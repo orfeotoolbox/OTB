@@ -55,7 +55,7 @@ PATH=$(cat_path "$OTB_INSTALL_DIR/bin" "$PATH")
 
 # export PYTHONPATH to import otbApplication.py
 PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/python" "$PYTHONPATH")
-if [ $OS ="RedHatEntreprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
+if [ $OS = "RedHatEntreprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
   PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3.8/site-packages" "$PYTHONPATH")
 else
   PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3/dist-packages" "$PYTHONPATH")

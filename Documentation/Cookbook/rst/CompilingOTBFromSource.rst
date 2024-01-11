@@ -378,8 +378,14 @@ To make the packages for OTB, you should simply call :
     $ cd ~/OTB/build
     $ make package
 
-By default the packages will be delivered in the subfolder build_packages.
-If you want only one package for OTB, you can set the variable ``CPACK_ARCHIVE_COMPONENT_INSTALL`` to *OFF*.
+By default the generated package contains all the modules and will be delivered in the subfolder build_packages.
+If you want to package OTB by module, you can set the variable ``CPACK_ARCHIVE_COMPONENT_INSTALL`` to *ON* :
+
+:: 
+
+    $ cd ~/OTB/build
+    $ cmake . -DCPACK_ARCHIVE_COMPONENT_INSTALL=ON
+    $ make package
 
 Known issues
 ------------

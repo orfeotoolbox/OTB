@@ -1,4 +1,4 @@
-On this page, we describe a simple use case for OTB that uses only the Core package.
+On this page, we describe a simple use case for OTB that uses only the Core and FeaturesExtraction package.
 
 System dependencies to run the standalone package
 `````````````````````````````````````````````````
@@ -21,9 +21,9 @@ Download OTB
 
 .. code-block:: bash
 
-    curl https://www.orfeo-toolbox.org/download/packages/OTB-9.0.0-Linux-Core.tar.gz -o /Path/Download/OTB-Core-9.0.tar.gz
-    curl https://www.orfeo-toolbox.org/download/packages/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o /Path/Download/OTB-FeaturesExtraction-9.0.tar.gz
-    curl https://www.orfeo-toolbox.org/download/packages/OTB-9.0.0-Linux-All-Dependencies.tar.gz -o /Path/Download/OTB-Dependencies-9.0.tar.gz
+    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o /Path/Download/OTB-Core-9.0.tar.gz
+    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o /Path/Download/OTB-FeaturesExtraction-9.0.tar.gz
+    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-All-Dependencies.tar.gz -o /Path/Download/OTB-Dependencies-9.0.tar.gz
 
 
 Installation
