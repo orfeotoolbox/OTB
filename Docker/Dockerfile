@@ -21,7 +21,7 @@ FROM ubuntu:20.04
 ARG OTB_RELEASE=9.0.0
 
 # Install system dependencies
-COPY system-dependencies.txt .
+COPY Docker/system-dependencies.txt .
 RUN apt-get update -y \
  && apt-get upgrade -y \
  && cat system-dependencies.txt | DEBIAN_FRONTEND=noninteractive xargs apt-get install -y --no-install-recommends \
@@ -29,31 +29,19 @@ RUN apt-get update -y \
  && rm -rf /var/lib/apt/lists/* system-dependencies.txt
 
 # Install pre-compiled OTB binaries
-RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-Core.tar.gz \
- && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-FeaturesExtraction.tar.gz \
- && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-Hyperspectral.tar.gz \
- && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-SAR.tar.gz  \
- && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-StereoProcessing.tar.gz  \
- && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-All-Dependencies.tar.gz
+RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux.tar.gz -o OTB-$OTB_RELEASE-Linux.tar.gz
 
-RUN tar xvf OTB-$OTB_RELEASE-Linux-Core.tar.gz --one-top-level="/opt/otb" \
- && tar xvf OTB-$OTB_RELEASE-Linux-FeaturesExtraction.tar.gz --one-top-level="/opt/otb" \
- && tar xvf OTB-$OTB_RELEASE-Linux-Hyperspectral.tar.gz --one-top-level="/opt/otb" \
- && tar xvf OTB-$OTB_RELEASE-Linux-SAR.tar.gz --one-top-level="/opt/otb" \
- && tar xvf OTB-$OTB_RELEASE-Linux-StereoProcessing.tar.gz --one-top-level="/opt/otb" \
- && tar xvf OTB-$OTB_RELEASE-Linux-All-Dependencies.tar.gz --one-top-level="/opt/otb"
-
-RUN cd /opt/otb && sh recompile_bindings.sh
+RUN tar xvf OTB-$OTB_RELEASE-Linux.tar.gz --one-top-level="/app" \
 
 # Persistant env
-ENV CMAKE_PREFIX_PATH=/opt/otb
-ENV PYTHONPATH=/opt/otb/lib/python
+ENV CMAKE_PREFIX_PATH=/app/OTB-${OTB_RELEASE}-Linux
+ENV PYTHONPATH=/app/OTB-$OTB_RELEASE-Linux/lib/python3/dist-packages:/app/OTB-${OTB_RELEASE}-Linux/lib/otb/python
 ENV GDAL_DRIVER_PATH=disable
-ENV GDAL_DATA=/opt/otb/share/gdal
-ENV PROJ_LIB=/opt/otb/share/proj
-ENV PATH=/opt/otb/bin:$PATH
-ENV LD_LIBRARY_PATH=/opt/otb/lib:$LD_LIBRARY_PATH
-ENV OTB_APPLICATION_PATH=/opt/otb/lib/otb/applications
+ENV GDAL_DATA=/app/OTB-${OTB_RELEASE}-Linux/share/gdal
+ENV PROJ_LIB=/app/OTB-${OTB_RELEASE}-Linux/share/proj
+ENV PATH=/app/OTB-${OTB_RELEASE}-Linux/bin:$PATH
+ENV LD_LIBRARY_PATH=/app/OTB-${OTB_RELEASE}-Linux/lib:$LD_LIBRARY_PATH
+ENV OTB_APPLICATION_PATH=/app/OTB-${OTB_RELEASE}-Linux/lib/otb/applications
 ENV LC_NUMERIC=C
 
 # Default command when using 'docker run' or 'docker create'

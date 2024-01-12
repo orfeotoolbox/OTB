@@ -13,11 +13,10 @@ your Python version.
 The procedure is simple, once you have the following prerequisite:
 
 * A C++ compiler:
-    * On Linux: GCC >= 5.0
-    * On macos: XCode
-    * On Windows: either Visual Studio >= 2015 with the desktop C++ workload,
+    * On Linux: GCC >= 8.0
+    * On Windows: either Visual Studio >= 2019 with the desktop C++ workload,
       or just the MSVC Build Tools.
-* CMake >= 3.10
+* CMake >= 3.16
 * Python library and headers for your Python version
     * On macos and Windows: they are usually supplied with installers from
       official website

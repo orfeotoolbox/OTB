@@ -9,3 +9,4 @@ gcc
 g++
 swig
 findutils
+file
