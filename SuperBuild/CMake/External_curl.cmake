@@ -43,8 +43,8 @@ endif()
 
 ExternalProject_Add(CURL
   PREFIX CURL
-  URL "https://curl.haxx.se/download/curl-7.88.1.tar.gz"
-  URL_MD5 1211d641ae670cebce361ab6a7c6acff
+  URL "https://github.com/curl/curl/releases/download/curl-8_5_0/curl-8.5.0.tar.gz"
+  URL_MD5 0bc69288b20ae165ff4b7d6d7bbe70d2
   BINARY_DIR ${CURL_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
