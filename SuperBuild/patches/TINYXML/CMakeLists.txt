@@ -18,27 +18,32 @@
 # limitations under the License.
 #
 
-INCLUDE_ONCE_MACRO(TINYXML)
+cmake_minimum_required(VERSION 2.8.3)
 
-SETUP_SUPERBUILD(TINYXML)
+project(tinyXMLlib)
 
-ExternalProject_Add(TINYXML
-  PREFIX TINYXML
-  URL "https://downloads.sourceforge.net/project/tinyxml/tinyxml/2.6.2/tinyxml_2_6_2.tar.gz"
-  URL_MD5 c1b864c96804a10526540c664ade67f0
-  BINARY_DIR ${TINYXML_SB_BUILD_DIR}
-  INSTALL_DIR ${SB_INSTALL_PREFIX}
-  DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-  DEPENDS ${TINYXML_DEPENDENCIES}
-  PATCH_COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_SOURCE_DIR}/patches/TINYXML/CMakeLists.txt
-  ${TINYXML_SB_SRC}
-  CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
-  CMAKE_COMMAND ${SB_CMAKE_COMMAND}
-  LOG_DOWNLOAD 1
-  LOG_CONFIGURE 1
-  LOG_BUILD 1
-  LOG_INSTALL 1
-  )
+option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
+if(MSVC AND BUILD_SHARED_LIBS)
+ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+add_definitions(-DTIXML_USE_STL=1)
 
-SUPERBUILD_UPDATE_CMAKE_VARIABLES(TINYXML FALSE)
+set(tinyXMLlib_SRCS
+  tinystr.cpp
+  tinyxml.cpp
+  tinyxmlerror.cpp
+  tinyxmlparser.cpp)
+
+set(tinyXMLlib_HDRS
+  tinystr.h
+  tinyxml.h)
+
+add_library(tinyxml ${tinyXMLlib_SRCS})
+
+install(TARGETS tinyxml
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
+
+install(FILES ${tinyXMLlib_HDRS}
+  DESTINATION include)
