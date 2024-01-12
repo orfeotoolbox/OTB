@@ -42,7 +42,11 @@ OS=`lsb_release -is`
 if [ $OS = "RedHatEntreprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
   OTB_INSTALL_DIR=$(dirname "${BASH_SOURCE[0]}")
 else
-  OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
+  if [ -z $ZSH_NAME ]; then
+    OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}"; )"; )
+  else
+    OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
+  fi
 fi
 CMAKE_PREFIX_PATH=$OTB_INSTALL_DIR
 export CMAKE_PREFIX_PATH
