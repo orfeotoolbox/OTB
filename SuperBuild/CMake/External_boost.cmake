@@ -107,10 +107,10 @@ ExternalProject_Add(BOOST
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
 if(WIN32)
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_82)
-  add_custom_command(TARGET BOOST POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:exe> $<TARGET_FILE_DIR:exe>
-    COMMAND_EXPAND_LISTS
-  )
+  # add_custom_command(TARGET BOOST POST_BUILD
+  #   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:BOOST> $<TARGET_FILE_DIR:BOOST>
+  #   COMMAND_EXPAND_LISTS
+  # )
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()
