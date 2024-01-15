@@ -13,8 +13,6 @@ OTB is known to work on:
 
 * GCC 5 or higher, Clang 3.4 or higher on GNU/Linux
 
-* AppleClang on macOS 10.8 or higher (intel, no ARM like the M1)
-
 The C++14 standard is required since version 6.2.0.
 
 OTB depends on a number of external libraries. Some are mandatory,

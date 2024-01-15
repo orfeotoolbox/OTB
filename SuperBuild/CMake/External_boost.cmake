@@ -75,6 +75,13 @@ set(BOOST_SB_CONFIG
   runtime-link=shared
   --prefix=${SB_INSTALL_PREFIX}
   )
+
+  if(WIN32)
+  set(BOOST_SB_CONFIG
+      ${BOOST_SB_CONFIG}
+      --libdir=${SB_INSTALL_PREFIX}/bin
+      )
+  endif()
   # set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
   # --includedir=${SB_INSTALL_PREFIX}/include #This is the default in boost
   # --libdir=${_SB_BOOST_LIBRARYDIR} # same here
