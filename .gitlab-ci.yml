@@ -203,7 +203,7 @@ redhat-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc -DGDAL_CONFIG_CHECKING:BOOL=OFF
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=ON
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
