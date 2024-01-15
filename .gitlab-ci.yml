@@ -208,7 +208,7 @@ redhat-build:
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RedHat-Dependencies.tar.gz
-    - mv OTB-9.0.0-Linux.tar.gz 0TB-9.0.0-Linux_RedHat.tar.gz
+    - mv OTB-9.0.0-Linux.tar.gz OTB-9.0.0-Linux_RedHat.tar.gz
   needs:
     - job: redhat-prepare
       artifacts: true
@@ -236,7 +236,7 @@ windows-10-prepare:
   script:
     - call ./CI/dev_env.bat x64 xdk 10
     - buildcache.exe -s
-    - ctest -C Release -V -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
     - buildcache.exe -s
 
 windows-10-build:
