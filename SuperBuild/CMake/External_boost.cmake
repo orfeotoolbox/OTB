@@ -107,14 +107,10 @@ ExternalProject_Add(BOOST
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
 if(WIN32)
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_82)
-  file(GLOB boost_dlls ${SB_INSTALL_PREFIX}/lib/*.dll)
-  message("Boost Dlls to move : " ${boost_dlls})
-  foreach(file_i ${boost_dlls})
-    ExternalProject_Add_Step(BOOST boost_dll_move
-    COMMAND ${CMAKE_COMMAND} -E copy ${file_i} ${SB_INSTALL_PREFIX}/lib/
-    DEPENDEES install
-    )
-  endforeach( file_i )
+  add_custom_command(TARGET BOOST POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:exe> $<TARGET_FILE_DIR:exe>
+    COMMAND_EXPAND_LISTS
+  )
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()
