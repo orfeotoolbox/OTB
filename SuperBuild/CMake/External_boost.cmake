@@ -79,6 +79,7 @@ set(BOOST_SB_CONFIG
   if(WIN32)
   set(BOOST_SB_CONFIG
       ${BOOST_SB_CONFIG}
+      --includedir=${SB_INSTALL_PREFIX}/include
       --libdir=${SB_INSTALL_PREFIX}/bin
       )
   endif()
