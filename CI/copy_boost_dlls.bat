@@ -1,0 +1,1 @@
+MOVE C:\build\otb\xdk\lib\*.dll C:\build\otb\xdk\bin

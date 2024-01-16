@@ -238,6 +238,7 @@ windows-10-prepare:
     - buildcache.exe -s
     - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
     - buildcache.exe -s
+    - call ./CI/copy_boost_dlls.bat
 
 windows-10-build:
   extends: .windows-build
