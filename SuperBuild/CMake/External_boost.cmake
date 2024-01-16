@@ -107,7 +107,7 @@ if(WIN32)
   install(DIRECTORY "${SB_INSTALL_PREFIX}/lib"
           DESTINATION "${SB_INSTALL_PREFIX}/bin"
           FILES_MATCHING 
-          PATTERN "boost*.dll"
+          PATTERN "*.dll"
   )
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
