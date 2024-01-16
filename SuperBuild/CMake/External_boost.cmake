@@ -104,6 +104,11 @@ ExternalProject_Add(BOOST
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
 if(WIN32)
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_82)
+  install(DIRECTORY "${SB_INSTALL_PREFIX}/lib"
+          DESTINATION "${SB_INSTALL_PREFIX}/bin"
+          FILES_MATCHING 
+          PATTERN "boost*.dll"
+  )
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()
