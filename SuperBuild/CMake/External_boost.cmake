@@ -76,17 +76,6 @@ set(BOOST_SB_CONFIG
   --prefix=${SB_INSTALL_PREFIX}
   )
 
-  if(WIN32)
-  set(BOOST_SB_CONFIG
-      ${BOOST_SB_CONFIG}
-      --includedir=${SB_INSTALL_PREFIX}/include
-      --libdir=${SB_INSTALL_PREFIX}/bin
-      )
-  endif()
-  # set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
-  # --includedir=${SB_INSTALL_PREFIX}/include #This is the default in boost
-  # --libdir=${_SB_BOOST_LIBRARYDIR} # same here
-
 set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
   -E chdir ${BOOST_SB_SRC}
   ${BOOST_B2_EXE}
@@ -115,10 +104,6 @@ ExternalProject_Add(BOOST
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
 if(WIN32)
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_82)
-  # add_custom_command(TARGET BOOST POST_BUILD
-  #   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:BOOST> $<TARGET_FILE_DIR:BOOST>
-  #   COMMAND_EXPAND_LISTS
-  # )
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()

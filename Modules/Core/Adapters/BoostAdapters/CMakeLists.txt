@@ -20,3 +20,10 @@
 
 project(OTBBoostAdapters)
 otb_module_impl()
+
+if(WIN32)
+    add_custom_command(TARGET OTBBoostAdapters-all POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:BOOST> $<TARGET_FILE_DIR:BOOST>
+    COMMAND_EXPAND_LISTS
+    )
+endif()
