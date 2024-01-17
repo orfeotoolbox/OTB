@@ -247,11 +247,16 @@ list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
 
+if(WIN32)
+  # Force all dll in the bin folder
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin)
+endif()
+
 set(FROM_SYSTEM_LIST)
 set(FROM_SUPERBUILD_LIST)
 set(USE_SYSTEM_PCRE ON)
 set(USE_SYSTEM_SWIG ON)
-set(USE_SYSTEM_OPENSSL OFF)
+option(USE_SYSTEM_OPENSSL OFF)
 
 # Modular building options
 option(OTB_BUILD_Core "Enable building only core modules" ON)

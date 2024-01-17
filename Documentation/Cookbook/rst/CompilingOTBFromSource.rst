@@ -13,8 +13,6 @@ OTB is known to work on:
 
 * GCC 5 or higher, Clang 3.4 or higher on GNU/Linux
 
-* AppleClang on macOS 10.8 or higher (intel, no ARM like the M1)
-
 The C++14 standard is required since version 6.2.0.
 
 OTB depends on a number of external libraries. Some are mandatory,
@@ -31,27 +29,27 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `Expat <https://sourceforge.net/projects/expat/>`_               | Yes                   |                            | 2.5.0                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Geos <https://libgeos.org/>`_                                   | Yes                   |                            | 3.9.5                    |
+    | `Geos <https://libgeos.org/>`_                                   | Yes                   |                            | 3.12.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `ITK <http://www.itk.org>`_                                      | Yes                   | 4.6.0                      | 4.13.3                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `GDAL <http://www.gdal.org>`_                                    | Yes                   | 2.4.1                      | 3.8.1                    |
+    | `GDAL <http://www.gdal.org>`_                                    | Yes                   | 2.4.1                      | 3.8.3                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `HDF4 <https://www.hdfgroup.org/solutions/hdf4/>`_               | Yes                   |                            | 4.2.13                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_               | Yes                   |                            | 1.14.3                   |
+    | `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_               | Yes                   |                            | 1.12.3                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `libgeotiff <http://trac.osgeo.org/geotiff/>`_                   | Yes                   |                            | 1.7.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `libjpeg-turbo <http://sourceforge.net/projects/libjpeg-turbo>`_ | Yes                   |                            | 1.5.3                    |
+    | `libjpeg-turbo <http://sourceforge.net/projects/libjpeg-turbo>`_ | Yes                   |                            | 2.0.0                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `libpng <https://downloads.sourceforge.net/project/libpng>`_     | Yes                   |                            | 1.6.37                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `libtiff <http://www.libtiff.org/>`_                             | Yes                   |                            | 4.4.0                    |
+    | `libtiff <http://www.libtiff.org/>`_                             | Yes                   |                            | 4.6.0                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `NetCDF <https://github.com/Unidata/netcdf-c>`_                  | Yes                   |                            | 4.9.2                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `OpenJPEG <https://github.com/uclouvain/openjpeg>`_              | Yes                   |                            | 2.3.1                    |
+    | `OpenJPEG <https://github.com/uclouvain/openjpeg>`_              | Yes                   |                            | 2.5.0                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `PROJ <https://proj.org/>`_                                      | Yes                   |                            | 9.3.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -63,7 +61,7 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `6S <http://6s.ltdri.org>`_                                      | No                    |                            |                          |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Curl <http://www.curl.haxx.se>`_                                | No                    |                            | 7.88.1                   |
+    | `Curl <http://www.curl.haxx.se>`_                                | No                    |                            | 8.2.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `FFTW <http://www.fftw.org>`_                                    | No                    |                            | 3.3.10                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -255,12 +253,13 @@ Build the dependencies in another folder than otb install path
 ::
 
     $ mkdir ~/OTB/buildxdk && cd ~/OTB/buildxdk
-    $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/xdk
+    # here use the OTB_BUILD var that will take care to build all dependencies needed for them
+    $ cmake ../otb/Superbuild -DCMAKE_INSTALL_PREFIX=$PWD/../xdk -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
     $ make OTB_DEPENDS
     # now build OTB 
-    $ mkdir ~/OTB/build
-    $ cmake ../otb -DXDK_INSTALL_PATH=/Path/To/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/install
-    $ make
+    $ cd .. && mkdir otb_build && cd otb_build
+    $ cmake ../otb -DXDK_INSTALL_PATH=/Path/To/xdk -DCMAKE_PREFIX_PATH=~/Workspace/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/install
+    $ make -j8
 
 Build the dependencies in the same folder as otb install
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -268,8 +267,8 @@ Build the dependencies in the same folder as otb install
 ::
     
     $ mkdir ~/OTB/build && cd ~/OTB/build
-    $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/install -DCMAKE_INSTALL_PREFIX=~/OTB/install
-    $ make
+    $ cmake ../otb/SuperBuild -DCMAKE_INSTALL_PREFIX=~/OTB/install
+    $ make -j8
 
 Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
 
@@ -377,8 +376,14 @@ To make the packages for OTB, you should simply call :
     $ cd ~/OTB/build
     $ make package
 
-By default the packages will be delivered in the subfolder build_packages.
-If you want only one package for OTB, you can set the variable ``CPACK_ARCHIVE_COMPONENT_INSTALL`` to *OFF*.
+By default the generated package contains all the modules and will be delivered in the subfolder build_packages.
+If you want to package OTB by module, you can set the variable ``CPACK_ARCHIVE_COMPONENT_INSTALL`` to *ON* :
+
+:: 
+
+    $ cd ~/OTB/build
+    $ cmake . -DCPACK_ARCHIVE_COMPONENT_INSTALL=ON
+    $ make package
 
 Known issues
 ------------

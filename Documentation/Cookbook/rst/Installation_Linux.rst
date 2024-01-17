@@ -1,19 +1,34 @@
 We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. They include
 all of the OTB applications along with command line launchers.
-Since OTB 9.0, the installation is modular, you have to choose which package to download depending on your use case.
+Since OTB 9.0, it is now possible to have a modular installation, you have to choose which package to download depending on your use case.
 
 See the page :doc:`Modules` to pick the ones you need.
 
 Download packages
 ~~~~~~~~~~~~~~~~~
 
-**Important note**
+**Important note for RedHat / Fedora / Rocky users**
 
-If you are using Fedora/Redhat8, please download the package **Linux_RH8-Dependencies** which contains GDAL bindings in a different folder than the standard Dependencies package.
-It is because the default system Python user site in Redhat8 is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
+If you are using Fedora, Redhat8, please download the package **Linux_RedHat** which contains GDAL bindings in a different folder than the standard Linux package.
+It is because the default system Python user site in RedHat, and distributions based on it, is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
 
-Recommended Installation : Core + Optional packages 
-```````````````````````````````````````````````````
+Recommended Installation : One package containing all the modules 
+`````````````````````````````````````````````````````````````````
+With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-9.0.0-Linux.tar.gz** package.
+
+You can download the package from the website and extract it in your file manager, or from command line :
+
+.. code-block:: bash
+
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux.tar.gz -o /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz
+   tar xf /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
+   source /Path/To/OTB_install/otbenv.profile
+
+Advanced Installation : One package per module
+``````````````````````````````````````````````
+
+Core and optional packages
+--------------------------
 
 In most cases, you will need the **OTB-All-Dependencies-9.0.tar.gz** package in order to run Core **AND** optional packages that you can install afterwards.
 Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning. 
@@ -24,16 +39,16 @@ If you want your installation to be the same as with OTB < 9, you can download a
 .. code-block:: bash
 
    # Download mandatory packages to run OTB
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-9.0.tar.gz
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-All-Dependencies-9.0.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o OTB-9.0.0-Linux-Core.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-All-Dependencies.tar.gz -o OTB-9.0.0-Linux-All-Dependencies.tar.gz
    # Download optional packages
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-FeaturesExtraction-9.0.tar.gz
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Learning-9.0.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o OTB-9.0.0-Linux-FeaturesExtraction.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Learning.tar.gz -o OTB-9.0.0-Linux-Learning.tar.gz
    ...
 
 
 Core Only
-`````````
+---------
 
 In this use case, you'll only be able to run Core applications, you **CANNOT** install any optional package over it as the necessary dependencies are not installed.
 it is possible to make your installation available to optional modules by downloading the **All-Dependencies** package and install it in the current OTB core install.
@@ -42,27 +57,31 @@ This installation will prompt you to replace the existing dependencies, just cli
 .. code-block:: bash
 
    # Download mandatory packages to run OTB
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-9.0.tar.gz
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-Dependencies-9.0.tar.gz
-
-
-Installation
-~~~~~~~~~~~~
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o OTB-9.0.0-Linux-Core.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core-Dependencies.tar.gz -o OTB-9.0.0-Linux-Core-Dependencies.tar.gz
 
 This package is a self-extractable tar.gz archive. You may uncompress the files with a
 right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
 
+Installation
+------------
+
 .. code-block:: bash
 
    # Install each tar gz in the same "top level" folder
-   tar xvf OTB-Core-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-9.0.0-Linux-Core.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-9.0.0-Linux-FeaturesExtraction.tar.gz --one-top-level="/Path/To/Install/OTB"
    # It is necessary to install the dependencies AFTER the other modules*
-   tar xvf OTB-All-Dependencies-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-9.0.0-Linux-All-Dependencies.tar.gz --one-top-level="/Path/To/Install/OTB"
    ...
+   source /Path/To/Install/OTB/otbenv.profile
 
 Be careful to install the dependencies *AFTER* the modules because the paths in the cmake files are made modular only when you install
-the dependencies : the resulting installation can be moved elsewhere on the disk. Just move the folder
-elsewhere and source the otbenv.profile.
+the dependencies : the resulting installation can be moved elsewhere on the disk. See the section "move installation below"
+
+Installation folder description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Once the archive is extracted, the directory structure consists of:
 
 -  ``otbenv.profile``: A script to initialize the environment for OTB
@@ -83,24 +102,6 @@ Once the archive is extracted, the directory structure consists of:
 
 If you want to use the otbcli launchers, you can initialize your
 environment with ``source otbenv.profile``.
-
-The package can be used to compile other projects using OTB (binaries, libraries
-and headers are included). If you want to build OTB from source using this
-package, you should first uninstall the specific OTB files from the package to
-leave only the dependencies (what we call an XDK). You can do it using the
-supplied script ``tools/uninstall_otb.sh``.
-
-Note for RedHat 8 users
-```````````````````````
-By default otbenv.profile file sets the PYTHONPATH to /Path/To/Install/OTB/lib/python3/dist-packages, but Python in RedHat searches for lib/python3.X/site-packages,
-In order to have the correct GDAL python bindings and be able to call "from osgeo import gdal" without problem, you have to modify the PYTHONPATH in otvbenv.profile
-before calling source.
-
-.. code-block:: bash
-
-   # Install each tar gz in the same "one top level" folder
-   cd "/Path/To/Install/OTB"
-   sed -i "s/python3\/dist-packages/python3.8\/site-packages/g" otbenv.profile
 
 Python bindings
 ~~~~~~~~~~~~~~~
@@ -159,3 +160,14 @@ We strongly recommend to use a virtual env to **avoid conflicts between OTB and 
 Notes:
 ```````
    - Multiple installation of OTB can exists in same system without one conflicting the other!
+
+Moving your installed OTB
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With OTB 9 one can move the installation folder, but once it is done, there is a step to do to ensure the paths are correct.
+
+.. code-block:: bash
+
+   rm /Path/To/Moved/OTB/tools/install_done.txt
+   source /Path/To/Moved/OTB/otbenv.profile
+   # At this time a message will be displayed showing that this is a new installation, this is normal

@@ -3,8 +3,8 @@ set(CPACK_PACKAGE_NAME "OTB"
     CACHE STRING "The OTB full package"
 )
 # which is useful in case of packing only selected components instead of the whole thing
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Light OTB Package"
-    CACHE STRING "This package contains only a part of OTB"
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OTB Package"
+    CACHE STRING "This package contains the entire OTB project by modules OR in one full package"
 )
 set(CPACK_PACKAGE_VENDOR "CS Group")
 
@@ -12,9 +12,6 @@ set(CPACK_VERBATIM_VARIABLES YES)
 
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
 SET(CPACK_OUTPUT_FILE_PREFIX "${CMAKE_SOURCE_DIR}/build_packages")
-
-# https://unix.stackexchange.com/a/11552/254512
-#set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/otb")#/${CMAKE_PROJECT_VERSION}")
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${OTB_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${OTB_VERSION_MINOR})

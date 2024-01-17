@@ -43,12 +43,6 @@ macro(otb_create_application)
    # and not a shared library to link against
    set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY PREFIX "")
 
-   # on Apple platform, a "MODULE" library gets a ".so" extension
-   # but the ITK factory mechanism looks for ".dylib"
-   if (APPLE)
-     set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY SUFFIX ".dylib")
-   endif()
-
    # When called from the OTB build system, use OTB_INSTALL_APP_DIR
    if (NOT APPLICATION_INSTALL_PATH AND OTB_INSTALL_APP_DIR)
      set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR})

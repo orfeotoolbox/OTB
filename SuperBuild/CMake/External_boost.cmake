@@ -75,9 +75,6 @@ set(BOOST_SB_CONFIG
   runtime-link=shared
   --prefix=${SB_INSTALL_PREFIX}
   )
-  # set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
-  # --includedir=${SB_INSTALL_PREFIX}/include #This is the default in boost
-  # --libdir=${_SB_BOOST_LIBRARYDIR} # same here
 
 set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
   -E chdir ${BOOST_SB_SRC}
@@ -105,9 +102,8 @@ ExternalProject_Add(BOOST
 
 #HINT: avoid all uses of  _SB_* in External_<project>.cmake
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
-if(MSVC)
+if(WIN32)
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_82)
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()
-SUPERBUILD_PATCH_SOURCE(BOOST)

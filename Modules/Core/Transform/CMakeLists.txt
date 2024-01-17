@@ -22,13 +22,3 @@ project(OTBTransform)
 
 set(OTBTransform_LIBRARIES OTBTransform)
 otb_module_impl()
-
-install(DIRECTORY ${OTBTransform_SOURCE_DIR}/include/
-        DESTINATION ${OTBTransform_INSTALL_INCLUDE_DIR}
-        COMPONENT Common
-        )
-
-install(TARGETS ${OTBTransform_LIBRARIES}
-        DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
-        COMPONENT Common
-        )

@@ -38,7 +38,16 @@ cat_path()
 # The below environment variables only affect current shell
 # So if you run again from a terminal, you need to run the script again
 
-OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
+OS=`lsb_release -is`
+if [ $OS = "RedHatEntreprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
+  OTB_INSTALL_DIR=$(dirname "${BASH_SOURCE[0]}")
+else
+  if [ -z $ZSH_NAME ]; then
+    OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}"; )"; )
+  else
+    OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
+  fi
+fi
 CMAKE_PREFIX_PATH=$OTB_INSTALL_DIR
 export CMAKE_PREFIX_PATH
 
@@ -50,7 +59,11 @@ PATH=$(cat_path "$OTB_INSTALL_DIR/bin" "$PATH")
 
 # export PYTHONPATH to import otbApplication.py
 PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/python" "$PYTHONPATH")
-PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3/dist-packages" "$PYTHONPATH")
+if [ $OS = "RedHatEntreprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
+  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3.8/site-packages" "$PYTHONPATH")
+else
+  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3/dist-packages" "$PYTHONPATH")
+fi
 
 # set numeric locale to C
 LC_NUMERIC=C
@@ -78,4 +91,6 @@ export OTB_INSTALL_DIR
 if [ ! -e $OTB_INSTALL_DIR/tools/install_done.txt ]
 then
   source $OTB_INSTALL_DIR/tools/post_install.sh
+else
+  echo "**** OTB environment setup complete ****"
 fi
