@@ -24,12 +24,12 @@ process:
 
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | **Library**                                                      | **Mandatory**         | **Minimum version**        | **Superbuild Version**   |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    +==================================================================+=======================+============================+==========================+
     | `Boost <http://www.boost.org>`_                                  | Yes                   |                            | 1.82.0                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `Expat <https://sourceforge.net/projects/expat/>`_               | Yes                   |                            | 2.5.0                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Geos <https://libgeos.org/>`_                                   | Yes                   |                            | 3.12.1                    |
+    | `Geos <https://libgeos.org/>`_                                   | Yes                   |                            | 3.12.1                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `ITK <http://www.itk.org>`_                                      | Yes                   | 4.6.0                      | 4.13.3                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -302,13 +302,7 @@ generate a Makefile:
 ::
 
     $ cd ~/OTB/build
-    $ cmake -C configuration.cmake ../otb
-
-The script ``configuration.cmake`` needs to contain dependencies
-location if CMake cannot find them automatically. This can be done with
-the ``XXX_DIR`` variables containing the directories which contain the
-FindXXX.cmake scripts, or with the ``XXX_INCLUDEDIR`` and
-``XXX_LIBRARY`` variables.
+    $ cmake ../otb -DCMAKE_INSTALL_PREFIX=/Path/To/OTB_install
 
 Additionally, decide which module you wish to enable, together with tests and
 examples. Refer to table above for the list of CMake variables.
