@@ -7,6 +7,11 @@ Features added:
 Bugs fixed:
   * !979: Update GDAL to 3.8.1 by Thibaut ROMAIN
   * !976: Fix handling of SAR Metadata (with empty projection) by Luc Hermitte
+  * !985: Add scripts that executes the first time otbenv profile is sourced to sanitize the install by Thibaut ROMAIN
+  * !985: Enhance otbenv profile to be compatible with bash and zsh, and multi OS (redhat, debian, ubuntu...) by Thibaut ROMAIN
+
+Dependencies update:
+  * !985: Update gdal to 3.8.3, geos to 3.12.1, tiff to 4.6, curl to 8.2, proj to 9.3 for release 9.0 by Thibaut ROMAIN
 
 Documentation:
   * !939: Refactor cookbook for more clarity , add a first step page by Thibaut ROMAIN
