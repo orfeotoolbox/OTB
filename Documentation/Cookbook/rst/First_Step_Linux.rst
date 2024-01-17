@@ -36,20 +36,21 @@ Installation
    tar xvf OTB-Core-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
    tar xvf OTB-Features-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
    tar xvf OTB-Dependencies-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
+   source /Path/To/Install/OTB/otbenv.profile
 
 Download an example image
 +++++++++++++++++++++++++
 
 .. code-block:: bash
 
-    curl https://www.orfeo-toolbox.org/download/data_example/xt_PHR.tif -o /Path/You/Want/xt_PHR.tif
+    curl https://www.orfeo-toolbox.org/packages/examples/phr_xs.tif -o /Path/You/Want/phr_xs.tif
 
 Compute NDVI using the CLI interface
 ++++++++++++++++++++++++++++++++++++
 
 .. code-block:: bash
 
-    otbcli_BandMath –il /Path/You/Want/xt_PHR.tif –out ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
+    otbcli_BandMath –il /Path/You/Want/phr_xs –out ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
 
 Use Python API to compute NDVI
 ++++++++++++++++++++++++++++++

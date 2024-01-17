@@ -22,6 +22,7 @@ You can download the package from the website and extract it in your file manage
 
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux.tar.gz -o /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz
    tar xf /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
+   source /Path/To/OTB_install/otbenv.profile
 
 Advanced Installation : One package per module
 ``````````````````````````````````````````````
@@ -73,10 +74,10 @@ Installation
    # It is necessary to install the dependencies AFTER the other modules*
    tar xvf OTB-9.0.0-Linux-All-Dependencies.tar.gz --one-top-level="/Path/To/Install/OTB"
    ...
+   source /Path/To/Install/OTB/otbenv.profile
 
 Be careful to install the dependencies *AFTER* the modules because the paths in the cmake files are made modular only when you install
-the dependencies : the resulting installation can be moved elsewhere on the disk. Just move the folder
-elsewhere and source the otbenv.profile.
+the dependencies : the resulting installation can be moved elsewhere on the disk. See the section "move installation below"
 
 Installation folder description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
