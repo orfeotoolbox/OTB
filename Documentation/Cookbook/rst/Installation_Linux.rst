@@ -4,16 +4,13 @@ Since OTB 9.0, it is now possible to have a modular installation, you have to ch
 
 See the page :doc:`Modules` to pick the ones you need.
 
-Download packages
-~~~~~~~~~~~~~~~~~
-
 **Important note for RedHat / Fedora / Rocky users**
 
 If you are using Fedora, Redhat8, please download the package **Linux_RedHat** which contains GDAL bindings in a different folder than the standard Linux package.
 It is because the default system Python user site in RedHat, and distributions based on it, is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
 
 Recommended Installation : One package containing all the modules 
-`````````````````````````````````````````````````````````````````
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-9.0.0-Linux.tar.gz** package.
 
 You can download the package from the website and extract it in your file manager, or from command line :
@@ -25,10 +22,10 @@ You can download the package from the website and extract it in your file manage
    source /Path/To/OTB_install/otbenv.profile
 
 Advanced Installation : One package per module
-``````````````````````````````````````````````
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Core and optional packages
---------------------------
+``````````````````````````
 
 In most cases, you will need the **OTB-All-Dependencies-9.0.tar.gz** package in order to run Core **AND** optional packages that you can install afterwards.
 Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning. 
@@ -48,7 +45,7 @@ If you want your installation to be the same as with OTB < 9, you can download a
 
 
 Core Only
----------
+`````````
 
 In this use case, you'll only be able to run Core applications, you **CANNOT** install any optional package over it as the necessary dependencies are not installed.
 it is possible to make your installation available to optional modules by downloading the **All-Dependencies** package and install it in the current OTB core install.
@@ -64,7 +61,7 @@ This package is a self-extractable tar.gz archive. You may uncompress the files 
 right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
 
 Installation
-------------
+````````````
 
 .. code-block:: bash
 

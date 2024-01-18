@@ -43,12 +43,12 @@ To run CLI tools, you can launch the docker image with:
    
     docker run -it orfeotoolbox/otb
 
-If you are planning on using the GUI applications, you have to call
-docker with the following arguments:
+
+If you are planning on using the image on MacOS with an Apple Silicon chip (M1,M2,M3) :
 
 ::
    
-    docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix/ --device=/dev/dri:/dev/dri orfeotoolbox/otb monteverdi
+   docker run -it --platform=linux/amd64 orfeotoolbox/otb:9.0.0
 
 
 Distribution packages
