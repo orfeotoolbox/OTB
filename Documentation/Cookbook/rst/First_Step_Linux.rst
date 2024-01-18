@@ -50,7 +50,7 @@ Compute NDVI using the CLI interface
 
 .. code-block:: bash
 
-    otbcli_BandMath –il /Path/You/Want/phr_xs –out ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
+    otbcli_BandMath –il /Path/You/Want/phr_xs.tif –out ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
 
 Use Python API to compute NDVI
 ++++++++++++++++++++++++++++++
