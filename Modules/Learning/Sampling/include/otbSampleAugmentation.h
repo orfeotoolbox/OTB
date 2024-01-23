@@ -26,6 +26,8 @@
 #endif
 
 #include <vector>
+#include <queue>
+#include <iterator>
 #include <algorithm>
 #include <random>
 #include <ctime>
@@ -169,15 +171,29 @@ void FindKNNIndices(const SampleVectorType& inSamples, const size_t nbNeighbors,
 #endif
   for (long long sampleIdx = 0; sampleIdx < nbSamples; ++sampleIdx)
   {
-    NNIndicesType nns;
+    std::priority_queue<NeighborType, NNIndicesType, NeighborSorter> nns;
     for (long long neighborIdx = 0; neighborIdx < nbSamples; ++neighborIdx)
     {
       if (sampleIdx != neighborIdx)
-        nns.push_back({static_cast<size_t>(neighborIdx), ComputeSquareDistance(inSamples[sampleIdx], inSamples[neighborIdx])});
+      {
+        nns.push({static_cast<size_t>(neighborIdx), ComputeSquareDistance(inSamples[sampleIdx], inSamples[neighborIdx])});
+        if (nns.size() > nbNeighbors)
+        {
+          nns.pop();
+        }
+      }
     }
-    std::partial_sort(nns.begin(), nns.begin() + nbNeighbors, nns.end(), NeighborSorter{});
-    nns.resize(nbNeighbors);
-    nnVector[sampleIdx] = std::move(nns);
+
+    NNIndicesType nnv;
+    nnv.reserve(nns.size());
+    while (!nns.empty())
+    {
+      nnv.push_back(nns.top());
+      nns.pop();
+    }
+    std::reverse(std::begin(nnv), std::end(nnv));
+
+    nnVector[sampleIdx] = std::move(nnv);
   }
 }
 
