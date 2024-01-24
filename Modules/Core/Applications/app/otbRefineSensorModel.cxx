@@ -23,13 +23,14 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperElevationParametersHandler.h"
 #include "otbWrapperMapProjectionParametersHandler.h"
-#include "otbSensorModelAdapter.h"
 #include "itkPoint.h"
 #include "itkEuclideanDistanceMetric.h"
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "ogrsf_frmts.h"
 #include "otbDEMHandler.h"
+#include "otbSensorTransformFactory.h"
+#include "otbRPCSolver.h"
 
 namespace otb
 {
@@ -44,10 +45,11 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::Point<double, 3> PointType;
-  typedef itk::Statistics::EuclideanDistanceMetric<PointType> DistanceType;
+  typedef itk::Point<double, 2> SensorPointType;
+  typedef itk::Point<double, 3> GroundPointType;
+  typedef itk::Statistics::EuclideanDistanceMetric<GroundPointType> DistanceType;
 
-  typedef std::pair<PointType, PointType> TiePointType;
+  typedef std::pair<GroundPointType, GroundPointType> TiePointType;
   typedef std::vector<TiePointType> TiePointsType;
 
   typedef otb::GenericRSTransform<double, 3, 3> RSTransformType;
@@ -122,16 +124,21 @@ private:
   {
     OGRMultiLineString mls;
 
-    otb::SensorModelAdapter::Pointer sm     = otb::SensorModelAdapter::New();
-    otb::SensorModelAdapter::Pointer sm_ref = otb::SensorModelAdapter::New();
+   // Read the geom file
+    otb::ImageMetadata imd;
 
-    // Read the geom file
-    bool isRead = sm->ReadGeomFile(GetParameterString("ingeom"));
-    sm_ref->ReadGeomFile(GetParameterString("ingeom"));
-
-    if (!isRead)
-      otbAppLogFATAL("Can't read the input geom file!");
-
+    // Fetching the RPC model from a GEOM file
+    otb::GeomMetadataSupplier geomSupplier(GetParameterString("ingeom"));
+    for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
+      imd.Bands.emplace_back();
+    otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
+    geomSupplier.FetchRPC(imd);
+    auto sensorModel_ref = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(imd, TransformDirection::FORWARD);
+    if (sensorModel_ref->IsValidSensorModel() == false)
+    {
+      otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!");
+    }
+    //auto rpcModel = boost::any_cast<otb::Projection::RPCParam>(imd[otb::MDGeom::RPC]);
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
@@ -140,14 +147,13 @@ private:
     ifs.open(GetParameterString("inpoints"));
 
     TiePointsType tiepoints;
+    otb::RPCSolver::GCPsContainerType gcps;
+    double x, y, z, lat, lon;
 
     while (!ifs.eof())
     {
       std::string line;
       std::getline(ifs, line);
-
-      double x, y, z, lat, lon;
-
       // Avoid commented lines or too short ones
       if (!line.empty() && line[0] != '#')
       {
@@ -169,26 +175,42 @@ private:
 
         otbAppLogDEBUG("Adding tie point x=" << x << ", y=" << y << ", z=" << z << ", lon=" << lon << ", lat=" << lat);
 
-        sm->AddTiePoint(x, y, z, lon, lat);
+        GroundPointType tp1, tp2;
+        tp1[0] = x;
+        tp1[1] = y;
+        tp1[2] = z;
+        tp2[0] = lon;
+        tp2[1] = lat;
+        tp2[2] = z;
 
-        PointType p1, p2;
-        p1[0] = x;
-        p1[1] = y;
-        p1[2] = z;
-        p2[0] = lon;
-        p2[1] = lat;
-        p2[2] = z;
+        otb::RPCSolver::Point2DType sensorGCP;
+        otb::RPCSolver::Point3DType groundGCP;
 
-        tiepoints.push_back(std::make_pair(p1, p2));
+        sensorGCP[0] = x;
+        sensorGCP[1] = y;
+        groundGCP[0] = lon;
+        groundGCP[1] = lat;
+        groundGCP[2] = z;
+
+        gcps.push_back(std::make_pair(sensorGCP,groundGCP));
+        tiepoints.push_back(std::make_pair(tp1, tp2));
       }
     }
     ifs.close();
-
     otbAppLogINFO("Optimization in progress ...");
-    sm->Optimize();
-    otbAppLogINFO("Done.\n");
+    Projection::RPCParam refinedRPCParams;
+    double rmsErrorAfterRefinement;
 
-    sm->WriteGeomFile(GetParameterString("outgeom"));
+    otb::RPCSolver::Solve(gcps, rmsErrorAfterRefinement, refinedRPCParams);
+
+    otb::ImageMetadata newimd;
+    newimd.Add(otb::MDGeom::RPC, refinedRPCParams);
+    auto sensorModelRefined = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(newimd, TransformDirection::FORWARD);
+    if (sensorModelRefined->IsValidSensorModel() == false)
+    {
+      otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!");
+    }
+    otbAppLogINFO("Done.\n");
 
     double rmse  = 0;
     double rmsex = 0;
@@ -223,11 +245,12 @@ private:
     }
 
     size_t validPoints = 0;
-    for (TiePointsType::const_iterator it = tiepoints.begin(); it != tiepoints.end(); ++it)
+
+    for (auto it = gcps.begin(); it != gcps.end(); ++it)
     {
-      PointType tmpPoint, tmpPoint_ref, ref;
-      sm->ForwardTransformPoint(it->first[0], it->first[1], it->first[2], tmpPoint[0], tmpPoint[1], tmpPoint[2]);
-      sm_ref->ForwardTransformPoint(it->first[0], it->first[1], it->first[2], tmpPoint_ref[0], tmpPoint_ref[1], tmpPoint_ref[2]);
+      GroundPointType ref;
+      auto tmpPoint_ref = sensorModel_ref->TransformPoint(it->first);
+      auto tmpPoint = sensorModelRefined->TransformPoint(it->first);
 
       if (!(std::isfinite(tmpPoint[0]) && std::isfinite(tmpPoint[1]) && std::isfinite(tmpPoint[2])))
       {
@@ -338,7 +361,7 @@ private:
 
     otbAppLogINFO("Estimation of final accuracy: ");
 
-    otbAppLogINFO("Overall Root Mean Square Error: " << rmse << " meters");
+    otbAppLogINFO("Overall Root Mean Square Error: " << rmsErrorAfterRefinement << " meters");
     otbAppLogINFO("X Mean Error: " << meanx << " meters");
     otbAppLogINFO("X standard deviation: " << stdevx << " meters");
     otbAppLogINFO("X Root Mean Square Error: " << rmsex << " meters");

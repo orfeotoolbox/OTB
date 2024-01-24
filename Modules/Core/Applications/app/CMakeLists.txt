@@ -130,7 +130,7 @@ otb_create_application(
     LINK_LIBRARIES ${${otb-module}_LIBRARIES})
       
 # TODO refactor this application
-#otb_create_application(
-#  NAME           RefineSensorModel
-#  SOURCES        otbRefineSensorModel.cxx
-#  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+otb_create_application(
+ NAME           RefineSensorModel
+ SOURCES        otbRefineSensorModel.cxx
+ LINK_LIBRARIES ${${otb-module}_LIBRARIES})
