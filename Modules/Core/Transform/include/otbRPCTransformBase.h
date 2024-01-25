@@ -54,6 +54,7 @@ public:
 
   using InputPointType  = itk::Point<TScalarType, NInputDimensions>;
   using OutputPointType = itk::Point<TScalarType, NOutputDimensions>;
+  using TiePointsType = std::vector<std::pair<InputPointType,OutputPointType>>;
   using PixelType =TScalarType;
   //@}
 
@@ -71,6 +72,9 @@ public:
 
   /** Check model validity */
   bool IsValidSensorModel() const override;
+
+  /** Refining the sensor model */
+  void OptimizeParameters(TiePointsType& tiepoints, double& rmsError) override;
 
 protected:
   RPCTransformBase(TransformDirection dir) : Superclass(dir) {};

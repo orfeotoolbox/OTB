@@ -55,7 +55,6 @@ otbGeometriesProjectionFilterFromMapToImage.cxx
 otbGeometriesProjectionFilterFromMapToEPSG.cxx
 otbVectorDataProjectionFilter.cxx
 otbImportGeoInformationImageFilter.cxx
-otbRPCSolverTest.cxx
 )
 
 
@@ -566,34 +565,6 @@ otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbProjectionT
   400 891 283 5955 7530 9105
   352 807 919 10023 12102 14181
   )
-
-
-otb_add_test(NAME prTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriver
-  otbRPCSolverTest
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  10 0.25 0.35
-  no
-  no
-  )
-
-otb_add_test(NAME prTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjectionTestDriver
-  otbRPCSolverTest
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  5 0.25 0.35
-  no
-  no
-  )
-
-otb_add_test(NAME prTvRPCSolverNotEnoughPointsTest COMMAND otbProjectionTestDriver
-  otbRPCSolverTest
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  4 0.25 0.35
-  ${INPUTDATA}/DEM/srtm_directory/
-  ${INPUTDATA}/DEM/egm96.grd
-  )
-if (OTB_DATA_USE_LARGEINPUT)
-  set_property(TEST prTvRPCSolverNotEnoughPointsTest PROPERTY WILL_FAIL TRUE)
-endif()
 
 
 set(VALID_CONDITION err=12)

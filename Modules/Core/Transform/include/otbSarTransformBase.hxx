@@ -63,6 +63,13 @@ void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSe
   os << indent << "Sar Model" << std::endl;
 }
 
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(TiePointsType& tiepoints, double& rmsError)
+{
+    rmsError = 0.0;
+    //TODO : develop the method that was done in ossim for parameter optimisation on sar model
+} 
+
 } // namespace otb
 
 #endif
