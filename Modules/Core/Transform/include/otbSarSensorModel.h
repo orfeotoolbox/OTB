@@ -34,6 +34,14 @@ class SarSensorModel
 {
 public:
 
+  using Point2DType  = itk::Point<double, 2>;
+  using Point3DType  = itk::Point<double, 3>;
+
+  using Vector3DType = itk::Point<double, 3>;
+
+  using TimeType     = MetaData::TimePoint;
+  using DurationType = MetaData::Duration;
+
   SarSensorModel(const std::string & productType,
                  const SARParam & sarParam,
                  const Projection::GCPParam & gcps);
@@ -43,14 +51,6 @@ public:
 
   SarSensorModel(const SarSensorModel&) = delete; // non construction-copyable
   SarSensorModel& operator=(const SarSensorModel&) = delete; // non copyable
-
-  using Point2DType = itk::Point<double, 2>;
-  using Point3DType = itk::Point<double, 3>;
-
-  using Vector3DType = itk::Point<double, 3>;
-
-  using TimeType = MetaData::TimePoint;
-  using DurationType = MetaData::Duration;
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) */
@@ -77,7 +77,6 @@ public:
   void LineSampleHeightToWorld(const Point2DType& imPt,
                                double heightAboveEllipsoid,
                                Point3DType& worldPt) const;
-
 
   void LineSampleToWorld(const Point2DType& imPt,
                          Point3DType& worldPt) const;
@@ -123,7 +122,7 @@ public:
             bool inputWithInvalidPixels=false);
 
    /**
-    * This method will estime the overlap area between two bursts and return the
+    * This method will estimate the overlap area between two bursts and return the
     * vector of lines and the vector of samples (with two elements : Burst Up and Burst Low).
     * Note that this operation has no effect if theBurstRecords
     * contains a single burst.
@@ -169,7 +168,6 @@ public:
                               unsigned long imageLine,
                               unsigned long & deburstLine);
 
-protected:
 
 private:
   void OptimizeTimeOffsetsFromGcps();
