@@ -30,7 +30,6 @@
 #include "ogrsf_frmts.h"
 #include "otbDEMHandler.h"
 #include "otbSensorTransformFactory.h"
-#include "otbRPCSolver.h"
 
 namespace otb
 {
@@ -49,7 +48,7 @@ public:
   typedef itk::Point<double, 3> GroundPointType;
   typedef itk::Statistics::EuclideanDistanceMetric<GroundPointType> DistanceType;
 
-  typedef std::pair<GroundPointType, GroundPointType> TiePointType;
+  typedef std::pair<SensorPointType, GroundPointType> TiePointType;
   typedef std::vector<TiePointType> TiePointsType;
 
   typedef otb::GenericRSTransform<double, 3, 3> RSTransformType;
@@ -133,12 +132,12 @@ private:
       imd.Bands.emplace_back();
     otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
-    auto sensorModel_ref = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(imd, TransformDirection::FORWARD);
-    if (sensorModel_ref->IsValidSensorModel() == false)
+    auto sensorModel_reference = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(imd, TransformDirection::FORWARD);
+    auto sensorModelRefined = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(imd, TransformDirection::FORWARD);
+    if (sensorModel_reference->IsValidSensorModel() == false)
     {
       otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!");
     }
-    //auto rpcModel = boost::any_cast<otb::Projection::RPCParam>(imd[otb::MDGeom::RPC]);
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
@@ -147,13 +146,11 @@ private:
     ifs.open(GetParameterString("inpoints"));
 
     TiePointsType tiepoints;
-    otb::RPCSolver::GCPsContainerType gcps;
     double x, y, z, lat, lon;
 
-    while (!ifs.eof())
+    std::string line;
+    while (std::getline(ifs, line))
     {
-      std::string line;
-      std::getline(ifs, line);
       // Avoid commented lines or too short ones
       if (!line.empty() && line[0] != '#')
       {
@@ -175,37 +172,21 @@ private:
 
         otbAppLogDEBUG("Adding tie point x=" << x << ", y=" << y << ", z=" << z << ", lon=" << lon << ", lat=" << lat);
 
-        GroundPointType tp1, tp2;
-        tp1[0] = x;
-        tp1[1] = y;
-        tp1[2] = z;
-        tp2[0] = lon;
-        tp2[1] = lat;
-        tp2[2] = z;
+        SensorPointType imagePoint;
+        GroundPointType groundPoint;
+        imagePoint[0] = x;
+        imagePoint[1] = y;
+        groundPoint[0] = lon;
+        groundPoint[1] = lat;
+        groundPoint[2] = z;
 
-        otb::RPCSolver::Point2DType sensorGCP;
-        otb::RPCSolver::Point3DType groundGCP;
-
-        sensorGCP[0] = x;
-        sensorGCP[1] = y;
-        groundGCP[0] = lon;
-        groundGCP[1] = lat;
-        groundGCP[2] = z;
-
-        gcps.push_back(std::make_pair(sensorGCP,groundGCP));
-        tiepoints.push_back(std::make_pair(tp1, tp2));
+        tiepoints.push_back({imagePoint, groundPoint});
       }
     }
     ifs.close();
     otbAppLogINFO("Optimization in progress ...");
-    Projection::RPCParam refinedRPCParams;
-    double rmsErrorAfterRefinement;
-
-    otb::RPCSolver::Solve(gcps, rmsErrorAfterRefinement, refinedRPCParams);
-
-    otb::ImageMetadata newimd;
-    newimd.Add(otb::MDGeom::RPC, refinedRPCParams);
-    auto sensorModelRefined = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(newimd, TransformDirection::FORWARD);
+    double rmseRefined = 0.0;
+    sensorModelRefined->OptimizeParameters(tiepoints,rmseRefined);
     if (sensorModelRefined->IsValidSensorModel() == false)
     {
       otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!");
@@ -246,10 +227,10 @@ private:
 
     size_t validPoints = 0;
 
-    for (auto it = gcps.begin(); it != gcps.end(); ++it)
+    for (auto it = tiepoints.begin(); it != tiepoints.end(); ++it)
     {
       GroundPointType ref;
-      auto tmpPoint_ref = sensorModel_ref->TransformPoint(it->first);
+      auto tmpPoint_ref = sensorModel_reference->TransformPoint(it->first);
       auto tmpPoint = sensorModelRefined->TransformPoint(it->first);
 
       if (!(std::isfinite(tmpPoint[0]) && std::isfinite(tmpPoint[1]) && std::isfinite(tmpPoint[2])))
@@ -264,6 +245,8 @@ private:
         continue;
       }
 
+      tmpPoint[2] = it->second[2];
+      tmpPoint_ref[2] = it->second[2];
       tmpPoint     = rsTransform->TransformPoint(tmpPoint);
       tmpPoint_ref = rsTransform->TransformPoint(tmpPoint_ref);
 
@@ -361,7 +344,7 @@ private:
 
     otbAppLogINFO("Estimation of final accuracy: ");
 
-    otbAppLogINFO("Overall Root Mean Square Error: " << rmsErrorAfterRefinement << " meters");
+    otbAppLogINFO("Overall Root Mean Square Error: " << rmseRefined << " meters");
     otbAppLogINFO("X Mean Error: " << meanx << " meters");
     otbAppLogINFO("X standard deviation: " << stdevx << " meters");
     otbAppLogINFO("X Root Mean Square Error: " << rmsex << " meters");

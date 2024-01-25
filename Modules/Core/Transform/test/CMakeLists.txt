@@ -33,6 +33,7 @@ otbInverseLogPolarTransformResample.cxx
 otbStreamingResampleImageFilterWithAffineTransform.cxx
 otbRPCTransformTest.cxx
 otbSarTransformTest.cxx
+otbRPCSolverTest.cxx
 )
 
 add_executable(otbTransformTestDriver ${OTBTransformTests})
@@ -41,6 +42,32 @@ target_link_libraries(otbTransformTestDriver ${OTBTransform-Test_LIBRARIES})
 otb_module_target_label(otbTransformTestDriver)
 
 # Tests Declaration
+otb_add_test(NAME prTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriver
+  otbRPCSolverTest
+  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  10 0.25 0.35
+  no
+  no
+  )
+
+otb_add_test(NAME prTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjectionTestDriver
+  otbRPCSolverTest
+  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  5 0.25 0.35
+  no
+  no
+  )
+
+otb_add_test(NAME prTvRPCSolverNotEnoughPointsTest COMMAND otbProjectionTestDriver
+  otbRPCSolverTest
+  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  4 0.25 0.35
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  )
+if (OTB_DATA_USE_LARGEINPUT)
+  set_property(TEST prTvRPCSolverNotEnoughPointsTest PROPERTY WILL_FAIL TRUE)
+endif()
 
 otb_add_test(NAME prTvGenericMapProjection COMMAND otbTransformTestDriver
   --compare-ascii ${EPSILON_4}
