@@ -42,9 +42,10 @@ public:
   using TimeType     = MetaData::TimePoint;
   using DurationType = MetaData::Duration;
 
-  SarSensorModel(const std::string & productType,
-                 const SARParam & sarParam,
-                 const Projection::GCPParam & gcps);
+  SarSensorModel(
+      std::string          productType,
+      SARParam             sarParam,
+      Projection::GCPParam gcps);
 
   SarSensorModel(const ImageMetadata & imd);
   virtual ~SarSensorModel() = default;

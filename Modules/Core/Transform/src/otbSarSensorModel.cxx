@@ -37,17 +37,16 @@ namespace otb
 {
 
 SarSensorModel::SarSensorModel(
-    const std::string & productType,
-    const SARParam & sarParam,
-    const Projection::GCPParam & gcps)
-  : m_ProductType(productType),
-  m_GCP(gcps),
-  m_SarParam(sarParam),
-  m_AzimuthTimeOffset(MetaData::Duration::Seconds(0)),
-  m_RangeTimeOffset(0.),
-  m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
-  m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
-
+    std::string  productType,
+    SARParam  sarParam,
+    Projection::GCPParam  gcps)
+  : m_ProductType(std::move(productType))
+  , m_GCP(std::move(gcps))
+  , m_SarParam(std::move(sarParam))
+  , m_AzimuthTimeOffset(MetaData::Duration::Seconds(0))
+  , m_RangeTimeOffset(0.)
+  , m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New())
+  , m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
 {
   if (m_GCP.GCPs.empty())
   {
@@ -62,9 +61,10 @@ SarSensorModel::SarSensorModel(
 }
 
 SarSensorModel::SarSensorModel(const ImageMetadata & imd)
-          : SarSensorModel(imd.Has(MDStr::ProductType) ? imd[MDStr::ProductType] : "UNKNOWN",
-                            boost::any_cast<SARParam>(imd[MDGeom::SAR]),
-                            imd.GetGCPParam())
+  : SarSensorModel(
+      imd.Has(MDStr::ProductType) ? imd[MDStr::ProductType] : "UNKNOWN",
+      boost::any_cast<SARParam>(imd[MDGeom::SAR]),
+      imd.GetGCPParam())
 {
 }
 
