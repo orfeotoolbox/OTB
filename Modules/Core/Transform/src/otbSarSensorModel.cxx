@@ -122,12 +122,15 @@ namespace otb
 SarSensorModel::SarSensorModel(
     std::string  productType,
     SARParam  sarParam,
-    Projection::GCPParam  gcps)
+    Projection::GCPParam  gcps,
+    unsigned int polynomial_degree)
   : m_ProductType(std::move(productType))
   , m_GCP(std::move(gcps))
   , m_SarParam(std::move(sarParam))
   , m_AzimuthTimeOffset(MetaData::Duration::Seconds(0))
   , m_RangeTimeOffset(0.)
+  , m_OrbitInterpolator(m_SarParam.orbits, polynomial_degree)
+  , m_polynomial_degree(polynomial_degree)
   , m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New())
   , m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
 {
@@ -143,11 +146,12 @@ SarSensorModel::SarSensorModel(
 
 }
 
-SarSensorModel::SarSensorModel(const ImageMetadata & imd)
+SarSensorModel::SarSensorModel(const ImageMetadata & imd, unsigned int polynomial_degree)
   : SarSensorModel(
       imd.Has(MDStr::ProductType) ? imd[MDStr::ProductType] : "UNKNOWN",
       boost::any_cast<SARParam>(imd[MDGeom::SAR]),
-      imd.GetGCPParam())
+      imd.GetGCPParam(),
+      polynomial_degree)
 {
 }
 
@@ -438,9 +442,7 @@ SarSensorModel::ZeroDopplerTimeLookup(Point3DType const& inEcefPoint) const
 }
 
 SarSensorModel::ZeroDopplerInfo
-SarSensorModel::ZeroDopplerLookup(
-    Point3DType const& inEcefPoint,
-    unsigned int polynomial_degree) const
+SarSensorModel::ZeroDopplerLookup(Point3DType const& inEcefPoint) const
 {
   TimeType      azimuthTime;
   OrbitIterator itRecord1, itRecord2;
@@ -456,20 +458,17 @@ SarSensorModel::ZeroDopplerLookup(
     // Ideally, we should center around the interval [record1, record2]
     ++itRecord1;
   }
-  std::tie(sensorPos, sensorVel) = interpolateSensorPosVel(
-      azimuthTime, itRecord1, polynomial_degree);
+  std::tie(sensorPos, sensorVel) = interpolateSensorPosVel(azimuthTime, itRecord1);
 
   ZeroDopplerInfo res{azimuthTime, sensorPos, sensorVel};
   return res;
 }
 
 SarSensorModel::OrbitIterator
-SarSensorModel::searchLagrangianNeighbourhood(
-    TimeType azimuthTime,
-    unsigned int deg) const
+SarSensorModel::searchLagrangianNeighbourhood(TimeType azimuthTime) const
 {
   // If there are less records than degrees, use them all
-  if(m_SarParam.orbits.size() < deg)
+  if(m_SarParam.orbits.size() < m_polynomial_degree)
   {
     // nEnd = m_SarParam.orbits.size()-1;
     return m_SarParam.orbits.end();
@@ -495,16 +494,16 @@ SarSensorModel::searchLagrangianNeighbourhood(
            t_min = current_time;
         }
      }
-  
+
     return m_SarParam.orbits.begin() + t_min_idx;
   }
 }
 
 std::pair<SarSensorModel::Point3DType, SarSensorModel::Vector3DType>
-SarSensorModel::interpolateSensorPosVel(
-    TimeType azimuthTime, OrbitIterator itRecord1, unsigned int deg) const
+SarSensorModel::interpolateSensorPosVel(TimeType azimuthTime, OrbitIterator itRecord1) const
 {
   assert(m_SarParam.orbits.size() &&"The orbit records vector is empty");
+  auto deg = m_polynomial_degree;
 
   auto t_min_idx = std::distance(m_SarParam.orbits.begin(), itRecord1);
 
@@ -526,47 +525,14 @@ SarSensorModel::interpolateSensorPosVel(
                               // reasonable
   assert(nBegin != nEnd);
 
-  Point3DType  sensorPos(0.);
-  Vector3DType sensorVel(0.);
-
-  // Compute lagrangian interpolation using records from nBegin to nEnd
-  for(unsigned int i = nBegin; i < nEnd; ++i)
-  {
-     double w = 1.;
-     unsigned int j = nBegin;
-     for( ; j != i ; ++j)
-     {
-        const DurationType td1 = azimuthTime                    - m_SarParam.orbits[j].time;
-        const DurationType td2 = m_SarParam.orbits[i].time - m_SarParam.orbits[j].time;
-        const double f = td1 / td2;
-        w *= f;
-     }
-     ++j;
-     for( ; j < nEnd; ++j)
-     {
-        const DurationType td1 = azimuthTime                    - m_SarParam.orbits[j].time;
-        const DurationType td2 = m_SarParam.orbits[i].time - m_SarParam.orbits[j].time;
-        const double f = td1 / td2;
-        w *= f;
-     }
-     sensorPos[0]+=w*m_SarParam.orbits[i].position[0];
-     sensorPos[1]+=w*m_SarParam.orbits[i].position[1];
-     sensorPos[2]+=w*m_SarParam.orbits[i].position[2];
-
-     sensorVel[0]+=w*m_SarParam.orbits[i].velocity[0];
-     sensorVel[1]+=w*m_SarParam.orbits[i].velocity[1];
-     sensorVel[2]+=w*m_SarParam.orbits[i].velocity[2];
-  }
-
-  return {sensorPos, sensorVel};
+  return m_OrbitInterpolator.interpolatePosVel(azimuthTime, nBegin, nEnd);
 }
 
 std::pair<SarSensorModel::Point3DType, SarSensorModel::Vector3DType>
-SarSensorModel::interpolateSensorPosVel(
-    TimeType azimuthTime, unsigned int deg) const
+SarSensorModel::interpolateSensorPosVel(TimeType azimuthTime) const
 {
-  auto const closest_osv = searchLagrangianNeighbourhood(azimuthTime, deg);
-  return interpolateSensorPosVel(azimuthTime, closest_osv, deg);
+  auto const closest_osv = searchLagrangianNeighbourhood(azimuthTime);
+  return interpolateSensorPosVel(azimuthTime, closest_osv);
 }
 
 void SarSensorModel::OptimizeTimeOffsetsFromGcps()

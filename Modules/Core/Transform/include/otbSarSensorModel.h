@@ -21,6 +21,7 @@
 #ifndef otbSarSensorModel_h
 #define otbSarSensorModel_h
 
+#include "otbLagrangianOrbitInterpolator.h"
 #include "otbImageMetadata.h"
 #include "otbSARMetadata.h"
 #include "otbGeocentricTransform.h"
@@ -51,9 +52,10 @@ public:
   SarSensorModel(
       std::string          productType,
       SARParam             sarParam,
-      Projection::GCPParam gcps);
+      Projection::GCPParam gcps,
+      unsigned int polynomial_degree = 8);
 
-  SarSensorModel(const ImageMetadata & imd);
+  explicit SarSensorModel(const ImageMetadata & imd, unsigned int polynomial_degree = 8);
   virtual ~SarSensorModel() = default;
 
   SarSensorModel(const SarSensorModel&) = delete; // non construction-copyable
@@ -247,9 +249,7 @@ public:
    * \throw itk::ExceptionObject if orbit record vector contains less than 2
    * elements.
    */
-  ZeroDopplerInfo ZeroDopplerLookup(
-      Point3DType const& inEcefPoint,
-      unsigned int polynomial_degree = 8) const;
+  ZeroDopplerInfo ZeroDopplerLookup(Point3DType const& inEcefPoint) const;
 
 
   /*-------------------------------[ Burst related functions ]-----------------*/
@@ -353,8 +353,7 @@ private:
    * supposition on the Lagrangian polynomial degree.
    * \throw None
    */
-  OrbitIterator searchLagrangianNeighbourhood(
-      TimeType azimuthTime, unsigned int deg) const;
+  OrbitIterator searchLagrangianNeighbourhood(TimeType azimuthTime) const;
 
    /**
     * Interpolate sensor position and velocity at given azimuth time
@@ -365,11 +364,9 @@ private:
    * This overload is time consuming and best avoided is possible.
    *
     * \param[in] azimuthTime The time at which to interpolate
-    * \param[in] deg Degree of lagragian interpolation
    * \return interpolated sensor {position, velocity}
     */
-  std::pair<Point3DType, Vector3DType> interpolateSensorPosVel(
-      TimeType azimuthTime, unsigned int deg = 8) const;
+  std::pair<Point3DType, Vector3DType> interpolateSensorPosVel(TimeType azimuthTime) const;
 
   /**
    * Interpolate sensor position and velocity at given azimuth time
@@ -380,13 +377,11 @@ private:
    * Prefer this overload when possible.
    *
    * \param[in] azimuthTime The time at which to interpolate
-   * \param[in] deg Degree of lagragian interpolation
    * \return interpolated sensor {position, velocity}
    */
   std::pair<Point3DType, Vector3DType> interpolateSensorPosVel(
       TimeType  azimuthTime,
-      OrbitIterator itrecord1,
-      unsigned int deg = 8) const;
+      OrbitIterator itrecord1) const;
 
    /**
     * Convert azimuth time to fractional line.
@@ -403,7 +398,6 @@ private:
   double ApplyCoordinateConversion(double in,
                                  const TimeType& azimuthTime,
                                  const std::vector<CoordinateConversionRecord> & records) const;
-
 
   const GCP & findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const;
 
@@ -431,6 +425,11 @@ private:
 
   // True if the input product is a ground product
   bool m_IsGrd;
+
+  // Let's use a single precision for Lagrangian interpolation that is decided
+  // once, when the SarSensorModel is instanciated.
+  LagrangianOrbitInterpolator m_OrbitInterpolator;
+  unsigned int                m_polynomial_degree;
 
   otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::Pointer m_EcefToWorldTransform;
   otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::Pointer m_WorldToEcefTransform;
