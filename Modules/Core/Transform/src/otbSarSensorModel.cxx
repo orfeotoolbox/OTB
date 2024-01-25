@@ -66,7 +66,7 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
 {
   TimeType azimuthTime;
   double rangeTime;
-  Point3DType sensorPos; 
+  Point3DType sensorPos;
   Vector3DType sensorVel;
 
   const bool success = WorldToAzimuthRangeTime(inGeoPoint, azimuthTime, rangeTime, sensorPos, sensorVel);
@@ -93,7 +93,7 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
   {
     // SLC case
     // Eq 23 and 24 p. 28
-    outLineSample[0] = (rangeTime - m_SarParam.nearRangeTime) 
+    outLineSample[0] = (rangeTime - m_SarParam.nearRangeTime)
                         * m_SarParam.rangeSamplingRate;
   }
 }
@@ -102,7 +102,7 @@ void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DT
 {
   TimeType azimuthTime;
   double rangeTime;
-  Point3DType sensorPos; 
+  Point3DType sensorPos;
   Vector3DType sensorVel;
 
   const bool success = WorldToAzimuthRangeTime(inGeoPoint, azimuthTime, rangeTime, sensorPos, sensorVel);
@@ -129,7 +129,7 @@ void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DT
   {
     // SLC case
     // Eq 23 and 24 p. 28
-    cr[0] = (rangeTime - m_SarParam.nearRangeTime) 
+    cr[0] = (rangeTime - m_SarParam.nearRangeTime)
                         * m_SarParam.rangeSamplingRate;
   }
 
@@ -137,15 +137,15 @@ void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DT
 
   // Radar distance
   double NormeS = std::sqrt(sensorPos[0]*sensorPos[0] + sensorPos[1]*sensorPos[1] + sensorPos[2]*sensorPos[2]);
-  
+
   double PS2 = inputPt[0]*sensorPos[0] + inputPt[1]*sensorPos[1] + inputPt[2]*sensorPos[2];
 
   assert(NormeS>1e-6);
   yz[1] = NormeS - PS2/NormeS;
 
-  double distance = std::sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) + 
-                             (sensorPos[1]-inputPt[1])*(sensorPos[1]-inputPt[1]) + 
-                             (sensorPos[2]-inputPt[2])*(sensorPos[2]-inputPt[2]));  
+  double distance = std::sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) +
+                             (sensorPos[1]-inputPt[1])*(sensorPos[1]-inputPt[1]) +
+                             (sensorPos[2]-inputPt[2])*(sensorPos[2]-inputPt[2]));
 
 
 
@@ -160,10 +160,10 @@ void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DT
   }
 }
 
-bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
-                                        TimeType & azimuthTime, 
-                                        double & rangeTime, 
-                                        Point3DType& sensorPos, 
+bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint,
+                                        TimeType & azimuthTime,
+                                        double & rangeTime,
+                                        Point3DType& sensorPos,
                                         Vector3DType& sensorVel) const
 {
   auto ecefPoint = WorldToEcef(inGeoPoint);
@@ -229,9 +229,9 @@ void SarSensorModel::LineSampleToWorld(const Point2DType& imPt,
   worldPt = EcefToWorld(projToSurface(gcp, imPt, heightFunction));
 }
 
-bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint, 
-                                        TimeType & azimuthTime, 
-                                        Point3DType& sensorPos, 
+bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint,
+                                        TimeType & azimuthTime,
+                                        Point3DType& sensorPos,
                                         Vector3DType& sensorVel) const
 {
   if (m_SarParam.orbits.size() < 2)
@@ -311,9 +311,9 @@ bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint,
 }
 
 
-void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime, 
-                                Point3DType& sensorPos, 
-                                Vector3DType& sensorVel, 
+void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime,
+                                Point3DType& sensorPos,
+                                Vector3DType& sensorVel,
                                 unsigned int deg) const
 {
   assert(m_SarParam.orbits.size() &&"The orbit records vector is empty");
@@ -438,7 +438,7 @@ void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & li
   // records will be 1 (except for TOPSAR Sentinel1 products)
   auto it = m_SarParam.burstRecords.cbegin();
   auto itend = m_SarParam.burstRecords.cend();
-  
+
   for(; it!= itend ; ++it)
   {
     if(azimuthTime >= it->azimuthStartTime
@@ -571,7 +571,7 @@ const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projec
   const GCP* closest ;
 
   // Squared distance between a Point and a gcp
-  auto squaredDistance = [](const Point2DType & imPt, const GCP & gcp) 
+  auto squaredDistance = [](const Point2DType & imPt, const GCP & gcp)
     {
       double dx = imPt[0] - gcp.m_GCPCol;
       double dy = imPt[1] - gcp.m_GCPRow;
@@ -685,9 +685,9 @@ SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const
     }
     catch (itk::ExceptionObject const& e)
     {
-      otbLogMacro(Warning, << "SarSensorModel::projToSurface(): singular matrix can not be inverted. Returning best estimation so far(" 
-                           << currentEstimation 
-                           << ") for output point (" 
+      otbLogMacro(Warning, << "SarSensorModel::projToSurface(): singular matrix can not be inverted. Returning best estimation so far("
+                           << currentEstimation
+                           << ") for output point ("
                            << imPt << ")" << std::endl);
       return currentEstimation;
     }
@@ -750,9 +750,9 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
     unsigned long overlapLength = timeOverlapEnd/m_SarParam.azimuthTimeInterval;
     unsigned long halfLineOverlapEnd = overlapLength/2;
     TimeType endTimeInNextBurst = it->azimuthStopTime-(halfLineOverlapEnd-1)*m_SarParam.azimuthTimeInterval;
-    
+
     unsigned long halfLineOverlapBegin = std::floor(0.5+(endTimeInNextBurst-next->azimuthStartTime)/m_SarParam.azimuthTimeInterval);
-      
+
     unsigned long currentStop = it->endLine-halfLineOverlapEnd;
 
     deburstEndLine+= currentStop - currentStart + 1; // +1 because currentStart/Stop are both valids
@@ -795,7 +795,7 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   deburstBurst.azimuthStartTime = deburstAzimuthStartTime;
   deburstBurst.endLine = deburstEndLine;
   deburstBurst.azimuthStopTime = deburstAzimuthStopTime;
-  deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime; 
+  deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime;
 
   if (onlyValidSample)
   {
@@ -854,9 +854,9 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   // redaptMedataAfterDeburst = true;
   m_FirstLineTime = deburstBurst.azimuthStartTime;
   m_LastLineTime = deburstBurst.azimuthStopTime;
-  
+
   if (onlyValidSample)
-    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate; 
+    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate;
 
 
   return true;
@@ -867,7 +867,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
                                      std::pair<unsigned long,unsigned long> & lines,
                                      std::pair<unsigned long,unsigned long> & samples,
                                      bool allPixels)
-{ 
+{
   auto & burstRecords = m_SarParam.burstRecords;
   if (burstRecords.empty())
   {
@@ -884,7 +884,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
   if (allPixels)
   {
     samples = {0, m_SarParam.numberOfSamplesPerBurst - 1};
-    lines = {burst_index*m_SarParam.numberOfLinesPerBurst, 
+    lines = {burst_index*m_SarParam.numberOfLinesPerBurst,
                            (burst_index+1)*m_SarParam.numberOfLinesPerBurst - 1};
 
     //redaptMedataAfterDeburst = true;
@@ -935,7 +935,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
     //redaptMedataAfterDeburst = true;
     m_FirstLineTime = oneBurst.azimuthStartTime;
     m_LastLineTime = oneBurst.azimuthStopTime;
-    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate; 
+    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate;
   }
 
   std::vector<GCP> oneBurstGCPs;
@@ -964,7 +964,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
 
     unsigned long newLine = gcpLine;
     bool linesOk = false;
-  
+
     if (gcpLine >= lines.first && gcpLine <= lines.second)
     {
       linesOk = true;
@@ -992,7 +992,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
 
 }
 
-bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
+bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts,
                                            std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
                                            unsigned int & linesOffset,
                                            unsigned int first_burstInd,
@@ -1004,7 +1004,7 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
     return false;
   }
 
-  // declare lines and samples 
+  // declare lines and samples
   std::vector<std::pair<unsigned long,unsigned long> > lines;
   lines.reserve(burstRecords.size());
   std::pair<unsigned long,unsigned long> samples;
@@ -1091,7 +1091,7 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
 
   // Now, update other metadata accordingly
   std::vector<GCP> deburstGCPs;
-  
+
   for (auto gcp : m_GCP.GCPs)
   {
     unsigned long newLine=0;
@@ -1183,8 +1183,8 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
   //redaptMedataAfterDeburst = true;
   m_FirstLineTime = deburstBurst.azimuthStartTime;
   m_LastLineTime = deburstBurst.azimuthStopTime;
-  
-  m_SarParam.nearRangeTime += samples.first*(1/m_SarParam.rangeSamplingRate); 
+
+  m_SarParam.nearRangeTime += samples.first*(1/m_SarParam.rangeSamplingRate);
 
   return true;
 }
@@ -1192,7 +1192,7 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
 bool SarSensorModel::Overlap(std::pair<unsigned long, unsigned long>& linesUp, std::pair<unsigned long, unsigned long>& linesLow,
                std::pair<unsigned long, unsigned long>& samplesUp, std::pair<unsigned long, unsigned long>& samplesLow, unsigned int burstIndUp,
                bool inputWithInvalidPixels)
-{  
+{
   auto & burstRecords = m_SarParam.burstRecords;
 
   // Check the no burst record case, the single burst record case or inferior to burstIndUp + 1
@@ -1275,10 +1275,10 @@ bool SarSensorModel::ImageLineToDeburstLine(const std::vector<std::pair<unsigned
 {
   auto vit = lines.cbegin();
   auto nit = vit + 1;
-  
+
   auto lineOffset = vit->first;
   deburstLine = imageLine;
-  
+
   for(; nit != lines.end(); ++vit, ++nit)
   {
     if(imageLine >= vit->first && imageLine <= vit->second)
@@ -1291,17 +1291,17 @@ bool SarSensorModel::ImageLineToDeburstLine(const std::vector<std::pair<unsigned
   return false;
 }
 
-void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
-                                            unsigned long deburstLine, 
+void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
+                                            unsigned long deburstLine,
                                             unsigned long & imageLine)
 {
   auto vit = lines.cbegin();
   auto nit = vit+1;
-  
+
   unsigned long lineOffset = vit->first;
 
   imageLine = deburstLine;
-  
+
   while(nit != lines.end())
   {
     if(imageLine+lineOffset>=vit->first && imageLine+lineOffset<=vit->second)

@@ -68,10 +68,10 @@ public:
   /** Transform line index to satellite position (x,y,z) and satellite velocity */
   bool LineToSatPositionAndVelocity(double line, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
 
-  bool WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
-                                          TimeType & azimuthTime, 
-                                          double & rangeTime, 
-                                          Point3DType& sensorPos, 
+  bool WorldToAzimuthRangeTime(const Point3DType& inGeoPoint,
+                                          TimeType & azimuthTime,
+                                          double & rangeTime,
+                                          Point3DType& sensorPos,
                                           Vector3DType& sensorVel) const;
 
   void LineSampleHeightToWorld(const Point2DType& imPt,
@@ -104,8 +104,8 @@ public:
 
    /**
     * This method will perform a deburst and concatenation operation, and return the
-    * vector of lines and the vector of samples to keep in the 
-    * image file. The lines and samples represents start/size into each independent bursts. 
+    * vector of lines and the vector of samples to keep in the
+    * image file. The lines and samples represents start/size into each independent bursts.
     * Note that the deburst operation has no effect if theBurstRecords
     * contains a single burst. Otherwise it will merge burst together
     * into a single burst, and update GCPs accordingly.
@@ -117,16 +117,16 @@ public:
     * deburst image.
     * \param lines A Boolean to indicate only valids samples are required.
     */
-   bool DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
+   bool DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts,
             std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
             unsigned int & linesOffset, unsigned int first_burstInd,
             bool inputWithInvalidPixels=false);
 
    /**
     * This method will estime the overlap area between two bursts and return the
-    * vector of lines and the vector of samples (with two elements : Burst Up and Burst Low). 
+    * vector of lines and the vector of samples (with two elements : Burst Up and Burst Low).
     * Note that this operation has no effect if theBurstRecords
-    * contains a single burst. 
+    * contains a single burst.
     * \return true if this operation succeeded. No changes is
     * made to the object if the operation fails.
     * \param linesUp A container for the lines ranges to keep into the first Burst
@@ -140,21 +140,21 @@ public:
                std::pair<unsigned long, unsigned long>& samplesUp, std::pair<unsigned long, unsigned long>& samplesLow, unsigned int burstIndUp,
                bool inputWithInvalidPixels = false);
 
-   /** Update a ImageMetadata object with the stored SarParam and GCPs, possibly modified from the 
+   /** Update a ImageMetadata object with the stored SarParam and GCPs, possibly modified from the
     * original metadata by the SarSensorModel
     * \param imd The ImageMetadata to be updated
-     */ 
+     */
    void UpdateImageMetadata(ImageMetadata & imd);
 
-  /** 
+  /**
     * This is a helper function to convert deburst line to input image
     * line
     * \param lines The vector of lines range to keep
     * \param imageLine The input deburst line
     * \param deburstLine The output original image line
   */
-  static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
-                                              unsigned long deburstLine, 
+  static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
+                                              unsigned long deburstLine,
                                               unsigned long & imageLine);
 
   /**
@@ -175,9 +175,9 @@ private:
   void OptimizeTimeOffsetsFromGcps();
 
 
-  bool ZeroDopplerLookup(const Point3DType& inEcefPoint, 
-                                          TimeType & azimuthTime, 
-                                          Point3DType& sensorPos, 
+  bool ZeroDopplerLookup(const Point3DType& inEcefPoint,
+                                          TimeType & azimuthTime,
+                                          Point3DType& sensorPos,
                                           Vector3DType& sensorVel) const;
 
 
@@ -190,9 +190,9 @@ private:
     * \param[out] sensorvel Interpolated sensor velocity
     * \param[in] deg Degree of lagragian interpolation
     */
-   void interpolateSensorPosVel(const TimeType & azimuthTime, 
-                                Point3DType& sensorPos, 
-                                Vector3DType& sensorVel, 
+   void interpolateSensorPosVel(const TimeType & azimuthTime,
+                                Point3DType& sensorPos,
+                                Vector3DType& sensorVel,
                                 unsigned int deg = 8) const;
 
    /**
@@ -201,11 +201,11 @@ private:
     * \param[in] azimuthTime The azimuth time to convert
     * \param[out] The estimated fractional line
     */
-  void AzimuthTimeToLine(const TimeType & azimuthTime, 
+  void AzimuthTimeToLine(const TimeType & azimuthTime,
                           double & line) const;
 
-  void SlantRangeToGroundRange(double slantRange, 
-                               const TimeType & azimuthTime, 
+  void SlantRangeToGroundRange(double slantRange,
+                               const TimeType & azimuthTime,
                                double & groundRange) const;
 
 
@@ -229,7 +229,6 @@ private:
   /** Coordinate transformation from geographic to ECEF */
   itk::Point<double, 3> WorldToEcef(const itk::Point<double, 3> & worldPoint) const;
 
-
   std::string m_ProductType;
   Projection::GCPParam m_GCP;
   SARParam m_SarParam;
@@ -240,7 +239,7 @@ private:
   DurationType m_AzimuthTimeOffset;
   double m_RangeTimeOffset; // Offset in seconds
 
-  // Speed of light 
+  // Speed of light
   static constexpr double C = 299792458;
 
   // True if the input product is a ground product
