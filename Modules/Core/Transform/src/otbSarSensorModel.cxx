@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,28 +19,34 @@
  */
 
 #include "otbSarSensorModel.h"
-
 #include "otbDEMHandler.h"
 
 #include <numeric>
 
-namespace otb
+namespace
+{ // Anonymous namespace
+
+double DotProduct(itk::Point<double, 3> const& pt1, itk::Point<double, 3> const& pt2)
 {
-double DotProduct(const itk::Point<double, 3> & pt1, const itk::Point<double, 3> & pt2)
-{
-  return std::inner_product(pt1.Begin(), pt1.End(), pt2.Begin(), 0.);
+  // Manual dot product is a bit faster w/ gcc...
+  return pt1[0]*pt2[0] + pt1[1]*pt2[1] + pt1[2]*pt2[2];
+  // return std::inner_product(pt1.Begin(), pt1.End(), pt2.Begin(), 0.);
 }
 
-SarSensorModel::SarSensorModel( const std::string & productType,
-                                const SARParam & sarParam,
-                                const Projection::GCPParam & gcps)
-                            : m_ProductType(productType),
-                              m_GCP(gcps),
-                              m_SarParam(sarParam),
-                              m_AzimuthTimeOffset(MetaData::Duration::Seconds(0)),
-                              m_RangeTimeOffset(0.),
-                              m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
-                              m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
+namespace otb
+{
+
+SarSensorModel::SarSensorModel(
+    const std::string & productType,
+    const SARParam & sarParam,
+    const Projection::GCPParam & gcps)
+  : m_ProductType(productType),
+  m_GCP(gcps),
+  m_SarParam(sarParam),
+  m_AzimuthTimeOffset(MetaData::Duration::Seconds(0)),
+  m_RangeTimeOffset(0.),
+  m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
+  m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
 
 {
   if (m_GCP.GCPs.empty())
