@@ -40,6 +40,10 @@ otb::MetaData::TimePoint time(otb::CoordinateConversionRecord const& o) { return
 auto const cmp_times = [](auto const& a, auto const& b)
 { return time(a) < time(b);};
 
+// Speed of light
+static constexpr double C = 299'792'458;
+static constexpr double two_on_C = 2.0 / C;
+
 double SlantRangeToGroundRange(double in, otb::CoordinateConversionRecord const& srgrRecord)
 {
   auto const& coeffs = srgrRecord.coeffs;
@@ -211,9 +215,7 @@ SarSensorModel::Doppler0ToLineSampleYZ(
 
   auto const grd_sat_vector = sensorPos - ecefGround;
   double const distance2 = DotProduct(grd_sat_vector, grd_sat_vector);
-  double const distance = std::sqrt(distance2);
-
-  res.yz[0] = std::sqrt(distance*distance - res.yz[1] * res.yz[1]);
+  res.yz[0] = std::sqrt(distance2 - res.yz[1] * res.yz[1]);
 
   // Check view side and change sign of Y accordingly
   if ( (( sensorVel[0] * (sensorPos[1]* ecefGround[2] - sensorPos[2]* ecefGround[1]) +
@@ -258,20 +260,16 @@ void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DT
   auto inputPt = WorldToEcef(inGeoPoint);
 
   // Radar distance
-  double NormeS = std::sqrt(sensorPos[0]*sensorPos[0] + sensorPos[1]*sensorPos[1] + sensorPos[2]*sensorPos[2]);
+  double const NormeS = std::sqrt(DotProduct(sensorPos, sensorPos));
 
-  double PS2 = inputPt[0]*sensorPos[0] + inputPt[1]*sensorPos[1] + inputPt[2]*sensorPos[2];
+  double const PS2 = DotProduct(inputPt, sensorPos);
 
   assert(NormeS>1e-6);
   yz[1] = NormeS - PS2/NormeS;
 
-  double distance = std::sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) +
-                             (sensorPos[1]-inputPt[1])*(sensorPos[1]-inputPt[1]) +
-                             (sensorPos[2]-inputPt[2])*(sensorPos[2]-inputPt[2]));
-
-
-
-  yz[0] = std::sqrt(distance*distance - yz[1] * yz[1]);
+  auto const grd_sat_vector = sensorPos - inputPt;
+  double const distance2 = DotProduct(grd_sat_vector, grd_sat_vector);
+  yz[0] = std::sqrt(distance2 - yz[1] * yz[1]);
 
   // Check view side and change sign of Y accordingly
   if ( (( sensorVel[0] * (sensorPos[1]* inputPt[2] - sensorPos[2]* inputPt[1]) +
@@ -287,7 +285,7 @@ double SarSensorModel::CalculateRangeTime(
 {
   //TODO Bistatic correction when needed
   double const rangeDistance = sensorPos.EuclideanDistanceTo(ecefGround);
-  return m_RangeTimeOffset + 2 * rangeDistance / C;
+  return m_RangeTimeOffset + two_on_C * rangeDistance; // This impacts precision
 }
 
 bool SarSensorModel::WorldToAzimuthRangeTime(
