@@ -37,6 +37,78 @@ otb::MetaData::TimePoint time(otb::MetaData::TimePoint t) { return t; }
 otb::MetaData::TimePoint time(otb::Orbit const& o) { return o.time; }
 otb::MetaData::TimePoint time(otb::CoordinateConversionRecord const& o) { return o.azimuthTime; }
 
+auto const cmp_times = [](auto const& a, auto const& b)
+{ return time(a) < time(b);};
+
+double SlantRangeToGroundRange(double in, otb::CoordinateConversionRecord const& srgrRecord)
+{
+  auto const& coeffs = srgrRecord.coeffs;
+  assert(!coeffs.empty()&&"Slant range to ground range coefficients vector is empty.");
+
+  const double sr_minus_sr0 =  in-srgrRecord.rg0;
+  double res = 0.;
+
+  for(auto cIt = coeffs.crbegin(); cIt!=coeffs.crend(); ++cIt)
+  {
+    res = *cIt + sr_minus_sr0*res;
+  }
+  return res;
+}
+
+double SlantRangeToGroundRange(
+    double in, otb::MetaData::TimePoint azimuthTime,
+    otb::CoordinateConversionRecord const& previousRecord,
+    otb::CoordinateConversionRecord const& nextRecord)
+{
+  otb::CoordinateConversionRecord srgrRecord;
+
+  auto const& previous_coeffs = previousRecord.coeffs;
+  auto const& next_coeffs     = nextRecord.coeffs;
+
+  assert(!previous_coeffs.empty()&&"previousRecord coefficients vector is empty.");
+  assert(!next_coeffs.empty()    &&"nextRecord coefficients vector is empty.");
+
+  // If azimuth time is between 2 records, interpolate
+  const double interp
+    = (azimuthTime - previousRecord.azimuthTime)
+    / (nextRecord.azimuthTime - previousRecord.azimuthTime)
+    ;
+
+  auto const rg0 = (1.-interp) * previousRecord.rg0 + interp*nextRecord.rg0;
+
+
+  // Let's avoid allocation (every time the function is called) to
+  // store the interpolated elements. Use instead a single loop that
+  // does the Horner polynomial evaluation as it computed each
+  // coefficients.
+  //
+  // Let's keep the algorithm how it used to work: align on the first
+  // elements even if there aren't the same number of elements in both
+  // lists.
+  auto const prev_size   = previous_coeffs.size();
+  auto const next_size   = next_coeffs    .size();
+  auto const min_size    = std::min(prev_size, next_size);
+  assert(min_size>0&&"Slant range to ground range interpolated coefficients vector is empty.");
+  auto const prev_offset = prev_size - min_size;
+  auto const next_offset = next_size - min_size;
+
+  auto pIt = previous_coeffs.crbegin() + prev_offset;
+  auto nIt = next_coeffs    .crbegin() + next_offset;
+
+  auto const sr_minus_sr0 =  in - rg0;
+
+  double res = 0.;
+
+  for(;pIt != previous_coeffs.crend() && nIt != next_coeffs.crend();++pIt,++nIt)
+  {
+    // interpolated the coeffs
+    auto const coeff = interp*(*nIt) + (1.-interp)*(*pIt);
+    // compute ground range from slant range (by horner polynomial
+    // evaluation on the coeeficcients)
+    res = coeff + sr_minus_sr0*res;
+  }
+  return res;
+}
 
 } // Anonymous namespace
 
@@ -510,15 +582,15 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
   m_AzimuthTimeOffset = DurationType::Seconds(0);
 
   // First, fix the azimuth time
-  for(auto gcpIt = m_GCP.GCPs.begin(); gcpIt!= m_GCP.GCPs.end(); ++gcpIt)
+  for(auto const& gcp : m_GCP.GCPs)
   {
-    auto gcpTimeIt = m_SarParam.gcpTimes.find(gcpIt->m_Id);
+    auto gcpTimeIt = m_SarParam.gcpTimes.find(gcp.m_Id);
     if (gcpTimeIt != std::end(m_SarParam.gcpTimes))
     {
       Point3DType inWorldPoint;
-      inWorldPoint[0] = gcpIt->m_GCPX;
-      inWorldPoint[1] = gcpIt->m_GCPY;
-      inWorldPoint[2] = gcpIt->m_GCPZ;
+      inWorldPoint[0] = gcp.m_GCPX;
+      inWorldPoint[1] = gcp.m_GCPY;
+      inWorldPoint[2] = gcp.m_GCPZ;
 
       // Estimate times
       auto const ecefPoint = WorldToEcef(inWorldPoint);
@@ -593,79 +665,29 @@ double SarSensorModel::ApplyCoordinateConversion(
   assert(!records.empty()&&"The records vector is empty.");
 
   // First, we need to find the correct pair of records for interpolation
-  auto it = records.cbegin();
-  auto previousRecord = it;
-  ++it;
-
-  auto nextRecord = it;
-
   // Look for the correct record
-  while(it!=records.end())
+  auto const wh = std::upper_bound(
+      std::begin(records), std::end(records),
+      azimuthTime, cmp_times);
+
+  if (wh == records.cend())
   {
-    if(azimuthTime >= previousRecord->azimuthTime
-        && azimuthTime < nextRecord->azimuthTime)
-    {
-      break;
-    }
-
-    previousRecord = nextRecord;
-    ++it;
-    nextRecord = it;
+    assert(azimuthTime > records.back().azimuthTime);
+    return ::SlantRangeToGroundRange(in, records.back());
   }
-
-  CoordinateConversionRecord srgrRecord;
-
-  if(it == records.cend())
+  else if (wh == records.cbegin())
   {
-    if(azimuthTime < records.front().azimuthTime)
-    {
-      srgrRecord = records.front();
-    }
-    else if(azimuthTime >= records.back().azimuthTime)
-    {
-      srgrRecord = records.back();
-    }
+    assert(azimuthTime < records.front().azimuthTime);
+    return ::SlantRangeToGroundRange(in, records.front());
   }
-
   else
   {
-    assert(nextRecord != records.end());
-    assert(!previousRecord->coeffs.empty()&&"previousRecord coefficients vector is empty.");
-    assert(!nextRecord->coeffs.empty()&&"nextRecord coefficients vector is empty.");
-
-    // If azimuth time is between 2 records, interpolate
-    const double interp
-            = DurationType(azimuthTime             - previousRecord->azimuthTime)
-            / (nextRecord->azimuthTime - previousRecord->azimuthTime)
-            ;
-
-    srgrRecord.rg0 = (1-interp) * previousRecord->rg0 + interp*nextRecord->rg0;
-
-    srgrRecord.coeffs.clear();
-    std::vector<double>::const_iterator pIt = previousRecord->coeffs.cbegin();
-    std::vector<double>::const_iterator nIt = nextRecord->coeffs.cbegin();
-
-    for(;pIt != previousRecord->coeffs.end() && nIt != nextRecord->coeffs.cend();++pIt,++nIt)
-    {
-      srgrRecord.coeffs.push_back(interp*(*nIt)+(1-interp)*(*pIt));
-    }
-
-    assert(!srgrRecord.coeffs.empty()&&"Slant range to ground range interpolated coefficients vector is empty.");
+    auto const previousRecord = wh-1;
+    auto const nextRecord     = wh;
+    assert(previousRecord->azimuthTime <= azimuthTime);
+    assert(nextRecord    ->azimuthTime >  azimuthTime);
+    return ::SlantRangeToGroundRange(in, azimuthTime, *previousRecord, *nextRecord);
   }
-
-  // Now that we have the interpolated coeffs, compute ground range
-  // from slant range
-  const double sr_minus_sr0 =  in-srgrRecord.rg0;
-
-  assert(!srgrRecord.coeffs.empty()&&"Slant range to ground range coefficients vector is empty.");
-
-  double out = 0.;
-
-  for(auto cIt = srgrRecord.coeffs.crbegin();cIt!=srgrRecord.coeffs.crend();++cIt)
-  {
-    out = *cIt + sr_minus_sr0*out;
-  }
-  return out;
 }
 
 const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const
