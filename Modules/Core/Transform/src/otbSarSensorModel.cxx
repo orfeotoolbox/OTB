@@ -774,7 +774,7 @@ SarSensorModel::Point3DType SarSensorModel::projToSurface(
     {
       dR = MatrixType(B.GetInverse()) * F;
     }
-    catch (itk::ExceptionObject const& e)
+    catch (itk::ExceptionObject const&)
     {
       otbLogMacro(Warning, << "SarSensorModel::projToSurface(): singular matrix can not be inverted. Returning best estimation so far("
                            << currentEstimation
