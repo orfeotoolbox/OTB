@@ -658,7 +658,7 @@ double SarSensorModel::ApplyCoordinateConversion(
 const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const
 {
   assert(gcpParam.GCPs.size() > 0);
-  const GCP* closest ;
+  GCP const* closest = &gcpParam.GCPs.front(); // Let's silence warning...
 
   // Squared distance between a Point and a gcp
   auto squaredDistance = [](const Point2DType & imPt, const GCP & gcp)
