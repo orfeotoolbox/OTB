@@ -22,6 +22,7 @@
 #include "otbDEMHandler.h"
 
 #include <numeric>
+#include <algorithm>
 
 namespace
 { // Anonymous namespace
@@ -508,7 +509,7 @@ SarSensorModel::interpolateSensorPosVel(TimeType azimuthTime, OrbitIterator itRe
   auto t_min_idx = std::distance(m_SarParam.orbits.begin(), itRecord1);
 
   // TODO: see if these expressions can be simplified
-  std::size_t nBegin = std::max(t_min_idx-(int)deg/2+1, 0L);
+  std::size_t nBegin = std::max(t_min_idx-(int)deg/2+1, std::ptrdiff_t{});
   std::size_t nEnd   = std::min(nBegin+deg-1, m_SarParam.orbits.size());
   nBegin = nEnd<m_SarParam.orbits.size()-1 ? nBegin : nEnd-deg+1;
 
