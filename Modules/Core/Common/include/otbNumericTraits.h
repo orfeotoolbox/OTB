@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@
 #include <limits>
 #include <cmath>
 #include <type_traits>
+#include <algorithm>
 
 namespace otb
 {
@@ -34,13 +35,18 @@ constexpr auto common_lowest() {
     return
       std::is_unsigned<I>::value ? I{}
     : std::is_unsigned<O>::value ? O{}
-    : std::max<C>(std::numeric_limits<I>::lowest(), std::numeric_limits<O>::lowest());
+    : std::max<C>(
+            static_cast<C>(std::numeric_limits<I>::lowest()),
+            static_cast<C>(std::numeric_limits<O>::lowest())
+            );
 }
 
 template <typename I, typename O>
 constexpr auto common_highest() {
     using C = std::common_type_t<I,O>;
-    return std::min<C>(std::numeric_limits<I>::max(), std::numeric_limits<O>::max());
+    return std::min<C>(
+            static_cast<C>(std::numeric_limits<I>::max()),
+            static_cast<C>(std::numeric_limits<O>::max()));
 }
 
 } // Namespace otb
