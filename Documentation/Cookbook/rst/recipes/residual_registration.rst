@@ -51,8 +51,8 @@ External *.geom* files can also be used with :ref:`extended filenames<extended-f
 
 ::
 
-    otbcli_ReadImageInfo -in slave_image
-                         -outkwl TheGeom.geom
+    otbcli_ReadImageInfo -in slave_image.tif
+                         -outgeom TheGeom.geom
 
 Extract homologous points from images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -129,15 +129,14 @@ Geometry refinement using homologous points
 
 Now that we can use this set of tie points to estimate a residual
 transformation.For this we use the dedicated application called
-**RefineSensorModel**. This application make use of OSSIM capabilities
+**RefineSensorModel**. This application make use of GDAL capabilities
 to align the sensor model.
 
-It reads the input geometry metadata file (*.geom*) which contains the
-sensor model information that we want to refine and the text file
-(homologous\_points.txt) containing the list of ground control point. It
-performs a least-square fit of the sensor model adjustable parameters to
-these tie points and produces an updated geometry file as output (the
-extension which is always use is *.geom*)
+It reads the input image geometry but can also read the metadata file (*.geom*)
+passed as an ExtendedFilename which contains the sensor model information that
+we want to refine and the text file (homologous\_points.txt) containing the list
+of ground control point. It performs a least-square fit of the sensor model 
+adjustable parameters to these tie points and produces an updated geometry image file as output
 
 The application can provide as well an optional ground control points
 based statistics file and a vector file containing residues that you can
@@ -157,8 +156,8 @@ the estimated model.
 
     otbcli_RefineSensorModel   -elev.dem dem_path/SRTM4-HGT/
                                -elev.geoid OTB-Data/Input/DEM/egm96.grd
-                               -ingeom slave_image.geom
-                               -outgeom refined_slave_image.geom
+                               -in slave_image.tif?&geom=TheGeom.geom
+                               -out refined_slave_image.tif
                                -inpoints homologous_points.txt
                                -outstat stats.txt
                                -outvector refined_slave_image.shp
@@ -181,8 +180,8 @@ set of tie points.
 ::
 
 
-    otbcli_OrthoRectification   -io.in slave_image?&geom=TheRefinedGeom.geom
-                                -io.out ortho_slave_image
+    otbcli_OrthoRectification   -io.in refined_slave_image.tif
+                                -io.out ortho_slave_image.tif
                                 -elev.dem dem_path/SRTM4-HGT/
                                 -elev.geoid OTB-Data/Input/DEM/egm96.grd
                          
