@@ -22,6 +22,7 @@
 #define otbSarTransformBase_hxx
 
 #include "otbSarTransformBase.h"
+#define UNUSED(x) [&x]{}()
 
 namespace otb
 {
@@ -66,8 +67,11 @@ void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSe
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(ImageMetadata& imd, TiePointsType& tiepoints, double& rmsError)
 {
-    std::cout<<"Optimize parameters function not implemented for SAR sensor model."<<std::endl;
     // A Standard definition of this function is available for RPC sensor model in RPCTransformBase class
+    std::cout<<"Optimize parameters function not implemented for SAR sensor model."<<std::endl;
+    UNUSED(imd);
+    UNUSED(tiepoints);
+    UNUSED(rmsError);   
 }
 
 } // namespace otb
