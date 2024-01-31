@@ -43,7 +43,7 @@ target_link_libraries(otbTransformTestDriver ${OTBTransform-Test_LIBRARIES})
 otb_module_target_label(otbTransformTestDriver)
 
 # Tests Declaration
-otb_add_test(NAME prTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriver
+otb_add_test(NAME prTvRPCSolverNoDEMValidationTest COMMAND otbTransformTestDriver
   otbRPCSolverTest
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   10 0.25 0.35
@@ -52,7 +52,7 @@ otb_add_test(NAME prTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriv
   )
 
 
-otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbProjectionTestDriver
+otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbTransformTestDriver
 --compare-ascii ${NOTOL}
 ${BASELINE_FILES}/otbLeastSquareAffineTransformEstimatorOutput.txt
 ${TEMP}/otbLeastSquareAffineTransformEstimatorOutput.txt
@@ -76,7 +76,7 @@ ${TEMP}/otbLeastSquareAffineTransformEstimatorOutput.txt
 352 807 919 10023 12102 14181
 )
 
-otb_add_test(NAME prTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjectionTestDriver
+otb_add_test(NAME prTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbTransformTestDriver
   otbRPCSolverTest
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   5 0.25 0.35
@@ -84,7 +84,7 @@ otb_add_test(NAME prTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjec
   no
   )
 
-otb_add_test(NAME prTvRPCSolverNotEnoughPointsTest COMMAND otbProjectionTestDriver
+otb_add_test(NAME prTvRPCSolverNotEnoughPointsTest COMMAND otbTransformTestDriver
   otbRPCSolverTest
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   4 0.25 0.35
