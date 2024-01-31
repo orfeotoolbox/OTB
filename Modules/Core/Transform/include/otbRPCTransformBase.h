@@ -74,7 +74,7 @@ public:
   bool IsValidSensorModel() const override;
 
   /** Refining the sensor model */
-  void OptimizeParameters(TiePointsType& tiepoints, double& rmsError) override;
+  void OptimizeParameters(ImageMetadata& imd, TiePointsType& tiepoints, double& rmsError) override;
 
 protected:
   RPCTransformBase(TransformDirection dir) : Superclass(dir) {};

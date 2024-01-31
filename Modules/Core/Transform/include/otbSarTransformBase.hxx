@@ -64,11 +64,11 @@ void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSe
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(TiePointsType& tiepoints, double& rmsError)
+void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(ImageMetadata& imd, TiePointsType& tiepoints, double& rmsError)
 {
-    rmsError = 0.0;
-    //TODO : develop the method that was done in ossim for parameter optimisation on sar model
-} 
+    std::cout<<"Optimize parameters function not implemented for SAR sensor model."<<std::endl;
+    // A Standard definition of this function is available for RPC sensor model in RPCTransformBase class
+}
 
 } // namespace otb
 
