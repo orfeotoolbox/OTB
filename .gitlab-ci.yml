@@ -161,6 +161,12 @@ ubuntu-prepare-full:
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
+ubuntu-22-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON
+
 ubuntu-build-core:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
@@ -190,6 +196,21 @@ ubuntu-build-full:
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
   needs:
     - job: ubuntu-prepare-full
+      artifacts: true
+
+ubuntu-22-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full
+    - mv build/CookBook-*-html.tar.gz . || true
+    - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
+    - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
+    - mv build_packages/OTB-*.tar.gz . || true
+    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
+  needs:
+    - job: ubuntu-22-prepare
       artifacts: true
 
 ## RedHat superbuild
