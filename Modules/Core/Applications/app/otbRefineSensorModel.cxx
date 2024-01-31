@@ -76,11 +76,11 @@ private:
     SetDocSeeAlso("OrthoRectification,HomologousPointsExtraction");
     SetDocAuthors("OTB-Team");
 
-    AddParameter(ParameterType_InputFilename, "ingeom", "Input geom file");
-    SetParameterDescription("ingeom", "Geom file containing the sensor model to refine");
+    AddParameter(ParameterType_InputImage, "in", "Input image file");
+    SetParameterDescription("in", "Image containing the sensor model to refine that can be in a geom file (extended filename) or in the image");
 
-    AddParameter(ParameterType_OutputFilename, "outgeom", "Output geom file");
-    SetParameterDescription("outgeom", "Geom file containing the refined sensor model");
+    AddParameter(ParameterType_OutputImage, "out", "Output image file");
+    SetParameterDescription("out", "Image containing the refined sensor model");
 
     AddParameter(ParameterType_InputFilename, "inpoints", "Input file containing tie points");
     SetParameterDescription("inpoints",
@@ -122,21 +122,15 @@ private:
   void DoExecute() override
   {
     OGRMultiLineString mls;
-
-   // Read the geom file
-    otb::ImageMetadata imd;
-
-    // Fetching the RPC model from a GEOM file
-    otb::GeomMetadataSupplier geomSupplier(GetParameterString("ingeom"));
-    for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
-      imd.Bands.emplace_back();
-    otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-    geomSupplier.FetchRPC(imd);
-    auto sensorModel_reference = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(imd, TransformDirection::FORWARD);
-    auto sensorModelRefined = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(imd, TransformDirection::FORWARD);
+    
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+    FloatVectorImageType::Pointer outImage = inImage;
+    // Create sensor model from input file
+    auto sensorModel_reference = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(inImage->GetImageMetadata(), TransformDirection::FORWARD);
+    auto sensorModelRefined = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(inImage->GetImageMetadata(), TransformDirection::FORWARD);
     if (sensorModel_reference->IsValidSensorModel() == false)
     {
-      otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!");
+      otbAppLogFATAL("Invalid Model pointer sensorModel_reference == NULL!\n The metadata is invalid!");
     }
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
@@ -147,7 +141,6 @@ private:
 
     TiePointsType tiepoints;
     double x, y, z, lat, lon;
-
     std::string line;
     while (std::getline(ifs, line))
     {
@@ -186,12 +179,15 @@ private:
     ifs.close();
     otbAppLogINFO("Optimization in progress ...");
     double rmseRefined = 0.0;
-    sensorModelRefined->OptimizeParameters(tiepoints,rmseRefined);
+    otb::ImageMetadata imdrefined = inImage->GetImageMetadata();
+    sensorModelRefined->OptimizeParameters(imdrefined,tiepoints,rmseRefined);
     if (sensorModelRefined->IsValidSensorModel() == false)
     {
-      otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!");
+      otbAppLogFATAL("Invalid Model pointer sensorModelRefined == NULL!\n The metadata is invalid!");
     }
     otbAppLogINFO("Done.\n");
+    outImage->SetImageMetadata(imdrefined);
+    SetParameterOutputImage("out", outImage);
 
     double rmse  = 0;
     double rmsex = 0;

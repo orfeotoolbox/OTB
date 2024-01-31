@@ -34,6 +34,7 @@ otbStreamingResampleImageFilterWithAffineTransform.cxx
 otbRPCTransformTest.cxx
 otbSarTransformTest.cxx
 otbRPCSolverTest.cxx
+otbLeastSquareAffineTransformEstimator.cxx
 )
 
 add_executable(otbTransformTestDriver ${OTBTransformTests})
@@ -49,6 +50,31 @@ otb_add_test(NAME prTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriv
   no
   no
   )
+
+
+otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbProjectionTestDriver
+--compare-ascii ${NOTOL}
+${BASELINE_FILES}/otbLeastSquareAffineTransformEstimatorOutput.txt
+${TEMP}/otbLeastSquareAffineTransformEstimatorOutput.txt
+otbLeastSquareAffineTransformEstimator
+${TEMP}/otbLeastSquareAffineTransformEstimatorOutput.txt
+840 394 783 7907 9925 11943
+798 911 197 5831 7738 9645
+335 768 277 5356 6737 8118
+553 477 628 6867 8526 10185
+364 513 952 9090 10920 12750
+916 635 717 8485 10754 13023
+141 606 16 2687 3451 4215
+242 137 804 6428 7612 8796
+156 400 129 2669 3355 4041
+108 998 218 5636 6961 8286
+512 839 612 8162 10126 12090
+296 637 524 6522 7980 9438
+493 972 292 6435 8193 9951
+771 526 769 8268 10335 12402
+400 891 283 5955 7530 9105
+352 807 919 10023 12102 14181
+)
 
 otb_add_test(NAME prTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjectionTestDriver
   otbRPCSolverTest

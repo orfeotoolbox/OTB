@@ -66,11 +66,10 @@ void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSe
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(std::vector<std::pair<InputPointType,OutputPointType>>& tiepoints, double& rmsError)
+void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(ImageMetadata& imd, TiePointsType& tiepoints, double& rmsError)
 {
     Projection::RPCParam refinedRPCParams;
     RPCSolver::GCPsContainerType gcps;
-    ImageMetadata refinedImd;
 
     //Build GCPS from tiepoints
     for(auto it=tiepoints.begin();it!=tiepoints.end();it++)
@@ -87,8 +86,8 @@ void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::Optimiz
         gcps.push_back({sensorGCP,groundGCP});
     }
     RPCSolver::Solve(gcps, rmsError, refinedRPCParams);
-    refinedImd.Add(MDGeom::RPC,refinedRPCParams);
-    this->SetMetadata(refinedImd);
+    imd.Add(MDGeom::RPC,refinedRPCParams);
+    this->SetMetadata(imd);
 }
 
 } // namespace otb

@@ -25,6 +25,7 @@
 #include "otbSARMetadata.h"
 #include "otbSarSensorModel.h"
 
+
 namespace otb
 {
 /** \class SarTransformBase
@@ -74,7 +75,7 @@ public:
   bool IsValidSensorModel() const override;
 
   /** Refining the sensor model */
-  void OptimizeParameters(TiePointsType& tiepoints,double& rmsError) override;
+  void OptimizeParameters(ImageMetadata& imd, TiePointsType& tiepoints, double& rmsError) override;
 
 protected:
   SarTransformBase(TransformDirection dir) : Superclass(dir) {};
