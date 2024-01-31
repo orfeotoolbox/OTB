@@ -58,6 +58,7 @@ public:
 
   using InputPointType  = itk::Point<TScalarType, NInputDimensions>;
   using OutputPointType = itk::Point<TScalarType, NOutputDimensions>;
+  using TiePointsType = std::vector<std::pair<InputPointType,OutputPointType>>;
   using PixelType =TScalarType;
   //@}
 
@@ -75,6 +76,8 @@ public:
 
   /** Check model validity */
   virtual bool IsValidSensorModel() const = 0;
+
+  virtual void OptimizeParameters(ImageMetadata& imd, TiePointsType& tiepoints, double& rmsError) = 0;
 
   TransformDirection getDirection() const {
       return m_direction;

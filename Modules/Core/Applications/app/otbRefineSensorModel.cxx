@@ -23,13 +23,13 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperElevationParametersHandler.h"
 #include "otbWrapperMapProjectionParametersHandler.h"
-#include "otbSensorModelAdapter.h"
 #include "itkPoint.h"
 #include "itkEuclideanDistanceMetric.h"
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "ogrsf_frmts.h"
 #include "otbDEMHandler.h"
+#include "otbSensorTransformFactory.h"
 
 namespace otb
 {
@@ -44,10 +44,11 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::Point<double, 3> PointType;
-  typedef itk::Statistics::EuclideanDistanceMetric<PointType> DistanceType;
+  typedef itk::Point<double, 2> SensorPointType;
+  typedef itk::Point<double, 3> GroundPointType;
+  typedef itk::Statistics::EuclideanDistanceMetric<GroundPointType> DistanceType;
 
-  typedef std::pair<PointType, PointType> TiePointType;
+  typedef std::pair<SensorPointType, GroundPointType> TiePointType;
   typedef std::vector<TiePointType> TiePointsType;
 
   typedef otb::GenericRSTransform<double, 3, 3> RSTransformType;
@@ -63,9 +64,9 @@ private:
     SetDescription("Perform least-square fit of a sensor model to a set of tie points");
 
     SetDocLongDescription(
-        "This application reads a geom file containing a sensor model and a text file containing a list of ground control point, and performs a least-square "
-        "fit of the sensor model adjustable parameters to these tie points. It produces an updated geom file as output, as well as an optional ground control "
-        "points based statistics file and a vector file containing residues. The output geom file can then be used to ortho-rectify the data more accurately. "
+        "This application reads an image file containing a sensor model (that can be passed as a geom as an extended filename) and a text file containing a list of ground control point, and performs a least-square "
+        "fit of the sensor model adjustable parameters to these tie points. It produces an updated image file as output, as well as an optional ground control "
+        "points based statistics file and a vector file containing residues. The updated output image file can then be used to ortho-rectify the data more accurately. "
         "Plaease note that for a proper use of the application, elevation must be correctly set (including DEM and geoid file). The map parameters allows one "
         "to choose a map projection in which the accuracy will be estimated in meters.");
 
@@ -75,11 +76,11 @@ private:
     SetDocSeeAlso("OrthoRectification,HomologousPointsExtraction");
     SetDocAuthors("OTB-Team");
 
-    AddParameter(ParameterType_InputFilename, "ingeom", "Input geom file");
-    SetParameterDescription("ingeom", "Geom file containing the sensor model to refine");
+    AddParameter(ParameterType_InputImage, "in", "Input image file");
+    SetParameterDescription("in", "Image containing the sensor model to refine that can be in a geom file (extended filename) or in the image");
 
-    AddParameter(ParameterType_OutputFilename, "outgeom", "Output geom file");
-    SetParameterDescription("outgeom", "Geom file containing the refined sensor model");
+    AddParameter(ParameterType_OutputImage, "out", "Output image file");
+    SetParameterDescription("out", "Image containing the refined sensor model");
 
     AddParameter(ParameterType_InputFilename, "inpoints", "Input file containing tie points");
     SetParameterDescription("inpoints",
@@ -104,8 +105,8 @@ private:
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("ingeom", "input.geom");
-    SetDocExampleParameterValue("outgeom", "output.geom");
+    SetDocExampleParameterValue("in", "input.tif&?geom=TheGeom.geom");
+    SetDocExampleParameterValue("out", "output.tif");
     SetDocExampleParameterValue("inpoints", "points.txt");
     SetDocExampleParameterValue("map", "epsg");
     SetDocExampleParameterValue("map.epsg.code", "32631");
@@ -121,17 +122,16 @@ private:
   void DoExecute() override
   {
     OGRMultiLineString mls;
-
-    otb::SensorModelAdapter::Pointer sm     = otb::SensorModelAdapter::New();
-    otb::SensorModelAdapter::Pointer sm_ref = otb::SensorModelAdapter::New();
-
-    // Read the geom file
-    bool isRead = sm->ReadGeomFile(GetParameterString("ingeom"));
-    sm_ref->ReadGeomFile(GetParameterString("ingeom"));
-
-    if (!isRead)
-      otbAppLogFATAL("Can't read the input geom file!");
-
+    
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+    FloatVectorImageType::Pointer outImage = inImage;
+    // Create sensor model from input file
+    auto sensorModel_reference = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(inImage->GetImageMetadata(), TransformDirection::FORWARD);
+    auto sensorModelRefined = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(inImage->GetImageMetadata(), TransformDirection::FORWARD);
+    if (sensorModel_reference->IsValidSensorModel() == false)
+    {
+      otbAppLogFATAL("Invalid Model pointer sensorModel_reference == NULL!\n The metadata is invalid!");
+    }
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
@@ -140,14 +140,10 @@ private:
     ifs.open(GetParameterString("inpoints"));
 
     TiePointsType tiepoints;
-
-    while (!ifs.eof())
+    double x, y, z, lat, lon;
+    std::string line;
+    while (std::getline(ifs, line))
     {
-      std::string line;
-      std::getline(ifs, line);
-
-      double x, y, z, lat, lon;
-
       // Avoid commented lines or too short ones
       if (!line.empty() && line[0] != '#')
       {
@@ -169,26 +165,29 @@ private:
 
         otbAppLogDEBUG("Adding tie point x=" << x << ", y=" << y << ", z=" << z << ", lon=" << lon << ", lat=" << lat);
 
-        sm->AddTiePoint(x, y, z, lon, lat);
+        SensorPointType imagePoint;
+        GroundPointType groundPoint;
+        imagePoint[0] = x;
+        imagePoint[1] = y;
+        groundPoint[0] = lon;
+        groundPoint[1] = lat;
+        groundPoint[2] = z;
 
-        PointType p1, p2;
-        p1[0] = x;
-        p1[1] = y;
-        p1[2] = z;
-        p2[0] = lon;
-        p2[1] = lat;
-        p2[2] = z;
-
-        tiepoints.push_back(std::make_pair(p1, p2));
+        tiepoints.push_back({imagePoint, groundPoint});
       }
     }
     ifs.close();
-
     otbAppLogINFO("Optimization in progress ...");
-    sm->Optimize();
+    double rmseRefined = 0.0;
+    otb::ImageMetadata imdrefined = inImage->GetImageMetadata();
+    sensorModelRefined->OptimizeParameters(imdrefined,tiepoints,rmseRefined);
+    if (sensorModelRefined->IsValidSensorModel() == false)
+    {
+      otbAppLogFATAL("Invalid Model pointer sensorModelRefined == NULL!\n The metadata is invalid!");
+    }
     otbAppLogINFO("Done.\n");
-
-    sm->WriteGeomFile(GetParameterString("outgeom"));
+    outImage->SetImageMetadata(imdrefined);
+    SetParameterOutputImage("out", outImage);
 
     double rmse  = 0;
     double rmsex = 0;
@@ -223,11 +222,12 @@ private:
     }
 
     size_t validPoints = 0;
-    for (TiePointsType::const_iterator it = tiepoints.begin(); it != tiepoints.end(); ++it)
+
+    for (auto it = tiepoints.begin(); it != tiepoints.end(); ++it)
     {
-      PointType tmpPoint, tmpPoint_ref, ref;
-      sm->ForwardTransformPoint(it->first[0], it->first[1], it->first[2], tmpPoint[0], tmpPoint[1], tmpPoint[2]);
-      sm_ref->ForwardTransformPoint(it->first[0], it->first[1], it->first[2], tmpPoint_ref[0], tmpPoint_ref[1], tmpPoint_ref[2]);
+      GroundPointType ref;
+      auto tmpPoint_ref = sensorModel_reference->TransformPoint(it->first);
+      auto tmpPoint = sensorModelRefined->TransformPoint(it->first);
 
       if (!(std::isfinite(tmpPoint[0]) && std::isfinite(tmpPoint[1]) && std::isfinite(tmpPoint[2])))
       {
@@ -241,6 +241,8 @@ private:
         continue;
       }
 
+      tmpPoint[2] = it->second[2];
+      tmpPoint_ref[2] = it->second[2];
       tmpPoint     = rsTransform->TransformPoint(tmpPoint);
       tmpPoint_ref = rsTransform->TransformPoint(tmpPoint_ref);
 
@@ -338,7 +340,7 @@ private:
 
     otbAppLogINFO("Estimation of final accuracy: ");
 
-    otbAppLogINFO("Overall Root Mean Square Error: " << rmse << " meters");
+    otbAppLogINFO("Overall Root Mean Square Error: " << rmseRefined << " meters");
     otbAppLogINFO("X Mean Error: " << meanx << " meters");
     otbAppLogINFO("X standard deviation: " << stdevx << " meters");
     otbAppLogINFO("X Root Mean Square Error: " << rmsex << " meters");

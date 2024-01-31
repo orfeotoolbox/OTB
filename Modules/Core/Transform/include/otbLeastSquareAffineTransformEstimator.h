@@ -63,7 +63,7 @@ namespace otb
  * back to TPoint::CoordRepType.
  *
  *
- * \ingroup OTBProjection
+ * \ingroup OTBTransform
  */
 template <class TPoint>
 class ITK_EXPORT LeastSquareAffineTransformEstimator : public itk::Object

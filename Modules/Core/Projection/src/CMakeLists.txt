@@ -21,7 +21,6 @@
 set(OTBProjection_SRC
   otbGeometriesProjectionFilter.cxx
   otbPleiadesPToXSAffineTransformCalculator.cxx
-  otbRPCSolver.cxx
   )
 
 add_library(OTBProjection ${OTBProjection_SRC})
