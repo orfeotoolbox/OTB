@@ -66,7 +66,7 @@ void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSe
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(ImageMetadata& imd, TiePointsType& tiepoints, double& rmsError)
+void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(ImageMetadata& imd, const TiePointsType& tiepoints, double& rmsError)
 {
     Projection::RPCParam refinedRPCParams;
     RPCSolver::GCPsContainerType gcps;

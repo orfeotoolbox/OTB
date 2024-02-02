@@ -39,19 +39,19 @@ class RefineSensorModel : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef RefineSensorModel             Self;
-  typedef Application                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self = RefineSensorModel;
+  using Superclass = Application;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
-  typedef itk::Point<double, 2> SensorPointType;
-  typedef itk::Point<double, 3> GroundPointType;
-  typedef itk::Statistics::EuclideanDistanceMetric<GroundPointType> DistanceType;
+  using SensorPointType = itk::Point<double, 2>;
+  using GroundPointType = itk::Point<double, 3>;
+  using DistanceType = itk::Statistics::EuclideanDistanceMetric<GroundPointType>;
 
-  typedef std::pair<SensorPointType, GroundPointType> TiePointType;
-  typedef std::vector<TiePointType> TiePointsType;
+  using TiePointType = std::pair<SensorPointType, GroundPointType>;
+  using TiePointsType = std::vector<TiePointType>;
 
-  typedef otb::GenericRSTransform<double, 3, 3> RSTransformType;
+  using RSTransformType = otb::GenericRSTransform<double, 3, 3>;
 
   /** Standard macro */
   itkNewMacro(Self);

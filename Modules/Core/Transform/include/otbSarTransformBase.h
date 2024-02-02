@@ -75,7 +75,7 @@ public:
   bool IsValidSensorModel() const override;
 
   /** Refining the sensor model */
-  void OptimizeParameters(ImageMetadata& imd, TiePointsType& tiepoints, double& rmsError) override;
+  void OptimizeParameters(ImageMetadata& imd, const TiePointsType& tiepoints, double& rmsError) final;
 
 protected:
   SarTransformBase(TransformDirection dir) : Superclass(dir) {};
