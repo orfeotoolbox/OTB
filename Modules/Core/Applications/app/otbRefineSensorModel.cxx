@@ -64,7 +64,7 @@ private:
     SetDescription("Perform least-square fit of a sensor model to a set of tie points");
 
     SetDocLongDescription(
-        "This application reads an image file containing a sensor model (that can be passed as a geom as an extended filename) and a text file containing a list of ground control point, and performs a least-square "
+        "This application reads an image file containing a sensor model (this model can be passed as a geom as an extended filename) and a text file containing a list of ground control point, and performs a least-square "
         "fit of the sensor model adjustable parameters to these tie points. It produces an updated image file as output, as well as an optional ground control "
         "points based statistics file and a vector file containing residues. The updated output image file can then be used to ortho-rectify the data more accurately. "
         "Plaease note that for a proper use of the application, elevation must be correctly set (including DEM and geoid file). The map parameters allows one "
@@ -150,16 +150,16 @@ private:
         // retrieve the x component
         std::string::size_type pos     = 0;
         std::string::size_type nextpos = line.find_first_of("\t", pos);
-        x                              = atof(line.substr(pos, nextpos).c_str());
+        x                              = std::stof(line.substr(pos, nextpos).c_str());
         pos                            = nextpos + 1;
         nextpos                        = line.find_first_of("\t", pos);
-        y                              = atof(line.substr(pos, nextpos).c_str());
+        y                              = std::stof(line.substr(pos, nextpos).c_str());
         pos                            = nextpos + 1;
         nextpos                        = line.find_first_of("\t", pos);
-        lon                            = atof(line.substr(pos, nextpos).c_str());
+        lon                            = std::stof(line.substr(pos, nextpos).c_str());
         pos                            = nextpos + 1;
         nextpos                        = line.find_first_of("\t", pos);
-        lat                            = atof(line.substr(pos, nextpos).c_str());
+        lat                            = std::stof(line.substr(pos, nextpos).c_str());
 
         z = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(lon, lat);
 
