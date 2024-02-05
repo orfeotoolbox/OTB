@@ -149,13 +149,13 @@ legal-check:
 #------------------------- prepare & build jobs --------------------------------
 
 ## Ubuntu superbuild
-ubuntu-prepare-core:
+ubuntu-20-prepare-core:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm
 
-ubuntu-prepare-full:
+ubuntu-20-prepare-full:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
@@ -167,7 +167,7 @@ ubuntu-22-prepare:
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON
 
-ubuntu-build-core:
+ubuntu-20-build-core:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
@@ -179,10 +179,10 @@ ubuntu-build-core:
     - mv build_packages/OTB-*.tar.gz . || true
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-Core-Dependencies.tar.gz
   needs:
-    - job: ubuntu-prepare-core
+    - job: ubuntu-20-prepare-core
       artifacts: true
 
-ubuntu-build-full:
+ubuntu-20-build-full:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
@@ -195,17 +195,14 @@ ubuntu-build-full:
     - mv build_packages/OTB-*.tar.gz . || true
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
   needs:
-    - job: ubuntu-prepare-full
+    - job: ubuntu-20-prepare-full
       artifacts: true
 
-ubuntu-22-build:
+ubuntu-22-build-full:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full
-    - mv build/CookBook-*-html.tar.gz . || true
-    - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
-    - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
@@ -296,7 +293,7 @@ ubuntu-qa-code-coverage:
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
   needs:
-    - job: ubuntu-prepare-full
+    - job: ubuntu-20-prepare-full
       artifacts: true
 
 ubuntu-qa-static-analysis:
@@ -320,7 +317,7 @@ ubuntu-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   needs:
-    - job: ubuntu-prepare-full
+    - job: ubuntu-20-prepare-full
       artifacts: true
 
 ubuntu-sonar-report:
@@ -368,7 +365,7 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-build-full
+    - job: ubuntu-20-build-full
       artifacts: true
     - job: windows-10-build
       artifacts: true
@@ -393,7 +390,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-prepare-full
+    - job: ubuntu-20-prepare-full
       artifacts: false
 
 
@@ -422,7 +419,7 @@ release-docker:
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   needs:
-      - job: ubuntu-build-full
+      - job: ubuntu-20-build-full
         artifacts: true
   script:
       - /kaniko/executor --cleanup
