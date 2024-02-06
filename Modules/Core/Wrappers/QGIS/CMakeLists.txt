@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project(OTBQGIS)
 if(OTB_WRAP_QGIS)
+	project(OTBQGIS)
 	otb_module_impl()
 endif()
