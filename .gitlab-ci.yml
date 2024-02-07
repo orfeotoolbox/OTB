@@ -198,14 +198,14 @@ ubuntu-20-build-full:
     - job: ubuntu-20-prepare-full
       artifacts: true
 
+# Ubuntu 22 build needed for gdal bindings with python 3.10. No need to launch testing again as full tests are already done in ubuntu 20 job
 ubuntu-22-build-full:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
-    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
-    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
   needs:
     - job: ubuntu-22-prepare
       artifacts: true
