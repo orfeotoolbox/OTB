@@ -182,6 +182,7 @@ ubuntu-22-gdal-bindings:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
     - tar -czf gdal-bindings-py310.tar.gz xdk/lib/python3/dist-packages/osgeo/*.so
   needs:
     - job: ubuntu-22-prepare
