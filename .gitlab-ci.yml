@@ -176,14 +176,13 @@ ubuntu-20-build:
     - job: ubuntu-20-prepare
       artifacts: true
 
-# Ubuntu 22 build needed for gdal bindings with python 3.10. No need to launch testing again as full tests are already done in ubuntu 20 job
-ubuntu-22-build:
+# Ubuntu 22 build needed for gdal bindings with python 3.10. We package the compiled bindings for python 3.10, this package will be downloaded and extracted automatically when
+# a user lauches the otbenv profile after unpacking the official archive for the first time (which contains bindings for ubuntu 20 and python 3.8 initially)
+ubuntu-22-gdal-bindings:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
-    - mv build_packages/OTB-*.tar.gz . || true
+    - tar -czf gdal-bindings-py310.tar.gz xdk/lib/python3/dist-packages/osgeo/*.so
   needs:
     - job: ubuntu-22-prepare
       artifacts: true
