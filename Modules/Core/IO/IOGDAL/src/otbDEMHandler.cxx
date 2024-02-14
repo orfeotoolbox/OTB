@@ -419,7 +419,7 @@ void DEMHandler::RegisterConfigurationInHandler(DEMHandlerTLS & tls) const
   if (! m_DatasetList.empty()) {
     if (! tls.OpenDEMVRTFile())
     {
-      otbLogMacro(Warning, << "An unexpected situation has occured: trying to open a VRT created from incompatible DEM files");
+      otbLogMacro(Warning, << "An unexpected situation has occurred: trying to open a VRT created from incompatible DEM files");
       assert(false);
       // The following should not be necessary. In the impossible case
       // the VRT file could not be opened, we just clear everything in
@@ -434,7 +434,6 @@ void DEMHandler::RegisterConfigurationInHandler(DEMHandlerTLS & tls) const
   }
   otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandler::RegisterConfigurationInHandler(" << &tls <<") END");
 }
-
 
 // Meyer singleton design pattern
 DEMHandler & DEMHandler::GetInstance()
@@ -647,13 +646,11 @@ void DEMHandler::OpenDEMDirectory(std::string DEMDirectory)
 
 bool HasInputProjection(GDALDataset const& gdalds)
 {
-  return
 #if GDAL_VERSION_NUM >= 3000000
-    gdalds.GetSpatialRef() && ! gdalds.GetSpatialRef()->IsEmpty()
+  return gdalds.GetSpatialRef() && ! gdalds.GetSpatialRef()->IsEmpty();
 #else
-    gdalds.GetProjectionRef()[0] != '\0'   // strlen(gdalds.GetProjectionRef()) != 0
+  return gdalds.GetProjectionRef()[0] != '\0';  // strlen(gdalds.GetProjectionRef()) != 0;
 #endif
-      ;
 }
 
 bool DEMHandlerTLS::OpenGeoidFile(const std::string& geoidFile)
