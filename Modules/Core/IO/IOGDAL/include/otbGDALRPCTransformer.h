@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,7 +49,7 @@ namespace otb
  * \ingroup OTBIOGDAL
  */
 
-class  GDALRPCTransformer : public DEMObserverInterface
+class GDALRPCTransformer final : public DEMObserverInterface
 {
 public:
 
@@ -206,7 +206,7 @@ protected:
    *
    * Called when performing a transformation and some options were modified.
    */
-  void Update() override;
+  void Update() final;
 
 private:
   /** Used to know if Update is required after a change in the options */

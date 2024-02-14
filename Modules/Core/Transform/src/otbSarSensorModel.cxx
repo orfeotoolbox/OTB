@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,29 +19,121 @@
  */
 
 #include "otbSarSensorModel.h"
-
 #include "otbDEMHandler.h"
 
 #include <numeric>
+#include <algorithm>
+
+namespace
+{ // Anonymous namespace
+
+double DotProduct(itk::Point<double, 3> const& pt1, itk::Point<double, 3> const& pt2)
+{
+  // Manual dot product is a bit faster w/ gcc...
+  return pt1[0]*pt2[0] + pt1[1]*pt2[1] + pt1[2]*pt2[2];
+  // return std::inner_product(pt1.Begin(), pt1.End(), pt2.Begin(), 0.);
+}
+
+otb::MetaData::TimePoint time(otb::MetaData::TimePoint t) { return t; }
+otb::MetaData::TimePoint time(otb::Orbit const& o) { return o.time; }
+otb::MetaData::TimePoint time(otb::CoordinateConversionRecord const& o) { return o.azimuthTime; }
+
+auto const cmp_times = [](auto const& a, auto const& b)
+{ return time(a) < time(b);};
+
+// Speed of light
+static constexpr double C = 299'792'458;
+static constexpr double two_on_C = 2.0 / C;
+
+double SlantRangeToGroundRange(double in, otb::CoordinateConversionRecord const& srgrRecord)
+{
+  auto const& coeffs = srgrRecord.coeffs;
+  assert(!coeffs.empty()&&"Slant range to ground range coefficients vector is empty.");
+
+  const double sr_minus_sr0 =  in-srgrRecord.rg0;
+  double res = 0.;
+
+  for(auto cIt = coeffs.crbegin(); cIt!=coeffs.crend(); ++cIt)
+  {
+    res = *cIt + sr_minus_sr0*res;
+  }
+  return res;
+}
+
+double SlantRangeToGroundRange(
+    double in, otb::MetaData::TimePoint azimuthTime,
+    otb::CoordinateConversionRecord const& previousRecord,
+    otb::CoordinateConversionRecord const& nextRecord)
+{
+  otb::CoordinateConversionRecord srgrRecord;
+
+  auto const& previous_coeffs = previousRecord.coeffs;
+  auto const& next_coeffs     = nextRecord.coeffs;
+
+  assert(!previous_coeffs.empty()&&"previousRecord coefficients vector is empty.");
+  assert(!next_coeffs.empty()    &&"nextRecord coefficients vector is empty.");
+
+  // If azimuth time is between 2 records, interpolate
+  const double interp
+    = (azimuthTime - previousRecord.azimuthTime)
+    / (nextRecord.azimuthTime - previousRecord.azimuthTime)
+    ;
+
+  auto const rg0 = (1.-interp) * previousRecord.rg0 + interp*nextRecord.rg0;
+
+
+  // Let's avoid allocation (every time the function is called) to
+  // store the interpolated elements. Use instead a single loop that
+  // does the Horner polynomial evaluation as it computed each
+  // coefficients.
+  //
+  // Let's keep the algorithm how it used to work: align on the first
+  // elements even if there aren't the same number of elements in both
+  // lists.
+  auto const prev_size   = previous_coeffs.size();
+  auto const next_size   = next_coeffs    .size();
+  auto const min_size    = std::min(prev_size, next_size);
+  assert(min_size>0&&"Slant range to ground range interpolated coefficients vector is empty.");
+  auto const prev_offset = prev_size - min_size;
+  auto const next_offset = next_size - min_size;
+
+  auto pIt = previous_coeffs.crbegin() + prev_offset;
+  auto nIt = next_coeffs    .crbegin() + next_offset;
+
+  auto const sr_minus_sr0 =  in - rg0;
+
+  double res = 0.;
+
+  for(;pIt != previous_coeffs.crend() && nIt != next_coeffs.crend();++pIt,++nIt)
+  {
+    // interpolated the coeffs
+    auto const coeff = interp*(*nIt) + (1.-interp)*(*pIt);
+    // compute ground range from slant range (by horner polynomial
+    // evaluation on the coeeficcients)
+    res = coeff + sr_minus_sr0*res;
+  }
+  return res;
+}
+
+} // Anonymous namespace
 
 namespace otb
 {
-double DotProduct(const itk::Point<double, 3> & pt1, const itk::Point<double, 3> & pt2)
-{
-  return std::inner_product(pt1.Begin(), pt1.End(), pt2.Begin(), 0.);
-}
 
-SarSensorModel::SarSensorModel( const std::string & productType,
-                                const SARParam & sarParam,
-                                const Projection::GCPParam & gcps)
-                            : m_ProductType(productType),
-                              m_GCP(gcps),
-                              m_SarParam(sarParam),
-                              m_AzimuthTimeOffset(MetaData::Duration::Seconds(0)),
-                              m_RangeTimeOffset(0.),
-                              m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
-                              m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
-
+SarSensorModel::SarSensorModel(
+    std::string  productType,
+    SARParam  sarParam,
+    Projection::GCPParam  gcps,
+    unsigned int polynomial_degree)
+  : m_ProductType(std::move(productType))
+  , m_GCP(std::move(gcps))
+  , m_SarParam(std::move(sarParam))
+  , m_AzimuthTimeOffset(MetaData::Duration::Seconds(0))
+  , m_RangeTimeOffset(0.)
+  , m_OrbitInterpolator(m_SarParam.orbits, polynomial_degree)
+  , m_polynomial_degree(polynomial_degree)
+  , m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New())
+  , m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
 {
   if (m_GCP.GCPs.empty())
   {
@@ -55,10 +147,12 @@ SarSensorModel::SarSensorModel( const std::string & productType,
 
 }
 
-SarSensorModel::SarSensorModel(const ImageMetadata & imd)
-          : SarSensorModel(imd.Has(MDStr::ProductType) ? imd[MDStr::ProductType] : "UNKNOWN",
-                            boost::any_cast<SARParam>(imd[MDGeom::SAR]),
-                            imd.GetGCPParam())
+SarSensorModel::SarSensorModel(const ImageMetadata & imd, unsigned int polynomial_degree)
+  : SarSensorModel(
+      imd.Has(MDStr::ProductType) ? imd[MDStr::ProductType] : "UNKNOWN",
+      boost::any_cast<SARParam>(imd[MDGeom::SAR]),
+      imd.GetGCPParam(),
+      polynomial_degree)
 {
 }
 
@@ -66,61 +160,96 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
 {
   TimeType azimuthTime;
   double rangeTime;
-  Point3DType sensorPos; 
+  Point3DType sensorPos;
   Vector3DType sensorVel;
 
-  const bool success = WorldToAzimuthRangeTime(inGeoPoint, azimuthTime, rangeTime, sensorPos, sensorVel);
-
-  if(!success)
-  {
-    //TODO return Nan or throw ?
-    return;
-  }
+  WorldToAzimuthRangeTime(inGeoPoint, azimuthTime, rangeTime, sensorPos, sensorVel);
 
   // Convert azimuth time to line
-  AzimuthTimeToLine(azimuthTime, outLineSample[1]);
+  outLineSample[1] = AzimuthTimeToLine(azimuthTime);
 
   if (m_IsGrd)
-  {
-    // GRD case
-    double groundRange(0);
-    SlantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
+  { // GRD case
+    double const groundRange = SlantRangeToGroundRange(C/2.*rangeTime, azimuthTime);
 
     // Eq 32 p. 31
     outLineSample[0] = groundRange/m_SarParam.rangeResolution;
   }
   else
-  {
-    // SLC case
+  { // SLC case
     // Eq 23 and 24 p. 28
-    outLineSample[0] = (rangeTime - m_SarParam.nearRangeTime) 
+    outLineSample[0] = (rangeTime - m_SarParam.nearRangeTime)
                         * m_SarParam.rangeSamplingRate;
   }
+}
+
+SarSensorModel::LineSampleYZ
+SarSensorModel::Doppler0ToLineSampleYZ(
+    Point3DType const& ecefGround, ZeroDopplerInfo const& zdi,
+    double rangeTime) const
+{
+  LineSampleYZ res {};
+
+  // Convert azimuth time to line
+  res.col_row[1] = AzimuthTimeToLine(zdi.azimuthTime);
+
+  if (m_IsGrd)
+  { // GRD case
+    double const groundRange = SlantRangeToGroundRange(C/2.*rangeTime, zdi.azimuthTime);
+
+    // Eq 32 p. 31
+    res.col_row[0] = groundRange/m_SarParam.rangeResolution;
+  }
+  else
+  { // SLC case
+    // Eq 23 and 24 p. 28
+    res.col_row[0] = (rangeTime - m_SarParam.nearRangeTime)
+                        * m_SarParam.rangeSamplingRate;
+  }
+
+  // Radar distance
+  auto const& sensorPos = zdi.sensorPos;
+  auto const& sensorVel = zdi.sensorVel;
+
+  double const NormeS = std::sqrt(DotProduct(sensorPos, sensorPos));
+
+  double const PS2 = DotProduct(ecefGround, sensorPos);
+
+  assert(NormeS>1e-6);
+  res.yz[1] = NormeS - PS2/NormeS;
+
+  auto const grd_sat_vector = sensorPos - ecefGround;
+  double const distance2 = DotProduct(grd_sat_vector, grd_sat_vector);
+  res.yz[0] = std::sqrt(distance2 - res.yz[1] * res.yz[1]);
+
+  // Check view side and change sign of Y accordingly
+  if ( (( sensorVel[0] * (sensorPos[1]* ecefGround[2] - sensorPos[2]* ecefGround[1]) +
+          sensorVel[1] * (sensorPos[2]* ecefGround[0] - sensorPos[0]* ecefGround[2]) +
+          sensorVel[2] * (sensorPos[0]* ecefGround[1] - sensorPos[1]* ecefGround[0])) > 0) ^ m_SarParam.rightLookingFlag )
+  {
+    res.yz[0] = -res.yz[0];
+  }
+
+  return res;
 }
 
 void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DType& cr, Point2DType& yz) const
 {
   TimeType azimuthTime;
   double rangeTime;
-  Point3DType sensorPos; 
+  Point3DType sensorPos;
   Vector3DType sensorVel;
 
-  const bool success = WorldToAzimuthRangeTime(inGeoPoint, azimuthTime, rangeTime, sensorPos, sensorVel);
-
-  if(!success)
-  {
-    //TODO return Nan or throw ?
-    return;
-  }
+  // WorldToAzimuthRangeTime always returns true..
+  WorldToAzimuthRangeTime(inGeoPoint, azimuthTime, rangeTime, sensorPos, sensorVel);
 
   // Convert azimuth time to line
-  AzimuthTimeToLine(azimuthTime, cr[1]);
+  cr[1] = AzimuthTimeToLine(azimuthTime);
 
   if (m_IsGrd)
   {
     // GRD case
-    double groundRange(0);
-    SlantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
+    double const groundRange = SlantRangeToGroundRange(C/2.*rangeTime, azimuthTime);
 
     // Eq 32 p. 31
     cr[0] = groundRange/m_SarParam.rangeResolution;
@@ -129,27 +258,23 @@ void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DT
   {
     // SLC case
     // Eq 23 and 24 p. 28
-    cr[0] = (rangeTime - m_SarParam.nearRangeTime) 
+    cr[0] = (rangeTime - m_SarParam.nearRangeTime)
                         * m_SarParam.rangeSamplingRate;
   }
 
   auto inputPt = WorldToEcef(inGeoPoint);
 
   // Radar distance
-  double NormeS = std::sqrt(sensorPos[0]*sensorPos[0] + sensorPos[1]*sensorPos[1] + sensorPos[2]*sensorPos[2]);
-  
-  double PS2 = inputPt[0]*sensorPos[0] + inputPt[1]*sensorPos[1] + inputPt[2]*sensorPos[2];
+  double const NormeS = std::sqrt(DotProduct(sensorPos, sensorPos));
+
+  double const PS2 = DotProduct(inputPt, sensorPos);
 
   assert(NormeS>1e-6);
   yz[1] = NormeS - PS2/NormeS;
 
-  double distance = std::sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) + 
-                             (sensorPos[1]-inputPt[1])*(sensorPos[1]-inputPt[1]) + 
-                             (sensorPos[2]-inputPt[2])*(sensorPos[2]-inputPt[2]));  
-
-
-
-  yz[0] = std::sqrt(distance*distance - yz[1] * yz[1]);
+  auto const grd_sat_vector = sensorPos - inputPt;
+  double const distance2 = DotProduct(grd_sat_vector, grd_sat_vector);
+  yz[0] = std::sqrt(distance2 - yz[1] * yz[1]);
 
   // Check view side and change sign of Y accordingly
   if ( (( sensorVel[0] * (sensorPos[1]* inputPt[2] - sensorPos[2]* inputPt[1]) +
@@ -160,27 +285,31 @@ void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DT
   }
 }
 
-bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
-                                        TimeType & azimuthTime, 
-                                        double & rangeTime, 
-                                        Point3DType& sensorPos, 
-                                        Vector3DType& sensorVel) const
+double SarSensorModel::CalculateRangeTime(
+    Point3DType const& ecefGround, Point3DType const& sensorPos) const
 {
-  auto ecefPoint = WorldToEcef(inGeoPoint);
-
-  const bool success = ZeroDopplerLookup(ecefPoint,azimuthTime,sensorPos,sensorVel);
-
-  if(!success)
-  {
-    return false;
-  }
-
   //TODO Bistatic correction when needed
-  const double rangeDistance = sensorPos.EuclideanDistanceTo(ecefPoint);
+  double const rangeDistance = sensorPos.EuclideanDistanceTo(ecefGround);
+  return m_RangeTimeOffset + two_on_C * rangeDistance; // This impacts precision
+}
 
-  rangeTime = m_RangeTimeOffset + 2*rangeDistance/C;
+bool SarSensorModel::WorldToAzimuthRangeTime(
+    const Point3DType& inGeoPoint,
+    TimeType & azimuthTime,
+    double & rangeTime,
+    Point3DType& sensorPos,
+    Vector3DType& sensorVel) const
+{
+  auto const ecefPoint = WorldToEcef(inGeoPoint);
+
+  auto const zdi = ZeroDopplerLookup(ecefPoint);
+  rangeTime   = CalculateRangeTime(ecefPoint, zdi.sensorPos);
+
+  azimuthTime = zdi.azimuthTime;
+  sensorPos   = zdi.sensorPos;
+  sensorVel   = zdi.sensorVel;
+
   return true;
-
 }
 
 bool SarSensorModel::WorldToSatPositionAndVelocity(const Point3DType& inGeoPoint,
@@ -198,9 +327,10 @@ bool SarSensorModel::WorldToSatPositionAndVelocity(const Point3DType& inGeoPoint
 }
 
 
-void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
-                                             double  heightAboveEllipsoid,
-                                             Point3DType& worldPt) const
+void SarSensorModel::LineSampleHeightToWorld(
+    const Point2DType& imPt,
+    double  heightAboveEllipsoid,
+    Point3DType& worldPt) const
 {
   assert(m_GCP.GCPs.size());
 
@@ -213,8 +343,8 @@ void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
   worldPt = EcefToWorld(projToSurface(gcp, imPt, heightFunction));
 }
 
-void SarSensorModel::LineSampleToWorld(const Point2DType& imPt,
-                                             Point3DType& worldPt) const
+void SarSensorModel::LineSampleToWorld(
+    const Point2DType& imPt, Point3DType& worldPt) const
 {
   assert(m_GCP.GCPs.size());
 
@@ -229,10 +359,8 @@ void SarSensorModel::LineSampleToWorld(const Point2DType& imPt,
   worldPt = EcefToWorld(projToSurface(gcp, imPt, heightFunction));
 }
 
-bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint, 
-                                        TimeType & azimuthTime, 
-                                        Point3DType& sensorPos, 
-                                        Vector3DType& sensorVel) const
+std::tuple<SarSensorModel::TimeType, SarSensorModel::OrbitIterator, SarSensorModel::OrbitIterator>
+SarSensorModel::ZeroDopplerTimeLookupInternal(Point3DType const& inEcefPoint) const
 {
   if (m_SarParam.orbits.size() < 2)
   {
@@ -278,11 +406,14 @@ bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint,
     //TODO test this case
     auto record1 = m_SarParam.orbits.cbegin();
     auto record2 = record1 + m_SarParam.orbits.size()-1;
-    doppler1 = DotProduct(inEcefPoint - record1->position,record1->velocity);
-    doppler2 = DotProduct(inEcefPoint - record2->position,record2->velocity);
+    doppler1 = DotProduct(inEcefPoint - record1->position, record1->velocity);
+    doppler2 = DotProduct(inEcefPoint - record2->position, record2->velocity);
     const DurationType delta_td = record2->time - record1->time;
 
-    azimuthTime = record1->time - doppler1 / (doppler2 - doppler1) * delta_td;
+    return {
+      record1->time - doppler1 / (doppler2 - doppler1) * delta_td,
+      record1, record2
+    };
   }
   else
   {
@@ -301,92 +432,109 @@ bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint,
     const DurationType td     = delta_td * interp;
 
     // Compute interpolated azimuth time
-    azimuthTime = record1->time + td + m_AzimuthTimeOffset;
+    return { record1->time + td + m_AzimuthTimeOffset, record1, record2 };
   }
-
-  // Interpolate sensor position and velocity
-  interpolateSensorPosVel(azimuthTime, sensorPos, sensorVel);
-
-  return true;
 }
 
-
-void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime, 
-                                Point3DType& sensorPos, 
-                                Vector3DType& sensorVel, 
-                                unsigned int deg) const
+SarSensorModel::TimeType
+SarSensorModel::ZeroDopplerTimeLookup(Point3DType const& inEcefPoint) const
 {
-  assert(m_SarParam.orbits.size() &&"The orbit records vector is empty");
+  return std::get<0>(ZeroDopplerTimeLookupInternal(inEcefPoint));
+}
 
-  // Lagrangian interpolation of sensor position and velocity
-  unsigned int nBegin(0), nEnd(0);
-  sensorPos[0] = 0;
-  sensorPos[1] = 0;
-  sensorPos[2] = 0;
+SarSensorModel::ZeroDopplerInfo
+SarSensorModel::ZeroDopplerLookup(Point3DType const& inEcefPoint) const
+{
+  TimeType      azimuthTime;
+  OrbitIterator itRecord1, itRecord2;
+  std::tie(azimuthTime, itRecord1, itRecord2)
+    = ZeroDopplerTimeLookupInternal(inEcefPoint);
 
-  sensorVel[0] = 0;
-  sensorVel[1] = 0;
-  sensorVel[2] = 0;
-  // First, we search for the correct set of record to use during
-  // interpolation
+  // Interpolate sensor position and velocity
+  Point3DType  sensorPos;
+  Vector3DType sensorVel;
+  if (Abs(time(*itRecord1) - azimuthTime) > Abs(time(*itRecord2) - azimuthTime))
+  { // While this may degrade results, this makes sure to keep identical
+    // results to previous code
+    // Ideally, we should center around the interval [record1, record2]
+    ++itRecord1;
+  }
+  std::tie(sensorPos, sensorVel) = interpolateSensorPosVel(azimuthTime, itRecord1);
 
+  ZeroDopplerInfo res{azimuthTime, sensorPos, sensorVel};
+  return res;
+}
+
+SarSensorModel::OrbitIterator
+SarSensorModel::searchLagrangianNeighbourhood(TimeType azimuthTime) const
+{
   // If there are less records than degrees, use them all
-  if(m_SarParam.orbits.size() < deg)
+  if(m_SarParam.orbits.size() < m_polynomial_degree)
   {
-     nEnd = m_SarParam.orbits.size()-1;
+    // nEnd = m_SarParam.orbits.size()-1;
+    return m_SarParam.orbits.end();
   }
   else
-  {
-     // Search for the deg number of records around the azimuth time
-     unsigned int t_min_idx = 0;
+  { // TODO: use std::upper_bound
+    // Search for the deg number of records around the azimuth time
+    unsigned int t_min_idx = 0;
     auto t_min = Abs(azimuthTime - m_SarParam.orbits.front().time);
-     unsigned int count = 0;
+    unsigned int count = 0;
+
+    // Unfortunatelly, we cannot loop from m_FirstLineInOrbit to
+    // m_LastLineInOrbit as there is no guarantee the azimuthTime happens
+    // outside this range => we must search the whole orbit information.
+    // for(auto it = m_FirstLineInOrbit; it!= m_LastLineInOrbit; ++it,++count)
      for(auto it = m_SarParam.orbits.cbegin();it!= m_SarParam.orbits.cend();++it,++count)
      {
         const auto current_time = Abs(azimuthTime-it->time);
         if(t_min > current_time)
         {
+        // TODO: break when the distance is growing.
            t_min_idx = count;
            t_min = current_time;
         }
      }
-     // TODO: see if these expressions can be simplified
-     nBegin = std::max((int)t_min_idx-(int)deg/2+1,(int)0);
-     nEnd = std::min(nBegin+deg-1,(unsigned int)m_SarParam.orbits.size());
-     nBegin = nEnd<m_SarParam.orbits.size()-1 ? nBegin : nEnd-deg+1;
+
+    return m_SarParam.orbits.begin() + t_min_idx;
+  }
+}
+
+std::pair<SarSensorModel::Point3DType, SarSensorModel::Vector3DType>
+SarSensorModel::interpolateSensorPosVel(TimeType azimuthTime, OrbitIterator itRecord1) const
+{
+  assert(m_SarParam.orbits.size() &&"The orbit records vector is empty");
+  auto deg = m_polynomial_degree;
+
+  auto t_min_idx = std::distance(m_SarParam.orbits.begin(), itRecord1);
+
+  // TODO: see if these expressions can be simplified
+  std::size_t nBegin = std::max(t_min_idx-(int)deg/2+1, std::ptrdiff_t{});
+  std::size_t nEnd   = std::min(nBegin+deg-1, m_SarParam.orbits.size());
+  nBegin = nEnd<m_SarParam.orbits.size()-1 ? nBegin : nEnd-deg+1;
+
+  // If there are less records than degrees, use them all
+  if(m_SarParam.orbits.size() < deg)
+  {
+    nBegin = 0;
+    nEnd   = m_SarParam.orbits.size()-1;
   }
 
   // Compute lagrangian interpolation using records from nBegin to nEnd
-  for(unsigned int i = nBegin; i < nEnd; ++i)
-  {
-     double w = 1.;
-     unsigned int j = nBegin;
-     for( ; j != i ; ++j)
-     {
-        const DurationType td1 = azimuthTime                    - m_SarParam.orbits[j].time;
-        const DurationType td2 = m_SarParam.orbits[i].time - m_SarParam.orbits[j].time;
-        const double f = td1 / td2;
-        w *= f;
-     }
-     ++j;
-     for( ; j < nEnd; ++j)
-     {
-        const DurationType td1 = azimuthTime                    - m_SarParam.orbits[j].time;
-        const DurationType td2 = m_SarParam.orbits[i].time - m_SarParam.orbits[j].time;
-        const double f = td1 / td2;
-        w *= f;
-     }
-     sensorPos[0]+=w*m_SarParam.orbits[i].position[0];
-     sensorPos[1]+=w*m_SarParam.orbits[i].position[1];
-     sensorPos[2]+=w*m_SarParam.orbits[i].position[2];
+  assert(nEnd - nBegin < 30); // Lagrangian interpolator fails miserably at 20
+                              // elements... Let's expected less than 30 as
+                              // reasonable
+  assert(nBegin != nEnd);
 
-     sensorVel[0]+=w*m_SarParam.orbits[i].velocity[0];
-     sensorVel[1]+=w*m_SarParam.orbits[i].velocity[1];
-     sensorVel[2]+=w*m_SarParam.orbits[i].velocity[2];
-  }
-
+  return m_OrbitInterpolator.interpolatePosVel(azimuthTime, nBegin, nEnd);
 }
 
+std::pair<SarSensorModel::Point3DType, SarSensorModel::Vector3DType>
+SarSensorModel::interpolateSensorPosVel(TimeType azimuthTime) const
+{
+  auto const closest_osv = searchLagrangianNeighbourhood(azimuthTime);
+  return interpolateSensorPosVel(azimuthTime, closest_osv);
+}
 
 void SarSensorModel::OptimizeTimeOffsetsFromGcps()
 {
@@ -399,36 +547,28 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
   m_AzimuthTimeOffset = DurationType::Seconds(0);
 
   // First, fix the azimuth time
-  for(auto gcpIt = m_GCP.GCPs.begin(); gcpIt!= m_GCP.GCPs.end(); ++gcpIt)
+  for(auto const& gcp : m_GCP.GCPs)
   {
-    auto gcpTimeIt = m_SarParam.gcpTimes.find(gcpIt->m_Id);
+    auto gcpTimeIt = m_SarParam.gcpTimes.find(gcp.m_Id);
     if (gcpTimeIt != std::end(m_SarParam.gcpTimes))
     {
-      TimeType estimatedAzimuthTime;
-      double   estimatedRangeTime;
-
-      Point3DType sensorPos;
-      Point3DType sensorVel;
-
       Point3DType inWorldPoint;
-      inWorldPoint[0] = gcpIt->m_GCPX;
-      inWorldPoint[1] = gcpIt->m_GCPY;
-      inWorldPoint[2] = gcpIt->m_GCPZ;
+      inWorldPoint[0] = gcp.m_GCPX;
+      inWorldPoint[1] = gcp.m_GCPY;
+      inWorldPoint[2] = gcp.m_GCPZ;
 
       // Estimate times
-      const bool s1 = this->WorldToAzimuthRangeTime(inWorldPoint,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
+      auto const ecefPoint = WorldToEcef(inWorldPoint);
+      TimeType const estimatedAzimuthTime = ZeroDopplerTimeLookup(ecefPoint);
 
-      if(s1)
-      {
-        cumulAzimuthTime -= (estimatedAzimuthTime - gcpTimeIt->second.azimuthTime);
-        ++count;
-      }
+      cumulAzimuthTime -= (estimatedAzimuthTime - gcpTimeIt->second.azimuthTime);
+      ++count;
     }
   }
   m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(MetaData::Duration::Seconds(0));
 }
 
-void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & line) const
+double SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime) const
 {
   assert(!m_SarParam.burstRecords.empty()&&"Burst records are empty (at least one burst should be available)");
 
@@ -438,7 +578,7 @@ void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & li
   // records will be 1 (except for TOPSAR Sentinel1 products)
   auto it = m_SarParam.burstRecords.cbegin();
   auto itend = m_SarParam.burstRecords.cend();
-  
+
   for(; it!= itend ; ++it)
   {
     if(azimuthTime >= it->azimuthStartTime
@@ -474,104 +614,54 @@ void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & li
   const DurationType timeSinceStart = azimuthTime - currentBurst->azimuthStartTime;
 
   // Eq 22 p 27
-  line = (timeSinceStart/m_SarParam.azimuthTimeInterval) + currentBurst->startLine;
+  return (timeSinceStart/m_SarParam.azimuthTimeInterval) + currentBurst->startLine;
 }
 
-void SarSensorModel::SlantRangeToGroundRange(double slantRange, const TimeType & azimuthTime, double & groundRange) const
+double SarSensorModel::SlantRangeToGroundRange(double slantRange, const TimeType & azimuthTime) const
 {
-  ApplyCoordinateConversion(slantRange, azimuthTime, m_SarParam.slantRangeToGroundRangeRecords , groundRange);
+  return ApplyCoordinateConversion(slantRange, azimuthTime, m_SarParam.slantRangeToGroundRangeRecords);
 }
 
-void SarSensorModel::ApplyCoordinateConversion(double in,
-                                 const TimeType& azimuthTime,
-                                 const std::vector<CoordinateConversionRecord> & records,
-                                 double & out) const
+double SarSensorModel::ApplyCoordinateConversion(
+    double in,
+    const TimeType& azimuthTime,
+    const std::vector<CoordinateConversionRecord> & records) const
 {
   assert(!records.empty()&&"The records vector is empty.");
 
   // First, we need to find the correct pair of records for interpolation
-  auto it = records.cbegin();
-  auto previousRecord = it;
-  ++it;
-
-  auto nextRecord = it;
-
   // Look for the correct record
-  while(it!=records.end())
+  auto const wh = std::upper_bound(
+      std::begin(records), std::end(records),
+      azimuthTime, cmp_times);
+
+  if (wh == records.cend())
   {
-    if(azimuthTime >= previousRecord->azimuthTime
-        && azimuthTime < nextRecord->azimuthTime)
-    {
-      break;
-    }
-
-    previousRecord = nextRecord;
-    ++it;
-    nextRecord = it;
+    assert(azimuthTime > records.back().azimuthTime);
+    return ::SlantRangeToGroundRange(in, records.back());
   }
-
-  CoordinateConversionRecord srgrRecord;
-
-  if(it == records.cend())
+  else if (wh == records.cbegin())
   {
-    if(azimuthTime < records.front().azimuthTime)
-    {
-      srgrRecord = records.front();
-    }
-    else if(azimuthTime >= records.back().azimuthTime)
-    {
-      srgrRecord = records.back();
-    }
-
+    assert(azimuthTime < records.front().azimuthTime);
+    return ::SlantRangeToGroundRange(in, records.front());
   }
-
   else
   {
-    assert(nextRecord != records.end());
-    assert(!previousRecord->coeffs.empty()&&"previousRecord coefficients vector is empty.");
-    assert(!nextRecord->coeffs.empty()&&"nextRecord coefficients vector is empty.");
-
-    // If azimuth time is between 2 records, interpolate
-    const double interp
-            = DurationType(azimuthTime             - previousRecord->azimuthTime)
-            / (nextRecord->azimuthTime - previousRecord->azimuthTime)
-            ;
-
-    srgrRecord.rg0 = (1-interp) * previousRecord->rg0 + interp*nextRecord->rg0;
-
-    srgrRecord.coeffs.clear();
-    std::vector<double>::const_iterator pIt = previousRecord->coeffs.cbegin();
-    std::vector<double>::const_iterator nIt = nextRecord->coeffs.cbegin();
-
-    for(;pIt != previousRecord->coeffs.end() && nIt != nextRecord->coeffs.cend();++pIt,++nIt)
-    {
-      srgrRecord.coeffs.push_back(interp*(*nIt)+(1-interp)*(*pIt));
-    }
-
-    assert(!srgrRecord.coeffs.empty()&&"Slant range to ground range interpolated coefficients vector is empty.");
-  }
-
-  // Now that we have the interpolated coeffs, compute ground range
-  // from slant range
-  const double sr_minus_sr0 =  in-srgrRecord.rg0;
-
-  assert(!srgrRecord.coeffs.empty()&&"Slant range to ground range coefficients vector is empty.");
-
-  out = 0.;
-
-  for(auto cIt = srgrRecord.coeffs.crbegin();cIt!=srgrRecord.coeffs.crend();++cIt)
-  {
-    out = *cIt + sr_minus_sr0*out;
+    auto const previousRecord = wh-1;
+    auto const nextRecord     = wh;
+    assert(previousRecord->azimuthTime <= azimuthTime);
+    assert(nextRecord    ->azimuthTime >  azimuthTime);
+    return ::SlantRangeToGroundRange(in, azimuthTime, *previousRecord, *nextRecord);
   }
 }
 
 const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const
 {
   assert(gcpParam.GCPs.size() > 0);
-  const GCP* closest ;
+  GCP const* closest = &gcpParam.GCPs.front(); // Let's silence warning...
 
   // Squared distance between a Point and a gcp
-  auto squaredDistance = [](const Point2DType & imPt, const GCP & gcp) 
+  auto squaredDistance = [](const Point2DType & imPt, const GCP & gcp)
     {
       double dx = imPt[0] - gcp.m_GCPCol;
       double dy = imPt[1] - gcp.m_GCPRow;
@@ -594,7 +684,8 @@ const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projec
   return *closest;
 }
 
-SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, std::function<double(double, double)> heightFunction) const
+SarSensorModel::Point3DType SarSensorModel::projToSurface(
+    const GCP & gcp, const Point2DType& imPt, std::function<double(double, double)> heightFunction) const
 {
   // Stop condition: img residual < 1e-2 pixels, height residual² <
   // 0.01² m, nb iter < 50. the loop runs at least once.
@@ -683,11 +774,11 @@ SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const
     {
       dR = MatrixType(B.GetInverse()) * F;
     }
-    catch (itk::ExceptionObject const& e)
+    catch (itk::ExceptionObject const&)
     {
-      otbLogMacro(Warning, << "SarSensorModel::projToSurface(): singular matrix can not be inverted. Returning best estimation so far(" 
-                           << currentEstimation 
-                           << ") for output point (" 
+      otbLogMacro(Warning, << "SarSensorModel::projToSurface(): singular matrix can not be inverted. Returning best estimation so far("
+                           << currentEstimation
+                           << ") for output point ("
                            << imPt << ")" << std::endl);
       return currentEstimation;
     }
@@ -750,9 +841,9 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
     unsigned long overlapLength = timeOverlapEnd/m_SarParam.azimuthTimeInterval;
     unsigned long halfLineOverlapEnd = overlapLength/2;
     TimeType endTimeInNextBurst = it->azimuthStopTime-(halfLineOverlapEnd-1)*m_SarParam.azimuthTimeInterval;
-    
+
     unsigned long halfLineOverlapBegin = std::floor(0.5+(endTimeInNextBurst-next->azimuthStartTime)/m_SarParam.azimuthTimeInterval);
-      
+
     unsigned long currentStop = it->endLine-halfLineOverlapEnd;
 
     deburstEndLine+= currentStop - currentStart + 1; // +1 because currentStart/Stop are both valids
@@ -795,7 +886,7 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   deburstBurst.azimuthStartTime = deburstAzimuthStartTime;
   deburstBurst.endLine = deburstEndLine;
   deburstBurst.azimuthStopTime = deburstAzimuthStopTime;
-  deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime; 
+  deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime;
 
   if (onlyValidSample)
   {
@@ -854,9 +945,9 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   // redaptMedataAfterDeburst = true;
   m_FirstLineTime = deburstBurst.azimuthStartTime;
   m_LastLineTime = deburstBurst.azimuthStopTime;
-  
+
   if (onlyValidSample)
-    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate; 
+    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate;
 
 
   return true;
@@ -867,7 +958,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
                                      std::pair<unsigned long,unsigned long> & lines,
                                      std::pair<unsigned long,unsigned long> & samples,
                                      bool allPixels)
-{ 
+{
   auto & burstRecords = m_SarParam.burstRecords;
   if (burstRecords.empty())
   {
@@ -884,7 +975,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
   if (allPixels)
   {
     samples = {0, m_SarParam.numberOfSamplesPerBurst - 1};
-    lines = {burst_index*m_SarParam.numberOfLinesPerBurst, 
+    lines = {burst_index*m_SarParam.numberOfLinesPerBurst,
                            (burst_index+1)*m_SarParam.numberOfLinesPerBurst - 1};
 
     //redaptMedataAfterDeburst = true;
@@ -935,7 +1026,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
     //redaptMedataAfterDeburst = true;
     m_FirstLineTime = oneBurst.azimuthStartTime;
     m_LastLineTime = oneBurst.azimuthStopTime;
-    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate; 
+    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate;
   }
 
   std::vector<GCP> oneBurstGCPs;
@@ -964,7 +1055,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
 
     unsigned long newLine = gcpLine;
     bool linesOk = false;
-  
+
     if (gcpLine >= lines.first && gcpLine <= lines.second)
     {
       linesOk = true;
@@ -992,7 +1083,7 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
 
 }
 
-bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
+bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts,
                                            std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
                                            unsigned int & linesOffset,
                                            unsigned int first_burstInd,
@@ -1004,7 +1095,7 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
     return false;
   }
 
-  // declare lines and samples 
+  // declare lines and samples
   std::vector<std::pair<unsigned long,unsigned long> > lines;
   lines.reserve(burstRecords.size());
   std::pair<unsigned long,unsigned long> samples;
@@ -1091,7 +1182,7 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
 
   // Now, update other metadata accordingly
   std::vector<GCP> deburstGCPs;
-  
+
   for (auto gcp : m_GCP.GCPs)
   {
     unsigned long newLine=0;
@@ -1183,8 +1274,8 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
   //redaptMedataAfterDeburst = true;
   m_FirstLineTime = deburstBurst.azimuthStartTime;
   m_LastLineTime = deburstBurst.azimuthStopTime;
-  
-  m_SarParam.nearRangeTime += samples.first*(1/m_SarParam.rangeSamplingRate); 
+
+  m_SarParam.nearRangeTime += samples.first*(1/m_SarParam.rangeSamplingRate);
 
   return true;
 }
@@ -1192,7 +1283,7 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
 bool SarSensorModel::Overlap(std::pair<unsigned long, unsigned long>& linesUp, std::pair<unsigned long, unsigned long>& linesLow,
                std::pair<unsigned long, unsigned long>& samplesUp, std::pair<unsigned long, unsigned long>& samplesLow, unsigned int burstIndUp,
                bool inputWithInvalidPixels)
-{  
+{
   auto & burstRecords = m_SarParam.burstRecords;
 
   // Check the no burst record case, the single burst record case or inferior to burstIndUp + 1
@@ -1275,10 +1366,10 @@ bool SarSensorModel::ImageLineToDeburstLine(const std::vector<std::pair<unsigned
 {
   auto vit = lines.cbegin();
   auto nit = vit + 1;
-  
+
   auto lineOffset = vit->first;
   deburstLine = imageLine;
-  
+
   for(; nit != lines.end(); ++vit, ++nit)
   {
     if(imageLine >= vit->first && imageLine <= vit->second)
@@ -1291,17 +1382,17 @@ bool SarSensorModel::ImageLineToDeburstLine(const std::vector<std::pair<unsigned
   return false;
 }
 
-void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
-                                            unsigned long deburstLine, 
+void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
+                                            unsigned long deburstLine,
                                             unsigned long & imageLine)
 {
   auto vit = lines.cbegin();
   auto nit = vit+1;
-  
+
   unsigned long lineOffset = vit->first;
 
   imageLine = deburstLine;
-  
+
   while(nit != lines.end())
   {
     if(imageLine+lineOffset>=vit->first && imageLine+lineOffset<=vit->second)
@@ -1314,7 +1405,7 @@ void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned
   imageLine += lineOffset;
 }
 
-void SarSensorModel::LineToAzimuthTime(double line, TimeType & azimuthTime) const
+SarSensorModel::TimeType SarSensorModel::LineToAzimuthTime(double line) const
 {
   assert(!m_SarParam.burstRecords.empty()&&"Burst records are empty (at least one burst should be available)");
 
@@ -1351,16 +1442,16 @@ void SarSensorModel::LineToAzimuthTime(double line, TimeType & azimuthTime) cons
   const auto timeSinceStart = (line - currentBurst->startLine) * m_SarParam.azimuthTimeInterval;
 
   // Eq 22 p 27
-  azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + m_AzimuthTimeOffset;
+  return currentBurst->azimuthStartTime + timeSinceStart + m_AzimuthTimeOffset;
 }
 
 
 bool SarSensorModel::LineToSatPositionAndVelocity(double line, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const
 {
-  TimeType azimuthTime;
-
-  LineToAzimuthTime(line, azimuthTime);
-  interpolateSensorPosVel(azimuthTime, satellitePosition, satelliteVelocity);
+  TimeType const azimuthTime = LineToAzimuthTime(line);
+  auto const pos_vel = interpolateSensorPosVel(azimuthTime);
+  satellitePosition = pos_vel.first;
+  satelliteVelocity = pos_vel.second;
 
   return !(vnl_math_isnan(satellitePosition[0]) && vnl_math_isnan(satellitePosition[1]) && vnl_math_isnan(satellitePosition[1])
            && vnl_math_isnan(satelliteVelocity[0]) && vnl_math_isnan(satelliteVelocity[1]) && vnl_math_isnan(satelliteVelocity[1]));

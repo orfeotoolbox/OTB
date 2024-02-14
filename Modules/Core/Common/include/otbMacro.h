@@ -198,6 +198,11 @@ namespace otb
 #endif // NDEBUG
 
 
+// MSVC doesn't have __has_attribute, let's silence it!
+#ifndef __has_attribute
+#  define __has_attribute(attr) 0
+#endif
+
 #if __has_cpp_attribute(fallthrough)
 #  define OTB_FALLTHROUGH [[fallthrough]]
 #elif __has_attribute(fallthrough)
