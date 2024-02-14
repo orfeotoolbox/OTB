@@ -149,34 +149,19 @@ legal-check:
 #------------------------- prepare & build jobs --------------------------------
 
 ## Ubuntu superbuild
-ubuntu-prepare-core:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm
-
-ubuntu-prepare-full:
+ubuntu-20-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
-ubuntu-build-core:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+ubuntu-22-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk
-    - mv build/CookBook-*-html.tar.gz . || true
-    - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
-    - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DPACKAGE_BY_MODULE:BOOL=ON
-    - mv build_packages/OTB-*.tar.gz . || true
-    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-Core-Dependencies.tar.gz
-  needs:
-    - job: ubuntu-prepare-core
-      artifacts: true
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON
 
-ubuntu-build-full:
+ubuntu-20-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
@@ -187,9 +172,23 @@ ubuntu-build-full:
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
-    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
   needs:
-    - job: ubuntu-prepare-full
+    - job: ubuntu-20-prepare
+      artifacts: true
+
+# Ubuntu 22 build needed for gdal bindings with python 3.10. We package the compiled bindings for python 3.10, this package will be downloaded and extracted automatically when
+# a user lauches the otbenv profile after unpacking the official archive for the first time (which contains bindings for ubuntu 20 and python 3.8 initially)
+ubuntu-22-gdal-bindings:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  only:
+    changes:
+      - SuperBuild/CMake/External_gdal.cmake
+  script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py310.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+  needs:
+    - job: ubuntu-22-prepare
       artifacts: true
 
 ## RedHat superbuild
@@ -275,7 +274,7 @@ ubuntu-qa-code-coverage:
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
   needs:
-    - job: ubuntu-prepare-full
+    - job: ubuntu-20-prepare
       artifacts: true
 
 ubuntu-qa-static-analysis:
@@ -299,7 +298,7 @@ ubuntu-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   needs:
-    - job: ubuntu-prepare-full
+    - job: ubuntu-20-prepare
       artifacts: true
 
 ubuntu-sonar-report:
@@ -347,7 +346,7 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-build-full
+    - job: ubuntu-20-build
       artifacts: true
     - job: windows-10-build
       artifacts: true
@@ -372,7 +371,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-prepare-full
+    - job: ubuntu-20-prepare
       artifacts: false
 
 
@@ -401,7 +400,7 @@ release-docker:
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   needs:
-      - job: ubuntu-build-full
+      - job: ubuntu-20-build
         artifacts: true
   script:
       - /kaniko/executor --cleanup

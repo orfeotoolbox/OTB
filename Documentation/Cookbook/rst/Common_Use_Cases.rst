@@ -19,6 +19,8 @@ This use case shows how to orthorectify a Pleiades Image and perform an Edge ext
     # Extract the edges from that cropped image
     otbcli_EdgeExtraction -in /Path/to/Output/pxs_extract.tif -out /Path/To/Output/pxs_extract_edges.tif
 
+.. _otbqgis:
+
 Use OTB in QGIS
 ~~~~~~~~~~~~~~~
 
@@ -42,6 +44,8 @@ Display the result
 ------------------
 
 .. image:: Art/qgis_result.png
+
+.. _otbpython:
 
 Use Python API
 ~~~~~~~~~~~~~~

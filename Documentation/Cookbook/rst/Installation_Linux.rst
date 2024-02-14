@@ -9,6 +9,8 @@ See the page :doc:`Modules` to pick the ones you need.
 If you are using Fedora, Redhat8, please download the package **Linux_RedHat** which contains GDAL bindings in a different folder than the standard Linux package.
 It is because the default system Python user site in RedHat, and distributions based on it, is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
 
+.. _recommandedinstall:
+
 Recommended Installation : One package containing all the modules 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-9.0.0-Linux.tar.gz** package.
@@ -21,47 +23,34 @@ You can download the package from the website and extract it in your file manage
    tar xf /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
    source /Path/To/OTB_install/otbenv.profile
 
-Advanced Installation : One package per module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _advancedinstallation:
 
-Core and optional packages
-``````````````````````````
+Advanced Installation : Modular installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In most cases, you will need the **OTB-All-Dependencies-9.0.tar.gz** package in order to run Core **AND** optional packages that you can install afterwards.
+Download
+````````
+
+In order to run OTB you will need the **OTB-Dependencies-9.0.tar.gz** package to run the Core **AND** optional packages that you can install afterwards.
 Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning. 
 In that case you will just need to download the OTB-Learning package, and untar it where you installed the Core package. 
 You can then use directly the applications packaged in the Learning package alongside the other Core apps.
-If you want your installation to be the same as with OTB < 9, you can download all the optional packages.
 
 .. code-block:: bash
 
    # Download mandatory packages to run OTB
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o OTB-9.0.0-Linux-Core.tar.gz
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-All-Dependencies.tar.gz -o OTB-9.0.0-Linux-All-Dependencies.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Dependencies.tar.gz -o OTB-9.0.0-Linux-Dependencies.tar.gz
    # Download optional packages
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o OTB-9.0.0-Linux-FeaturesExtraction.tar.gz
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Learning.tar.gz -o OTB-9.0.0-Linux-Learning.tar.gz
    ...
 
-
-Core Only
-`````````
-
-In this use case, you'll only be able to run Core applications, you **CANNOT** install any optional package over it as the necessary dependencies are not installed.
-it is possible to make your installation available to optional modules by downloading the **All-Dependencies** package and install it in the current OTB core install.
-This installation will prompt you to replace the existing dependencies, just click OK.  
-
-.. code-block:: bash
-
-   # Download mandatory packages to run OTB
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o OTB-9.0.0-Linux-Core.tar.gz
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core-Dependencies.tar.gz -o OTB-9.0.0-Linux-Core-Dependencies.tar.gz
-
-This package is a self-extractable tar.gz archive. You may uncompress the files with a
-right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
-
 Installation
 ````````````
+
+These packages are self-extractable tar.gz archives. You may uncompress the files with a
+right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
 
 .. code-block:: bash
 
@@ -69,7 +58,7 @@ Installation
    tar xvf OTB-9.0.0-Linux-Core.tar.gz --one-top-level="/Path/To/Install/OTB"
    tar xvf OTB-9.0.0-Linux-FeaturesExtraction.tar.gz --one-top-level="/Path/To/Install/OTB"
    # It is necessary to install the dependencies AFTER the other modules*
-   tar xvf OTB-9.0.0-Linux-All-Dependencies.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-9.0.0-Linux-Dependencies.tar.gz --one-top-level="/Path/To/Install/OTB"
    ...
    source /Path/To/Install/OTB/otbenv.profile
 

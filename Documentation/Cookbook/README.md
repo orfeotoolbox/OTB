@@ -11,19 +11,19 @@ The old Cookbook in otb-documents is now deprecated.
 
 Requirements
 ============
-Install OTB, sphinx, sphinx-rtd-theme:
+Install OTB, sphinx, sphinx-rtd-theme and sphinx-rtd-theme-common. You may need to adapt packages names depending on your Linux OS:
 
-aptitude install python-sphinx python-sphinx-rtd-theme
+```bash
+apt-get install python3-sphinx python3-sphinx-rtd-theme sphinx-rtd-theme-common
+```
 
 How to build the Cookbook:
 ==========================
 
-You will need a build of OTB with python wrapping enabled (SuperBuild is fine). Then:
+You will need a build of OTB with python wrapping enabled (SuperBuild is fine). Two options:
 
-    mkdir ~/build-cookbook
-    cd ~/build-cookbook
-    cmake ~/sources/otb/Documentation/CookBook -DOTB_DIR=/path/where/you/installed/otb/lib/cmake/OTB-X.Y
-    make
+* You already build otb with superbuild: ```cd /your/otb/build/dir; ccmake .```, enable the **BUILD_COOKBOOK** option.
+* You build otb from scratch with superbuild and you can use the ```-DBUILD_COOKBOOK=ON``` option.
 
 View results
 ============

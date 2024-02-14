@@ -57,7 +57,7 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `tinyXML <http://www.grinninglizard.com/tinyxml>`_               | Yes                   |                            | 2.6.2                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `ZLIB <https://zlib.net>`_                                       | Yes                   |                            | 1.3                      |
+    | `ZLIB <https://zlib.net>`_                                       | Yes                   |                            | 1.3.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `6S <http://6s.ltdri.org>`_                                      | No                    |                            |                          |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -106,8 +106,7 @@ Debian / Ubuntu
     apt update -y && apt install -y --no-install-recommends ca-certificates curl make cmake g++ gcc git git-lfs libtool swig python3 python3-dev python3-pip python3-numpy pkg-config patch
 
     # Additional dependencies if you need to build the documentation
-    apt install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended doxygen graphviz gnuplot dvipng python3-sphinx sphinx-rtd-theme-common
-    pip install sphinx_rtd_theme
+    apt install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended doxygen graphviz gnuplot dvipng python3-sphinx sphinx-rtd-theme-common python3-sphinx-rtd-theme
 
 
 Additional dependencies for a native build
