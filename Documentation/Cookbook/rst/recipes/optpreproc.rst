@@ -240,7 +240,7 @@ path to a file which contains the geoid. `Geoid <http://en.wikipedia.org/wiki/Ge
 corresponds to the equipotential surface that would coincide with the mean ocean surface of
 the Earth.
 
-We provide one geoid in the `OTB-Data <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/tree/master/Input/DEM>`_ repository.
+We provide one geoid in the `OTB-Data <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/tree/develop/Data/Input/DEM>`_ repository.
 
 In all applications, the option **elev.geoid** manages the path
 to the geoid. Finally, it is also possible to use an average elevation

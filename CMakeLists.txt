@@ -422,11 +422,11 @@ if(XDK_INSTALL_PATH)
     install(DIRECTORY ${XDK_INSTALL_PATH}/share
             DESTINATION .
             USE_SOURCE_PERMISSIONS
-            COMPONENT Core)       
+            COMPONENT Core)
     install(DIRECTORY ${XDK_INSTALL_PATH}/include
             DESTINATION .
             USE_SOURCE_PERMISSIONS
-            COMPONENT Core)        
+            COMPONENT Core)
     install(DIRECTORY ${XDK_INSTALL_PATH}/bin
             DESTINATION .
             USE_SOURCE_PERMISSIONS
@@ -434,7 +434,7 @@ if(XDK_INSTALL_PATH)
     install(DIRECTORY ${XDK_INSTALL_PATH}/cmake
             DESTINATION ./lib
             USE_SOURCE_PERMISSIONS
-            COMPONENT Core)    
+            COMPONENT Core)
 else()
     message(WARNING "XDK NOT FOUND, it will not be packaged")
 endif()
