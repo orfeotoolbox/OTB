@@ -9,6 +9,8 @@ See the page :doc:`Modules` to pick the ones you need.
 If you are using Fedora, Redhat8, please download the package **Linux_RedHat** which contains GDAL bindings in a different folder than the standard Linux package.
 It is because the default system Python user site in RedHat, and distributions based on it, is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
 
+.. _recommandedinstall:
+
 Recommended Installation : One package containing all the modules 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-9.0.0-Linux.tar.gz** package.
@@ -20,6 +22,8 @@ You can download the package from the website and extract it in your file manage
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux.tar.gz -o /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz
    tar xf /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
    source /Path/To/OTB_install/otbenv.profile
+
+.. _advancedinstallation:
 
 Advanced Installation : Modular installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
