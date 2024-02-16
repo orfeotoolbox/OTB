@@ -23,7 +23,10 @@ INCLUDE_ONCE_MACRO(TIFF)
 SETUP_SUPERBUILD(TIFF)
 
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(TIFF ZLIB JPEG)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(TIFF ZLIB JPEG LERC)
+
+set(TIFF_URL "https://download.osgeo.org/libtiff/tiff-4.6.0.tar.gz")
+set(TIFF_MD5 fc7d49a9348b890b29f91a4ecadd5b49)
 
 if(MSVC)
   set(TIFF_C_FLAGS "/D_CRT_SECURE_NO_WARNINGS /DWIN32")
@@ -31,8 +34,8 @@ endif()
 
 ExternalProject_Add(TIFF
   PREFIX TIFF
-  URL "https://download.osgeo.org/libtiff/tiff-4.6.0.tar.gz"
-  URL_MD5 fc7d49a9348b890b29f91a4ecadd5b49
+  URL ${TIFF_URL}
+  URL_MD5 ${TIFF_MD5}
   SOURCE_DIR ${TIFF_SB_SRC}
   BINARY_DIR ${TIFF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -49,6 +52,7 @@ ExternalProject_Add(TIFF
   -Dlzma:BOOL=FALSE
   -Djbig:BOOL=FALSE
   -Dzlib:BOOL=TRUE
+  -Dlerc:BOOL=TRUE
   -DWITH_OPENGL:BOOL=FALSE
   -Dpixarlog:BOOL=TRUE
   -Dcxx:BOOL=FALSE
