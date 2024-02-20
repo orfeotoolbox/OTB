@@ -142,6 +142,9 @@ private:
     TiePointsType tiepoints;
     double x, y, z, lat, lon;
     std::string line;
+    // skip header
+    std::getline(ifs, line);
+    line.clear();
     while (std::getline(ifs, line))
     {
       // Avoid commented lines or too short ones
