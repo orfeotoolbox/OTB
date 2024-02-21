@@ -282,6 +282,7 @@ set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 #----------------------------------------------------------------------
 # Make sure remote modules are downloaded before sorting out the module
 # dependencies.
+add_subdirectory(Modules)
 add_subdirectory(Modules/Remote)
 
 # Enable modules according to user inputs and the module dependency DAG.

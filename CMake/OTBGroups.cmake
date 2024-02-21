@@ -57,6 +57,9 @@ compatibility as other modules in the toolkit.")
 
 #------------------------------------------------
 # Find the modules in each group and the module name line in otb-module.cmake
+# OUTPUT for each group:
+# ${group}_module_list that contains names of each "otb_module" defined in
+# otb-module.cmake file found recursively
 foreach( group ${group_list} )
   if (CMAKE_DEBUG)
     message(STATUS "[CMAKE_DEBUG] ${group}Targets_EXPORTED == ${${group}Targets_EXPORTED} before turning it to 0")
@@ -93,8 +96,8 @@ ${${group}_documentation} */\n"
 /** \\defgroup ${mod} Module ${mod}
 \\ingroup Group-${group} */\n"
       )
-  endforeach()
-endforeach()
+  endforeach() # mod ${_${group}_module_list}
+endforeach() # group ${group_list} 
 
 set( _content ${group_list_dox} )
 configure_file(
@@ -107,6 +110,8 @@ configure_file(
 
 # Set a module name list for each group and exclude
 # Modules that should be OFF
+# OUTPUT: _${group}_on_module_list that contains list of enabled modules
+# if OTB_MODULE_${module}_EXCLUDE_FROM_DEFAULT is undeclared or OFF
 foreach( group ${group_list} )
   set( _${group}_on_module_list )
   list( LENGTH _${group}_module_list _num_modules )
@@ -125,6 +130,11 @@ option(OTBGroup_ThirdParty "Request using thirdparty modules" ON)
 # create a list of enable groups to later generate needed Config.cmake files
 get_property(GROUPS_ENABLED_LIST GLOBAL PROPERTY OTB_GROUPS_ENABLED)
 
+# Foreach group:
+# - Depending of option OTB_BUILD_${group}, defines OTBGroup_${group}
+# - If the group is required to be build, appends to
+#   OTB_MODULE_${otb-module}_REQUEST_BY (with otb-module as group submodule)
+#   the value 
 foreach( group ${group_list})
     if(NOT DEFINED OTBGroup_${group})
       if(DEFINED OTB_BUILD_${group})

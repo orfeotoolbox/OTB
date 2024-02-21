@@ -18,11 +18,10 @@
 # limitations under the License.
 #
 
-# otbapp_GenericRegionMerging
-# 
-#Contact: Pierre Lassalle <lassallepierre34@gmail.com> 
-otb_fetch_module(otbGRM
-  "This module provides the GRM OTB application to perform multiscale
+#Contact: Pierre Lassalle <lassallepierre34@gmail.com>
+set(mod_name otbGRM)
+otb_fetch_module(${mod_name}
+"This module provides the GRM OTB application to perform multiscale
 region-merging segmentation on satellite images. Three local homogeneity
 criteria are available: the Baatz & Schäpe criterion, the Full Lambda Schedule
 criterion and the simple Euclidean Distance criterion.  This application uses
@@ -33,6 +32,7 @@ to see which format you must respect to add a new criterion.
 A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/lassallep/grm
 "
+  "${CMAKE_CURRENT_SOURCE_DIR}/${mod_name}"
   GIT_REPOSITORY https://github.com/orfeotoolbox/GRM
   GIT_TAG 459943a6fde517cc0dd601dfaca3400e3f1788de
 )
