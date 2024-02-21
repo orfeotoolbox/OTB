@@ -1,0 +1,3 @@
+[submodule "Modules/Miscellaneous"]
+	path = Modules/Miscellaneous
+	url = git@gitlab.orfeo-toolbox.org:orfeotoolbox/otb-modules/miscellaneous.git
