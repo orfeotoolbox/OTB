@@ -19,8 +19,10 @@
 #
 
 #Contact: Gaëlle USSEGLIO
-otb_fetch_module(DiapOTBModule
+set(mod_name DiapOTBModule)
+otb_fetch_module(${mod_name}
   "OTB module for SAR processing in Diapason."
+  "${CMAKE_CURRENT_SOURCE_DIR}/${mod_name}"
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/remote_modules/diapotb.git
   GIT_TAG d84b9accbba81d966c51410dee32c866295594b1
 )
