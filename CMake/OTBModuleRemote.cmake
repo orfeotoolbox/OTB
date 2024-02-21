@@ -147,7 +147,7 @@ endfunction()
 # The following options are currently supported:
 #    [GIT_REPOSITORY url]        # URL of git repo
 #    [GIT_TAG tag]               # Git branch name, commit id or tag
-function(otb_fetch_module _name _description)
+function(otb_fetch_module _name _description _destination)
   option(Module_${_name} "${_description}" OFF)
   mark_as_advanced(Module_${_name})
 
@@ -177,6 +177,7 @@ function(otb_fetch_module _name _description)
     _fetch_with_git("${GIT_EXECUTABLE}"
       "${_fetch_options_GIT_REPOSITORY}"
       "${_fetch_options_GIT_TAG}"
+      ${_destination}
       "${OTB_SOURCE_DIR}/Modules/Remote/${_name}"
       )
   endif()
