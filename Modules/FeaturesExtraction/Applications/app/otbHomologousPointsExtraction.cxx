@@ -352,7 +352,7 @@ private:
     file << std::fixed;
     file.precision(12);
     // keep \n as this is used a delimiter character in refine sensor model
-    file << "row\t" << "col\t" << "lon\t" << "lat\n";
+    file << "#row\t" "col\t" "lon\t" "lat\n";
 
     // Setting up channel extractors
     ExtractChannelFilterType::Pointer extractChannel1 = ExtractChannelFilterType::New();

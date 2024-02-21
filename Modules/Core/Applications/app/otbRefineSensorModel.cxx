@@ -140,29 +140,24 @@ private:
     ifs.open(GetParameterString("inpoints"));
 
     TiePointsType tiepoints;
-    double x, y, z, lat, lon;
+    double x = 0.0, y = 0.0, z = 0.0, lat = 0.0, lon = 0.0;
     std::string line;
-    // skip header
-    std::getline(ifs, line);
-    line.clear();
+
+    std::istringstream iss;
     while (std::getline(ifs, line))
     {
       // Avoid commented lines or too short ones
       if (!line.empty() && line[0] != '#')
       {
-        // retrieve the x component
-        std::string::size_type pos     = 0;
-        std::string::size_type nextpos = line.find_first_of("\t", pos);
-        x                              = std::stof(line.substr(pos, nextpos).c_str());
-        pos                            = nextpos + 1;
-        nextpos                        = line.find_first_of("\t", pos);
-        y                              = std::stof(line.substr(pos, nextpos).c_str());
-        pos                            = nextpos + 1;
-        nextpos                        = line.find_first_of("\t", pos);
-        lon                            = std::stof(line.substr(pos, nextpos).c_str());
-        pos                            = nextpos + 1;
-        nextpos                        = line.find_first_of("\t", pos);
-        lat                            = std::stof(line.substr(pos, nextpos).c_str());
+        iss.str(line);
+          if (! (iss >> x >> y >> lon >> lat)) {
+          throw std::invalid_argument("Invalid line: \"" + iss.str() +
+                                      "\". Expected 4 doubles separated"
+                                      " by space or tab.");
+        }
+        // you must clear istringstream to reset the error state and eof flag
+        // otherwise all futher attempts to read line will fail
+        iss.clear();
 
         z = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(lon, lat);
 
@@ -216,7 +211,9 @@ private:
     std::ofstream ofs;
     ofs << std::fixed;
     ofs.precision(12);
-    if (IsParameterEnabled("outstat"))
+    bool outStatEnabled = IsParameterEnabled("outstat");
+
+    if (outStatEnabled)
     {
       ofs.open(GetParameterString("outstat"));
       ofs << "#ref_lon ref_lat elevation predicted_lon predicted_lat predicted_elev x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) "
@@ -269,9 +266,9 @@ private:
       double yerror_ref = ref[1] - tmpPoint_ref[1];
 
 
-      if (IsParameterEnabled("outstat"))
+      if (outStatEnabled)
         ofs << ref[0] << "\t" << ref[1] << "\t" << it->first[2] << "\t" << tmpPoint[0] << "\t" << tmpPoint[1] << "\t" << tmpPoint[2] << "\t" << xerror_ref
-            << "\t" << yerror_ref << "\t" << gerror_ref << "\t" << xerror << "\t" << yerror << "\t" << gerror << std::endl;
+            << "\t" << yerror_ref << "\t" << gerror_ref << "\t" << xerror << "\t" << yerror << "\t" << gerror << "\n";
 
       rmse += gerror * gerror;
       rmsex += xerror * xerror;
