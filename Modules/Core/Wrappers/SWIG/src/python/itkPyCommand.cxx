@@ -115,7 +115,7 @@ void PyCommand::PyExecute()
     PyGILStateEnsure gil;
     PyObject* result;
 
-    result = PyEval_CallObject(this->obj, (PyObject*)nullptr);
+    result = PyObject_CallObject(this->obj, (PyObject*)nullptr);
 
     if (result)
     {
