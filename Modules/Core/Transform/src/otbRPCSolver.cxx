@@ -213,9 +213,9 @@ void RPCSolver::Solve(const GCPsContainerType& gcpContainer, PrecisionType& rmsE
   altNorm.reserve(numberOfPoints);
   
   // Check for enough points
-  if (numberOfPoints < 20)
+  if (numberOfPoints < 15)
   {
-    itkGenericExceptionMacro(<< "At least 20 points are required to estimate the 40 parameters of a RPC model without elevation support, and 40 are required "
+    itkGenericExceptionMacro(<< "At least 15 points are required to estimate the 40 parameters of a RPC model without elevation support, and 40 are required "
                                 "to estimate the 80 parameters of a RPC model with elevation support. Only "
                              << numberOfPoints << " points were given.");
   }

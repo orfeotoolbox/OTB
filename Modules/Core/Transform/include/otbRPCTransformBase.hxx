@@ -22,6 +22,7 @@
 #define otbRPCTransformBase_hxx
 
 #include "otbRPCTransformBase.h"
+#include "otbRPCSolver.h"
 
 namespace otb
 {
@@ -62,6 +63,31 @@ void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSe
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "RPC Model: " << this->m_RPCParam.get()->ToJSON() << std::endl;
+}
+
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(ImageMetadata& imd, const TiePointsType& tiepoints, double& rmsError)
+{
+    Projection::RPCParam refinedRPCParams;
+    RPCSolver::GCPsContainerType gcps;
+
+    //Build GCPS from tiepoints
+    for(auto it=tiepoints.begin();it!=tiepoints.end();it++)
+    {
+        otb::RPCSolver::Point2DType sensorGCP;
+        otb::RPCSolver::Point3DType groundGCP;
+
+        sensorGCP[0] = it->first[0];
+        sensorGCP[1] = it->first[1];
+        groundGCP[0] = it->second[0];
+        groundGCP[1] = it->second[1];
+        groundGCP[2] = it->second[2];
+
+        gcps.push_back({sensorGCP,groundGCP});
+    }
+    RPCSolver::Solve(gcps, rmsError, refinedRPCParams);
+    imd.Add(MDGeom::RPC,refinedRPCParams);
+    this->SetMetadata(imd);
 }
 
 } // namespace otb
