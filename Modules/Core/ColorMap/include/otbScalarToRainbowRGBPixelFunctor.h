@@ -34,9 +34,7 @@ namespace Functor
  * \class HSVToRGBFunctor
  * \brief Function object to convert HSV value to RGB.
  *
- *
  * \sa ScalarToRainbowRGBPixelFunctor
- *
  *
  * \ingroup OTBColorMap
  */
@@ -44,11 +42,10 @@ template <class TRGBPixel>
 class ITK_EXPORT HSVToRGBFunctor
 {
 public:
-  HSVToRGBFunctor(){};
-  ~HSVToRGBFunctor()
-  {
-  }
-  inline TRGBPixel operator()(double h, double s, double v) const
+  HSVToRGBFunctor() = default;
+  ~HSVToRGBFunctor() = default;
+
+  TRGBPixel operator()(double h, double s, double v) const
   {
     const double onethird  = 1.0 / 3.0;
     const double onesixth  = 1.0 / 6.0;
@@ -105,8 +102,8 @@ public:
 
     //         std::cout << h << ", " << s << ", " << v << " -> " << r << ", " << g << ", " << b << std::endl;
 
-    TRGBPixel                                 ans;
-    typedef typename TRGBPixel::ComponentType RGBComponentType;
+    using RGBComponentType = typename TRGBPixel::ComponentType;
+    TRGBPixel ans;
     ans[0] = static_cast<RGBComponentType>(r);
     ans[1] = static_cast<RGBComponentType>(g);
     ans[2] = static_cast<RGBComponentType>(b);
@@ -130,7 +127,6 @@ namespace Functor
  *
  * \example BasicFilters/DEMToRainbowExample.cxx
  *
- *
  * \ingroup OTBColorMap
  */
 template <class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char>>
@@ -139,22 +135,20 @@ class ITK_EXPORT ScalarToRainbowRGBPixelFunctor : public itk::Function::Colormap
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
-  ~ScalarToRainbowRGBPixelFunctor() override
-  {
-  }
+  ~ScalarToRainbowRGBPixelFunctor() = default;
 
-  typedef ScalarToRainbowRGBPixelFunctor Self;
-  typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self                = ScalarToRainbowRGBPixelFunctor;
+  using Superclass          = itk::Function::ColormapFunction<TScalar, TRGBPixel>;
+  using Pointer             = itk::SmartPointer<Self>;
+  using ConstPointer        = itk::SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef TRGBPixel                            RGBPixelType;
-  typedef typename RGBPixelType::ComponentType RGBComponentType;
-  typedef TScalar                              ScalarType;
-  typedef HSVToRGBFunctor<RGBPixelType>        HSVToRGBFunctorType;
+  using RGBPixelType        = TRGBPixel;
+  using RGBComponentType    = typename RGBPixelType::ComponentType;
+  using ScalarType          = TScalar;
+  using HSVToRGBFunctorType = HSVToRGBFunctor<RGBPixelType>;
 
   RGBPixelType operator()(const TScalar&) const override;
 

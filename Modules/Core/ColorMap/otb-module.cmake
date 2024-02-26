@@ -27,6 +27,7 @@ requirements.")
 
 otb_module(OTBColorMap
   DEPENDS
+    OTBCommon
     OTBITK
 
   TEST_DEPENDS
