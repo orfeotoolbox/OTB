@@ -23,29 +23,33 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "itkScalarToRGBColormapImageFilter.h"
 #include "otbScalarToRainbowRGBPixelFunctor.h"
 
 int otbScalarToRainbowRGBPixelFunctor(int itkNotUsed(argc), char* argv[])
 {
-  typedef unsigned char            PixelType;
-  typedef itk::RGBPixel<PixelType> RGBPixelType;
-  typedef otb::Image<PixelType, 2>    ImageType;
-  typedef otb::Image<RGBPixelType, 2> RGBImageType;
-  typedef otb::ImageFileReader<ImageType>    ReaderType;
-  typedef otb::ImageFileWriter<RGBImageType> WriterType;
+  using PixelType    = unsigned char;
+  using RGBPixelType = itk::RGBPixel<PixelType>;
+  using ImageType    = otb::Image<PixelType, 2>;
+  using RGBImageType = otb::Image<RGBPixelType, 2>;
+  using ReaderType   = otb::ImageFileReader<ImageType>;
+  using WriterType   = otb::ImageFileWriter<RGBImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
 
-  typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType> ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
-  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
-  colormapper->GetFunctor().SetMaximumInputValue(150);
-  colormapper->GetFunctor().SetMinimumInputValue(70);
+  using ColorMapFunctorType = otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType, RGBPixelType>;
+  ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
+  colormap->SetMinimumInputValue(70);
+  colormap->SetMaximumInputValue(150);
 
+  using ColorMapFilterType  = itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType>;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
+  colormapper->SetColormap(colormap);
+
+  colormapper->SetUseInputImageExtremaForScaling(false);
   colormapper->SetInput(reader->GetOutput());
   writer->SetInput(colormapper->GetOutput());
 

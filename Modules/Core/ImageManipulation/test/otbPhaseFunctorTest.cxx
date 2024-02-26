@@ -36,7 +36,8 @@ int otbPhaseFunctorTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   typedef itk::RGBAPixel<ScalarType>              RGBAPixelType;
   typedef VectorPixelType                         OutputPixelType;
 
-  FunctorType               funct;
+  FunctorType::Pointer      funct_ptr = FunctorType::New();
+  FunctorType              &funct = *funct_ptr;
   OutputPixelType           output;
   std::vector<unsigned int> channels;
   ScalarType                result;

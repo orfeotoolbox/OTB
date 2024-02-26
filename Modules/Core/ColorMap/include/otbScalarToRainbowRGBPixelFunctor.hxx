@@ -40,15 +40,11 @@ ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::ScalarToRainbowRGBPixelFunct
 template <class TScalar, class TRGBPixel>
 typename ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::RGBPixelType ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::operator()(const TScalar& v) const
 {
+  double const hinc = 0.6 / (this->GetMaximumInputValue() - this->GetMinimumInputValue());
+  double const sinc = 0.0; // WHY ??
+  double const vinc = 0.0; // WHY ??
 
-  double hinc, sinc, vinc;
-  hinc = 0.6 / (this->GetMaximumInputValue() - this->GetMinimumInputValue());
-  sinc = 0.0;
-  vinc = 0.0;
-
-  double hue, sat, val;
-
-  hue = 0.6 - (v - this->GetMinimumInputValue()) * hinc;
+  double hue = 0.6 - (v - this->GetMinimumInputValue()) * hinc;
   if (v < this->GetMinimumInputValue())
   {
     hue = 0.6;
@@ -57,8 +53,8 @@ typename ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::RGBPixelType Scalar
   {
     hue = 0.0;
   }
-  sat = 0.99 + v * sinc;
-  val = itk::NumericTraits<RGBComponentType>::max() + v * vinc;
+  double const sat = 0.99 + v * sinc;
+  double const val = itk::NumericTraits<RGBComponentType>::max() + v * vinc;
 
   return m_HSVToRGBFunctor(hue, sat, val);
 }
