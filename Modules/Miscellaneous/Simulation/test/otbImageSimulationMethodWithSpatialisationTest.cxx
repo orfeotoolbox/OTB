@@ -67,9 +67,9 @@ int otbImageSimulationMethodWithSpatialisationTest(int itkNotUsed(argc), char* a
   objectSize[0] = 300;
   objectSize[1] = 300;
 
-  SpatialisationFilterType::SizeType nbOjects;
-  nbOjects[0] = 3;
-  nbOjects[1] = 3;
+  SpatialisationFilterType::SizeType nbObjects;
+  nbObjects[0] = 3;
+  nbObjects[1] = 3;
 
   std::vector<std::string> pathVector(9);
   pathVector[0] = "JHU/becknic/rocks/sedimentary/powder/0_75/txt/greywa1f.txt";
@@ -105,7 +105,7 @@ int otbImageSimulationMethodWithSpatialisationTest(int itkNotUsed(argc), char* a
   labels[8] = 3;
 
   spatialisationFilter->SetObjectSize(objectSize);
-  spatialisationFilter->SetNumberOfObjects(nbOjects);
+  spatialisationFilter->SetNumberOfObjects(nbObjects);
   spatialisationFilter->SetPathVector(pathVector);
   spatialisationFilter->SetAreaVector(areaVector);
   spatialisationFilter->SetLabels(labels);

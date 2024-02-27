@@ -142,15 +142,15 @@ bool CompareVectorReal(const ImageRefType::Pointer imRef, const ImageType* im)
   auto                                          it    = itk::ImageRegionConstIterator<ImageType>(im, im->GetLargestPossibleRegion());
   itRef.GoToBegin();
   it.GoToBegin();
-  unsigned int nbChanel = im->GetNumberOfComponentsPerPixel();
-  // unsigned int nbChanelRef = imRef->GetNumberOfComponentsPerPixel ();
+  unsigned int nbChannel = im->GetNumberOfComponentsPerPixel();
+  // unsigned int nbChannelRef = imRef->GetNumberOfComponentsPerPixel ();
   RealPixelType val;
   double        ref;
   while (!it.IsAtEnd())
   {
     // std::cout<<it.Get()<<std::endl;
     // std::cout<<itRef.Get()<<std::endl;
-    for (unsigned int i = 0; i < nbChanel; i++)
+    for (unsigned int i = 0; i < nbChannel; i++)
     {
       val = it.Get()[i];
       ref = itRef.Get()[i];
@@ -229,12 +229,12 @@ bool CompareVectorComplex(const ImageRefType::Pointer imageRef, const ImageType*
   auto     it    = itk::ImageRegionConstIterator<ImageType>(im, im->GetLargestPossibleRegion());
   itRef.GoToBegin();
   it.GoToBegin();
-  unsigned int nbChanel = im->GetNumberOfComponentsPerPixel();
+  unsigned int nbChannel = im->GetNumberOfComponentsPerPixel();
   ComplexType  val;
   float        reRef, imRef;
   while (!it.IsAtEnd())
   {
-    for (unsigned int i = 0; i < nbChanel; i++)
+    for (unsigned int i = 0; i < nbChannel; i++)
     {
       val   = it.Get()[i];
       reRef = itRef.Get()[2 * i];
@@ -271,12 +271,12 @@ bool CompareArrayComplex(const ImageRefType::Pointer imageRef, const ImageType* 
   auto     it    = itk::ImageRegionConstIterator<ImageType>(im, im->GetLargestPossibleRegion());
   itRef.GoToBegin();
   it.GoToBegin();
-  unsigned int nbChanel = im->GetNumberOfComponentsPerPixel();
+  unsigned int nbChannel = im->GetNumberOfComponentsPerPixel();
   ComplexType  val;
   float        reRef, imRef;
   while (!it.IsAtEnd())
   {
-    for (unsigned int i = 0; i < nbChanel; i++)
+    for (unsigned int i = 0; i < nbChannel; i++)
     {
       val   = it.Get()[i];
       reRef = itRef.Get()[2 * i];

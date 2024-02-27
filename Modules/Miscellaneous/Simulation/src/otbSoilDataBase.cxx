@@ -40,7 +40,7 @@ const typename SoilDataBase::SoilDataVector& SoilDataBase::GetDB() const
   return m_SoilDataVector;
 }
 
-double SoilDataBase::GetReflectance(size_t SoilIndex, WavelenghtType wl) const
+double SoilDataBase::GetReflectance(size_t SoilIndex, WavelengthType wl) const
 {
   if (SoilIndex >= m_SoilDataVector.size())
   {
@@ -58,7 +58,7 @@ double SoilDataBase::GetReflectance(size_t SoilIndex, WavelenghtType wl) const
     if (wl > wlmax)
       return (*m_SoilDataVector[SoilIndex].find(wlmax)).second;
 
-    const auto p       = std::partition_point(m_Wavelengths.cbegin(), m_Wavelengths.cend(), [&](WavelenghtType w) { return w < wl; });
+    const auto p       = std::partition_point(m_Wavelengths.cbegin(), m_Wavelengths.cend(), [&](WavelengthType w) { return w < wl; });
     const auto wlinf   = *(p - 1);
     const auto wlsup   = *p;
     const auto factinf = wl - wlinf;
@@ -118,7 +118,7 @@ void SoilDataBase::ParseSoilFile()
       std::stringstream ss(line);
       double            tmpwl;
       ss >> tmpwl;
-      WavelenghtType wl = static_cast<WavelenghtType>(m_WlFactor * tmpwl);
+      WavelengthType wl = static_cast<WavelengthType>(m_WlFactor * tmpwl);
       m_Wavelengths.push_back(wl);
       for (size_t i = 0; i < number_of_soils; ++i)
       {

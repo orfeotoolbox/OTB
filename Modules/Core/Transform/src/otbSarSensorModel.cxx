@@ -481,7 +481,7 @@ SarSensorModel::searchLagrangianNeighbourhood(TimeType azimuthTime) const
     auto t_min = Abs(azimuthTime - m_SarParam.orbits.front().time);
     unsigned int count = 0;
 
-    // Unfortunatelly, we cannot loop from m_FirstLineInOrbit to
+    // Unfortunately, we cannot loop from m_FirstLineInOrbit to
     // m_LastLineInOrbit as there is no guarantee the azimuthTime happens
     // outside this range => we must search the whole orbit information.
     // for(auto it = m_FirstLineInOrbit; it!= m_LastLineInOrbit; ++it,++count)

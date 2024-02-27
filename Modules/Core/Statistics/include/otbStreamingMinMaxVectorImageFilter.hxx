@@ -134,13 +134,13 @@ void PersistentMinMaxVectorImageFilter<TInputImage>::Reset()
   tempPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
   this->GetMinimumOutput()->Set(tempPixel);
 
-  PixelType tempTemporiesPixel;
-  tempTemporiesPixel.SetSize(numberOfComponent);
-  tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
-  m_ThreadMin = ArrayPixelType(numberOfThreads, tempTemporiesPixel);
+  PixelType tempTemporariesPixel;
+  tempTemporariesPixel.SetSize(numberOfComponent);
+  tempTemporariesPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
+  m_ThreadMin = ArrayPixelType(numberOfThreads, tempTemporariesPixel);
 
-  tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
-  m_ThreadMax = ArrayPixelType(numberOfThreads, tempTemporiesPixel);
+  tempTemporariesPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
+  m_ThreadMax = ArrayPixelType(numberOfThreads, tempTemporariesPixel);
 }
 
 template <class TInputImage>

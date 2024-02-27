@@ -96,7 +96,7 @@ public:
    *
    * As such, prefer using `otb::Projection::WorldToEcef`, `ZeroDopplerLookup`,
    * and `Doppler0ToLineSampleYZ` manually if you need several of these
-   * informations.
+   * information.
    *
    * \param[in] inGeoPoint  ground point in WGS84 (lat, lon, hgt) coordinates
    * \param[out] cr         associated col+row
@@ -136,7 +136,7 @@ public:
   /**
    * Calculate range time from pre computed information.
    * For user code that may or may not need range time information
-   * independently of other informations related to the zero doppler.
+   * independently of other information related to the zero doppler.
    * \param[in] ecefGround  ground point in XYZ cartesian coordinates
    * \param[in] sensorPos   sensor position associated to `ecefGround`
    *
@@ -427,7 +427,7 @@ private:
   bool m_IsGrd;
 
   // Let's use a single precision for Lagrangian interpolation that is decided
-  // once, when the SarSensorModel is instanciated.
+  // once, when the SarSensorModel is instantiated.
   LagrangianOrbitInterpolator m_OrbitInterpolator;
   unsigned int                m_polynomial_degree;
 

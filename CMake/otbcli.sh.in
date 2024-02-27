@@ -40,7 +40,7 @@ export LC_NUMERIC=C
 
 # Export GDAL_DATA
 # Note that OTB_APPLICATION_PATH is reset here.
-if [ -z $OTB_INSTALL_DIR ]; then
+if [ -z "$OTB_INSTALL_DIR" ]; then
     . "$CURRENT_SCRIPT_DIR/../otbenv.profile"
 fi
 

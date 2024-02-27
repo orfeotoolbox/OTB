@@ -24,13 +24,13 @@
 
 source /build/anaconda3/bin/activate
 
-cd /build/staged-recipes/recipes/
+cd /build/staged-recipes/recipes/ || exit
 
-conda build ${CONDA_BUILD_OPTIONS} muparserx
-conda build ${CONDA_BUILD_OPTIONS} shark
-conda build ${CONDA_BUILD_OPTIONS} tinyxml
-conda build ${CONDA_BUILD_OPTIONS} libitk
-conda build ${CONDA_BUILD_OPTIONS} otb
+conda build "${CONDA_BUILD_OPTIONS}" muparserx
+conda build "${CONDA_BUILD_OPTIONS}" shark
+conda build "${CONDA_BUILD_OPTIONS}" tinyxml
+conda build "${CONDA_BUILD_OPTIONS}" libitk
+conda build "${CONDA_BUILD_OPTIONS}" otb
 
-mkdir ${CI_PROJECT_DIR}/conda-bld
-mv /build/anaconda3/conda-bld/linux-64/*.tar.bz2 ${CI_PROJECT_DIR}/conda-bld
+mkdir "${CI_PROJECT_DIR}/conda-bld"
+mv /build/anaconda3/conda-bld/linux-64/*.tar.bz2 "${CI_PROJECT_DIR}/conda-bld"

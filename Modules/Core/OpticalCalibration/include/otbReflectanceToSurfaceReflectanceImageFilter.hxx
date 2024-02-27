@@ -142,7 +142,7 @@ void ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>::Upda
       else
       {
         otbMsgDevMacro(<< "use dummy filter");
-        WavelengthSpectralBandVectorType spectralDummy;
+        WavelengthSpectralBandVectorType spectralDummy = AcquiCorrectionParametersType::InternalWavelengthSpectralBandVectorType::New();
         spectralDummy->Clear();
         for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
         {

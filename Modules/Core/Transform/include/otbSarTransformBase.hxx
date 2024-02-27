@@ -66,13 +66,10 @@ void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSe
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(ImageMetadata& imd, const TiePointsType& tiepoints, double& rmsError)
+void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::OptimizeParameters(ImageMetadata& /*imd*/, const TiePointsType& /*tiepoints*/, double& /*rmsError*/)
 {
     // A Standard definition of this function is available for RPC sensor model in RPCTransformBase class
     otbLogMacro(Warning, << "Optimize parameters function not implemented for SAR sensor model. The sensor model parameters will NOT be modified");
-    UNUSED(imd);
-    UNUSED(tiepoints);
-    UNUSED(rmsError);
 }
 
 } // namespace otb

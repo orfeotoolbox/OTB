@@ -121,7 +121,7 @@ public:
 
   constexpr index_type extent(size_t k) const noexcept
   {
-    // less optimizer friendly than the reccursive approach
+    // less optimizer friendly than the recursive approach
     // GCC 7.1 is less efficient to resolve constexpr search, than
     // clang or GCC 6.x
     constexpr auto se = std::array<index_type, rank()>{StaticExtents...};

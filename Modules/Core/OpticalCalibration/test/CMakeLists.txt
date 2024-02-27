@@ -863,7 +863,7 @@ otb_add_test(NAME raTvSurfaceAdjacencyEffectCorrectionSchemeFilter COMMAND otbOp
   ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelengths, channel 2
   ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelengths, channel 1
   ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelengths, channel 4
-  ${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
+  ${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SValues.txt
   )
 
 otb_add_test(NAME raTvRadianceToImageImageFilter COMMAND otbOpticalCalibrationTestDriver

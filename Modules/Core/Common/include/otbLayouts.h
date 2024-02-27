@@ -130,7 +130,7 @@ struct right_ : root_layout_mapping<Extents>
  * - `operator()`
  * \sa http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p0009r9.html
  * \sa https://github.com/ORNL/cpp-proposals-pub/blob/master/P0009/reference-implementation
- * \warning this class is partially implented. `is_contiguous()` isn't
+ * \warning this class is partially implemented. `is_contiguous()` isn't
  * implemented.
  */
 template <typename Extents>

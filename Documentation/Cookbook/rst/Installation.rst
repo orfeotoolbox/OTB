@@ -4,8 +4,10 @@ Installation
 Orfeo Toolbox installation is straightforward:
 
 1.   Download otb package for your OS. You can choose between:
-   -   A full package corresponding to your operating system in `the package list <https://orfeo-toolbox.org/packages/>`__. Archives are named OTB-<version>-<OS>. **For Windows, "full package" is     the only archive**. You can find detailled explaination at :ref:`recommandedinstall`.
-   -   **Linux users** can choose a lighter installation. You can install only *Core* package, or specifics modules. OTB dependencies can be resolved either with system packages or our dependencies archive (OTB-<version>-Linux-Dependencies in package download list). Commands are detailled here :ref:`advancedinstallation`.
+
+   -   A full package corresponding to your operating system in `the package list <https://orfeo-toolbox.org/packages/>`__. Archives are named OTB-<version>-<OS>. **For Windows, "full package" is     the only archive**. You can find detailled explaination at `"recommended installation"  <#recommended-installation-one-package-containing-all-the-modules>`__.
+   -   **Linux users** can choose a lighter installation. You can install only *Core* package, or specifics modules. OTB dependencies can be resolved either with system packages or our dependencies archive (OTB-<version>-Linux-Dependencies in package download list). Commands are detailled here `here <#advanced-installation-modular-installation>`__.
+
 2.   Configure OTB: ``source /Path/To/OTB/otbenv.profile``
 3.   Play with OTB in terminal (:doc:`CliInterface`), as QGIS module (:ref:`otbqgis` and :doc:`QGISInterface`) or in python scripts (:doc:`PythonAPI`).
 

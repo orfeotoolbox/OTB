@@ -79,9 +79,9 @@ int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char* argv[])
   objectSize[0] = 300;
   objectSize[1] = 300;
 
-  SpatialisationFilterType::SizeType nbOjects;
-  nbOjects[0] = 2;
-  nbOjects[1] = 1;
+  SpatialisationFilterType::SizeType nbObjects;
+  nbObjects[0] = 2;
+  nbObjects[1] = 1;
 
   std::vector<std::string> pathVector(2);
   pathVector[0] = "JHU/becknic/rocks/sedimentary/powder/0_75/txt/greywa1f.txt";
@@ -117,7 +117,7 @@ int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char* argv[])
   //    labels[8]=3;
 
   spatialisationFilter->SetObjectSize(objectSize);
-  spatialisationFilter->SetNumberOfObjects(nbOjects);
+  spatialisationFilter->SetNumberOfObjects(nbObjects);
   spatialisationFilter->SetPathVector(pathVector);
   spatialisationFilter->SetAreaVector(areaVector);
   spatialisationFilter->SetLabels(labels);

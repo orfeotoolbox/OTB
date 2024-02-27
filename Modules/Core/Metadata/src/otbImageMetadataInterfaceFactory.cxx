@@ -76,6 +76,7 @@ ImageMetadataInterfaceFactory
       {
         // silent catch of MissingMetadataException
         // just means that this IMI can't parse the file
+        (void)e; // just to silent windows unreferenced var warning
       }
     }
     else

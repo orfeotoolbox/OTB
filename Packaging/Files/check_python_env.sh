@@ -96,8 +96,8 @@ do
 done
 
 if [ "$found_python_lib" -eq "1" ]; then
-    numpy_import_result="$($OTB_PYTHON_EXE -c 'import numpy' 2>&1)" || numpy_ret=$?
-    if [ ! -z "$numpy_import_result" ]; then
+    numpy_import_result="$($OTB_PYTHON_EXE -c 'import numpy' 2>&1)"
+    if [ -n "$numpy_import_result" ]; then
       printf %s\\n "*****Error occurred during installation******"
       printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE \
                     ( version: $python_version )"

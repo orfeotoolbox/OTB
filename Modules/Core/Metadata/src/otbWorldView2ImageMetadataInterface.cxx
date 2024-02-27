@@ -832,12 +832,12 @@ namespace
   void ParseProductMetadata(const MetadataSupplierInterface & mds, DigitalGlobeMetadata & outMetadata)
   {
     // Open the metadata file to find the band names, as it is not parsed by GDAL
-    auto ressourceFiles = mds.GetResourceFiles();
+    auto resourceFiles = mds.GetResourceFiles();
 
     // return true if the file extension is .IMD
     auto lambda = [](const std::string & filename){return itksys::SystemTools::GetFilenameLastExtension(filename) == ".IMD";};
-    auto filename = std::find_if(ressourceFiles.begin(), ressourceFiles.end(), lambda);
-    if (filename == ressourceFiles.end())
+    auto filename = std::find_if(resourceFiles.begin(), resourceFiles.end(), lambda);
+    if (filename == resourceFiles.end())
     {
       otbGenericExceptionMacro(MissingMetadataException, 
         << "Cannot find the .IMD file associated with the Digital Globe dataset");

@@ -37,7 +37,7 @@ set(FeaturesExtraction_documentation "This group contains algorithms dedicated t
 set(Hyperspectral_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(IO_documentation "This group contains everything related to input/output")
 set(Learning_documentation "This group contains algorithms and frameworks related to supervised or unsupervised learning")
-set(Miscellaneous_documentation "This group contains miscellanous algorithms")
+set(Miscellaneous_documentation "This group contains miscellaneous algorithms")
 set(Radiometry_documentation "This group contains algorithms related to the processing of image radiometry")
 set(StereoProcessing_documentation "This group contains algorithms related to registration of images")
 set(SAR_documentation "This group contains algorithms related to SAR processing")
