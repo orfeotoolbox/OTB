@@ -23,7 +23,7 @@ Download OTB
 
     curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o /Path/Download/OTB-Core-9.0.tar.gz
     curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o /Path/Download/OTB-FeaturesExtraction-9.0.tar.gz
-    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-All-Dependencies.tar.gz -o /Path/Download/OTB-Dependencies-9.0.tar.gz
+    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Dependencies.tar.gz -o /Path/Download/OTB-Dependencies-9.0.tar.gz
 
 
 Installation
