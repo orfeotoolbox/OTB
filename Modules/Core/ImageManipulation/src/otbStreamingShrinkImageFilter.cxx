@@ -25,11 +25,11 @@ namespace otb
 
 unsigned int StreamingShrinkImageRegionSplitter::GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber)
 {
-  unsigned int theoricalNbPixelPerTile = region.GetNumberOfPixels() / requestedNumber;
-  unsigned int theoricalTileDimension  = static_cast<unsigned int>(std::sqrt(static_cast<double>(theoricalNbPixelPerTile)));
+  unsigned int theoreticalNbPixelPerTile = region.GetNumberOfPixels() / requestedNumber;
+  unsigned int theoreticalTileDimension  = static_cast<unsigned int>(std::sqrt(static_cast<double>(theoreticalNbPixelPerTile)));
 
   // Take the previous multiple of m_ShrinkFactor (eventually generate more splits than requested)
-  m_TileDimension = theoricalTileDimension / m_ShrinkFactor * m_ShrinkFactor;
+  m_TileDimension = theoreticalTileDimension / m_ShrinkFactor * m_ShrinkFactor;
 
   // Minimal tile size is m_ShrinkFactor * m_ShrinkFactor
   if (m_TileDimension < m_ShrinkFactor)

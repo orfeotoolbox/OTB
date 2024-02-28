@@ -132,7 +132,7 @@ template <class TPrecision, class TValuePrecision>
 inline typename SatelliteRSR<TPrecision, TValuePrecision>::ValuePrecisionType SatelliteRSR<TPrecision, TValuePrecision>::operator()(const PrecisionType& lambda,
                                                                                                                                     const unsigned int numBand)
 {
-  // Get the response of the band number numBand at the wavelenght lambda
+  // Get the response of the band number numBand at the wavelength lambda
   if (numBand >= m_NbBands)
   {
     itkExceptionMacro(<< "There is no band num " << numBand << " in the RSR vector!(Size of the current RSR vector is " << m_NbBands << ")");

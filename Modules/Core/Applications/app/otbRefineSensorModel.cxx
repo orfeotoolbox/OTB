@@ -156,7 +156,7 @@ private:
                                       " by space or tab.");
         }
         // you must clear istringstream to reset the error state and eof flag
-        // otherwise all futher attempts to read line will fail
+        // otherwise all further attempts to read line will fail
         iss.clear();
 
         z = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(lon, lat);

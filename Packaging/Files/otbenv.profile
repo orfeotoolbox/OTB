@@ -40,7 +40,7 @@ cat_path()
 
 OS=`lsb_release -is`
 if [ $OS = "RedHatEnterprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
-  OTB_INSTALL_DIR=$(dirname "${BASH_SOURCE[0]}")
+  OTB_INSTALL_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}"))
 else
   if [ -z $ZSH_NAME ]; then
     OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}"; )"; )

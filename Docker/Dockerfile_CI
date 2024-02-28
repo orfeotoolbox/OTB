@@ -32,7 +32,7 @@ RUN apt-get update -y \
 RUN tar xvf OTB-$OTB_RELEASE-Linux.tar.gz --one-top-level="/app/otb" \
 && rm OTB-$OTB_RELEASE-Linux.tar.gz
 
-# Persistant env
+# Persistent env
 ENV CMAKE_PREFIX_PATH=/app/otb
 ENV PYTHONPATH=/app/otb/lib/python3/dist-packages:/app/otb/lib/otb/python
 ENV GDAL_DRIVER_PATH=disable

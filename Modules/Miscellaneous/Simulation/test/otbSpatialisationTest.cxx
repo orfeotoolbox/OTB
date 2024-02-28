@@ -47,9 +47,9 @@ int otbSpatialisationTest(int itkNotUsed(argc), char* argv[])
   objectSize[0] = 300;
   objectSize[1] = 300;
 
-  FilterType::SizeType nbOjects;
-  nbOjects[0] = 3;
-  nbOjects[1] = 3;
+  FilterType::SizeType nbObjects;
+  nbObjects[0] = 3;
+  nbObjects[1] = 3;
 
   std::vector<std::string> pathVector(9);
   pathVector[0] = "path1";
@@ -85,7 +85,7 @@ int otbSpatialisationTest(int itkNotUsed(argc), char* argv[])
   labels[8] = 9;
 
   filter->SetObjectSize(objectSize);
-  filter->SetNumberOfObjects(nbOjects);
+  filter->SetNumberOfObjects(nbObjects);
   filter->SetPathVector(pathVector);
   filter->SetAreaVector(areaVector);
   filter->SetLabels(labels);

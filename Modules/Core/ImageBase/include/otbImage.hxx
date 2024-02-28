@@ -106,7 +106,7 @@ typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimensio
   auto origin = this->GetOrigin();
   auto spacing = this->GetSpacing();
   auto direction = this->GetDirection();
-  
+
   // Note : OTB does not handle rotated geoTransform (see GDALImageIO)
   geoTransform[0] = origin[0] - 0.5 * spacing[0] * direction[0][0];
   geoTransform[3] = origin[1] - 0.5 * spacing[1] * direction[1][1];

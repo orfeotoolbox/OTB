@@ -101,7 +101,7 @@ int Sentinel1ThermalNoiseLookupData::GetRangeVectorIndex(int y) const
   }
   
   otbGenericExceptionMacro(MissingMetadataException,<<"Missing LUT metadata for index : '"<<y<<"', you should call the calibration without 'removenoise' parameter")
-  //Avoid any segfault that occured when LUT missing metadata was missing
+  //Avoid any segfault that occurred when LUT missing metadata was missing
   return 0;
 }
 
@@ -119,7 +119,7 @@ int Sentinel1ThermalNoiseLookupData::GetAzimuthVectorIndex(int x, int y) const
   }
 
   otbGenericExceptionMacro(MissingMetadataException,<<"Missing LUT metadata for index : '"<<x<<" "<<y<<"', you should call the calibration without 'removenoise' parameter")
-  //Avoid any segfault that occured when LUT missing metadata was missing
+  //Avoid any segfault that occurred when LUT missing metadata was missing
   return 0;
 }
 

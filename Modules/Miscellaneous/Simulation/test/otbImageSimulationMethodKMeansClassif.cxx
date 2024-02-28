@@ -85,9 +85,9 @@ int otbImageSimulationMethodKMeansClassif(int itkNotUsed(argc), char* argv[])
   objectSize[0] = 300;
   objectSize[1] = 300;
 
-  SpatialisationFilterType::SizeType nbOjects;
-  nbOjects[0] = 2;
-  nbOjects[1] = 2;
+  SpatialisationFilterType::SizeType nbObjects;
+  nbObjects[0] = 2;
+  nbObjects[1] = 2;
 
   std::vector<std::string> pathVector(nbClasses);
   pathVector[0] = "JHU/becknic/rocks/sedimentary/powder/0_75/txt/greywa1f.txt";
@@ -108,7 +108,7 @@ int otbImageSimulationMethodKMeansClassif(int itkNotUsed(argc), char* argv[])
   labels[3] = 4;
 
   spatialisationFilter->SetObjectSize(objectSize);
-  spatialisationFilter->SetNumberOfObjects(nbOjects);
+  spatialisationFilter->SetNumberOfObjects(nbObjects);
   spatialisationFilter->SetPathVector(pathVector);
   spatialisationFilter->SetAreaVector(areaVector);
   spatialisationFilter->SetLabels(labels);
@@ -147,7 +147,7 @@ int otbImageSimulationMethodKMeansClassif(int itkNotUsed(argc), char* argv[])
       }
       classIndex++;
 
-      if (x < (nbOjects[0] - 1))
+      if (x < (nbObjects[0] - 1))
       {
         centroidIndex[0] += objectSize[0];
         x++;

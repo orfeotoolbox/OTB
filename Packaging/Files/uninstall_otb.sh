@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #

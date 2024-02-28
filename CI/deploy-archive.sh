@@ -23,7 +23,7 @@ jobs_directory=/home/otbpush/test
 
 build_dir=$(readlink -f "$1")
 
-scp ${build_dir}/SuperBuild-archives-*.{tar.bz2,md5} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp "${build_dir}"/SuperBuild-archives-*.{tar.bz2,md5} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
 if [ "$CI_COMMIT_REF_NAME" = "develop" ] # check if the branch name is develop or not
 then # we are on develop

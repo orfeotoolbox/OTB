@@ -35,13 +35,13 @@ class ITK_ABI_EXPORT SoilDataBase
 {
 public:
   // wavelength in nm
-  using WavelenghtType = unsigned int;
-  using SoilData       = std::unordered_map<WavelenghtType, double>;
+  using WavelengthType = unsigned int;
+  using SoilData       = std::unordered_map<WavelengthType, double>;
   using SoilDataVector = std::vector<SoilData>;
 
   SoilDataBase(const std::string& SoilFileName, double wlfactor);
   const SoilDataVector& GetDB() const;
-  double GetReflectance(size_t SoilIndex, WavelenghtType wl) const;
+  double GetReflectance(size_t SoilIndex, WavelengthType wl) const;
 
 protected:
   size_t CountColumns(std::string fileName) const;
@@ -50,7 +50,7 @@ protected:
   std::string                 m_SoilFileName;
   double                      m_WlFactor;
   SoilDataVector              m_SoilDataVector;
-  std::vector<WavelenghtType> m_Wavelengths;
+  std::vector<WavelengthType> m_Wavelengths;
 };
 }
 

@@ -241,7 +241,6 @@ The overall file should look like this:
     cmake_minimum_required(VERSION 3.10.0)
     project(OTBTheModuleName)
     set(OTBTheModuleName_LIBRARIES OTBTheModuleName)
-
     if(NOT OTB_SOURCE_DIR)
       find_package(Boost REQUIRED COMPONENTS filesystem serialization)
       find_package(OTB REQUIRED)
@@ -255,10 +254,10 @@ The overall file should look like this:
       otb_module_impl()
     endif()
 
-    Remarque: the command find_package(Boost) is called before
-    find_package(OTB). This is due to the fact that FindBoost.cmake is
-    integrated to cmake, so it is better to use the official command
-    rather than the one integrated to the OTB.
+Remarque: the command find_package(Boost) is called before
+find_package(OTB). This is due to the fact that FindBoost.cmake is
+integrated to cmake, so it is better to use the official command
+rather than the one integrated to the OTB.
 
 **The include folder**
 

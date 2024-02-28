@@ -33,7 +33,7 @@ RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Li
 
 RUN tar xvf OTB-$OTB_RELEASE-Linux.tar.gz --one-top-level="/app" \
 
-# Persistant env
+# Persistent env
 ENV CMAKE_PREFIX_PATH=/app/OTB-${OTB_RELEASE}-Linux
 ENV PYTHONPATH=/app/OTB-$OTB_RELEASE-Linux/lib/python3/dist-packages:/app/OTB-${OTB_RELEASE}-Linux/lib/otb/python
 ENV GDAL_DRIVER_PATH=disable

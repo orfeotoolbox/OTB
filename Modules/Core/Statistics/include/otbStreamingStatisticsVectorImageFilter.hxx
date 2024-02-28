@@ -281,13 +281,13 @@ void PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::Re
     tempPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
     this->GetMaximumOutput()->Set(tempPixel);
 
-    PixelType tempTemporiesPixel;
-    tempTemporiesPixel.SetSize(numberOfComponent);
-    tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
-    m_ThreadMin = std::vector<PixelType>(numberOfThreads, tempTemporiesPixel);
+    PixelType tempTemporariesPixel;
+    tempTemporariesPixel.SetSize(numberOfComponent);
+    tempTemporariesPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
+    m_ThreadMin = std::vector<PixelType>(numberOfThreads, tempTemporariesPixel);
 
-    tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
-    m_ThreadMax = std::vector<PixelType>(numberOfThreads, tempTemporiesPixel);
+    tempTemporariesPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
+    m_ThreadMax = std::vector<PixelType>(numberOfThreads, tempTemporariesPixel);
   }
 
   if (m_EnableSecondOrderStats)
