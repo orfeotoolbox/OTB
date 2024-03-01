@@ -43,12 +43,6 @@ macro(otb_create_application)
    # and not a shared library to link against
    set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY PREFIX "")
 
-   # on Apple platform, a "MODULE" library gets a ".so" extension
-   # but the ITK factory mechanism looks for ".dylib"
-   if (APPLE)
-     set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY SUFFIX ".dylib")
-   endif()
-
    # When called from the OTB build system, use OTB_INSTALL_APP_DIR
    if (NOT APPLICATION_INSTALL_PATH AND OTB_INSTALL_APP_DIR)
      set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR})
@@ -59,16 +53,16 @@ macro(otb_create_application)
        install(TARGETS ${APPLICATION_TARGET_NAME}
                EXPORT ${${otb-module}-targets}
                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-               COMPONENT RuntimeLibraries)
+               COMPONENT ${${otb-module}_COMPONENT})
      else()
        install(TARGETS ${APPLICATION_TARGET_NAME}
                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-               COMPONENT RuntimeLibraries)
+               COMPONENT Dependencies)
      endif()
    else()
      install(TARGETS ${APPLICATION_TARGET_NAME}
              LIBRARY DESTINATION lib
-             COMPONENT RuntimeLibraries)
+             COMPONENT Dependencies)
    endif()
 
    # What is the path to the applications
@@ -96,7 +90,7 @@ macro(otb_create_application)
    endif()
 
    # ----- Create and install launcher scripts ------
-   foreach(type CLI GUI)
+   foreach(type CLI)
      string(TOLOWER "${type}" type_lower)
      set(SCRIPT_NAME otb${type_lower}_${APPLICATION_NAME}${SCRIPT_EXT})
      otb_write_app_launcher(
@@ -110,7 +104,7 @@ macro(otb_create_application)
      # Install a version of this script if we are inside the OTB build
      install(PROGRAMS ${_script_output_dir}/${SCRIPT_NAME}
              DESTINATION ${_script_install_dir}
-             COMPONENT Runtime)
+             COMPONENT ${${otb-module}_COMPONENT})
    endforeach()
 
    list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
@@ -149,10 +143,8 @@ macro(otb_write_app_launcher)
   cmake_parse_arguments(APPLAUNCHER  "" "NAME;OUTPUT;TYPE" "" ${ARGN} )
   if("${APPLAUNCHER_TYPE}" STREQUAL "CLI")
     set(_launcher_type "otbcli")
-  elseif("${APPLAUNCHER_TYPE}" STREQUAL "GUI")
-    set(_launcher_type "otbgui")
   else()
-    message(FATAL_ERROR "Unknown launcher type : ${APPLAUNCHER_TYPE}, only support CLI and GUI")
+    message(FATAL_ERROR "Unknown launcher type : ${APPLAUNCHER_TYPE}, only support CLI")
   endif()
 
   if(WIN32)

@@ -1,4 +1,50 @@
+OTB-v 9.0.0 - Changes since version 8.1.2 (February 28th, 2024)
+--------------------------------------------------------------
+
+Features added:
+  * !995: CI: Add an Ubuntu 22 job by Thibaut ROMAIN
+  * !989: Revive RefineSensorModel application by Thibaut ROMAIN
+  * !939: Refactor OTB in Core and Optional modules, use Cmake for packaging by Thibaut ROMAIN
+  * !902: Remove GUI modules by Julien Osman
+
+Bugs fixed:
+  * !979: Update GDAL to 3.8.1 by Thibaut ROMAIN
+  * !976: Fix handling of SAR Metadata (with empty projection) by Luc Hermitte
+  * !985: Add scripts that executes the first time otbenv profile is sourced to sanitize the install by Thibaut ROMAIN
+  * !985: Enhance otbenv profile to be compatible with bash and zsh, and multi OS (redhat, debian, ubuntu...) by Thibaut ROMAIN
+  * !984: Refresh dependencies when changing otb group options by Tristan Laurent
+  * !983: Remove old Mosaic remote module as it is integrated in OTB since v7 by Thibaut ROMAIN
+
+Dependencies update:
+  * !985: Update gdal to 3.8.3, geos to 3.12.1, tiff to 4.6, curl to 8.2, proj to 9.3 for release 9.0 by Thibaut ROMAIN
+
+Documentation:
+  * !987: Merge changes on cookbook indentation for Release 9.0 rc2 into develop by Thibaut ROMAIN
+  * !939: Refactor cookbook for more clarity , add a first step page by Thibaut ROMAIN
+
+OTB-v 8.1.2 - Changes since version 8.1.1 (July 24th, 2023)
+-----------------------------------------------------------
+
+Bugs fixed:
+  * !964: BUG: Fix default RCS parameter for PHR pansharpening by Thibaut ROMAIN
+  * !960: BUG: Fix precision from float to double on the orthorectification app by Thibaut ROMAIN
+  * !954: BUG: calling vmax on an image with negative values returns 0 as max instead of the real max by Thibaut ROMAIN
+  * !949: Mosaic application fixes by Rémi CRESSON
+  * !945: BUG: Fix wrong in-memory connection to OpticalCalibration by Thibaut ROMAIN
+  * !944: Fix band metadata drop in ManageNoData application by Thibaut ROMAIN
+  * !948: BUG: Fix segmentation fault with some S1 products with SarCalibration app by Thibaut ROMAIN
+
+Documentation:
+  * !961: add a caption on python APi about the zonalstatistics app problem by Thibaut ROMAIN
+  * !956: add a before installation step in documentation to describe system dependencies to install by Thibaut ROMAIN
+  * !952: Add some tips to use OTB python interfaces with rasterio and numpy by Yannick TANGUY
+  * !947: Update Documentation/Cookbook/rst/recipes/sarprocessing.rst by Mickaël SAVINAUD
+
+CI:
+  * !959: Update CI to replace CentOS7 with RedHat 8, minor dependencies updates for compilation compatibility with Ubuntu 22 by Thibaut ROMAIN
+
 OTB-v 8.1.1 - Changes since version 8.1.0 (January 13th, 2023)
+--------------------------------------------------------------
 
 Bugs fixed:
   * !933: Improve DEMHandler performances which fixes #2307 Spatial shifting with Orthorectifcation of Sentinel 1 products by Luc Hermitte
@@ -23,7 +69,7 @@ Bugs fixed:
    * !922: Fix strange behavior of BandMath in python pipeline by calling RegisterPipeline() by Rémi Cresson
    * !920: Correctly take into account the extended filename writerpctag by Julien Osman
    * !918: Fix Pixel shift in pleiades orthorectification by Thibaut ROMAIN
-   * !914: Read RPC model from images writen by OTB by Julien Osman
+   * !914: Read RPC model from images written by OTB by Julien Osman
    * !879: Fix SetParameterString for listview parameters by Cédric Traizet
 
 Documentation:
@@ -56,10 +102,10 @@ Bugs fixed:
 CI:
 
    * !911: Upgrade zlib to version 1.2.12 and GDAL to version 3.4.2 by Julien Osman
-  
+
 Documentation:
 
-   * !911: Fix formating issue by Julien Osman
+   * !911: Fix formatting issue by Julien Osman
    * !911: Update warning message about python version by Julien Osman
 
 
@@ -151,7 +197,7 @@ Documentation:
    * !800: Add legend for output colored images of Hoover Compare Segmentation by Julien Osman
    * !781: Update the documentation about Remote Modules by Thibaut romain
    * !780: Updating the documentation in preparation for OTB 8.0.0-alpha1 by Julien Osman
-   
+
 
 OTB-v 7.4.1 - Changes since version 7.4.0 (April 27th, 2022)
 ----------------------------------------------------------------

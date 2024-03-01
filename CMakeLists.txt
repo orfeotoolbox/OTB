@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.13.0)
 
 foreach(p
     CMP0072 # CMake 3.11
@@ -53,15 +53,6 @@ include(CMakeDependentOption)
 # use ExternalProject
 include(ExternalProject)
 
-#mantis: 1193
-if(APPLE)
-  # https://cmake.org/cmake/help/v3.10/variable/CMAKE_SYSTEM_FRAMEWORK_PATH.html
-  # By default it contains the standard directories for the current system. It
-  # is not intended to be modified by the project, use CMAKE_FRAMEWORK_PATH
-  # for this.
-  set(CMAKE_SYSTEM_FRAMEWORK_PATH "" CACHE PATH "" FORCE)
-endif()
-
 if( CMAKE_HOST_WIN32 )
 
   string( LENGTH "${CMAKE_CURRENT_SOURCE_DIR}" n )
@@ -95,43 +86,14 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
-include( i18n_qt )
-
-reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
 if(OTB_WRAP_PYTHON)
-  # Find python stuff
-  # Version 3 is preferred before 2
-  if(CMAKE_VERSION VERSION_LESS 3.12.0)
-    set ( Python_ADDITIONAL_VERSIONS "3;2" )
-    set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
-    set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
-    find_package( PythonInterp )
-    if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
-        message (WARNING "Python3 not found. There is no longer support of \
-        wrapping in python2 in OTB, but it can still be used.")
-    endif()
-    # Now that we have a python version the addditional versions should only
-    # contain the version we have to get the corresponding libs
-    set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-    find_package ( PythonLibs )
-  else()
-    if(WIN32)
-      set(Python_ROOT_DIR "C:/tools/Python37-x64")
-    endif()
-    find_package(Python REQUIRED COMPONENTS Interpreter Development)
-    if(Python_FOUND)
-      message(STATUS "Python Library directory : ${Python_LIBRARY_DIRS}")
-      message(STATUS "Python Headers directory : ${Python_INCLUDE_DIRS}")
-      #For compatibility reason, we have to define these variables
-      set(PYTHON_LIBRARIES ${Python_LIBRARIES})
-      set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS})
-      set(PYTHON_LIBRARY_DIR ${Python_LIBRARY_DIRS})
-      set(PYTHON_VERSION_STRING ${Python_VERSION})
-      set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
-    endif()
+  find_package(Python REQUIRED COMPONENTS Interpreter Development)
+  if(Python_FOUND)
+    message(STATUS "Python Library directory : ${Python_LIBRARY_DIRS}")
+    message(STATUS "Python Headers directory : ${Python_INCLUDE_DIRS}")
   endif()
 endif()
 
@@ -151,22 +113,12 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
-set(OTB_VERSION_MAJOR "8")
-set(OTB_VERSION_MINOR "1")
-set(OTB_VERSION_PATCH "1")
+set(OTB_VERSION_MAJOR "9")
+set(OTB_VERSION_MINOR "0")
+set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 get_package_name(${OTB_SOURCE_DIR} ${PROJECT_NAME} OTB_VERSION_STRING2)
-
-# Monteverdi version number (follows OTB)
-set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
-set( Monteverdi_VERSION_MINOR ${OTB_VERSION_MINOR} )
-set( Monteverdi_VERSION_PATCH ${OTB_VERSION_PATCH} )
-set( Monteverdi_VERSION_SUFFIX "" )
-
-set( Monteverdi_VERSION_STRING
-  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
-  )
 
 #-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
@@ -265,6 +217,24 @@ set(CMAKE_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS}")
 set(CMAKE_MODULE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
+# use, i.e. don't skip the full RPATH for the build tree
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+set(CMAKE_BUILD_RPATH_USE_ORIGIN TRUE)
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# the RPATH to be used when installing, but only if it's not a system directory
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif("${isSystemDir}" STREQUAL "-1")
 
 # TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
 option(BUILD_TESTING "Build the testing tree." OFF)
@@ -421,32 +391,123 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/exportheader.cmake.in
               CMake/NamespaceHandler.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-  COMPONENT Development)
+  COMPONENT Core)
 get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)
 if(OTBTargets_MODULES)
   install(EXPORT OTBTargets DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-          COMPONENT Development)
+          COMPONENT Core)
 else()
   set(CMAKE_CONFIGURABLE_FILE_CONTENT "# No targets!")
   configure_file(${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in
                  ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake @ONLY)
   install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake
-          DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Development)
+          DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
+endif()
+
+if(XDK_INSTALL_PATH)
+    # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell
+    # Cmake it is here
+    message(STATUS "XDK FOUND, preparing it for packaging")
+    install(DIRECTORY ${XDK_INSTALL_PATH}/lib
+            DESTINATION .
+            USE_SOURCE_PERMISSIONS
+            COMPONENT Dependencies)
+    # Redhat8 case : the bindings are installed by default in lib64/python3.8
+    if( EXISTS ${XDK_INSTALL_PATH}/lib64)
+      install(DIRECTORY ${XDK_INSTALL_PATH}/lib64/python3.8
+              DESTINATION ./lib
+              USE_SOURCE_PERMISSIONS
+              COMPONENT Dependencies)
+    endif()
+    install(DIRECTORY ${XDK_INSTALL_PATH}/share
+            DESTINATION .
+            USE_SOURCE_PERMISSIONS
+            COMPONENT Core)
+    install(DIRECTORY ${XDK_INSTALL_PATH}/include
+            DESTINATION .
+            USE_SOURCE_PERMISSIONS
+            COMPONENT Core)
+    install(DIRECTORY ${XDK_INSTALL_PATH}/bin
+            DESTINATION .
+            USE_SOURCE_PERMISSIONS
+            COMPONENT Core)
+    install(DIRECTORY ${XDK_INSTALL_PATH}/cmake
+            DESTINATION ./lib
+            USE_SOURCE_PERMISSIONS
+            COMPONENT Core)
+else()
+    message(WARNING "XDK NOT FOUND, it will not be packaged")
 endif()
 
 # install FindXXX.cmake
 file(GLOB OTB_FIND_PACKAGE_SCRIPTS CMake/Find*.cmake)
-install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Development)
+install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
 
 # TODO : install release notes, copyright notice, ...
-# install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
-install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
+install(FILES "LICENSE" DESTINATION . COMPONENT Core)
 
 # Configure and install VERSION file
 configure_file(VERSION VERSION @ONLY)
 install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR})
 
-install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
+if(EXISTS ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR})
+  message("Directory share/otb already exists")
+else()
+  file(MAKE_DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR})
+endif()
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share COMPONENT Core)
+
+install(FILES Packaging/Files/build_wrapping.cmake
+DESTINATION ./share/otb/swig
+COMPONENT Core)
+install(FILES Packaging/Files/build_wrapping.md
+DESTINATION ./share/otb/swig
+RENAME README.md
+COMPONENT Core)
+
+#start installing script and other stuff related to package
+if(UNIX)
+  install( PROGRAMS
+    ${OTB_SOURCE_DIR}/Packaging/Files/recompile_bindings.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.profile
+    DESTINATION .
+    COMPONENT Core
+    )
+    install( PROGRAMS
+    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/sanitize_rpath.sh
+    DESTINATION ./tools
+    COMPONENT Core
+    )
+endif()
+
+#my_file_ext is required for otbcli files which has
+# no extension on linux. (hence we cannot use SCRIPT_EXT
+
+#For windows otbenv.bash and otbenv.bat is required.
+# Former is for windows shell users and latter is for other
+# linux emulator such as bash for windows or mobxterm
+set(my_file_ext "")
+if(WIN32)
+  set(my_file_ext ".bat")
+  install( PROGRAMS
+    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bat
+    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bash
+    DESTINATION .
+    COMPONENT Core
+    )
+endif()
+
+# #configure README from rst docs
+set(RSTDOC_DIR "${OTB_SOURCE_DIR}/Documentation/Cookbook/rst")
+if(WIN32) #windows
+  set(README_FILE ${RSTDOC_DIR}/Installation_Windows.rst)
+else()
+  set(README_FILE ${RSTDOC_DIR}/Installation_Linux.rst)
+endif()
+configure_file("${README_FILE}" ${CMAKE_BINARY_DIR}/README )
+install(FILES ${CMAKE_BINARY_DIR}/README DESTINATION . COMPONENT Core)
 
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
@@ -553,13 +614,6 @@ list(APPEND option_list GEOTIFF)
 list(APPEND option_list ITK)
 list(APPEND option_list TINYXML)
 
-#RK
-#Q: Why these two guys here? we already have option_list
-#A: Because cmake case sensitivity with variables.
-
-if(OTB_USE_QT)
-  list(APPEND option_list QT)
-endif()
 #sort again!
 list(SORT option_list)
 
@@ -627,5 +681,4 @@ message("======================= End of OTB cmake summary ======================
 unset(option_list)
 
 #----------------------------------------------------------------------------
-# I18N
-add_subdirectory( i18n )
+include(Packaging_OTB)

@@ -30,16 +30,7 @@ set(OTBBoost_INCLUDE_DIRS ${OTBBoost_SOURCE_DIR}/src)
 # why drag a semi-standard c++ library for use in two tests?.
 # Update OTB 8.0: link with boost libraries as boost::date_time and boost::filesystem are used extensively in core modules.
 if(Boost_LIBRARIES)
-  if(Boost_MINOR_VERSION STREQUAL "72")
-    set(OTBBoost_IMPORTED_LIBRARIES)
-    foreach(current_LIB ${Boost_LIBRARIES})
-      get_target_property(OTBBoost_current_LIB ${current_LIB} IMPORTED_LOCATION_RELEASE)
-      list(APPEND OTBBoost_IMPORTED_LIBRARIES ${OTBBoost_current_LIB})
-    endforeach()
-    set(OTBBoost_LIBRARIES "${OTBBoost_IMPORTED_LIBRARIES}")
-  else()
-    set(OTBBoost_LIBRARIES ${Boost_LIBRARIES})
-  endif()
+  set(OTBBoost_LIBRARIES ${Boost_LIBRARIES})
   set(OTBBoost_SYSTEM_LIBRARY_DIRS "${Boost_LIBRARY_DIRS}")
 endif()
 
@@ -49,5 +40,5 @@ otb_module_impl()
 
 install(DIRECTORY ${OTBBoost_SOURCE_DIR}/src/boost
   DESTINATION ${OTBBoost_INSTALL_INCLUDE_DIR}
-  COMPONENT Development
+  COMPONENT Core
   )

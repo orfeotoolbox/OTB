@@ -22,13 +22,8 @@ INCLUDE_ONCE_MACRO(SQLITE)
 
 SETUP_SUPERBUILD(SQLITE)
 
-if(WIN32)
-  set(SQLITE_URL "https://www.sqlite.org/2015/sqlite-amalgamation-3080801.zip")
-  set(SQLITE_MD5 b1cbcbd710bdfd762dc169f1676053b5)
-else()
-  set(SQLITE_URL "https://www.sqlite.org/2021/sqlite-amalgamation-3360000.zip")
-  set(SQLITE_MD5 c5d360c74111bafae1b704721ff18fe6)
-endif()
+set(SQLITE_URL "https://www.sqlite.org/2023/sqlite-amalgamation-3420000.zip")
+set(SQLITE_MD5 eb9a6e56044bc518e6705521a1a929ed)
 
 ExternalProject_Add(SQLITE
   PREFIX SQLITE

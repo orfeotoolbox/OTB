@@ -30,6 +30,8 @@ otb_module(OTBFunctor
     OTBImageBase
   TEST_DEPENDS
     OTBTestKernel
-DESCRIPTION
+  DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

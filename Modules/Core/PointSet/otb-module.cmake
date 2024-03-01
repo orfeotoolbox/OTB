@@ -40,4 +40,6 @@ otb_module(OTBPointSet
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

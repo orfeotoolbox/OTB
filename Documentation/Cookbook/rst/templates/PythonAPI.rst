@@ -17,13 +17,13 @@ becomes available from Python.
 On Windows, you can install the ``otb-python`` package, and the module
 will be automatically available from an OSGeo4W shell.
 
-As for the command line and GUI launchers, the path to the application
-modules needs to be properly set with the ``OTB_APPLICATION_PATH``
-environment variable. The standard location on Unix systems is
+As for the command line, the path to the application modules needs to
+be properly set with the ``OTB_APPLICATION_PATH`` environment
+variable. The standard location on Unix systems is
 ``/usr/lib/otb/applications``. On Windows, the applications are
 available in the ``otb-bin`` OSGeo4W package, and the environment is
-configured automatically so ``OTB_APPLICATION_PATH`` doesn't need to be modified
-``OTB_APPLICATION_PATH``.
+configured automatically so ``OTB_APPLICATION_PATH`` doesn't need to
+be modified ``OTB_APPLICATION_PATH``.
 
 Once your environment is set, you can use OTB applications from Python, just
 like this small example:
@@ -155,6 +155,45 @@ temporary file.
    ExtractOutput = ExtractROI.GetImageAsNumpyArray('out')
    output_pil_image = PILImage.fromarray(np.uint8(ExtractOutput))
    imshow(output_pil_image)
+
+Mix OTB with other libraries 
+----------------------------
+
+It's now possible to mix Python libraries (rasterio to open images, scikit-image, scikit-learn for processings) with OTB. 
+In order to build efficient code, here are some tips illustrated by a small example.
+
+- **OTB expects "(height, width, channels)" shaped arrays** while rasterio and other libs usually use "(channels, height, width)" arrays. The Numpy ``np.transpose(x,y,z)`` helps you transpose axis
+- For single-band images, use ``otbapp.SetImageFromNumpyArray(..)`` method and ``otbapp.SetVectorImageFromNumpyArray(..)`` otherwise. 
+- ***OTB returns a reference** on the numpy array output : depending on your use-case, you may copy the array (``numpy.copy()``)
+- **OTB expects C contiguous arrays** : sometimes it's not the case, for example if multiple process use a shared_memory array. In that specific case, you may use Numpy.ascontiguousarray method to make it work properly
+
+.. code-block:: python
+
+    ds = rio.open(image)
+    np_image_raw = ds.read()
+    print(">> shape rio.open().read() "+str(np_image_raw.shape))
+    
+    nbchannels = np_image_raw.shape[0]
+    heigth = np_image_raw.shape[1]
+    width = np_image_raw.shape[2]
+    # use np.transpose to switch axis : OTB expects [height, width, nb channels] images
+    np_image=np_image_raw.transpose(1, 2, 0) 
+    [ ... ]
+    app_rindices = otb.Registry.CreateApplication("RadiometricIndices")
+    app_rindices.SetVectorImageFromNumpyArray('in', np_image)
+    # OTB expects C contiguous arrays and in certain conditions (ex : shared_memory arrays), 
+    # the ndarray should be transform as following
+    app_rindices.SetVectorImageFromNumpyArray('in', np.ascontiguousarray(np_image))
+    [ ... set parameters ..]
+    app_rindices.Execute() # we don't write output
+    # Get output result
+    res_indices = app_rindices.GetVectorImageAsNumpyArray("out")
+    # to write it with rasterio or pass it to another library, you may switch back axis
+    res_indices = res_indices.transpose(2,0,1)
+    # Be aware that as soon as OTB application is deleted from memory, the ndarray is deallocated...
+    # You should consider making a copy of the array
+    res_indices = app_rindices.GetVectorImageAsNumpyArray("out").copy()
+
 
 In-memory connection
 --------------------
@@ -482,6 +521,15 @@ Corner cases
 There are a few corner cases to be aware of when using Python wrappers. They are
 often limitations, that one day may be solved in future versions. If it
 happens, this documentation will report the OTB version that fixes the issue.
+
+Multithreading problem when calling ZonalStatistics application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There is a known multithreading problem that occurs only in python when you call, with python >= 3.8,
+where you can get the error "free() : invalid next size". It is due to a python GIL problem, that sometimes invalidates
+a part of the memory before a thread tries to access it. For more information, refer to the issue 2334 on the forge
+
+A workaround for this problem is to use the ZonalStatistics application in C++ / via the command line or graphical tool.
 
 Calling UpdateParameters()
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

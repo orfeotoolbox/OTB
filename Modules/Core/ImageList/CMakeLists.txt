@@ -20,3 +20,8 @@
 
 project(OTBImageList)
 otb_module_impl()
+
+install(DIRECTORY ${OTBImageList_SOURCE_DIR}/include/
+        DESTINATION ${OTBImageList_INSTALL_INCLUDE_DIR}
+        COMPONENT Common
+        )

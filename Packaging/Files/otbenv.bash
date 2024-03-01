@@ -35,8 +35,7 @@ cat_path()
 }
 
 # The below environment variables only affect current shell
-# So if you run again from a terminal. you need to run the script again
-# see how this is sourced in monteverdi.sh and mapla.sh
+# So if you run again from a terminal, you need to run the script again
 
 CURRENT_DIR=$(cd -P -- "$(dirname -- "$BASH_SOURCE")" && printf '%s\n' "$(pwd -P)")
 
@@ -45,7 +44,7 @@ unset LD_LIBRARY_PATH
 PATH=$(cat_path "$CURRENT_DIR/bin" "$PATH")
 GDAL_DATA=$CURRENT_DIR/share/data
 PROJ_LIB=$CURRENT_DIR/share/proj
-PYTHONPATH=$(cat_path "$CURRENT_DIR/lib/python" "$PYTHONPATH")
+PYTHONPATH=$(cat_path "$CURRENT_DIR/lib/otb/python" "$PYTHONPATH")
 OTB_APPLICATION_PATH=$(cat_path "$CURRENT_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
 GDAL_DRIVER_PATH="disable"
 LC_NUMERIC=C

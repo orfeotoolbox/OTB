@@ -44,4 +44,7 @@ otb_module(OTBDempsterShafer
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Learning
 )

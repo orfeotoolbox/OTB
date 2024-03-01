@@ -34,13 +34,6 @@ if(NOT APPLE AND NOT WIN32)
     -DCMAKE_C_FLAGS:STRING=-fPIC)
 # Set CURL_CA_PATH to none because openssl in not enabled and CMake generation will fail if
 # a CA path is found in auto mode.
-elseif(APPLE)
-  list(APPEND CURL_SB_CONFIG
-    -DCMAKE_USE_DARWINSSL:BOOL=ON
-    -DHAVE_LIBNETWORK:STRING=0
-    -DCMAKE_C_FLAGS:STRING=-fPIC
-    -DCURL_CA_PATH:STRING=none)
-
 elseif(WIN32)
   list(APPEND CURL_SB_CONFIG
     -DCMAKE_USE_WINSSL:BOOL=ON
@@ -50,8 +43,8 @@ endif()
 
 ExternalProject_Add(CURL
   PREFIX CURL
-  URL "https://curl.haxx.se/download/curl-7.54.1.tar.gz"
-  URL_MD5 21a6e5658fd55103a90b11de7b2a8a8c
+  URL "https://github.com/curl/curl/releases/download/curl-8_2_1/curl-8.2.1.tar.gz"
+  URL_MD5 b25588a43556068be05e1624e0e74d41
   BINARY_DIR ${CURL_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -93,6 +86,7 @@ ExternalProject_Add(CURL
   -DENABLE_MANUAL:BOOL=OFF
   -DHTTP_ONLY:BOOL=OFF
   -DUSE_WIN32_LDAP:BOOL=OFF
+  -DCMAKE_INSTALL_LIBDIR:STRING=lib
   ${CURL_SB_CONFIG}
   DEPENDS ${CURL_DEPENDENCIES}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
@@ -101,8 +95,6 @@ ExternalProject_Add(CURL
   LOG_BUILD 1
   LOG_INSTALL 1
   )
-
-# SUPERBUILD_PATCH_SOURCE(CURL)
 
 set(_SB_CURL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)

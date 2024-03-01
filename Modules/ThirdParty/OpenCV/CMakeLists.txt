@@ -32,5 +32,5 @@ otb_module_impl()
 
 install(FILES ${OTBOpenCV_BINARY_DIR}/src/otb_opencv_api.h
   DESTINATION ${OTBOpenCV_INSTALL_INCLUDE_DIR}
-  COMPONENT Development
+  COMPONENT Learning
   )

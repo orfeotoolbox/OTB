@@ -41,4 +41,7 @@ otb_module(OTBOGRProcessing
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

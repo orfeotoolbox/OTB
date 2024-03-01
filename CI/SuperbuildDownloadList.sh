@@ -39,7 +39,7 @@ SB_CMAKE_DIR_REL=$CUR_DIR/../SuperBuild/CMake
 SB_CMAKE_DIR=$(readlink -f "${SB_CMAKE_DIR_REL}")
 cd "$CUR_DIR/../" || echo "cannot cd to CUR_DIR/../"
 
-GIT_BRANCH=$(git name-rev --name-only ${GIT_HASH})
+GIT_BRANCH=$(git name-rev --name-only "${GIT_HASH}")
 
 # the version is the branch name for develop and release-X.Y branches and the commit short hash for other branches
 if [[ ${CI_COMMIT_REF_NAME} =~ develop|release-+[0-9]+\.[0-9] ]] ; then
@@ -86,6 +86,6 @@ echo "Creating archive ${OUTPUT_DIR}/$ARCHIVE_NAME.tar.bz2"
 mkdir -p "${OUTPUT_DIR}"
 cd "${OUTPUT_DIR}" || echo "cannot cd to ${OUTPUT_DIR}"
 touch "${DOWNLOAD_DIR}/OTBSuperBuild.readme"
-tar -cjf "$ARCHIVE_NAME.tar.bz2" -C ${DOWNLOAD_DIR} ${DOWNLOAD_NAMES} OTBSuperBuild.readme
+tar -cjf "$ARCHIVE_NAME.tar.bz2" -C "${DOWNLOAD_DIR}" "${DOWNLOAD_NAMES}" OTBSuperBuild.readme
 echo "Saving md5sum to ${OUTPUT_DIR}/$ARCHIVE_NAME.md5"
 md5sum "$ARCHIVE_NAME.tar.bz2" > "$ARCHIVE_NAME.md5"

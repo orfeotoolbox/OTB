@@ -1,34 +1,77 @@
-We provide a binary package for GNU/Linux x86_64. This package includes
-all of the OTB applications along with command line and graphical launchers.
-It can be downloaded from `OTB's download page
-<https://www.orfeo-toolbox.org/download>`__.
+We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. They include
+all of the OTB applications along with command line launchers.
+Since OTB 9.0, it is now possible to have a modular installation, you have to choose which package to download depending on your use case.
 
-This package is a self-extractable archive. You may uncompress it with a
-double-click on the file, or from the command line as follows:
+See the page :doc:`Modules` to pick the ones you need.
 
-.. parsed-literal::
+**Important note for RedHat / Fedora / Rocky users**
 
-   chmod +x OTB-|release|-Linux64.run
-   ./OTB-|release|-Linux64.run
+If you are using Fedora, Redhat8, please download the package **Linux_RedHat** which contains GDAL bindings in a different folder than the standard Linux package.
+It is because the default system Python user site in RedHat, and distributions based on it, is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
 
-The self-extractable archive only needs common tools found on most Linux
-distributions ("sed", "grep", "find", "cat", "printf", "ln", ...). However, be
-aware that it requires tools such as "which" and "file" (they are not always
-present, for instance when building a container).
+Recommended Installation : One package containing all the modules 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-9.0.0-Linux.tar.gz** package.
 
-Please note that the resulting installation is not meant to be moved,
-you should uncompress the archive in its final location. Once the
-archive is extracted, the directory structure consists of:
+You can download the package from the website and extract it in your file manager, or from command line :
 
--  ``monteverdi.sh``: A launcher script for Monteverdi
+.. code-block:: bash
 
--  ``mapla.sh``: A launcher script for Mapla
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux.tar.gz -o /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz
+   tar xf /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
+   source /Path/To/OTB_install/otbenv.profile
+
+Advanced Installation : Modular installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Download
+````````
+
+In order to run OTB you will need the **OTB-Dependencies-9.0.tar.gz** package to run the Core **AND** optional packages that you can install afterwards.
+Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning. 
+In that case you will just need to download the OTB-Learning package, and untar it where you installed the Core package. 
+You can then use directly the applications packaged in the Learning package alongside the other Core apps.
+
+.. code-block:: bash
+
+   # Download mandatory packages to run OTB
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o OTB-9.0.0-Linux-Core.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Dependencies.tar.gz -o OTB-9.0.0-Linux-Dependencies.tar.gz
+   # Download optional packages
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o OTB-9.0.0-Linux-FeaturesExtraction.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Learning.tar.gz -o OTB-9.0.0-Linux-Learning.tar.gz
+   ...
+
+Installation
+````````````
+
+These packages are self-extractable tar.gz archives. You may uncompress the files with a
+right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
+
+.. code-block:: bash
+
+   # Install each tar gz in the same "top level" folder
+   tar xvf OTB-9.0.0-Linux-Core.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-9.0.0-Linux-FeaturesExtraction.tar.gz --one-top-level="/Path/To/Install/OTB"
+   # It is necessary to install the dependencies AFTER the other modules*
+   tar xvf OTB-9.0.0-Linux-Dependencies.tar.gz --one-top-level="/Path/To/Install/OTB"
+   ...
+   source /Path/To/Install/OTB/otbenv.profile
+
+Be careful to install the dependencies *AFTER* the modules because the paths in the cmake files are made modular only when you install
+the dependencies : the resulting installation can be moved elsewhere on the disk. See the section "move installation below"
+
+Installation folder description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once the archive is extracted, the directory structure consists of:
 
 -  ``otbenv.profile``: A script to initialize the environment for OTB
    executables
 
--  ``bin``: A folder containing application launchers (otbcli.sh,
-   otbgui.sh), Monteverdi and Mapla.
+- ``recompile_bindings.sh`` : A script to recompile the python bindings with your system's Python
+
+-  ``bin``: A folder containing application launcher (otbcli.sh)
 
 -  ``lib``: A folder containing all shared libraries and OTB
    applications.
@@ -39,55 +82,17 @@ archive is extracted, the directory structure consists of:
 -  ``share``: A folder containing common resources and copyright
    mentions.
 
--  ``tool``: A folder containing useful scripts to test the installation or
-   to uninstall OTB libraries and headers while keeping all the dependencies.
-
-The applications can be launched from the Mapla launcher. If you want to
-use the otbcli and otbgui launchers, you can initialize your environment
-with ``source otbenv.profile``.
-
-The package can be used to compile other projects using OTB (binaries, libraries
-and headers are included). If you want to build OTB from source using this
-package, you should first uninstall the specific OTB files from the package to
-leave only the dependencies (what we call an XDK). You can do it using the
-supplied script ``tools/uninstall_otb.sh``.
-
-System dependencies
-~~~~~~~~~~~~~~~~~~~
-
-In order to run the command line launchers, this package doesn’t require
-any special library that is not present in most modern Linux
-distributions. The graphical executable (otbgui launchers, Monteverdi
-and Mapla) use the X11 libraries, which are widely used in a lot of
-distributions:
-
-::
-
-    libx11-6 libxext6 libxau6 libxxf86vm1 libxdmcp6 libdrm2
-
-Monteverdi also requires the standard graphics libraries **libgl1** and
-**libglu1**, as well as the xcb library. Make sure you have at least one version of them installed
-in your system. See :`Examples of installation on specific distribution`_ for guidelines on some distributions.
-
-Caveat on OTB 6.0
-~~~~~~~~~~~~~~~~~
-
-In OTB 6.0 binaries, there is a small caveat for "expat" as the supplied binaries
-depend on "libexpat.so", which is not contained in the package. It can be
-supplied by most package managers (apt, yum, ...). If not already present, it is
-necessary to install one of the following packages:
-
-::
-
-    libexpat-dev   libexpat1-dev
+If you want to use the otbcli launchers, you can initialize your
+environment with ``source otbenv.profile``.
 
 Python bindings
 ~~~~~~~~~~~~~~~
 
+**Our recommendation is to always recompile the python bindings when you install OTB**
+
 Since OTB 8.0.0 OTB bindings for Python 3.8 are distributed as a binary
-package. (From OTB 6.7 to 7.4, bindings are provided for Python 3.5)
-Please note that using a different Python version may not be compatible with
-OTB wrappings. If the installation completes
+package. Please note that using a different Python version may not be compatible with
+OTB wrappings directly after installation. If the installation completes
 without issue, information relating to your Python bindings will be provided. 
 
 You must have Python NumPy bindings installed in your system. They can be installed locally
@@ -97,116 +102,54 @@ to select their own existing Python installation rather than the one dibstribute
 By default, bindings for Python 3.8 will be enabled with the ``otbenv`` script.
 
 Recompiling Python bindings
-+++++++++++++++++++++++++++
+```````````````````````````
 
 If you are using another version of Python 3 than 3.8, but still want to use OTB Python bindings, it is possible
 to compile the python bindings again with your version of Python. CMake is required (it is available in most package
-managers or at [https://cmake.org/]). At the root of the OTB installation run :
+managers or at [https://cmake.org/]). Make sure you installed the necessary dependencies in the :doc:`First_Steps` page
 
-.. parsed-literal::
+At the root of the OTB installation run :
+
+.. code-block:: bash
 
     source otbenv.profile 
-    ctest -S share/otb/swig/build_wrapping.cmake -VV
+    sh recompile_bindings.sh
 
 You should now be able to import ``otbApplication`` through Python !
 
-Alternatively, you could use a virtual env or otb Conda Package to use the OTB Python bindings.
+Create an healthy Python environment for OTB
+````````````````````````````````````````````
 
-Also see `Examples of installation on specific distribution`_ for examples on some distributions.
+We strongly recommend to use a virtual env to **avoid conflicts between OTB and GDAL when you develop python scripts that uses other dependencies like rasterio, scikit...**
+
+.. code-block:: bash
+
+   # Source your OTB environment
+   . <your installation directory>/otbenv.profile
+   # Create a virtual env and install some libraries
+   python -m venv otb_venv
+   . otb_venv/bin/activate
+   pip install --upgrade pip
+   pip install scikit-image scikit-learn geopandas 
+   # Rastero depends on GDAL and need to be compiled on the flight with current OTB's own GDAL
+   pip install rasterio --no-binary :all:
+   # Use your libraries within Python
+   python
+   > import rasterio
+   > import otbApplication as otb
+
 
 Notes:
-~~~~~~
+```````
+   - Multiple installation of OTB can exists in same system without one conflicting the other!
 
-- You must use monteverdi and mapla through ``mapla.sh`` and ``monteverdi.sh`` helper scripts in extracted directory.
+Moving your installed OTB
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- The helper scripts for monteverdi and mapla set required environment variables
-
-- You might be tempted to move "OTB-|release|-Linux64" into another location say /usr/local/ after extraction. But avoid this action!
-
-- To have "OTB-|release|-Linux64" installed in /usr/local or /opt execute "OTB-|release|-Linux64.run" in that directory.
-
-- Multiple installation of OTB can exists in same system without one conflicting the other!
-
-Examples of installation on specific distribution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Here are provided provide examples of package installations on popular distributions, using package managers to install the required dependencies.
-
-Ubuntu 18.04 and Ubuntu 20.04
-+++++++++++++++++++++++++++++
-
-The following commands can be executed on Ubuntu 18.04 or Ubuntu 20.04, for example in a docker container, to install OTB in a folder containing the OTB package self-extractable archive:
+With OTB 9 one can move the installation folder, but once it is done, there is a step to do to ensure the paths are correct.
 
 .. code-block:: bash
 
-  apt-get update
-
-  # Required packages to extract OTB from the archive
-  apt-get install -y --no-install-recommends file python3 python3-dev python3-numpy
-
-  # Required packages to run OTB GUI tools AND recompile the Python bindings
-  apt-get install -y --no-install-recommends '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev
-
-  # optional: prevent tzdata from asking the timezone during cmake installation
-  export DEBIAN_FRONTEND=noninteractive 
-
-  # Required tools to recompile the bindings
-  apt-get install -y --no-install-recommends g++ cmake make
-
-  # Extract the archive
-  chmod +x OTB-8.0.0-rc1-Linux64.run
-  ./OTB-8.0.0-rc1-Linux64.run
-
-  # recompile the Python bindings
-  cd OTB-8.0.0-Linux64
-  source otbenv.profile
-  ctest -S share/otb/swig/build_wrapping.cmake -VV
-
-CENTOS 7
-++++++++
-
-.. code-block:: bash
-
-   #Add the SCL repositories to install python 3.8 and gcc 8
-   yum -y install epel-release centos-release-scl
-
-   #Install required dependencies for python bindings recompilation
-   yum -y install devtoolset-8 cmake3 rh-python38 rh-python38-python-devel rh-python38-python-numpy swig3 mesa-libGL-devel mesa-libGLU-devel
-
-   #Required dependencies for running OTB GUI tools
-	yum install libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libxcb-devel libxkbcommon-devel libxkbcommon-x11-devel 
-   yum install xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel
-
-   #Enable the environment
-   scl enable rh-python38 devtoolset-8 -- /bin/bash
-
-   # Extract the archive
-   chmod +x OTB-8.0.0-rc1-Linux64.run
-   ./OTB-8.0.0-rc1-Linux64.run
-
-   # recompile the Python bindings
-   cd OTB-8.0.0-Linux64
-   source otbenv.profile
-   ctest3 -S share/otb/swig/build_wrapping.cmake -VV
-
-
-FAQ
-~~~
-
-Q: Unable to import otbApplication library with Python3.5
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-::
-
-   ImportError: libpython3.5m.so.rh-python35-1.0: cannot open shared object file: No such file or directory
-
-A: You need to add a symlink to libpython3.5m.so.rh-python35-1.0 to make it works. 
-
-Here is the solution:
-
-- Find the libpython3.5XX on your system : ``find /usr/lib -iname *libpython3.5*``
-  (on Ubuntu 14.04, it is ``/usr/lib/x86_64-linux-gnu/libpython3.5m.so``)
-- Create a symlink : ``ln -s path/to/lib/python3.5XX path/to/lib/libpython3.5m.so.rh-python35-1.0``
-- Try to import otbApplication again
-
-See this discussion on `OTB issue tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1540#note_67864>`_
+   rm /Path/To/Moved/OTB/tools/install_done.txt
+   source /Path/To/Moved/OTB/otbenv.profile
+   # At this time a message will be displayed showing that this is a new installation, this is normal

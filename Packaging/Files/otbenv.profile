@@ -36,30 +36,46 @@ cat_path()
 }
 
 # The below environment variables only affect current shell
-# So if you run again from a terminal. you need to run the script again
-# see how this is sourced in monteverdi.sh and mapla.sh
+# So if you run again from a terminal, you need to run the script again
 
-CMAKE_PREFIX_PATH=OUT_DIR
+OS=`lsb_release -is`
+if [ $OS = "RedHatEnterprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
+  OTB_INSTALL_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}"))
+else
+  if [ -z $ZSH_NAME ]; then
+    OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}"; )"; )
+  else
+    OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
+  fi
+fi
+CMAKE_PREFIX_PATH=$OTB_INSTALL_DIR
 export CMAKE_PREFIX_PATH
 
 # check and set OTB_APPLICATION_PATH
-OTB_APPLICATION_PATH=$(cat_path "OUT_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
+OTB_APPLICATION_PATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
 
 # Add bin directory to system PATH
-PATH=$(cat_path "OUT_DIR/bin" "$PATH")
+PATH=$(cat_path "$OTB_INSTALL_DIR/bin" "$PATH")
 
 # export PYTHONPATH to import otbApplication.py
-PYTHONPATH=$(cat_path "OUT_DIR/lib/python" "$PYTHONPATH")
+PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/python" "$PYTHONPATH")
+if [ $OS = "RedHatEnterprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
+  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3.8/site-packages" "$PYTHONPATH")
+else
+  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3/dist-packages" "$PYTHONPATH")
+fi
 
 # set numeric locale to C
 LC_NUMERIC=C
 
 # set GDAL_DATA variable used by otb application
-GDAL_DATA=OUT_DIR/share/gdal
+GDAL_DATA=$OTB_INSTALL_DIR/share/gdal
 
-PROJ_LIB=OUT_DIR/share/proj
+PROJ_LIB=$OTB_INSTALL_DIR/share/proj
 
 export GDAL_DRIVER_PATH=disable
+
+export LD_LIBRARY_PATH=$OTB_INSTALL_DIR/lib:$LD_LIBRARY_PATH
 
 # export variables
 export LC_NUMERIC
@@ -68,4 +84,13 @@ export PROJ_LIB
 export OTB_APPLICATION_PATH
 export PATH
 export PYTHONPATH
+export OTB_INSTALL_DIR
 
+# The first time after install, run that script to patch cmake files with the right install path. This cannot be done until OTB is installed
+# This call permits to the user not to launch this by hand
+if [ ! -e $OTB_INSTALL_DIR/tools/install_done.txt ]
+then
+  source $OTB_INSTALL_DIR/tools/post_install.sh
+else
+  echo "**** OTB environment setup complete ****"
+fi

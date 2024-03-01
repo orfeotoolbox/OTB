@@ -128,6 +128,7 @@ const std::string & Get(const std::unordered_map<std::string, std::string> & kwl
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
              << "Unable to find " << key << "in the input keywordlist");
+    (void)e; // just to silent windows unreferenced var warning
   }
 }
 

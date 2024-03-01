@@ -147,28 +147,32 @@ macro(otb_module_target_name _name)
   endif()
 endmacro()
 
-macro(otb_module_target_install _name)
+macro(otb_module_target_install _name _component)
   #Use specific runtime components for executables and libraries separately when installing a module,
   #considering that the target of a module could be either an executable or a library.
-  get_property(_ttype TARGET ${_name} PROPERTY TYPE)
-  if("${_ttype}" STREQUAL EXECUTABLE)
-    set(runtime_component Runtime)
-  else()
-    set(runtime_component RuntimeLibraries)
-  endif()
+  # get_property(_ttype TARGET ${_name} PROPERTY TYPE)
+  # if("${_ttype}" STREQUAL EXECUTABLE)
+  #   set(runtime_component Runtime)
+  # else()
+  #   set(runtime_component Dependencies)
+  # endif()
   install(TARGETS ${_name}
     EXPORT  ${${otb-module}-targets}
-    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${runtime_component}
-    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT Development
+    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_component}
+    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
+    ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT ${_component}
     )
 endmacro()
 
 macro(otb_module_target _name)
   set(_install 1)
+  set(_component Remote)
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(NO_INSTALL)$")
       set(_install 0)
+    elseif("${arg}" MATCHES "^COMPONENT_[a-zA-Z]+$")
+      string(REPLACE "_" ";" _list_components ${arg})
+      list(GET _list_components 1 _component)
     else()
       message(FATAL_ERROR "Unknown argument [${arg}]")
     endif()
@@ -176,7 +180,7 @@ macro(otb_module_target _name)
   otb_module_target_name(${_name})
   otb_module_target_label(${_name})
   if(_install)
-    otb_module_target_install(${_name})
+    otb_module_target_install(${_name} ${_component})
   endif()
 endmacro()
 
@@ -194,7 +198,7 @@ macro(otb_module _name)
   set(OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT 0)
   set(OTB_MODULE_${otb-module}_ENABLE_SHARED 0)
   foreach(arg ${ARGN})
-    if("${arg}" MATCHES "^(DEPENDS|OPTIONAL_DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT)$")
+    if("${arg}" MATCHES "^(DEPENDS|OPTIONAL_DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT|COMPONENT)$")
       set(_doing "${arg}")
     elseif("${arg}" MATCHES "^EXCLUDE_FROM_DEFAULT$")
       set(_doing "")
@@ -220,6 +224,9 @@ macro(otb_module _name)
       set(OTB_MODULE_${otb-module}_DESCRIPTION "${arg}")
     elseif("${_doing}" MATCHES "^DEFAULT")
       message(FATAL_ERROR "Invalid argument [DEFAULT]")
+    elseif("${_doing}" MATCHES "^COMPONENT$")
+      set(_doing "")
+      set(OTB_MODULE_${otb-module}_COMPONENT "${arg}")
     else()
       set(_doing "")
       message(AUTHOR_WARNING "Unknown argument [${arg}]")
@@ -321,7 +328,7 @@ macro(otb_module_impl)
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/include)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
-    install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT Development)
+    install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT ${${otb-module}_COMPONENT})
   endif()
 
   if(NOT OTB_SOURCE_DIR)
@@ -388,7 +395,7 @@ macro(otb_module_impl)
     install(FILES
       ${_export_header_file}
       DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
-      COMPONENT Development
+      COMPONENT ${${otb-module}_COMPONENT}
       )
 
     if (BUILD_SHARED_LIBS)

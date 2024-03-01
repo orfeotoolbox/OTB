@@ -37,4 +37,7 @@ otb_module(OTBSOM
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Learning
 )

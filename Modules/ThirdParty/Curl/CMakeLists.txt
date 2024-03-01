@@ -38,5 +38,5 @@ otb_module_impl()
 
 install(FILES ${OTBCurl_BINARY_DIR}/src/otb_curl.h
   DESTINATION ${OTBCurl_INSTALL_INCLUDE_DIR}
-  COMPONENT Development
+  COMPONENT Core
   )

@@ -48,5 +48,5 @@ otb_module_impl()
 
 install(FILES ${OTBTinyXML_BINARY_DIR}/src/otb_tinyxml.h
   DESTINATION ${OTBTinyXML_INSTALL_INCLUDE_DIR}
-  COMPONENT Development
+  COMPONENT Core
   )

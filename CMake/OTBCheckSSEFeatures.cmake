@@ -24,11 +24,6 @@ function(check_sse_features sse_flags )
   include(CheckCXXCompilerFlag)
 
   set(${sse_flags} "0" PARENT_SCOPE)
-  # For apple assume sse2 is on for all intel builds, check for 64 and 32 bit versions
-  if(APPLE)
-      message(STATUS "For apple assume sse2 is on for all intel builds")
-    return()
-  endif()
   set(sse_flags_detected)
   if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG)
     set(CMAKE_REQUIRED_FLAGS "-msse2")

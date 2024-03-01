@@ -56,11 +56,6 @@ option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
 
-
-if(APPLE)
-  set(CMAKE_MACOSX_RPATH TRUE)
-endif()
-
 # use, i.e. don't skip the full RPATH for the build tree
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # when building, don't use the install RPATH already
@@ -113,13 +108,6 @@ get_version(
 set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
 
 message("OTB version : ${SUPERBUILD_OTB_VERSION}")
-
-# Special setting for low kernel versions
-if(UNIX)
-  option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
-  mark_as_advanced(USE_LOW_KERNEL_VERSION)
-endif()
-
 
 # Default install prefix
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
@@ -181,10 +169,6 @@ list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_PREFIX:PATH=${SB_INSTALL_PREFIX}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_PREFIX_PATH:PATH=${SB_CMAKE_PREFIX_PATH}")
-
-if(APPLE)
-  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_MACOSX_RPATH:BOOL=${CMAKE_MACOSX_RPATH}")
-endif()
 
 if(UNIX)
   list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_SKIP_BUILD_RPATH:BOOL=${CMAKE_SKIP_BUILD_RPATH}")
@@ -263,83 +247,52 @@ list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
 
+if(WIN32)
+  # Force all dll in the bin folder
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin)
+endif()
+
 set(FROM_SYSTEM_LIST)
 set(FROM_SUPERBUILD_LIST)
+set(USE_SYSTEM_PCRE ON)
+set(USE_SYSTEM_SWIG ON)
+option(USE_SYSTEM_OPENSSL OFF)
 
-#TODO: enforce check from ITK on directory length
-# Setup third parties
-option(USE_SYSTEM_ZLIB "Use a system build of zlib" OFF)
-option(USE_SYSTEM_JPEG "Use a system build of JPEG" OFF)
-option(USE_SYSTEM_EXPAT "Use a system build of expat" OFF)
-option(USE_SYSTEM_PNG "Use a system build of libpng" OFF)
-option(USE_SYSTEM_TIFF "Use a system build of libtiff" OFF)
-option(USE_SYSTEM_PROJ  "Use a system build of Proj.4" OFF)
-option(USE_SYSTEM_GEOTIFF  "Use a system build of GeoTIFF" OFF)
-option(USE_SYSTEM_SQLITE  "Use a system build of sqlite" OFF)
-option(USE_SYSTEM_GEOS "Use a system build of GEOS" OFF)
-option(USE_SYSTEM_OPENJPEG "Use a system build of OpenJPEG" OFF)
-option(USE_SYSTEM_BOOST "Use a system build of Boost" OFF)
-option(USE_SYSTEM_LIBKML  "Use a system build of LibKML" OFF)
-option(USE_SYSTEM_CURL  "Use a system build of cURL" OFF)
-option(USE_SYSTEM_OPENSSL  "Use a system build of OpenSSL" OFF)
-option(USE_SYSTEM_GDAL "Use a system build of GDAL" OFF)
-option(USE_SYSTEM_FFTW "Use a system build of FFTW" OFF)
-option(USE_SYSTEM_ITK "Use a system build of ITK" OFF)
-option(USE_SYSTEM_MUPARSER  "Use a system build of muParser" OFF)
-option(USE_SYSTEM_MUPARSERX "Use a system build of  muParserX" OFF)
-option(USE_SYSTEM_TINYXML  "Use a system build of TinyXML" OFF)
-option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
-option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
-option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
-option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_QT5 "Use a system build of QT5"  OFF)
-option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
-option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
-option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
-option(USE_SYSTEM_GLUT  "Use a system build of glut" OFF)
-option(USE_SYSTEM_FREETYPE "Use a system build of freetype" OFF)
-option(USE_SYSTEM_SHARK "Use a system build of Shark" OFF)
-option(USE_SYSTEM_HDF4 "Use a system build of HDF4" OFF)
-option(USE_SYSTEM_HDF5 "Use a system build of HDF5" OFF)
-option(USE_SYSTEM_NETCDF "Use a system build of NetCDF" OFF)
-option(USE_SYSTEM_GSL "Use a system build of GSL" OFF)
+# Modular building options
+option(OTB_BUILD_Core "Enable building only core modules" ON)
+option(OTB_BUILD_FeaturesExtraction "Enable building image processing module" OFF)
+option(OTB_BUILD_Hyperspectral "Enable building Hyperspectral module" OFF)
+option(OTB_BUILD_Learning "Enable building of the machine learning module" OFF)
+option(OTB_BUILD_Miscellaneous "Enable building of the miscelanous algorithms module" OFF)
+option(OTB_BUILD_SAR "Enable building of SAR module" OFF)
+option(OTB_BUILD_Segmentation "Enable building of segmentation module" OFF)
+option(OTB_BUILD_StereoProcessing "Enable building of Stereo module" OFF)
+option(OTB_BUILD_RemoteModules "Enable building of Remote modules" OFF)
 
-# Call OTB
+# Dependencies options
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
 option(OTB_USE_CURL "Enable module Curl in OTB" ON)
-#RK: disabled libkml. problems on windows msvc
-if(MSVC)
-  option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
-else()
-  option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
-endif()
-option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
-option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
-option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
-option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
-option(OTB_USE_QT "Enable module QT5 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
-option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
-option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
-
-#Cannot activate GLUT on OSX. See Mantis issue #1194")
-# do not activate GLFW by default on osx. see failing test
-# https://dash.orfeo-toolbox.org/testDetails.php?test=59844554&build=287120
-if(APPLE)
-  option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
-  option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
+option(OTB_USE_GSL "Enable module GSL in OTB" ON)
+option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
+#option() does not change the value in cache so we have to set the option via the set CACHE FORCE method
+if(OTB_BUILD_Learning MATCHES ON)
+  set(OTB_USE_LIBSVM ON CACHE BOOL "Enable module LibSVM in OTB" FORCE)
+  set(OTB_USE_OPENCV ON CACHE BOOL "Enable module OPENCV in OTB" FORCE)
+  set(OTB_USE_SHARK ON CACHE BOOL "Enable module Shark in OTB" FORCE)
 else()
-  option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
-  option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
+  set(OTB_USE_LIBSVM OFF CACHE BOOL "Enable module LibSVM in OTB" FORCE)
+  set(OTB_USE_OPENCV OFF CACHE BOOL "Enable module OPENCV in OTB" FORCE)
+  set(OTB_USE_SHARK OFF CACHE BOOL "Enable module Shark in OTB" FORCE)
+endif()
+if(OTB_BUILD_FeaturesExtraction MATCHES ON)
+  set(OTB_USE_MUPARSER ON CACHE BOOL "Enable module MuParser in OTB" FORCE)
+  set(OTB_USE_MUPARSERX ON CACHE BOOL "Enable module MuParserX in OTB" FORCE)
+else()
+  set(OTB_USE_MUPARSER OFF CACHE BOOL "Enable module MuParser in OTB" FORCE)
+  set(OTB_USE_MUPARSERX OFF CACHE BOOL "Enable module MuParserX in OTB" FORCE)
 endif()
 
-option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
-include (CMakeDependentOption)
-CMAKE_DEPENDENT_OPTION( OTB_USE_QWT "Enable module QWT in OTB" ON "OTB_USE_QT" OFF)
-option(OTB_USE_GSL "Enable module GSL in OTB" ON)
-
-option(OTB_USE_MPI "Enable MPI in OTB" OFF)
-option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT
@@ -355,40 +308,11 @@ configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
 
 # Python
-# This should set the following variables (and more):
-#   -PYTHON_EXECUTABLE
-#   -PYTHON_INCLUDE_DIR
-#   -PYTHON_LIBRARY
-if(CMAKE_VERSION VERSION_LESS 3.12.0)
-  set ( Python_ADDITIONAL_VERSIONS "3;2" )
-  set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
-  set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
-  find_package( PythonInterp )
-  if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
-      message (WARNING "Python3 not found. There is no longer support of \
-      wrapping in python2 in OTB, but it can still be used.")
-  endif()
-  # Now that we have a python version the addditional versions should only
-  # contain the version we have to get the corresponding libs
-  set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-  find_package ( PythonLibs )
-else()
-  if(WIN32)
-    set(Python_ROOT_DIR "C:/tools/Python37-x64")
-  endif()
-  find_package( Python REQUIRED COMPONENTS Interpreter Development)
-  if(Python_FOUND)
-    message(STATUS "Python Library directory : ${Python_LIBRARY_DIRS}")
-    message(STATUS "Python Headers directory : ${Python_INCLUDE_DIRS}")
-    #For compatibility reason, we have to define these variables
-    set(PYTHON_LIBRARIES ${Python_LIBRARIES})
-    set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS})
-    set(PYTHON_LIBRARY_DIR ${Python_LIBRARY_DIRS})
-    set(PYTHON_VERSION_STRING ${Python_VERSION})
-    set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
-  endif()
+find_package( Python REQUIRED COMPONENTS Interpreter Development)
+if(Python_FOUND)
+  message(STATUS "Python Library directory : ${Python_LIBRARY_DIRS}")
+  message(STATUS "Python Headers directory : ${Python_INCLUDE_DIRS}")
 endif()
-
 include(External_otb)
 
 if(FROM_SYSTEM_LIST)

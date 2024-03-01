@@ -48,7 +48,7 @@ add_executable(LeeImageFilter LeeImageFilter.cxx)
 target_link_libraries(LeeImageFilter ${OTB_LIBRARIES})
 
 #OTBMeanShift depends OTBMathParser. But OTB_USE_MUPARSER is OFF
-if(OTBMathParser_LOADED)
+if(OTBMathParser_LOADED AND OTBGroup_Segmentation)
 add_executable(MeanShiftSegmentationFilterExample MeanShiftSegmentationFilterExample.cxx)
 target_link_libraries(MeanShiftSegmentationFilterExample ${OTB_LIBRARIES})
 endif()

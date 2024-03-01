@@ -58,6 +58,7 @@ SarImageMetadataInterfaceFactory
       {
         // silent catch of MissingMetadataException
         // just means that this IMI can't parse the file
+        (void)e; // keep this line to silent unreferenced local var warning
       }
     }
     else

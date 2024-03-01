@@ -22,32 +22,21 @@ INCLUDE_ONCE_MACRO(JPEG)
 
 SETUP_SUPERBUILD(JPEG)
 
-if(WIN32)
-  set(JPEG_CONFIGURE_COMMAND "${SB_CMAKE_COMMAND}"
-    ${SB_CMAKE_ARGS}
-    ${SB_CMAKE_CACHE_ARGS}
-    -DENABLE_SHARED=TRUE
-    -DENABLE_STATIC=FALSE
-    -DWITH_SIMD=FALSE
-    -DWITH_TURBOJPEG=FALSE
-    -DWITH_ARITH_DEC=TRUE
-    -DWITH_JAVA=FALSE
-    ${JPEG_SB_SRC} )
-
-else()
-  set(JPEG_CONFIGURE_COMMAND "${SB_ENV_CONFIGURE_CMD};${JPEG_SB_SRC}/configure"
-    ${SB_CONFIGURE_ARGS}
-    --with-arith-dec
-    --without-simd
-    --without-java
-     )
-
-endif()
+set(JPEG_CONFIGURE_COMMAND "${SB_CMAKE_COMMAND}"
+  ${SB_CMAKE_ARGS}
+  ${SB_CMAKE_CACHE_ARGS}
+  -DENABLE_SHARED=TRUE
+  -DENABLE_STATIC=FALSE
+  -DWITH_SIMD=FALSE
+  -DWITH_TURBOJPEG=FALSE
+  -DWITH_ARITH_DEC=TRUE
+  -DWITH_JAVA=FALSE
+  ${JPEG_SB_SRC} )
 
 ExternalProject_Add(JPEG
   PREFIX JPEG
-  URL "https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/libjpeg-turbo-1.5.3.tar.gz"
-  URL_MD5 7c82f0f6a3130ec06b8a4d0b321cbca3
+  URL "https://downloads.sourceforge.net/project/libjpeg-turbo/2.0.0/libjpeg-turbo-2.0.0.tar.gz"
+  URL_MD5 b12a3fcf1d078db38410f27718a91b83
   SOURCE_DIR ${JPEG_SB_SRC}
   BINARY_DIR ${JPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

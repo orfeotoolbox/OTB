@@ -3,8 +3,8 @@ Environment variables
 
 The following environment variables are parsed by Orfeo ToolBox. Note
 that they only affect default values, and that settings in extended
-filenames, applications, Monteverdi or custom C++ code might override
-those values.
+filenames, applications or custom C++ code might override those
+values.
 
 * ``OTB_DEM_DIRECTORY``: Default directory were DEM tiles are
   stored. It should only contain ```.hgt`` or or georeferenced

@@ -34,4 +34,6 @@ otb_module(OTBComplexImage
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

@@ -41,11 +41,14 @@ if(WIN32)
   endif()
 endif()
 
+set(OPENSSL_URL "https://github.com/openssl/openssl/archive/OpenSSL_1_1_1w.tar.gz")
+set(OPENSSL_MD5 cff61098da69cf3ca25b5b2a129d9861)
+
 if(MSVC)
   ExternalProject_Add(OPENSSL
     PREFIX OPENSSL
-    URL "https://github.com/openssl/openssl/archive/OpenSSL_1_1_1k.tar.gz"
-    URL_MD5 bdd51a68ad74618dd2519da8e0bcc759
+    URL ${OPENSSL_URL}
+    URL_MD5 ${OPENSSL_MD5}
     DEPENDS ${OPENSSL_DEPENDENCIES}
     BINARY_DIR ${OPENSSL_SB_SRC}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -63,13 +66,12 @@ if(MSVC)
     LOG_BUILD 1
     LOG_INSTALL 1
     )
-
-else(UNIX)
+else()
   ExternalProject_Add(OPENSSL
     PREFIX OPENSSL
     DEPENDS ${OPENSSL_DEPENDENCIES}
-    URL "https://github.com/openssl/openssl/archive/OpenSSL_1_1_1k.tar.gz"
-    URL_MD5 bdd51a68ad74618dd2519da8e0bcc759
+    URL ${OPENSSL_URL}
+    URL_MD5 ${OPENSSL_MD5}
     BINARY_DIR ${OPENSSL_SB_SRC}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

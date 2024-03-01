@@ -91,7 +91,7 @@ public:
   DictType<std::string, std::string> ExtraKeys;
 
   // Constructor
-  ImageMetadataBase();
+  ImageMetadataBase() = default;
   ImageMetadataBase(DictType<MDGeom, boost::any> geometryKeys,
                     DictType<MDNum, double> numericKeys,
                     DictType<MDStr, std::string> stringKeys,
@@ -103,7 +103,7 @@ public:
   // -------------------- Geom utility function ----------------------------
 
   /** Read-only accessor to geometric keys */
-  const boost::any & operator[](const MDGeom& key) const;
+  const boost::any & operator[](MDGeom key) const;
 
   const Projection::GCPParam & GetGCPParam() const;
   const Projection::RPCParam & GetRPCParam() const;
@@ -112,21 +112,21 @@ public:
   std::string GetProjectedGeometry() const;
 
   std::string GetProjectionWKT() const;
-  
+
   std::string GetProjectionProj() const;
-  
+
   /** Setter for geometric keys */
-  void Add(const MDGeom& key, const boost::any &value);
-  
+  void Add(MDGeom key, const boost::any &value);
+
   /** Remove a key from the dictionary (even if the key is already missing) */
-  size_t Remove(const MDGeom& key);
+  size_t Remove(MDGeom key);
 
   size_t RemoveSensorGeometry();
 
   size_t RemoveProjectedGeometry();
-  
+
   /** Test if a key is available */
-  bool Has(const MDGeom& key) const;
+  bool Has(MDGeom key) const;
 
   bool HasSensorGeometry() const;
 
@@ -135,84 +135,84 @@ public:
   // -------------------- Double utility function ----------------------------
 
   /** Read-only accessor to numeric keys */
-  const double & operator[](const MDNum& key) const;
-  
+  const double & operator[](MDNum key) const;
+
   /** Setter for numeric keys */
-  void Add(const MDNum& key, const double &value);
-  
+  void Add(MDNum key, const double &value);
+
   /** Remove a key from the dictionary (even if the key is already missing) */
-  size_t Remove(const MDNum& key);
-  
+  size_t Remove(MDNum key);
+
   /** Test if a key is available */
-  bool Has(const MDNum& key) const;
+  bool Has(MDNum key) const;
 
   /** Return the list of valid keys */
   std::string GetKeyListNum() const;
-  
+
   // -------------------- String utility function ----------------------------
 
   /** Read-only accessor to string keys */
-  const std::string & operator[](const MDStr& key) const;
-  
+  const std::string & operator[](MDStr key) const;
+
   /** Setter for string keys */
-  void Add(const MDStr& key, const std::string &value);
-  
+  void Add(MDStr key, const std::string &value);
+
   /** Remove a key from the dictionary (even if the key is already missing) */
-  size_t Remove(const MDStr& key);
-  
+  size_t Remove(MDStr key);
+
   /** Test if a key is available */
-  bool Has(const MDStr& key) const;
+  bool Has(MDStr key) const;
 
   /** Return the list of valid keys */
   std::string GetKeyListStr() const;
-  
+
   // -------------------- LUT1D utility function ----------------------------
 
   /** Read-only accessor to 1D LUT keys */
-  const MetaData::LUT1D & operator[](const MDL1D& key) const;
-  
+  const MetaData::LUT1D & operator[](MDL1D key) const;
+
   /** Setter for 1D LUT keys */
-  void Add(const MDL1D& key, const MetaData::LUT1D &value);
-  
+  void Add(MDL1D key, const MetaData::LUT1D &value);
+
   /** Remove a key from the dictionary (even if the key is already missing) */
-  size_t Remove(const MDL1D& key);
-  
+  size_t Remove(MDL1D key);
+
   /** Test if a key is available */
-  bool Has(const MDL1D& key) const;
+  bool Has(MDL1D key) const;
 
   /** Return the list of valid keys */
   std::string GetKeyListL1D() const;
-  
+
   // -------------------- 2D LUT utility function ----------------------------
 
   /** Read-only accessor to 2D LUT keys */
-  const MetaData::LUT2D & operator[](const MDL2D& key) const;
-  
+  const MetaData::LUT2D & operator[](MDL2D key) const;
+
   /** Setter for 2D LUT keys */
-  void Add(const MDL2D& key, const MetaData::LUT2D &value);
-  
+  void Add(MDL2D key, const MetaData::LUT2D &value);
+
   /** Remove a key from the dictionary (even if the key is already missing) */
-  size_t Remove(const MDL2D& key);
-  
+  size_t Remove(MDL2D key);
+
   /** Test if a key is available */
-  bool Has(const MDL2D& key) const;
+  bool Has(MDL2D key) const;
 
   /** Return the list of valid keys */
 //  std::string GetKeyListL2D() const;
-  
+
   // -------------------- Time utility function ----------------------------
 
   /** Read-only accessor to time keys */
-  const MetaData::TimePoint & operator[](const MDTime& key) const;
-  
+  const MetaData::TimePoint & operator[](MDTime key) const;
+
   /** Setter for time keys */
-  void Add(const MDTime& key, const MetaData::TimePoint &value);
+  void Add(MDTime key, const MetaData::TimePoint &value);
 
   /** Remove a key from the dictionary (even if the key is already missing) */
-  size_t Remove(const MDTime& key);
+  size_t Remove(MDTime key);
 
   /** Test if a key is available */
-  bool Has(const MDTime& key) const;
+  bool Has(MDTime key) const;
 
   /** Return the list of valid keys */
   std::string GetKeyListTime() const;
@@ -235,7 +235,7 @@ public:
 
   /** Fill a KeywordList with the metadata */
   void ToKeywordlist(Keywordlist&) const;
-  
+
   /** Format the metadata to JSON */
   std::string ToJSON(bool multiline=false) const;
 
@@ -303,7 +303,7 @@ public:
    * If a key exists in both ImageMetadata, keeps the value of this ImageMetadata.
    * */
   void Merge(const ImageMetadata& );
-  
+
   /** Append the Metadata to a vector of KeywordList.
    *  The first KeywordList contains the metadata common to all the bands.
    *  The following KeywordList contains the metadata of the bands.
@@ -325,22 +325,22 @@ public:
 
   /** Setter for numeric keys on each band*/
   using ImageMetadataBase::Add;
-  void Add(const MDNum&, const MetaDataKey::VariableLengthVectorType);
+  void Add(MDNum , const MetaDataKey::VariableLengthVectorType);
 
   /** Getter for numeric keys on each band*/
-  itk::VariableLengthVector<double> GetAsVector(const MDNum & key) const;
+  itk::VariableLengthVector<double> GetAsVector(MDNum key) const;
 
   /** test whether the metadata corresponding to key is present on each band */
-  bool HasBandMetadata(const MDNum & key) const;
+  bool HasBandMetadata(MDNum key) const;
 
   /** test whether the metadata corresponding to key is present on each band */
-  bool HasBandMetadata(const MDL1D & key) const;
+  bool HasBandMetadata(MDL1D key) const;
 
-  /** Return a vector containing the name of each band of the ImageMetadata or an empty 
+  /** Return a vector containing the name of each band of the ImageMetadata or an empty
    * vector if at least one band name is missing */
   std::vector<std::string> GetBandNames() const;
 
-  /** Return a vector containing the name of each band of the ImageMetadata or an empty 
+  /** Return a vector containing the name of each band of the ImageMetadata or an empty
    * vector if at least one band name is missing */
   std::vector<std::string> GetEnhancedBandNames() const;
 

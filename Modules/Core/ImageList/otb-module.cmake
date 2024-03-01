@@ -38,4 +38,6 @@ otb_module(OTBImageList
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

@@ -71,11 +71,7 @@ if(BUILD_DIR)
 else()
   set (CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/")
 endif()
-if(INSTALL_DIR)
-  set (CTEST_INSTALL_DIRECTORY "${INSTALL_DIR}")
-else()
-  set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/")
-endif()
+set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/")
 set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 
 # Ctest command value
@@ -185,3 +181,4 @@ if(ENABLE_DOXYGEN)
               CAPTURE_CMAKE_ERROR _doxy_error
               )
 endif()
+

@@ -20,44 +20,29 @@
 
 # Set a list of group names
 set(group_list
-  Adapters
-  Applications
   Core
-  Detection
-  Feature
-  Filtering
-  Fusion
+  FeaturesExtraction
   Hyperspectral
-  IO
   Learning
-  OBIA
-  Radiometry
-  Registration
+  Miscellaneous
   Remote
+  SAR
   Segmentation
+  StereoProcessing
   ThirdParty
-  Visualization
-  Wrappers
   )
 
-set(Adapters_documentation "This group contains adapters class to third party software")
-set(Applications_documentation "This group contains the applications shipped with Orfeo TooLBox")
 set(Core_documentation "This group contains the core module used in Orfeo ToolBox")
-set(Detection_documentation "This group contains algorithms related to detection of low or high level objects")
-set(Feature_documentation "This group contains algorithms related to the computation of features")
-set(Filtering_documentation "This group contains algorithms for classical image to image processing")
-set(Fusion_documentation "This group contains algorithms for data fusion, including pan-sharpening")
+set(FeaturesExtraction_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(Hyperspectral_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(IO_documentation "This group contains everything related to input/output")
 set(Learning_documentation "This group contains algorithms and frameworks related to supervised or unsupervised learning")
-set(OBIA_documentation "This group contains algorithms related to Object Based Image Analysis")
+set(Miscellaneous_documentation "This group contains miscellaneous algorithms")
 set(Radiometry_documentation "This group contains algorithms related to the processing of image radiometry")
-set(Registration_documentation "This group contains algorithms related to registration of images")
+set(StereoProcessing_documentation "This group contains algorithms related to registration of images")
+set(SAR_documentation "This group contains algorithms related to SAR processing")
 set(Segmentation_documentation "This group contains algorithms related to image segmentaiton")
 set(ThirdParty_documentation "This group contains all Orfeo ToolBox third parties")
-set(Visualization_documentation "This group contains Ice (visualization framework) and IceViewer (visualization tool)")
-set(Wrappers_documentation "This group contains the application framework and the wrappers to use it")
-
 
 set(Remote_documentation "This group of modules is for OTB based code that have
 additional third-party dependencies not bundled with the toolkit,
@@ -127,12 +112,18 @@ foreach( group ${group_list} )
   endforeach()
 endforeach()
 
-if("$ENV{DASHBOARD_TEST_FROM_CTEST}" STREQUAL "")
-  # developer build
-  option(OTBGroup_Core "Request building core modules" ON)
-endif()
+#by default enable Core and Thirdparty modules
+option(OTBGroup_Core  "Request building Core modules" ON)
+option(OTBGroup_ThirdParty "Request using thirdparty modules" ON)
+
 foreach( group ${group_list})
-    option(OTBGroup_${group} "Request building ${group} modules" OFF)
+    if(NOT DEFINED OTBGroup_${group})
+      if(DEFINED OTB_BUILD_${group})
+        option(OTBGroup_${group} "Request building ${group} modules" ${OTB_BUILD_${group}})
+      else()
+        option(OTBGroup_${group} "Request building ${group} modules" OFF)
+      endif()
+    endif()
     if (OTBGroup_${group})
       foreach (otb-module ${_${group}_on_module_list} )
          list(APPEND OTB_MODULE_${otb-module}_REQUEST_BY OTBGroup_${group})
@@ -145,3 +136,20 @@ foreach( group ${group_list})
       set_property(CACHE OTBGroup_${group} PROPERTY TYPE BOOL)
     endif()
 endforeach()
+
+if(OTBGroup_Learning MATCHES ON)
+  set(OTB_USE_LIBSVM ON CACHE BOOL "Enable module LibSVM in OTB" FORCE)
+  set(OTB_USE_OPENCV ON CACHE BOOL "Enable module OPENCV in OTB" FORCE)
+  set(OTB_USE_SHARK ON CACHE BOOL "Enable module Shark in OTB" FORCE)
+else()
+  set(OTB_USE_LIBSVM OFF CACHE BOOL "Enable module LibSVM in OTB" FORCE)
+  set(OTB_USE_OPENCV OFF CACHE BOOL "Enable module OPENCV in OTB" FORCE)
+  set(OTB_USE_SHARK OFF CACHE BOOL "Enable module Shark in OTB" FORCE)
+endif()
+if(OTBGroup_FeaturesExtraction MATCHES ON)
+  set(OTB_USE_MUPARSER ON CACHE BOOL "Enable module MuParser in OTB" FORCE)
+  set(OTB_USE_MUPARSERX ON CACHE BOOL "Enable module MuParserX in OTB" FORCE)
+else()
+  set(OTB_USE_MUPARSER OFF CACHE BOOL "Enable module MuParser in OTB" FORCE)
+  set(OTB_USE_MUPARSERX OFF CACHE BOOL "Enable module MuParserX in OTB" FORCE)
+endif()

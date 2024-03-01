@@ -68,8 +68,8 @@ std::vector<std::string> GetXMLFilesInDirectory(const std::string & directoryPat
     else
     {
       //Extract only XML files
-      std::string extension = boost::filesystem::extension(item);
-      if (extension ==".xml")
+      std::string extension = boost::filesystem::path(item).extension().string();
+      if (extension == ".xml")
         fileList.push_back(item.path().string());
     }
   }

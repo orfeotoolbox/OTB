@@ -263,7 +263,7 @@ auto make_span(T (&arr)[N]) noexcept
 
 /**
  * Helper function to make a span from a contiguous container.
- * Compensate the fact we are not have access to C++17 `span{container}`.
+ * Compensate the fact we do not have access to C++17 `span{container}`.
  * \tparam ContiguousContainer  Auto deduced type of the container
  * \param[in] cont  container of contiguous elements
  * \return a span over `[c.data(), c.size())`

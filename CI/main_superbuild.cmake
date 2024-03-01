@@ -30,27 +30,23 @@ set (CMAKE_COMMAND "cmake")
 # retrieve XDK
 get_xdk()
 
-set( INSTALL_DIR "${XDK_PATH}" )
-
 if(WIN32)
-  file(TO_NATIVE_PATH "${XDK_PATH}" XDK_PATH_NATIVE)
+  file(TO_NATIVE_PATH "${XDK_INSTALL_PATH}" XDK_INSTALL_PATH_NATIVE)
   file(TO_NATIVE_PATH "${CTEST_BINARY_DIRECTORY}/bin" OTB_BUILD_BIN_DIR_NATIVE)
   set(ENV{PATH} "$ENV{PATH};${OTB_BUILD_BIN_DIR_NATIVE}" )
-  set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
-  set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
-  set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\data" )
-  set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share\\proj" )
-  # needed to load Qt plugins for testing, not for binary packages where we use a qt.conf file
-  set(ENV{QT_PLUGIN_PATH} "${XDK_PATH_NATIVE}\\plugins")
+  set(ENV{PATH} "${XDK_INSTALL_PATH_NATIVE}\\bin;$ENV{PATH}" )
+  set(ENV{PATH} "$ENV{PATH};${XDK_INSTALL_PATH_NATIVE}\\lib" )
+  set(ENV{GDAL_DATA} "${XDK_INSTALL_PATH_NATIVE}\\data" )
+  set(ENV{PROJ_LIB} "${XDK_INSTALL_PATH_NATIVE}\\share\\proj" )
   set( CTEST_ENVIRONMENT
 "PATH=$ENV{PATH}
 GDAL_DATA=$ENV{GDAL_DATA}
 PROJ_LIB=$ENV{PROJ_LIB}
 ")
 else()
-  set(ENV{PATH} "${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}" )
-  set( GDAL_DATA "${XDK_PATH}/share/gdal" )
-  set( PROJ_LIB "${XDK_PATH}/share" )
+  set(ENV{PATH} "${XDK_INSTALL_PATH}/lib:${XDK_INSTALL_PATH}/bin:$ENV{PATH}" )
+  set( GDAL_DATA "${XDK_INSTALL_PATH}/share/gdal" )
+  set( PROJ_LIB "${XDK_INSTALL_PATH}/share" )
   set( CTEST_ENVIRONMENT
 "PATH=$ENV{PATH}
 ")

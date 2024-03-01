@@ -39,10 +39,6 @@ rd /S /Q lib\otb
 del /S /Q lib\otb*
 del /S /Q lib\python\*otbApplication.* || exit 1
 del /S /Q bin\otb* || exit 1
-del /S /Q bin\monteverdi.exe || exit 1
-del /S /Q bin\mapla.exe || exit 1
-del /S /Q mapla.bat || exit 1
-del /S /Q monteverdi.bat || exit 1
 del /S /Q otbenv.* || exit 1
 del /S /Q start_devenv.bat || exit 1
 del /S /Q "OTB Project.zip" || exit 1

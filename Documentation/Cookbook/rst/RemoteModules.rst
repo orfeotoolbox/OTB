@@ -114,17 +114,10 @@ an external CMake project with an existing OTB installation.
 
   In this case, only the second behaviour (build as standalone) is available. This requires to specify cmake options for the build : 
     - Set the module to build as standalone with ``OTB_BUILD_MODULE_AS_STANDALONE=ON``
-    - Set the following option ``-DCMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0`` (see bellow)
     - Set the OTB install directory with the variable ``OTB_DIR``
     - Set an install folder for your libraries ``CMAKE_INSTALL_PREFIX=/theModulePath/install``
     - Set the runtime path *RPATH* of your libraries to your install/lib folder ``DCMAKE_INSTALL_RPATH=/theModulePath/install/lib``
     - Tell cmake to set runtime path using link path : ``CMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE`` (permits to avoid modifying your LD_LIBRARY_PATH)
-
-The OTB binaries are compiled with the option
-``GLIBCXX_USE_CXX11_ABI`` set to ``0``. This is why you have to build
-your remote module with the same option. If you don't, you will
-encounter a "symbol not found" error message while running your
-application.
 
 **Compilation and Installation**
 
@@ -151,11 +144,10 @@ the applications of your module will be installed in the same folder as OTB appl
 .. code-block:: bash
 
   mkdir /Path/to/Module/build && cd /Path/to/Module/build
-  cmake -DOTB_DIR=/PathTo/OTB/install -DOTB_BUILD_MODULE_AS_STANDALONE=ON
-  -DCMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0
+  cmake -DOTB_DIR=/PathTo/OTB/install/lib/cmake/OTB-9.0 -DOTB_BUILD_MODULE_AS_STANDALONE=ON
   -DCMAKE_INSTALL_PREFIX=/theModulePath/install -DCMAKE_INSTALL_RPATH=/theModulePath/install/lib 
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE ../
-  make install
+  make -j8 install
 
 the applications will be installed in ``/theModuleInstallFolder/lib`` and the binaries will be available in ``/theModuleInstallFolder/bin`` 
 
@@ -230,7 +222,7 @@ CMake plumbing of the module:
 .. code-block:: cmake
 
     if(NOT OTB_SOURCE_DIR)
-      find_package(BOOST REQUIRED)
+      find_package(Boost REQUIRED COMPONENTS filesystem serialization)
       find_package(OTB REQUIRED)
       list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
       # The Python interpreter is needed for Python tests
@@ -249,9 +241,8 @@ The overall file should look like this:
     cmake_minimum_required(VERSION 3.10.0)
     project(OTBTheModuleName)
     set(OTBTheModuleName_LIBRARIES OTBTheModuleName)
-
     if(NOT OTB_SOURCE_DIR)
-      find_package(BOOST REQUIRED)
+      find_package(Boost REQUIRED COMPONENTS filesystem serialization)
       find_package(OTB REQUIRED)
       list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
       # The Python interpreter is needed for Python tests
@@ -263,10 +254,10 @@ The overall file should look like this:
       otb_module_impl()
     endif()
 
-    Remarque: the command find_package(BOOST) is called before
-    find_package(OTB). This is due to the fact that FindBoost.cmake is
-    integrated to cmake, so it is better to use the official command
-    rather than the one integrated to the OTB.
+Remarque: the command find_package(Boost) is called before
+find_package(OTB). This is due to the fact that FindBoost.cmake is
+integrated to cmake, so it is better to use the official command
+rather than the one integrated to the OTB.
 
 **The include folder**
 
@@ -420,7 +411,7 @@ To add a **test executed by a Python script** using OTB Applications bindings:
         --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_EmptyApp> )
 
     otb_add_test(NAME otbEmptyScriptTest
-      COMMAND ${TEST_DRIVER} Execute ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/EmptyScript.py)
+      COMMAND ${TEST_DRIVER} Execute ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/EmptyScript.py)
 
 Overall CMakeLists.txt should look like:
 

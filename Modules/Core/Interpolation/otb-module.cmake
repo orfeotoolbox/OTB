@@ -34,4 +34,6 @@ otb_module(OTBInterpolation
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

@@ -118,7 +118,7 @@ else()
 
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt AND NOT ${otb-module}_NO_SRC AND "${${otb-module}-targets}")
     install(EXPORT ${${otb-module}-targets} DESTINATION "${OTB_INSTALL_PACKAGE_DIR}/Modules"
-      COMPONENT Development)
+      COMPONENT ${${otb-module}_COMPONENT})
   endif()
 
   set(OTB_TEST_OUTPUT_DIR "${CMAKE_BINARY_DIR}/Testing/Temporary")

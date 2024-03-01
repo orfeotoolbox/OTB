@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,11 +23,11 @@ INCLUDE_ONCE_MACRO(ZLIB)
 SETUP_SUPERBUILD(ZLIB)
 
 
-# Try official release 1.2.13
+# TODO: Detect whether there is a more recent version, and emit a warning if so.
 ExternalProject_Add(ZLIB
   PREFIX ZLIB
-  URL "https://zlib.net/zlib-1.2.13.tar.gz"
-  URL_MD5 9b8aa094c4e5765dabf4da391f00d15c
+  URL "https://www.zlib.net/fossils/zlib-1.3.1.tar.gz"
+  URL_HASH SHA256=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23
   BINARY_DIR ${ZLIB_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

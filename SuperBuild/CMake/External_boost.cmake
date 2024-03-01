@@ -75,9 +75,6 @@ set(BOOST_SB_CONFIG
   runtime-link=shared
   --prefix=${SB_INSTALL_PREFIX}
   )
-  # set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
-  # --includedir=${SB_INSTALL_PREFIX}/include #This is the default in boost
-  # --libdir=${_SB_BOOST_LIBRARYDIR} # same here
 
 set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
   -E chdir ${BOOST_SB_SRC}
@@ -89,8 +86,8 @@ set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
 #NOTE: update _SB_Boost_INCLUDE_DIR below when you change version number
 ExternalProject_Add(BOOST
   PREFIX BOOST
-  URL "https://downloads.sourceforge.net/project/boost/boost/1.72.0/boost_1_72_0.tar.bz2"
-  URL_MD5 cb40943d2a2cb8ce08d42bc48b0f84f0
+  URL "https://downloads.sourceforge.net/project/boost/boost/1.82.0/boost_1_82_0.tar.bz2"
+  URL_MD5 b45dac8b54b58c087bfbed260dbfc03a
   BINARY_DIR ${BOOST_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -105,9 +102,8 @@ ExternalProject_Add(BOOST
 
 #HINT: avoid all uses of  _SB_* in External_<project>.cmake
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
-if(MSVC)
-  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_72)
+if(WIN32)
+  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_82)
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()
-SUPERBUILD_PATCH_SOURCE(BOOST)

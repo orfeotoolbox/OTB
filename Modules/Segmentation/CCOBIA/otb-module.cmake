@@ -41,4 +41,7 @@ otb_module(OTBCCOBIA
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

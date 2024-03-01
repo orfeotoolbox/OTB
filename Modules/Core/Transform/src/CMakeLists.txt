@@ -21,6 +21,7 @@
 set(OTBTransform_SRC
   otbSarSensorModel.cxx
   otbSensorTransformFactory.cxx
+  otbRPCSolver.cxx
   )
 
 add_library(OTBTransform ${OTBTransform_SRC})
@@ -31,4 +32,4 @@ target_link_libraries(OTBTransform
   ${OTBBoostAdapters_LIBRARIES}
   )
 
-otb_module_target(OTBTransform)
+otb_module_target(OTBTransform COMPONENT_Core)

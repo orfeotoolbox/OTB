@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2023 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,6 +34,7 @@
 #include <cmath>
 #include <string>
 #include "OTBCommonExport.h"
+#include "otbMacro.h"
 
 namespace otb {
 
@@ -507,8 +508,8 @@ T to(string_view const& v, string_view const& context)
    if (ss << v && (ss >> res >> std::ws).eof())  {
       return res;
    }
-   throw std::runtime_error("Cannot decode "+v+" as "+
-         typeid(T).name() + " while " + context);
+   throw std::runtime_error("Cannot decode \""+v+"\" as \""+
+         typeid(T).name() + "\" while " + context);
 }
 
 /**
@@ -567,7 +568,8 @@ namespace details {
         Int res = 0;
         if (it != end) {
             switch (*it) {
-                case '-': is_negative = true; /*[[fallthrough]]*/
+                case '-': is_negative = true;
+                          OTB_FALLTHROUGH;
                 case '+': ++it;
             }
             for ( ; it != end ; ++it) {
