@@ -167,7 +167,7 @@ to manage dependencies. Both methods rely on CMake.
   compiled.  This method is the easiest to use and provides a complete OTB with
   minimal effort.
 
-* **Normal build**: OTB dependencies must already be compiled and available on
+* **Native build**: OTB dependencies must already be installed/compiled on
   your system. This method requires more work but provides more flexibility.
 
 If you do not know which method to use and just want to compile OTB with
@@ -178,8 +178,7 @@ Important CMake configuration variables:
 * ``CMAKE_INSTALL_PREFIX``: Installation directory, target for ``make install``
 * ``BUILD_EXAMPLES``: Activate compilation of OTB examples
 * ``BUILD_TESTING``: Activate compilation of the tests
-* ``OTB_BUILD_DEFAULT_MODULES``: Activate all usual modules, required to build the examples
-* ``OTB_USE_XXX``: Activate module *XXX*
+* ``OTB_USE_XXX``: Activate dependency *XXX* such as MUPARSER, OPENCV...
 * ``OTB_BUILD_ModuleName``: Enable building of optional modules (SAR,FeaturesExtraction...) used in the superbuild
 * ``OTBGroup_XXX``: Enable modules in the group *XXX* used in a native build
 * ``OTB_DATA_ROOT``: otb-data repository
@@ -189,10 +188,13 @@ Important CMake configuration variables:
 SuperBuild only:
 
 * ``DOWNLOAD_LOCATION``: Location to download dependencies
-* ``USE_SYSTEM_XXX``: Use the system’s *XXX* library
 
-SuperBuild: Build OTB and all dependencies
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**IMPORTANT NOTE**
+
+By default the Toolbox is only building the CORE modules, if you want to build the whole toolbox you have to activate the ``OTB_BUILD_ModuleName`` options for each additional module you want to build
+
+SuperBuild: build all OTB dependencies before building the toolbox against these dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OTB’s compilation is customized by specifying configuration variables.
 The most important configuration variables are shown in the
@@ -202,6 +204,8 @@ configuration variables is via the command line ``-D`` option:
 ::
 
     $ cd ~/OTB/build
+    # this example command will build the dependencies only for the CORE module of OTB
+    # see below for building the dependencies for the whole toolbox
     $ cmake -DCMAKE_INSTALL_PREFIX=~/OTB/install -DXDK_INSTALL_PATH=~/OTB/install ../otb/SuperBuild
 
 You can also set variables manually with ``cmake-gui`` or ``ccmake``.
@@ -212,20 +216,6 @@ step. Therefore this directory will be used even if you don’t use make
 install target. In fact there is no *make install* target for the
 SuperBuild. Also note that if not specified to cmake, a default install
 dir will be used, located in ``../superbuild_install``.
-
-By default, SuperBuild will not use any of libraries installed on
-system. All ``USE_SYSTEM_XXX`` are set to `OFF`. This is our recommended
-way of using SuperBuild. You are however free to use a system library if
-you want! You must be very much aware of dependencies of those
-libraries you use from system. For example, if libjpeg is not used from
-superbuild then you should not use zlib from superbuild because zlib is
-a dependency of libjpeg. Here SuperBuild will NOT set
-``USE_SYSTEM_ZLIB=FALSE``. One must re-run cmake with
-``-DUSE_SYSTEM_ZLIB=FALSE``. Above example of libjpeg-zlib dependency is
-so simple. Imagine the case for GDAL which depends on zlib, libjpeg,
-libtiff (with big tiff support), geotiff, sqlite, curl, geos, libkml,
-openjpeg. This is one of the reasons we recommend to use SuperBuild
-exclusively.
 
 All dependencies are configured and built in a way that help us to get
 an efficient OTB build. So we enable geotiff (with proj4 support),
@@ -266,7 +256,7 @@ Build the dependencies in the same folder as otb install
 ::
     
     $ mkdir ~/OTB/build && cd ~/OTB/build
-    $ cmake ../otb/SuperBuild -DCMAKE_INSTALL_PREFIX=~/OTB/install
+    $ cmake ../otb/SuperBuild -DCMAKE_INSTALL_PREFIX=~/OTB/install -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
     $ make -j8
 
 Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
@@ -279,51 +269,37 @@ will launch the command line version of the **ExtractROI** application,
 while:
 
 In order to ensure access to your OTB build from anywhere within your
-system, we recommend setting the following environment variables.
-First, add ``bin/`` directory to your PATH for easy access:
+system, we recommend calling `source ~/OTB/install/otbenv.profile`
 
-::
+Native build with system dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    export PATH=$PATH:~/OTB/install/bin
-
-Second, add the ``lib/`` directory to your ``LD_LIBRARY_PATH``:
-
-::
-
-    export LD_LIBRARY_PATH=~/OTB/install/lib:$LD_LIBRARY_PATH
-
-Normal build: Build only OTB
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Once all OTB dependencies are availables on your system, use CMake to
+Once all OTB dependencies are available on your system, use CMake to
 generate a Makefile:
 
 ::
 
     $ cd ~/OTB/build
+    # if you want to build only the Core module use this command
     $ cmake ../otb -DCMAKE_INSTALL_PREFIX=/Path/To/OTB_install
+    # if you want to build the whole toolbox not only the Core of OTB, use this command instead
+    $ cmake ../otb -DCMAKE_INSTALL_PREFIX=/Path/To/OTB_install -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
 
 Additionally, decide which module you wish to enable, together with tests and
 examples. Refer to table above for the list of CMake variables.
 
 OTB is modular. It is possible to only build some modules
-instead of the whole set. To deactivate a module (and the ones that
-depend on it) switch off the CMake variable
-``OTB_BUILD_DEFAULT_MODULES``, configure, and then switch off each
-``Module_module_name`` variable.
-
-Some of the OTB capabilities are considered as optional, and you can
-deactivate the related modules thanks to a set of CMake variables
-starting with ``OTB_USE_XXX``. The table below shows which modules
-are associated to these variables. It is very important to notice that
-these variable override the variable ``OTB_BUILD_DEFAULT_MODULES``.
+instead of the whole set. To activate an optional module (and the ones that
+depend on it) you can pass ``OTB_BUILD_ModuleName`` to cmake.
+The activation or deactivation of these variables will automatically switch ON or OFF
+the variable ``OTB_USE_XXX``. 
 
 You are now ready to compile OTB! Simply use the make command (other
 targets can be generated with CMake’s ``-G`` option):
 
 ::
 
-    $ make
+    $ make -j8
 
 The installation target will copy the binaries and libraries to the
 installation location:
@@ -337,15 +313,15 @@ installation location:
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_CURL**        | OTBCurl                |                                                                                                                                                                           |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_MUPARSER**    | OTBMuParser            | OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBMeanShift   |
+| **OTB\_USE\_MUPARSER**    | OTBMuParser            | FeaturesExtraction                                                                                                                                                        |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_MUPARSERX**   | OTBMuParserX           | OTBMathParserX OTBAppMathParserX                                                                                                                                          |
+| **OTB\_USE\_MUPARSERX**   | OTBMuParserX           | FeaturesExtraction                                                                                                                                                        |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_LIBSVM**      | OTBLibSVM              | optional for OTBSupervised OTBAppClassification                                                                                                                           |
+| **OTB\_USE\_LIBSVM**      | OTBLibSVM              | Learning                                                                                                                                                                  |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_OPENCV**      | OTBOpenCV              | optional for OTBSupervised OTBAppClassification                                                                                                                           |
+| **OTB\_USE\_OPENCV**      | OTBOpenCV              | Learning                                                                                                                                                                  |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_SHARK**       | OTBShark               | optional for OTBSupervised OTBAppClassification                                                                                                                           |
+| **OTB\_USE\_SHARK**       | OTBShark               | Learning                                                                                                                                                                  |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_6S**          | OTB6S                  | OTBOpticalCalibration OTBAppOpticalCalibration OTBSimulation                                                                                                              |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
