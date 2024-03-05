@@ -19,11 +19,13 @@
 #
 
 #Contact: Adrien Lagrange <adrien.lagrange@irit.fr>
-otb_fetch_module(OTBFFSforGMM
+set(mod_name OTBFFSforGMM)
+otb_fetch_module(${mod_name}
   "This module implements a method to perform a fast forward feature selection using a Gaussian Mixture Model. 
 A more detailed description can be found on the project website:
 https://github.com/Laadr/otbFFSforGMM
 "
+  "${CMAKE_CURRENT_SOURCE_DIR}/${mod_name}"
   GIT_REPOSITORY https://github.com/Laadr/otbFFSforGMM.git
   GIT_TAG d9c31cf51b59a4a10e4daa2858a85cd12561c696
   )
