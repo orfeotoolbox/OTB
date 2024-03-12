@@ -19,8 +19,8 @@
 #
 
 #Contact: Jordi Inglada  <jordi.inglada@cesbio.eu>
-set(mod_name OTBTemporalGapFilling)
-otb_fetch_module(${mod_name}
+set(__mod_name OTBTemporalGapFilling)
+otb_fetch_module(${__mod_name}
   "Gapfilling for time series replaces invalid pixels (as designated by a mask)
   by an interpolation using the valid dates of the series.
 A more detailed description can be found on the project website:
@@ -28,7 +28,7 @@ https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling
 
 Declares application ImageTimeSeriesGapFilling
 "
-  "${CMAKE_CURRENT_SOURCE_DIR}/${mod_name}"
+  "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling.git
   GIT_TAG master
 )
