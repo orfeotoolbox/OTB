@@ -19,13 +19,13 @@
 #
 # Contact: Thierry Koleck  <thierry.koleck@cnes.fr>
 
-set(mod_name S1TilingSupportApplications)
-otb_fetch_module(${mod_name}
+set(__mod_name S1TilingSupportApplications)
+otb_fetch_module(${__mod_name}
 "Speckle filtering of a time-serie of SAR images using the multichanel Quegan-like filter
 A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/s1-tiling/s1tilingsupportapplications
 "
-  "${CMAKE_CURRENT_SOURCE_DIR}/${mod_name}"
+  "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/s1-tiling/s1tilingsupportapplications
   # Commit on master branch
   GIT_TAG 2.0.0

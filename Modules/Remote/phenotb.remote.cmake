@@ -19,13 +19,15 @@
 #
 
 #Contact: Jordi Inglada  <jordi.inglada@cesbio.eu>
-otb_fetch_module(OTBPhenology
+set(__mod_name OTBPhenology)
+otb_fetch_module(${__mod_name}
   "This module implements several algorithms allowing to extract phenological
   information from time profiles. These time profiles should represent
   vegetation status as for instance NDVI, LAI, etc.
 A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/phenotb
 "
+  "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/phenotb.git
   GIT_TAG 72ba22feac301ae00869b5604c2eef17d6a3fae5
   )
