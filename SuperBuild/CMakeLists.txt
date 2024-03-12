@@ -49,7 +49,6 @@ mark_as_advanced(BUILD_SHARED_LIBS)
 option(BUILD_GEOS_STATIC_LIBS "Build GEOS with static libraries." OFF)
 mark_as_advanced(BUILD_GEOS_STATIC_LIBS)
 option(BUILD_ALWAYS "Always build or install OTB." ON)
-option(WITH_REMOTE_MODULES "Build with specific list of remote modules." ${OTB_BUILD_RemoteModules})
 option(OTB_USE_OPENMP "use openmp" OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
 
@@ -269,6 +268,9 @@ option(OTB_BUILD_SAR "Enable building of SAR module" OFF)
 option(OTB_BUILD_Segmentation "Enable building of segmentation module" OFF)
 option(OTB_BUILD_StereoProcessing "Enable building of Stereo module" OFF)
 option(OTB_BUILD_RemoteModules "Enable building of Remote modules" OFF)
+
+# backward compat?
+option(WITH_REMOTE_MODULES "Build with specific list of remote modules." ${OTB_BUILD_RemoteModules})
 
 # Dependencies options
 option(OTB_USE_6S "Enable module 6S in OTB" ON)

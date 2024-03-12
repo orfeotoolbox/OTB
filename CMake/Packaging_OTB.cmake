@@ -63,6 +63,7 @@ cpack_add_component(Hyperspectral
                     [DESCRIPTION "Contains all Hyperspectral libraries and applications for OTB" ]
                     [OPTIONAL])
 
+# NOTE TLA: packaging -> remove it if disabled
 cpack_add_component(Miscellaneous
                     [DISPLAY_NAME Miscellaneous]
                     [DESCRIPTION "Contains Miscellaneous libraries and applications for OTB" ]
