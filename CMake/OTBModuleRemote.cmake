@@ -178,7 +178,6 @@ function(otb_fetch_module _name _description _destination)
       "${_fetch_options_GIT_REPOSITORY}"
       "${_fetch_options_GIT_TAG}"
       ${_destination}
-      "${OTB_SOURCE_DIR}/Modules/Remote/${_name}"
       )
   endif()
 endfunction()
