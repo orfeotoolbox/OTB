@@ -40,7 +40,8 @@ interfaces are:
 +------------------------+-------------------------+--------------------------------------------------------------------+
 | Sentinel 1             | TIFF                    | Use the tiff file, not the manifest.                               |
 +------------------------+-------------------------+--------------------------------------------------------------------+
-| Sentinel 2             | JPEG2000 / TIFF | Use JPEG2000 or TIFF file instead of XML as band order in XML is not correctly supported. |
+| Sentinel 2             | JPEG2000 / TIFF         | Use JPEG2000 or TIFF file instead of XML as band order in XML      |
+|                        |                         | is not correctly supported.                                        |
 +------------------------+-------------------------+--------------------------------------------------------------------+
 | Spot 5                 | DIMAP / TIFF            | RPC not available.                                                 |
 +------------------------+-------------------------+--------------------------------------------------------------------+
