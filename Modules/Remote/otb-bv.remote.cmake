@@ -19,13 +19,13 @@
 #
 
 #Contact: Jordi Inglada  <jordi.inglada@cesbio.eu>
-set(mod_name OTBBioVars)
-otb_fetch_module(${mod_name}
+set(__mod_name OTBBioVars)
+otb_fetch_module(${__mod_name}
   "Biophysical variable estimation from remote sensing imagery.
 A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/otb-bv
 "
-  "${CMAKE_CURRENT_SOURCE_DIR}/${mod_name}"
+  "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/otb-bv.git
   GIT_TAG 0e56e487aebc4a493e25223960560e9ef0ca27ec
 )
