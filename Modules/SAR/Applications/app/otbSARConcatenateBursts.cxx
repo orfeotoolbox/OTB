@@ -155,7 +155,7 @@ private:
 
       // Check invalid Pixel Key
       const bool inputWithInvalidPixels_loop = vectIm->GetImageMetadata().Has("invalid_pixels") &&
-                                               vectIm->GetImageMetadata()["support_data.invalid_pixels"] == "yes";
+                                               vectIm->GetImageMetadata()["invalid_pixels"] == "yes";
 
       if (inputWithInvalidPixels_loop != inputWithInvalidPixels)
       {
