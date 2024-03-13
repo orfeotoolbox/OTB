@@ -19,8 +19,8 @@
 #
 
 #Contact: Gaëlle USSEGLIO
-otb_fetch_module(DiapOTBModule
-  "OTB module for SAR processing in Diapason."
-  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/remote_modules/diapotb.git
-  GIT_TAG 53f07e97771569b6581a56b9ee427c2acc81d32b
+otb_fetch_module(PyDiapOTBModule
+  "Python OTB module for SAR processing in Diapason."
+  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/remote_modules/pydiapotb.git
+  GIT_TAG d92c6014504205a653b50e7d7695b8b46dc565c4
 )
