@@ -33,6 +33,7 @@ otbInverseLogPolarTransformResample.cxx
 otbStreamingResampleImageFilterWithAffineTransform.cxx
 otbRPCTransformTest.cxx
 otbSarTransformTest.cxx
+otbSpot5TransformTest.cxx
 )
 
 add_executable(otbTransformTestDriver ${OTBTransformTests})
