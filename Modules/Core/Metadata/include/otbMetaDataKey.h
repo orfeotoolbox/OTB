@@ -224,6 +224,7 @@ enum class MDGeom
   SensorGeometry, // -> boost::any
   GCP,            // -> GCPParam
   Adjustment,     // -> ?
+  Spot5Geometry, //Spot5Param
   END
 };
 

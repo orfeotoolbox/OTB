@@ -33,28 +33,29 @@
 namespace otb
 {
 
-/** \struct Orbit
+/** \struct Ephemeris
  *
- * \brief This structure is used to handle orbit information
+ * \brief This structure is used to handle Ephemeris information
  */
-struct OTBMetadata_EXPORT Orbit
+struct OTBMetadata_EXPORT Ephemeris
 {
   using PointType = itk::Point<double, 3>;
+  using VectorType = itk::Vector<double, 3>;
 
-  /** Timestamp at which orbit state vectors apply */
+  /** Timestamp at which Ephemeris state vectors apply */
   //MetaData::TimePoint time;
   double time;
 
   /** Position vector */
   PointType position;
   /** Velocity vector */
-  PointType velocity;
+  VectorType velocity;
 
   /** Keywordlist export */
   void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
 
   /** Keywordlist import */
-  static Orbit FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
+  static Ephemeris FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 /** \struct Spot5Param
@@ -88,7 +89,11 @@ struct OTBMetadata_EXPORT Spot5Param
   std::vector<double> PixelLookAngleX;
   std::vector<double> PixelLookAngleY;
 
-  std::vector<Orbit> EcefSamples;
+  //std::vector<Ephemeris> EcefSamples;
+  std::vector<Point3DType> EcefPosSamples;
+  std::vector<Point3DType> EcefVelSamples;
+  std::vector<double> EcefTimeSamples;
+
 
 
 };
