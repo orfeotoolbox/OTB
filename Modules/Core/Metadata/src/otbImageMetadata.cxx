@@ -67,6 +67,11 @@ const SARParam & ImageMetadataBase::GetSARParam() const
   return boost::any_cast<const SARParam &>(GeometryKeys.at(MDGeom::SAR));
 }
 
+/*const SPOT5Param & ImageMetadataBase::GetSpot5Param() const
+{
+  return boost::any_cast<const Spot5Param &>(GeometryKeys.at(MDGeom::Spot5));
+}*/
+
 std::string ImageMetadataBase::GetProjectedGeometry() const
 {
   if (this->Has(MDGeom::ProjectionWKT))
@@ -122,7 +127,7 @@ size_t ImageMetadataBase::Remove(const MDGeom& key)
 
 size_t ImageMetadataBase::RemoveSensorGeometry()
 {
-  return Remove(MDGeom::RPC) + Remove(MDGeom::SAR) + Remove(MDGeom::SensorGeometry);
+  return Remove(MDGeom::RPC) + Remove(MDGeom::SAR) + Remove(MDGeom::SensorGeometry) +  Remove(MDGeom::Spot5Geometry);
 }
 
 size_t ImageMetadataBase::RemoveProjectedGeometry()
@@ -137,7 +142,7 @@ bool ImageMetadataBase::Has(const MDGeom& key) const
 
 bool ImageMetadataBase::HasSensorGeometry() const
 {
-  return Has(MDGeom::RPC) || Has(MDGeom::SAR) || Has(MDGeom::SensorGeometry);
+  return Has(MDGeom::RPC) || Has(MDGeom::SAR) || Has(MDGeom::SensorGeometry) || Has(MDGeom::Spot5Geometry);
 }
 
 bool ImageMetadataBase::HasProjectedGeometry() const
@@ -328,7 +333,7 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
 {
   kwl.clear();
   std::ostringstream oss;
-
+  // SPOT5 TODO
   // Converting the GeomKeys
   for (const auto& kv : GeometryKeys)
   {
@@ -916,6 +921,8 @@ bool HasSameRPCModel(const ImageMetadataBase& a, const ImageMetadataBase& b)
   // Both don't have a model
   return true;
 }
+
+// TODO SPOT5
 
 bool HasSameSARModel(const ImageMetadataBase& a, const ImageMetadataBase& b)
 {

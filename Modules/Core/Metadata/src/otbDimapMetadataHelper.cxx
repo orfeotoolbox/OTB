@@ -21,7 +21,7 @@
 #include "otbDimapMetadataHelper.h"
 #include "itkPoint.h"
 #include "itkPointSet.h"
-#include "otbSpot5Metadata.h"
+// #include "otbSpot5Metadata.h"
 
 namespace otb
 {
@@ -336,7 +336,7 @@ void DimapMetadataHelper::ParseDimapV2(const MetadataSupplierInterface & mds, co
   }
 }
 
-void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds, const std::string & prefix){
+void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds, Spot5Param& spot5Param, const std::string & prefix){
 
   using Point3DType = itk::Point<double, 3>;
   using Point2DType = itk::Point<double, 2>;
@@ -356,45 +356,33 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   double sampletime, second;
   int year, month, day, hour, minute;
 
+  //Spot5Param spot5Param;
+
   /* RefLineTime and RefLineTime */
   // acquisitionDate convert to date since 2002 (spot5 launch)
-  res = mds.GetMetadataValue(prefix + "Data_Strip.Sensor_Configuration.Time_Stamp.SCENE_CENTER_TIME", hasValue);
-
-  // Time stamps are in the format: "yyyy-mm-ddThh:mm:ss.ssssss"
-  int converted = sscanf(res.c_str(),
-                        "%4d-%2d-%2dT%2d:%2d:%9lf",
-                        &year, &month, &day,
-                        &hour, &minute, &second);
-  RefLineTime = (((((year-2002.0)*12.0 + month - 1.0)*365.0 + day - 1.0)*24.0
-            + hour)*60.0 + minute)*60.0 + second;
-
-  res = mds.GetMetadataValue(prefix + "Data_Strip.Sensor_Configuration.Time_Stamp.SCENE_CENTER_LINE", hasValue);
-  RefLineTimeLine = stoi(res);
-
-  res = mds.GetMetadataValue(prefix + "Data_Strip.Sensor_Configuration.Time_Stamp.LINE_PERIOD", hasValue);
-  LineSamplingPeriod = std::stod(res);
+  spot5Param.RefLineTime = GetTime(mds.GetMetadataValue(prefix + "Data_Strip.Sensor_Configuration.Time_Stamp.SCENE_CENTER_TIME", hasValue));
+  spot5Param.RefLineTimeLine = stoi(mds.GetMetadataValue(prefix + "Data_Strip.Sensor_Configuration.Time_Stamp.SCENE_CENTER_LINE", hasValue)) - 1.0;
+  spot5Param.LineSamplingPeriod = std::stod(mds.GetMetadataValue(prefix + "Data_Strip.Sensor_Configuration.Time_Stamp.LINE_PERIOD", hasValue));
 
   /* ImageSize */
   // If SWIR /2 size?
-  res = mds.GetMetadataValue(prefix + "Raster_Dimensions.NCOLS", hasValue);
-  ImageSize[0] = stoi(res);
-  res = mds.GetMetadataValue(prefix + "Raster_Dimensions.NROWS", hasValue);
-  ImageSize[1] = stoi(res);
+  spot5Param.ImageSize[0] = stoi(mds.GetMetadataValue(prefix + "Raster_Dimensions.NCOLS", hasValue));
+  spot5Param.ImageSize[1] = stoi(mds.GetMetadataValue(prefix + "Raster_Dimensions.NROWS", hasValue));
 
   /* SubImageOffset */
   res = mds.GetMetadataValue(prefix + "Data_Processing.Regions_Of_Interest.Region_Of_Interest.COL_MIN", hasValue);
   if (hasValue) {
-    SubImageOffset[0] = std::stod(res);
+    spot5Param.SubImageOffset[0] = std::stod(res) - 1.0;
   }
   else {
-    SubImageOffset[0] = 0.0;
+    spot5Param.SubImageOffset[0] = 0.0;
   }
   res = mds.GetMetadataValue(prefix + "Data_Processing.Regions_Of_Interest.Region_Of_Interest.ROW_MIN", hasValue);  
   if (hasValue) {
-    SubImageOffset[1] = std::stod(res);
+    spot5Param.SubImageOffset[1] = std::stod(res) - 1.0;
   }
   else {
-    SubImageOffset[1] = 0.0;
+    spot5Param.SubImageOffset[1] = 0.0;
   }
 
   /* Satellite Attitudes */
@@ -415,31 +403,21 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   for (int i=0; i < size_vector; i++){
 
     Point3DType point3d;
-    point3d[0] = yaw_vector[i];
-    point3d[1] = pitch_vector[i];
-    point3d[2] = roll_vector[i];
-    AttitudesSamples.push_back(std::move(point3d));
-    int converted = sscanf(string_vector[i].c_str(),
-                          "%4d-%2d-%2dT%2d:%2d:%9lf",
-                          &year, &month, &day,
-                          &hour, &minute, &second);
-    sampletime = (((((year-2002.0)*12.0 + month - 1.0)*365.0 + day - 1.0)*24.0
-            + hour)*60.0 + minute)*60.0 + second;
-
-    AttitudesSamplesTimes.push_back(sampletime);
+    point3d[0] = pitch_vector[i];
+    point3d[1] = roll_vector[i];
+    point3d[2] = yaw_vector[i];
+    spot5Param.AttitudesSamples.push_back(std::move(point3d));
+    sampletime = GetTime(string_vector[i]);
+    spot5Param.AttitudesSamplesTimes.push_back(sampletime);
 
   }
 
-  // Cas Raw Attitude
-
-  // TODO
-
+  // TODO Cas Raw Attitude
 
   /* Look Angles */
 
   // Use look angles from Green band
   // /!\ Warning chech condition with SWIR band not clear in OSSIM!
-  int band_index = 1;
   bool notFind = true;
   int i = 1;
   std::string expr;
@@ -447,30 +425,22 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   hasValue = false;
   while (i < m_Data.BandIDs.size() && notFind ){
     expr = prefix + "Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".BAND_INDEX";
-    res = mds.GetMetadataValue(expr, hasValue);
-    if (res == "3") {
-      notFind = false;
-    }
-    else {
-      i++;
-    }
-
+    mds.GetMetadataValue(expr, hasValue) == "2" ? notFind=false:i++;
   }
 
   expr = "Dimap_Document.Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".Look_Angles_List.Look_Angles";           
-  ParseVector(mds, expr, "PSI_X", PixelLookAngleX);  
-  ParseVector(mds, expr, "PSI_Y", PixelLookAngleY); 
-  int test = PixelLookAngleX.size();
+  ParseVector(mds, expr, "PSI_X", spot5Param.PixelLookAngleX);  
+  ParseVector(mds, expr, "PSI_Y", spot5Param.PixelLookAngleY); 
 
 
-  // Cas mtd verssion == 1.1
+  // TODO Cas mtd verssion == 1.1
 
-  // Cas nbr look angles != image size
+  // TODO Cas nbr look angles != image size
 
-  // Cas nbr look angles == image size
+  // TODO Cas nbr look angles == image size
 
   /* Ephemeris*/
-  std::vector<Orbit> EcefSamples;
+  //std::vector<Ephemeris> EcefSamples;
 
   std::vector<double> pos_x, pos_y, pos_z, vel_x, vel_y, vel_z;
 
@@ -495,22 +465,31 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
 
   for (int i=0; i < size_vector; i++){
 
-    Orbit orbit;
-    orbit.position[0] = pos_x[i];
-    orbit.position[1] = pos_y[i];
-    orbit.position[2] = pos_z[i];
-    orbit.velocity[0] = vel_x[i];
-    orbit.velocity[1] = vel_y[i];
-    orbit.velocity[2] = vel_z[i];
-    sscanf(string_vector[i].c_str(),
-                      "%4d-%2d-%2dT%2d:%2d:%9lf",
-                      &year, &month, &day,
-                      &hour, &minute, &second);
-    sampletime = (((((year-2002.0)*12.0 + month - 1.0)*365.0 + day - 1.0)*24.0
-            + hour)*60.0 + minute)*60.0 + second;
-    orbit.time = sampletime;
+    // Ephemeris ephemeris;
+    // ephemeris.position[0] = pos_x[i];
+    // ephemeris.position[1] = pos_y[i];
+    // ephemeris.position[2] = pos_z[i];
+    // ephemeris.velocity[0] = vel_x[i];
+    // ephemeris.velocity[1] = vel_y[i];
+    // ephemeris.velocity[2] = vel_z[i];
+    // sampletime = GetTime(string_vector[i]);
+    // ephemeris.time = sampletime;
 
-    EcefSamples.push_back(std::move(orbit));
+    // spot5Param.EcefSamples.push_back(std::move(ephemeris));
+
+    Point3DType position;
+    Point3DType velocity;
+    position[0] = pos_x[i];
+    position[1] = pos_y[i];
+    position[2] = pos_z[i];
+    velocity[0] = vel_x[i];
+    velocity[1] = vel_y[i];
+    velocity[2] = vel_z[i];
+    sampletime = GetTime(string_vector[i]);
+
+    spot5Param.EcefPosSamples.push_back(std::move(position));
+    spot5Param.EcefVelSamples.push_back(std::move(velocity));
+    spot5Param.EcefTimeSamples.push_back(sampletime);
 
   }
 
