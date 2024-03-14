@@ -35,6 +35,7 @@ otbRPCTransformTest.cxx
 otbSarTransformTest.cxx
 otbRPCSolverTest.cxx
 otbLeastSquareAffineTransformEstimator.cxx
+otbSpot5TransformTest.cxx
 )
 
 add_executable(otbTransformTestDriver ${OTBTransformTests})

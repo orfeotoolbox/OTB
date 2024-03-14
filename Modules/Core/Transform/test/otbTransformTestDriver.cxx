@@ -36,4 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbSarTransformTest);
   REGISTER_TEST(otbRPCSolverTest);
   REGISTER_TEST(otbLeastSquareAffineTransformEstimator);
+  REGISTER_TEST(otbSpot5TransformTest);
 }

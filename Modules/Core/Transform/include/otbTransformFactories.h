@@ -30,6 +30,8 @@
 #include "otbRPCInverseTransform.h"
 #include "otbSarForwardTransform.h"
 #include "otbSarInverseTransform.h"
+#include "otbSpot5ForwardTransform.h"
+#include "otbSpot5InverseTransform.h"
 
 namespace otb {
 
@@ -110,6 +112,42 @@ SARInverseTransformFactory(const ImageMetadata &imd, TransformDirection directio
   if(imd.Has(MDGeom::SAR))
   {
     auto transform = SarInverseTransform<TScalarType, NInputDimensions,NOutputDimensions>::New();
+    if(transform->getDirection() != direction)
+      return nullptr;
+    transform->SetMetadata(imd);
+    return DynamicCast<typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>>(transform);
+  }
+  return nullptr;
+}
+
+/**
+ * Factory for the forward transformer based on the Spot5 sensor model
+ */
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
+Spot5ForwardTransformFactory(const ImageMetadata &imd, TransformDirection direction)
+{
+  if(imd.Has(MDGeom::Spot5Geometry))
+  {
+    auto transform = Spot5ForwardTransform<TScalarType, NInputDimensions,NOutputDimensions>::New();
+    if(transform->getDirection() != direction)
+      return nullptr;
+    transform->SetMetadata(imd);
+    return DynamicCast<typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>>(transform);
+  }
+  return nullptr;
+}
+
+/**
+ * Factory for the inverse transformer based on the Spot5 sensor model
+ */
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
+Spot5InverseTransformFactory(const ImageMetadata &imd, TransformDirection direction)
+{
+  if(imd.Has(MDGeom::Spot5Geometry))
+  {
+    auto transform = Spot5InverseTransform<TScalarType, NInputDimensions,NOutputDimensions>::New();
     if(transform->getDirection() != direction)
       return nullptr;
     transform->SetMetadata(imd);
