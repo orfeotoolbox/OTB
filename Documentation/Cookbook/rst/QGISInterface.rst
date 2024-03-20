@@ -1,16 +1,45 @@
 QGIS interface
 ==============
 
-OTB Applications are fully integrated in QGIS since QGIS 3.8.
-You can configure OTB for QGIS according to the:
+OTB Applications can be used with QGis:
 
-- `QGIS Provider documentation for latest LTR <https://docs.qgis.org/latest/en/docs/user_manual/processing/3rdParty.html>`_.
-- `QGIS Provider documentation <https://docs.qgis.org/testing/en/docs/user_manual/processing/3rdParty.html>`_.
+- Since QGis 3.8 and until 3.34, OTB provider is fully integrated
+- Since QGis 3.36, OTB provider is available in QGis plugin's catalog
 
+.. warning:: Since QGIS 3.22 and until 3.34: the plugin is not activated by default. It should be activated in the plugins settings (``Plugins/Manage and Install Plugins...`` toolbar). The plugin should then be configured as detailed in the QGIS documentation (see the links provided above).
 
-.. warning:: Since QGIS 3.22: the plugin is not activated by default. It should be activated in the plugins settings (``Plugins/Manage and Install Plugins...`` toolbar). The plugin should then be configured as detailed in the QGIS documentation (see the links provided above).
+Plugin installation
+-------------------
+
+.. note:: Instructions only valid since QGis 3.36
+
+The easiest method is to install OTB provider plugin from QGis catalog:
+
+- :menuselection:`Plugin --> Manage and Install Plugins...`
+- Go to :guilabel:`Not installed` list and search for otb
+- Install plugin, it should be available in :guilabel:`Installed` list
+
+If you need the plugin on a terminal disconnected from public network, use the following instructions. You need at least one terminal connected to network and a way to transfer plugin from one terminal to another:
+
+- Download plugin from https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-qgis-plugin ( :guilabel:`Code` button on right then :guilabel:`zip` in download source code section)
+- Transfer you files from one terminal to another and unzip it somewhere
+- copy only ``orfeoToolbox_provider`` folder to ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+- Plugin should be available
 
 .. image:: Art/plugins.png
+
+Plugin configuration
+--------------------
+
+When installed, to use OTB in QGIS you need to setup the provider plugin:
+
+- Open the processing settings: :menuselection:`Settings --> Options --> Processing`
+- You can see ``OTB`` under :menuselection:`Providers` menu (see following picture):
+
+    - Expand the :guilabel:`OTB` entry
+    - Set the :guilabel:`OTB folder`. This is the location of your OTB installation.
+    - Set the :guilabel:`OTB application folder`. This is the location of your OTB applications ( :file:`<PATH_TO_OTB_INSTALLATION>/lib/otb/applications`)
+    - Click :guilabel:`OK` to save the settings and close the dialog.
 
 .. image:: Art/plugins_config.png
 
@@ -42,5 +71,6 @@ The table below summarizes which version of OTB can be used with which version o
 
 Issue tracking
 --------------
+
 If you encounter issues with integration of OTB application into QGIS,
-please `fill an issue <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/new?issue[assignee_id]=&issue[milestone_id]=>`_ into the OTB issue tracker with `qgis` label.
+please `fill an issue in otb-qgis-plugin board <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-qgis-plugin/-/issues/new?issue[assignee_id]=&issue[milestone_id]=>`_ .
