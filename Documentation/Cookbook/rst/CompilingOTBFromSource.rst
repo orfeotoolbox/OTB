@@ -25,7 +25,7 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | **Library**                                                      | **Mandatory**         | **Minimum version**        | **Superbuild Version**   |
     +==================================================================+=======================+============================+==========================+
-    | `Boost <http://www.boost.org>`_                                  | Yes                   |                            | 1.82.0                   |
+    | `Boost <http://www.boost.org>`_                                  | Yes                   | 1.73.0                     | 1.82.0                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `Expat <https://sourceforge.net/projects/expat/>`_               | Yes                   |                            | 2.5.0                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -119,10 +119,10 @@ Debian / Ubuntu
 
     # Install mandatory dependencies
     apt install -y --no-install-recommends libboost-filesystem-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libcurl4-gnutls-dev libgdal-dev python3-gdal libexpat1-dev libfftw3-dev libgeotiff-dev libgsl-dev libinsighttoolkit4-dev libgeotiff-dev libpng-dev libtinyxml-dev
-    
+
     # Install optional dependencies
     apt install -y --no-install-recommends libmuparser-dev libmuparserx-dev libkml-dev libopencv-core-dev libopencv-ml-dev libopenmpi-dev libsvm-dev
-         
+
 
 Setting up the build environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -245,7 +245,7 @@ Build the dependencies in another folder than otb install path
     # here use the OTB_BUILD var that will take care to build all dependencies needed for them
     $ cmake ../otb/Superbuild -DCMAKE_INSTALL_PREFIX=$PWD/../xdk -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
     $ make OTB_DEPENDS
-    # now build OTB 
+    # now build OTB
     $ cd .. && mkdir otb_build && cd otb_build
     $ cmake ../otb -DXDK_INSTALL_PATH=/Path/To/xdk -DCMAKE_PREFIX_PATH=~/Workspace/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/install
     $ make -j8
@@ -254,7 +254,7 @@ Build the dependencies in the same folder as otb install
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
-    
+
     $ mkdir ~/OTB/build && cd ~/OTB/build
     $ cmake ../otb/SuperBuild -DCMAKE_INSTALL_PREFIX=~/OTB/install -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
     $ make -j8
@@ -292,7 +292,7 @@ OTB is modular. It is possible to only build some modules
 instead of the whole set. To activate an optional module (and the ones that
 depend on it) you can pass ``OTB_BUILD_ModuleName`` to cmake.
 The activation or deactivation of these variables will automatically switch ON or OFF
-the variable ``OTB_USE_XXX``. 
+the variable ``OTB_USE_XXX``.
 
 You are now ready to compile OTB! Simply use the make command (other
 targets can be generated with CMake’s ``-G`` option):
@@ -333,14 +333,14 @@ Table: Third parties and related modules.
 Packaging
 ---------
 
-Before OTB 9, the packaging was done using makeself which delivers a .run self extractable file. The main problem of this method was the huge number of 
+Before OTB 9, the packaging was done using makeself which delivers a .run self extractable file. The main problem of this method was the huge number of
 steps required to have a single package (a successive call to 12 cmake files). In OTB9 we decided to do the packaging with CPack which is included in CMake, making it very simple to package OTB.
-The packaging is done via the "install" routines in the CMake Code. 
+The packaging is done via the "install" routines in the CMake Code.
 The file describing the packaging is Package_OTB.cmake that you can find in the CMake folder.
 
 To make the packages for OTB, you should simply call :
 
-:: 
+::
 
     $ cd ~/OTB/build
     $ make package
@@ -348,7 +348,7 @@ To make the packages for OTB, you should simply call :
 By default the generated package contains all the modules and will be delivered in the subfolder build_packages.
 If you want to package OTB by module, you can set the variable ``CPACK_ARCHIVE_COMPONENT_INSTALL`` to *ON* :
 
-:: 
+::
 
     $ cd ~/OTB/build
     $ cmake . -DCPACK_ARCHIVE_COMPONENT_INSTALL=ON
