@@ -198,13 +198,7 @@ BCOInterpolateImageFunction<otb::VectorImage<TPixel, VImageDimension>, TCoordRep
   IndexType baseIndex;
   IndexType neighIndex;
 
-
-#if BOOST_VERSION >= 105800
-  // faster path for <= 8 components
   boost::container::small_vector<ScalarRealType, 8> lineRes(componentNumber);
-#else
-  std::vector<ScalarRealType> lineRes(componentNumber);
-#endif
 
   OutputType output(componentNumber);
   output.Fill(itk::NumericTraits<ScalarRealType>::Zero);
