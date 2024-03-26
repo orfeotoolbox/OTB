@@ -72,6 +72,9 @@ public:
   /** Check model validity */
   bool IsValidSensorModel() const override;
 
+  /** Refining the sensor model */
+  void OptimizeParameters(ImageMetadata& imd, const TiePointsType& tiepoints, double& rmsError) final;
+
 protected:
   Spot5TransformBase(TransformDirection dir) : Superclass(dir) {};
   ~Spot5TransformBase() = default;
