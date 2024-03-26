@@ -54,6 +54,7 @@ public:
 
   using InputPointType  = itk::Point<TScalarType, NInputDimensions>;
   using OutputPointType = itk::Point<TScalarType, NOutputDimensions>;
+  using TiePointsType = std::vector<std::pair<InputPointType,OutputPointType>>;
   using PixelType =TScalarType;
   //@}
 
