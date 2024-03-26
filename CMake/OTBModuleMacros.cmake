@@ -33,6 +33,18 @@ if(OTB_CPPCHECK_TEST)
   include(${_OTBModuleMacros_DIR}/OTBModuleCPPCheckTest.cmake)
 endif()
 
+# Declare usefull OTB_MODULE_ vars
+# OUTPUT:
+# - OTB_MODULE_${otb-module}_DECLARED == 1
+# - OTB_MODULE_${otb-module}-Test_DECLARED == 1
+# - OTB_MODULE_${otb-module}_DEPENDS empty by default, can be set with DEPENDS arg. This list is sorted
+# - OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS same as DEPENDS. This list is sorted
+# - OTB_MODULE_${otb-module}_Test_DEPENDS same as DEPENDS. This list is sorted
+# - OTB_MODULE_${otb-module}_DESCRIPTION == "description", can be changed by DESCRIPTION
+# - OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT == 0 by default but can be set with EXCLUDE_FROM_DEFAULT and EXCLUDE_FROM_ALL
+# - OTB_MODULE_${otb-module}_ENABLE_SHARED == 0 but can be changed with ENABLE_SHARED arg
+# - OTB_MODULE_${otb-module}_COMPONENT == Core, can be changed with COMPONENT arg
+# - OTB_MODULE_${otb-module}_IS_DEPRECATED which can be declared and set with DEPRECATED arg
 macro(otb_module _name)
   otb_module_check_name(${_name})
   set(otb-module ${_name})
@@ -106,7 +118,8 @@ macro(otb_module_check_name _name)
 endmacro()
 
 macro(otb_module_impl)
-  include(otb-module.cmake) # Load module meta-data
+  # Load module meta-data, this declare all needed vars with otb_module macro
+  include(otb-module.cmake)
   set(${otb-module}_INSTALL_RUNTIME_DIR ${OTB_INSTALL_RUNTIME_DIR})
   set(${otb-module}_INSTALL_LIBRARY_DIR ${OTB_INSTALL_LIBRARY_DIR})
   set(${otb-module}_INSTALL_ARCHIVE_DIR ${OTB_INSTALL_ARCHIVE_DIR})
@@ -198,7 +211,7 @@ macro(otb_module_impl)
   endif()
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/src/CMakeLists.txt)
-    set_property(GLOBAL APPEND PROPERTY OTBTargets_MODULES ${otb-module})
+    set_property(GLOBAL APPEND PROPERTY OTB${OTB_MODULE_${otb-module}_COMPONENT}Targets_MODULES ${otb-module})
     add_subdirectory(src)
   endif()
 
@@ -348,8 +361,18 @@ macro(otb_module_target_install _name _component)
     )
 endmacro()
 
-macro(otb_module_target _name)
+macro(otb_module_target_install_cmake_helper _name _component)
+  message(STATUS "File ${${otb-module}-targets}.cmake of ${_name} of module ${otb-module} part of ${_component} will be installed in ${${otb-module}_INSTALL_LIBRARY_DIR}/cmake")
+  install(EXPORT ${${otb-module}-targets}
+          FILE ${${otb-module}-targets}.cmake
+          NAMESPACE Otb::
+          DESTINATION ${${otb-module}-targets-install}
+          COMPONENT ${_component})
+endmacro()
+
+macro(otb_module_target _name _component)
   set(_install 1)
+  set(_external 0)
   set(_component Core)
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(NO_INSTALL)$")
@@ -357,6 +380,8 @@ macro(otb_module_target _name)
     elseif("${arg}" MATCHES "^COMPONENT_[a-zA-Z]+$")
       string(REPLACE "_" ";" _list_components ${arg})
       list(GET _list_components 1 _component)
+    elseif("${arg}" MATCHES "^(EXPORT)$")
+      set(_external 1)
     else()
       message(FATAL_ERROR "Unknown argument [${arg}]")
     endif()
