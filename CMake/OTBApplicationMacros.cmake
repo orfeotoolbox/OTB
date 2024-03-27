@@ -19,6 +19,8 @@
 #
 
 macro(otb_create_application)
+   # parse all arguments ARGN which can be one or multi values args in
+   # vars with name prefixed by "APPLICATION_"
    cmake_parse_arguments(APPLICATION  "" "NAME;BUILD_PATH;INSTALL_PATH" "SOURCES;INCLUDE_DIRS;LINK_LIBRARIES" ${ARGN} )
 
    set( APPLICATION_TARGET_NAME otbapp_${APPLICATION_NAME} )
@@ -50,10 +52,19 @@ macro(otb_create_application)
 
    if (APPLICATION_INSTALL_PATH)
      if(otb-module)
+       # use the EXPORT keyword create CMake commands relative to this target
+       # in the appropriate target file
+       # NOTE TLA: change the target name here to stick to module name
+       message(STATUS "App ${APPLICATION_TARGET_NAME} of module ${otb-module} generated target params will be in build ${${otb-module}-targets-build} and installed in ${${otb-module}-targets-install}")
        install(TARGETS ${APPLICATION_TARGET_NAME}
                EXPORT ${${otb-module}-targets}
                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
                COMPONENT ${${otb-module}_COMPONENT})
+      #  install(EXPORT ${${otb-module}-targets}
+      #          DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
+      #          FILE ${${otb-module}-targets}.cmake
+      #          NAMESPACE Otb
+      #          COMPONENT ${${otb-module}_COMPONENT})
      else()
        install(TARGETS ${APPLICATION_TARGET_NAME}
                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}

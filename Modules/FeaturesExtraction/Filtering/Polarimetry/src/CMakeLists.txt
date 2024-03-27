@@ -28,4 +28,4 @@ target_link_libraries(OTBPolarimetry
 
   )
 
-otb_module_target(OTBPolarimetry "COMPONENT_FeaturesExtraction")
+otb_module_target(OTBPolarimetry "COMPONENT_FeaturesExtraction" EXPORT)
