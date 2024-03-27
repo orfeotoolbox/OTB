@@ -23,6 +23,7 @@
 #include "itkVector.hxx"
 
 #include <numeric>
+#include "float.h"
 
 namespace otb
 {
