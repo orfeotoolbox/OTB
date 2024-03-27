@@ -18,12 +18,15 @@
 # limitations under the License.
 #
 
+# 
 #Contact: Jordi Inglada  <jordi.inglada@cesbio.eu>
 otb_fetch_module(OTBTemporalGapFilling
   "Gapfilling for time series replaces invalid pixels (as designated by a mask)
   by an interpolation using the valid dates of the series.
 A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling
+
+Declares application ImageTimeSeriesGapFilling
 "
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling.git
   GIT_TAG master

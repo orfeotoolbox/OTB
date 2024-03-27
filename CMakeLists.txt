@@ -337,7 +337,7 @@ endif()
 
 set(OTB_CONFIG_APPLICATION_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION " AND NOT OTB_BINARY_DIR")
-set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/OTBTargets.cmake")
+set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/CoreTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "${OTB_SOURCE_DIR}/CMake/OTBModuleAPI.cmake")
 set(OTB_CONFIG_APPLI_MACROS_FILE "${OTB_SOURCE_DIR}/CMake/OTBApplicationMacros.cmake")
 configure_file(CMake/OTBConfig.cmake.in OTBConfig.cmake @ONLY)
@@ -365,7 +365,7 @@ endif()
 
 set(OTB_CONFIG_APPLICATION_PATH "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION "")
-set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBTargets.cmake")
+set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/CoreTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBModuleAPI.cmake")
 set(OTB_CONFIG_APPLI_MACROS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBApplicationMacros.cmake")
 
@@ -392,17 +392,18 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/NamespaceHandler.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Core)
-get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)
-if(OTBTargets_MODULES)
-  install(EXPORT OTBTargets DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-          COMPONENT Core)
-else()
-  set(CMAKE_CONFIGURABLE_FILE_CONTENT "# No targets!")
-  configure_file(${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in
-                 ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake @ONLY)
-  install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake
-          DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
-endif()
+get_property(CoreTargets_MODULES GLOBAL PROPERTY CoreTargets_MODULES)
+# if(CoreTargets_MODULES)
+#   # NOTE TLA: target file is isntalled here
+#   install(EXPORT CoreTargets DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
+#           COMPONENT Core)
+# else()
+#   set(CMAKE_CONFIGURABLE_FILE_CONTENT "# No targets!")
+#   configure_file(${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in
+#                  ${OTB_BINARY_DIR}/CMakeFiles/CoreTargets.cmake @ONLY)
+#   install(FILES ${OTB_BINARY_DIR}/CMakeFiles/CoreTargets.cmake
+#           DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
+# endif()
 
 if(XDK_INSTALL_PATH)
     # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell

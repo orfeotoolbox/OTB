@@ -365,7 +365,8 @@ macro(otb_module_impl)
   endif()
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/src/CMakeLists.txt)
-    set_property(GLOBAL APPEND PROPERTY OTBTargets_MODULES ${otb-module})
+    # add the current otb-module to global list property ${${otb-module}-targets}_MODULES
+    set_property(GLOBAL APPEND PROPERTY ${${otb-module}-targets}_MODULES ${otb-module})
     add_subdirectory(src)
   endif()
 

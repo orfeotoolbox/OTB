@@ -37,4 +37,4 @@ target_link_libraries(OTBSimulation
 
   )
 
-otb_module_target(OTBSimulation)
+otb_module_target(OTBSimulation COMPONENT_Miscellaneous)

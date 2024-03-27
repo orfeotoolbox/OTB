@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+# NOTE TLA: this file seems to be unused (see NAMESPACE condition at the end)
+# and occurance
 # replace target name on one line
 macro(ns_filter_line)
 foreach(_t_name ${_t_list})
@@ -28,28 +30,33 @@ endmacro()
 # This function sets the namespace for all targets in the CMake files installed
 # by OTB
 function(otb_set_namespace folder ns)
+  # all combinaison of string with add_library or add exectuable a lib name 
+  # and IMPORTED in target definition
   set(_t_regex "add_(library|executable) *\\( *([a-zA-Z0-9_:-]+) (.* )?IMPORTED( |\\)).*")
-  if(EXISTS "${folder}/OTBTargets.cmake")
-    # list targets
-    file(STRINGS "${folder}/OTBTargets.cmake" _t_content REGEX "${_t_regex}")
+  if(EXISTS "${folder}/OTBCoreTargets.cmake")
+    # get all strings corresponding to IMPORTED target
+    file(STRINGS "${folder}/OTBCoreTargets.cmake" _t_content REGEX "${_t_regex}")
     set(_t_list)
-    foreach(_line ${_t_content})
+    foreach(_line ${_t_content}) # foreach IMPORTED target definition
+      # get 2nd regex group of _t_regex in _line
       string(REGEX REPLACE "${_t_regex}" "\\2" _t_name "${_line}")
       list(APPEND _t_list "${_t_name}")
       set(_t_real_name "${_t_name}")
       set(_old_ns_regex "([a-zA-Z0-9_-]+)::([a-zA-Z0-9_-]+)")
+      # remove all before ::
       if(_t_name MATCHES "${_old_ns_regex}")
         string(REGEX REPLACE "${_old_ns_regex}" "\\2" _t_real_name "${_t_name}")
       endif()
+      # replace namespace before name if guven in function arg
       if(ns)
         set(REPLACEMENT_${_t_name} "${ns}::${_t_real_name}")
       else()
         set(REPLACEMENT_${_t_name} "${_t_real_name}")
       endif()
     endforeach()
-    # list files to patch
-    set(_files_to_process "${folder}/OTBTargets.cmake")
-    file(GLOB _other_targets "${folder}/OTBTargets-*.cmake")
+    # list files to patch: general target files and all module cmake files
+    set(_files_to_process "${folder}/OTBCoreTargets.cmake")
+    file(GLOB _other_targets "${folder}/OTBCoreTargets-*.cmake")
     list(APPEND _files_to_process ${_other_targets})
     file(GLOB _module_files "${folder}/Modules/*.cmake")
     list(APPEND _files_to_process ${_module_files})
@@ -105,7 +112,7 @@ function(otb_set_namespace folder ns)
       file(WRITE "${_file_path}" "${_file_filtered_content}")
     endforeach()
   else()
-    message(WARNING "No OTBTargets.cmake found in folder : ${folder}")
+    message(WARNING "No OTBCoreTargets.cmake found in folder : ${folder}")
   endif()
 endfunction()
 
