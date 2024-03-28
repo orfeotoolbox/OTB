@@ -25,6 +25,7 @@
 #include "otbSARMetadata.h"
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
+#include "otbSpot5Metadata.h"
 #include "otbMacro.h"
 
 #include <boost/any.hpp>
@@ -108,6 +109,7 @@ public:
   const Projection::GCPParam & GetGCPParam() const;
   const Projection::RPCParam & GetRPCParam() const;
   const SARParam & GetSARParam() const;
+  const Spot5Param & GetSpot5Param() const;
 
   std::string GetProjectedGeometry() const;
 
