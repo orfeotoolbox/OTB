@@ -79,10 +79,10 @@ const SARParam & ImageMetadataBase::GetSARParam() const
   return boost::any_cast<const SARParam &>(wh->second);
 }
 
-/*const SPOT5Param & ImageMetadataBase::GetSpot5Param() const
+const Spot5Param & ImageMetadataBase::GetSpot5Param() const
 {
-  return boost::any_cast<const Spot5Param &>(GeometryKeys.at(MDGeom::Spot5));
-}*/
+  return boost::any_cast<const Spot5Param &>(GeometryKeys.at(MDGeom::Spot5Geometry));
+}
 
 std::string ImageMetadataBase::GetProjectedGeometry() const
 {
@@ -369,7 +369,6 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
 {
   kwl.clear();
   std::ostringstream oss;
-  // SPOT5 TODO
   // Converting the GeomKeys
   for (const auto& kv : GeometryKeys)
   {
@@ -394,6 +393,9 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
         case MDGeom::SARCalib:
           // To be completed by ImageIO
           return "<SARCalib>";
+        case MDGeom::Spot5Geometry:
+          // To be completed by ImageIO
+          return "<Spot5Param>";
         default:
           // TODO : MDGeom::Adjustment
           return boost::any_cast<std::string>(kv.second);
