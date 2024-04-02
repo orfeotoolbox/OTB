@@ -340,23 +340,12 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
 
   using Point3DType = itk::Point<double, 3>;
   using Point2DType = itk::Point<double, 2>;
-
-  // Physical Model Variables
-  std::vector<Point3DType> AttitudesSamples;
-  std::vector<double> AttitudesSamplesTimes, PixelLookAngleX, PixelLookAngleY;
-  Point2DType ImageSize, SubImageOffset;
-  double RefLineTime, LineSamplingPeriod;
-  int RefLineTimeLine;
-
-  // Tmp variables
+  
   std::vector<double> yaw_vector, pitch_vector, roll_vector;
-  std::vector<std::string> string_vector;
-  std::string res;
+  std::vector<std::string> time_vector;
+  std::string resRoi;
   bool hasValue;
-  double sampletime, second;
-  int year, month, day, hour, minute;
-
-  //Spot5Param spot5Param;
+  double sampletime;
 
   /* RefLineTime and RefLineTime */
   // acquisitionDate convert to date since 2002 (spot5 launch)
@@ -370,16 +359,16 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   spot5Param.ImageSize[1] = stoi(mds.GetMetadataValue(prefix + "Raster_Dimensions.NROWS", hasValue));
 
   /* SubImageOffset */
-  res = mds.GetMetadataValue(prefix + "Data_Processing.Regions_Of_Interest.Region_Of_Interest.COL_MIN", hasValue);
+  resRoi = mds.GetMetadataValue(prefix + "Data_Processing.Regions_Of_Interest.Region_Of_Interest.COL_MIN", hasValue);
   if (hasValue) {
-    spot5Param.SubImageOffset[0] = std::stod(res) - 1.0;
+    spot5Param.SubImageOffset[0] = std::stod(resRoi) - 1.0;
   }
   else {
     spot5Param.SubImageOffset[0] = 0.0;
   }
-  res = mds.GetMetadataValue(prefix + "Data_Processing.Regions_Of_Interest.Region_Of_Interest.ROW_MIN", hasValue);  
+  resRoi = mds.GetMetadataValue(prefix + "Data_Processing.Regions_Of_Interest.Region_Of_Interest.ROW_MIN", hasValue);  
   if (hasValue) {
-    spot5Param.SubImageOffset[1] = std::stod(res) - 1.0;
+    spot5Param.SubImageOffset[1] = std::stod(resRoi) - 1.0;
   }
   else {
     spot5Param.SubImageOffset[1] = 0.0;
@@ -387,96 +376,61 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
 
   /* Satellite Attitudes */
 
-  // Cas Corrected Attitude
+  // Cas Corrected Attitude or Raw Attitude
+  std::string expr_attitude = prefix + "Data_Strip.Satellite_Attitudes.Corrected_Attitudes.Corrected_Attitude.Angles";
 
-  ParseVector(mds, prefix + "Data_Strip.Satellite_Attitudes.Corrected_Attitudes.Corrected_Attitude.Angles",
-                     "YAW", yaw_vector);
-  ParseVector(mds, prefix + "Data_Strip.Satellite_Attitudes.Corrected_Attitudes.Corrected_Attitude.Angles",
-                     "PITCH", pitch_vector);
-  ParseVector(mds, prefix + "Data_Strip.Satellite_Attitudes.Corrected_Attitudes.Corrected_Attitude.Angles",
-                     "ROLL", roll_vector);     
-  ParseVector(mds, prefix + "Data_Strip.Satellite_Attitudes.Corrected_Attitudes.Corrected_Attitude.Angles",
-                     "TIME", string_vector);  
+  ParseVector(mds, expr_attitude,"YAW", yaw_vector);
+  if(yaw_vector.size() == 0)
+  {
+    // take raw attitude instead of corrected
+    expr_attitude = prefix + "Data_Strip.Satellite_Attitudes.Raw_Attitudes.Aocs_Attitude.Angles_List.Angles";
+    ParseVector(mds, expr_attitude,"YAW", yaw_vector);
+  }
+  ParseVector(mds, expr_attitude,"PITCH", pitch_vector);
+  ParseVector(mds, expr_attitude,"ROLL", roll_vector);     
+  ParseVector(mds, expr_attitude,"TIME", time_vector);  
 
-  auto size_vector = yaw_vector.size();
-
-  for (int i=0; i < size_vector; i++){
-
+  for (int i=0; i < yaw_vector.size(); i++){
     Point3DType point3d;
     point3d[0] = pitch_vector[i];
     point3d[1] = roll_vector[i];
     point3d[2] = yaw_vector[i];
     spot5Param.AttitudesSamples.push_back(std::move(point3d));
-    sampletime = GetTime(string_vector[i]);
+    sampletime = GetTime(time_vector[i]);
     spot5Param.AttitudesSamplesTimes.push_back(sampletime);
-
   }
-
-  // TODO Cas Raw Attitude
 
   /* Look Angles */
 
   // Use look angles from Green band
   // /!\ Warning chech condition with SWIR band not clear in OSSIM!
-  bool notFind = true;
+  bool bandFound = false;
   int i = 1;
   std::string expr;
 
   hasValue = false;
-  while (i < m_Data.BandIDs.size() && notFind ){
+  while (i < m_Data.BandIDs.size() && !bandFound ){
     expr = prefix + "Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".BAND_INDEX";
-    mds.GetMetadataValue(expr, hasValue) == "2" ? notFind=false:i++;
+    mds.GetMetadataValue(expr, hasValue) == "2" ? bandFound=true:i++;
   }
 
   expr = "Dimap_Document.Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".Look_Angles_List.Look_Angles";           
   ParseVector(mds, expr, "PSI_X", spot5Param.PixelLookAngleX);  
   ParseVector(mds, expr, "PSI_Y", spot5Param.PixelLookAngleY); 
 
-
-  // TODO Cas mtd verssion == 1.1
-
-  // TODO Cas nbr look angles != image size
-
-  // TODO Cas nbr look angles == image size
-
-  /* Ephemeris*/
-  //std::vector<Ephemeris> EcefSamples;
-
   std::vector<double> pos_x, pos_y, pos_z, vel_x, vel_y, vel_z;
 
+  expr = prefix + "Data_Strip.Ephemeris.Points.Point";
 
-  ParseVector(mds, prefix + "Data_Strip.Ephemeris.Points.Point",
-                     "Location.X", pos_x);
-  ParseVector(mds, prefix + "Data_Strip.Ephemeris.Points.Point",
-                     "Location.Y", pos_y);
-  ParseVector(mds, prefix + "Data_Strip.Ephemeris.Points.Point",
-                     "Location.Z", pos_z);   
-  ParseVector(mds, prefix + "Data_Strip.Ephemeris.Points.Point",
-                     "Velocity.X", vel_x);
-  ParseVector(mds, prefix + "Data_Strip.Ephemeris.Points.Point",
-                     "Velocity.Y", vel_y);                     
-  ParseVector(mds, prefix + "Data_Strip.Ephemeris.Points.Point",
-                     "Velocity.Z", vel_z);
-  ParseVector(mds, prefix + "Data_Strip.Ephemeris.Points.Point",
-                     "TIME", string_vector);
+  ParseVector(mds, expr,"Location.X", pos_x);
+  ParseVector(mds, expr,"Location.Y", pos_y);
+  ParseVector(mds, expr,"Location.Z", pos_z);   
+  ParseVector(mds, expr,"Velocity.X", vel_x);
+  ParseVector(mds, expr,"Velocity.Y", vel_y);                     
+  ParseVector(mds, expr,"Velocity.Z", vel_z);
+  ParseVector(mds, expr,"TIME", time_vector);
 
-
-  size_vector = pos_x.size();
-
-  for (int i=0; i < size_vector; i++){
-
-    // Ephemeris ephemeris;
-    // ephemeris.position[0] = pos_x[i];
-    // ephemeris.position[1] = pos_y[i];
-    // ephemeris.position[2] = pos_z[i];
-    // ephemeris.velocity[0] = vel_x[i];
-    // ephemeris.velocity[1] = vel_y[i];
-    // ephemeris.velocity[2] = vel_z[i];
-    // sampletime = GetTime(string_vector[i]);
-    // ephemeris.time = sampletime;
-
-    // spot5Param.EcefSamples.push_back(std::move(ephemeris));
-
+  for (int i=0; i < pos_x.size(); i++){
     Point3DType position;
     Point3DType velocity;
     position[0] = pos_x[i];
@@ -485,7 +439,7 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
     velocity[0] = vel_x[i];
     velocity[1] = vel_y[i];
     velocity[2] = vel_z[i];
-    sampletime = GetTime(string_vector[i]);
+    sampletime = GetTime(time_vector[i]);
 
     spot5Param.EcefPosSamples.push_back(std::move(position));
     spot5Param.EcefVelSamples.push_back(std::move(velocity));
