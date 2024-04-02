@@ -28,18 +28,33 @@ If you need the plugin on a terminal disconnected from public network, use the f
 
 .. image:: Art/plugins.png
 
-Plugin configuration
---------------------
+Plugin configuration/parameters
+-------------------------------
 
 When installed, to use OTB in QGIS you need to setup the provider plugin:
 
 - Open the processing settings: :menuselection:`Settings --> Options --> Processing`
-- You can see ``OTB`` under :menuselection:`Providers` menu (see following picture):
+- You can see ``OTB`` under :menuselection:`Providers` menu (see following picture), expand the :guilabel:`OTB` entry.
 
-    - Expand the :guilabel:`OTB` entry
-    - Set the :guilabel:`OTB folder`. This is the location of your OTB installation.
-    - Set the :guilabel:`OTB application folder`. This is the location of your OTB applications ( :file:`<PATH_TO_OTB_INSTALLATION>/lib/otb/applications`)
-    - Click :guilabel:`OK` to save the settings and close the dialog.
+The following parameters can be personnalized:
+
+- **Mandatory parameter** :guilabel:`OTB folder`, i.e. the location of the root of your OTB installation.
+- **Mandatory parameter** :guilabel:`OTB application folder`. The location of your OTB applications (e.g. :file:`<PATH_TO_OTB_INSTALLATION>/lib/otb/applications`). Multiple paths are allowed.
+- :guilabel:`Logger level`, an optional parameter indicates level of logger used by OTB applications.
+  The level of logging controls the amount of detail printed during
+  algorithm execution. Possible values from less to most verbose are:
+  ``CRITICAL``, ``WARNING``, ``INFO`` and ``DEBUG``. Default to ``INFO``.
+- :guilabel:`Maximum RAM to use`, an optional and advanced parameter. By default, OTB applications use all available system RAM.
+  You can, however, instruct OTB to use a specific amount of RAM (in megabytes). A value of 256 is ignored by the OTB processing provider.
+- :guilabel:`Geoid file`, optional and advanced parameter. Path to the geoid file.
+  This option sets the value of the *elev.dem.geoid* and *elev.geoid*
+  parameters in OTB applications.
+  Setting this value globally enables users to share it across multiple
+  processing algorithms. Empty by default.
+- :guilabel:`SRTM tiles folder`, an optional and advanced parameter. The directory where SRTM tiles are available. SRTM data can be stored locally to avoid downloading of files during processing. This option sets the value of *elev.dem.path*
+  and *elev.dem* parameters in OTB applications. Setting this value
+  globally enables users to share it across multiple processing algorithms.
+  Empty by default.
 
 .. image:: Art/plugins_config.png
 
