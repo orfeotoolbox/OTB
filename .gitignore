@@ -12,3 +12,4 @@ archives*
 .vscode*
 CMakeLists.txt.user
 .directory*
+build_packages*

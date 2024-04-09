@@ -295,23 +295,7 @@ set(TEMP           ${OTB_BINARY_DIR}/Testing/Temporary)
 set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
-set(NOTOL      0.0)
-set(EPSILON_1  0.1)
-set(EPSILON_2  0.01)
-set(EPSILON_3  0.001)
-set(EPSILON_4  0.0001)
-set(EPSILON_5  0.00001)
-set(EPSILON_6  0.000001)
-set(EPSILON_7  0.0000001)
-set(EPSILON_8  0.00000001)
-set(EPSILON_9  0.000000001)
-set(EPSILON_10 0.0000000001)
-set(EPSILON_11 0.00000000001)
-set(EPSILON_12 0.000000000001)
-set(EPSILON_13 0.0000000000001)
-set(EPSILON_14 0.00000000000001)
-set(EPSILON_15 0.000000000000001)
-
+include(TestConstants)
 # Location of OTB Example Data.
 set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 
@@ -385,6 +369,7 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/OTBApplicationMacros.cmake
               CMake/OTBModuleAPI.cmake
               CMake/OTBStandaloneModuleMacros.cmake
+              CMake/TestConstants.cmake
               CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
               CMake/GenerateExportHeaderCustom.cmake
