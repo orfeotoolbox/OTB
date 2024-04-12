@@ -112,7 +112,9 @@ else()
   set(${otb-module}-targets ${otb-module}Targets)
   set(${otb-module}-targets-install "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/${otb-module}Targets.cmake")
   set(${otb-module}_TARGETS_FILE_INSTALL "${${otb-module}-targets-install}")
+  # NOTE TLA
   set(${otb-module}-targets-build "${OTB_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}Targets.cmake")
+  # is this var used ?
   set(${otb-module}_TARGETS_FILE_BUILD "${${otb-module}-targets-build}")
   otb_module_impl()
 

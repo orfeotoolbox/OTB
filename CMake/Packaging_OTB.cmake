@@ -39,22 +39,26 @@ else()
     set(CPACK_GENERATOR "TGZ")
 endif()
 
-if(XDK_INSTALL_PATH AND NOT WIN32)
-    include(patch_cmake_files)
-    include(install_without_message)
+# if(XDK_INSTALL_PATH AND NOT WIN32)
+#     include(patch_cmake_files)
+#     include(install_without_message)
 
-    patch_cmake_files(NAME "ITK"
-    VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}"
-    MATCH_STRING  "${XDK_INSTALL_PATH}"
-    REPLACE_VAR "ITK_INSTALL_PREFIX"
-    )
+#     patch_cmake_files(NAME "ITK"
+#     VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}"
+#     MATCH_STRING  "${XDK_INSTALL_PATH}"
+#     REPLACE_VAR "ITK_INSTALL_PREFIX"
+#     )
+#     message(STATUS "Before patching OTB cmake")
+#     message(STATUS "CMAKE_BINARY_DIR == ${CMAKE_BINARY_DIR}")
 
-    patch_cmake_files(NAME "OTB"
-    VERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}"
-    MATCH_STRING  "${XDK_INSTALL_PATH}"
-    REPLACE_VAR "OTB_INSTALL_PREFIX"
-    )
-endif()
+#     patch_cmake_files(NAME "OTB"
+#     VERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}"
+#     #MATCH_STRING "${CMAKE_BINARY_DIR}"
+#     MATCH_STRING  "${XDK_INSTALL_PATH}"
+#     REPLACE_VAR "OTB_INSTALL_PREFIX"
+#     )
+#     message(STATUS "After patching OTB cmake")
+# endif()
 
 include(CPack)
 

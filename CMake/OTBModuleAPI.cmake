@@ -37,6 +37,8 @@ macro(_otb_module_use_recurse mod)
   endif()
 endmacro()
 
+# append to ${ns}_LIBRAIRIES/INCLUDE_DIRS/LIBRARY_DIRS
+# the ${mod}_LIBRAIRIES/INCLUDE_DIRS/LIBRARY_DIRS and thoses of its dependencies
 macro(_otb_module_config_recurse ns mod)
   if(NOT _${ns}_${mod}_USED)
     set(_${ns}_${mod}_USED 1)
@@ -79,6 +81,8 @@ endmacro()
 #  <namespace>_LIBRARY_DIRS = Library search path (for outside dependencies)
 # Do not name a module as the namespace.
 macro(otb_module_config ns)
+  # if there is mod in ${ARGN}, these three vars are fields with all mod lib,
+  # include ...
   set(${ns}_LIBRARIES "")
   set(${ns}_INCLUDE_DIRS "")
   set(${ns}_LIBRARY_DIRS "")

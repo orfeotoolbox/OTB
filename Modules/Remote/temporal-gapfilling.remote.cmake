@@ -18,7 +18,6 @@
 # limitations under the License.
 #
 
-# 
 #Contact: Jordi Inglada  <jordi.inglada@cesbio.eu>
 otb_fetch_module(OTBTemporalGapFilling
   "Gapfilling for time series replaces invalid pixels (as designated by a mask)
