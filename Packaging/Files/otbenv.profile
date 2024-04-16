@@ -37,16 +37,19 @@ cat_path()
 
 # The below environment variables only affect current shell
 # So if you run again from a terminal, you need to run the script again
-
-OS=`lsb_release -is`
-if [ $OS = "RedHatEnterprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
-  OTB_INSTALL_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}"))
-else
-  if [ -z $ZSH_NAME ]; then
-    OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}"; )"; )
-  else
-    OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
+OS="$(lsb_release -is)"
+# test the shell used before OS as variable used to resolve this script
+# path may differ
+if [ -n "${BASH}" ]; then
+  # dirname does not exists on RH-based OS
+  if [ $OS = "RedHatEnterprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
+    OTB_INSTALL_DIR="$(realpath $(dirname "${BASH_SOURCE[0]}"))"
+  elif [ -n "${BASH}" ]; then
+    OTB_INSTALL_DIR="$( dirname -- "$( readlink -f -- "${BASH_SOURCE[0]}"; )"; )"
   fi
+else
+  # non-bash shell
+  OTB_INSTALL_DIR="$( dirname -- "$( readlink -f -- "$0"; )"; )"
 fi
 CMAKE_PREFIX_PATH=$OTB_INSTALL_DIR
 export CMAKE_PREFIX_PATH
