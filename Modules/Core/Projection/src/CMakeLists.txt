@@ -19,6 +19,7 @@
 #
 
 set(OTBProjection_SRC
+  otbBilinearProjection.cxx
   otbGeometriesProjectionFilter.cxx
   otbPleiadesPToXSAffineTransformCalculator.cxx
   )

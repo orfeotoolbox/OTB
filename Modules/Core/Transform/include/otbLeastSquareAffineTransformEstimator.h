@@ -97,6 +97,11 @@ public:
   typedef itk::AffineTransform<PrecisionType, PointDimension> AffineTransformType;
   typedef typename AffineTransformType::Pointer AffineTransformPointerType;
 
+    /** Constructor */
+  LeastSquareAffineTransformEstimator();
+  /** Destructor */
+  ~LeastSquareAffineTransformEstimator() override;
+
   /** Get the affine transform matrix */
   itkGetConstReferenceMacro(Matrix, MatrixType);
 
@@ -129,11 +134,6 @@ public:
   void Compute();
 
 protected:
-  /** Constructor */
-  LeastSquareAffineTransformEstimator();
-  /** Destructor */
-  ~LeastSquareAffineTransformEstimator() override;
-
   /** The PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
