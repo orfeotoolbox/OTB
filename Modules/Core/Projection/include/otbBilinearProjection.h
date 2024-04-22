@@ -78,6 +78,12 @@ public:
 
    void getTiePoints(std::vector<Point2DType>& lsPt, std::vector<Point3DType>& geoPt) const;
 
+   /** Return true if there is any nan in the points coordinates */
+   bool imgPointsHaveNan();
+
+   /** Return true if there is any nan in the points coordinates */
+   bool worldPointsHaveNan();
+
 protected:
   BilinearProjection();
   BilinearProjection(const Point2DType& ul,
