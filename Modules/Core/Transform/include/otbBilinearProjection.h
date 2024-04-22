@@ -33,7 +33,7 @@ namespace otb
  * \brief Computes a bilinear projection after init with reference points
  *
  *
- * \ingroup OTBProjection
+ * \ingroup OTBTransform
  */
 class ITK_EXPORT BilinearProjection : public itk::Object
 {
