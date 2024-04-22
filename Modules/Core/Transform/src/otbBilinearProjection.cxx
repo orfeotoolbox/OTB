@@ -53,7 +53,7 @@ BilinearProjection::BilinearProjection(const Point2DType& ul,
     m_worldPoints[2] = lrg;
     m_worldPoints[3] = llg;
 
-    initializeBilinear();
+    computeLS();
 }
 
 BilinearProjection::~BilinearProjection(){}
@@ -111,7 +111,7 @@ void BilinearProjection::getTiePoints(std::vector<Point2DType>& lsPt, std::vecto
     geoPt = m_worldPoints;
 }
 
-void BilinearProjection::initializeBilinear()
+void BilinearProjection::computeLS()
 {
    bool theInterpolationPointsHaveNanFlag = imgPointsHaveNan()||worldPointsHaveNan();
    bool theInverseSupportedFlag = false;
