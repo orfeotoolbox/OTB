@@ -24,6 +24,7 @@
 
 #include <numeric>
 #include "float.h"
+#include "otbBilinearProjection.h"
 
 namespace otb
 {
@@ -209,6 +210,12 @@ void Spot5SensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
     LineSampleToWorld(ll, llg);
     LineSampleToWorld(lr, lrg);
 
+    std::vector<Point2DType> impts {ul,ur,ll,lr};
+    std::vector<Point3DType> wrldpts {ulg,urg,llg,lrg};
+    BilinearProjection::Pointer m_bproj = BilinearProjection::New();
+    m_bproj->setTiePoints(impts,wrldpts);
+    m_bproj->computeLS();
+    m_bproj->lineSampleHeightToWorld(imPt,heightAboveEllipsoid,worldPt);
     // ALEX PAS FINI
 
     // if (theInterpolationPointsHaveNanFlag)

@@ -84,6 +84,9 @@ public:
    /** Return true if there is any nan in the points coordinates */
    bool worldPointsHaveNan();
 
+   /** Resolve the bilinear system */
+   void computeLS();
+
 protected:
   BilinearProjection();
   BilinearProjection(const Point2DType& ul,
@@ -95,7 +98,6 @@ protected:
                     const Point3DType& lrg,
                     const Point3DType& llg);
   virtual ~BilinearProjection();
-  void initializeBilinear();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
