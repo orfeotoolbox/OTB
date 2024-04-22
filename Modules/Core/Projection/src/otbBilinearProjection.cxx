@@ -66,6 +66,7 @@ void BilinearProjection::worldToLineSample(const Point3DType& worldPoint,
    worldptMatrix[1] = worldPoint[1];
    worldptMatrix[2] = worldPoint[2];
 
+   // Result is a 3DPoint (3,3 * 3,1 matrix) that we have to convert to 2D points after
    auto lineSpX = m_XFit->GetMatrix() * worldptMatrix;
    auto lineSpY = m_YFit->GetMatrix() * worldptMatrix;
 
@@ -90,10 +91,10 @@ void BilinearProjection::lineSampleHeightToWorld(const Point2DType& lineSampPt,
    lineSampMatrix[1] = lineSampPt[1];
    lineSampMatrix[2] = heightAboveEllipsoid;
 
-   auto wrldMatLon = m_LonFit->GetMatrix() * lineSampMatrix;
-   auto wrldMatLat = m_LatFit->GetMatrix() * lineSampMatrix;
-   worldPt[0] = wrldMatLon[0];
-   worldPt[1] = wrldMatLat[1];
+   auto worldLon = m_LonFit->GetMatrix() * lineSampMatrix;
+   auto worldLat = m_LatFit->GetMatrix() * lineSampMatrix;
+   worldPt[0] = worldLon[0];
+   worldPt[1] = worldLat[1];
    worldPt[2] = heightAboveEllipsoid;
 }
 
@@ -112,7 +113,7 @@ void BilinearProjection::getTiePoints(std::vector<Point2DType>& lsPt, std::vecto
 
 void BilinearProjection::initializeBilinear()
 {
-   //theInterpolationPointsHaveNanFlag = dPtsHaveNan()||gPtsHaveNan();
+   bool theInterpolationPointsHaveNanFlag = imgPointsHaveNan()||worldPointsHaveNan();
    bool theInverseSupportedFlag = false;
    if(!theInverseSupportedFlag)
    {
@@ -139,6 +140,33 @@ void BilinearProjection::initializeBilinear()
       m_XFit->Compute();
       m_YFit->Compute();
    }
+
+   //TODO update boolean flags like ossim
+}
+
+bool BilinearProjection::imgPointsHaveNan()
+{
+   for(auto currentPoint : m_LineSamplePoints)
+   {
+      if (std::isnan(currentPoint[0]) || std::isnan(currentPoint[1]))
+      {
+         return true;
+      }
+   }
+
+   return false;
+}
+
+bool BilinearProjection::worldPointsHaveNan()
+{
+   for(auto currentPoint : m_worldPoints)
+   {
+      if ( std::isnan(currentPoint[0]) || std::isnan(currentPoint[1]) || std::isnan(currentPoint[2]) )
+      {
+         return true;
+      }
+   }
+   return false;
 }
 
 void BilinearProjection::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -146,6 +174,8 @@ void BilinearProjection::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os, indent);
   os << indent << "Bilinear Projection LatFit Matrix : " << m_LatFit->GetMatrix() << std::endl;
   os << indent << "Bilinear Projection LatFit AffineTransform : " << m_LatFit->GetAffineTransform() << std::endl;
+  os << indent << "Bilinear Projection LonFit Matrix : " << m_LonFit->GetMatrix() << std::endl;
+  os << indent << "Bilinear Projection LonFit AffineTransform : " << m_LonFit->GetAffineTransform() << std::endl;
 }
                         
 }
