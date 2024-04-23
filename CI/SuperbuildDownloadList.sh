@@ -86,6 +86,6 @@ echo "Creating archive ${OUTPUT_DIR}/$ARCHIVE_NAME.tar.bz2"
 mkdir -p "${OUTPUT_DIR}"
 cd "${OUTPUT_DIR}" || echo "cannot cd to ${OUTPUT_DIR}"
 touch "${DOWNLOAD_DIR}/OTBSuperBuild.readme"
-tar -cjf "$ARCHIVE_NAME.tar.bz2" -C "${DOWNLOAD_DIR}" "${DOWNLOAD_NAMES}" OTBSuperBuild.readme
+tar -cjf "$ARCHIVE_NAME.tar.bz2" -C "${DOWNLOAD_DIR}" .
 echo "Saving md5sum to ${OUTPUT_DIR}/$ARCHIVE_NAME.md5"
 md5sum "$ARCHIVE_NAME.tar.bz2" > "$ARCHIVE_NAME.md5"
