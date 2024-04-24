@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,7 +43,6 @@ namespace otb
 class OTBCommon_EXPORT System
 {
 public:
-
   /** Standard class typedefs. */
   typedef System Self;
 

@@ -135,7 +135,7 @@
   -  itk::ImageRegionConstIteratorWithIndex
   -  itk::ImageSliceConstIteratorWithIndex
 
-  \subsection NeighbohoodIteratorType  Other Types of Iterators
+  \subsection NeighborhoodIteratorType  Other Types of Iterators
 
   Another group of iterators support a moving neighborhood. Here the
   neighborhood can "iterate" over an image and a calculation can iterate

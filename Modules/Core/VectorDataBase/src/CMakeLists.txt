@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -29,8 +29,7 @@ target_link_libraries(OTBVectorDataBase
   ${OTBGDAL_LIBRARIES}
   ${OTBITK_LIBRARIES}
   ${OTBImageBase_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBObjectList_LIBRARIES}
   )
 
-otb_module_target(OTBVectorDataBase)
+otb_module_target(OTBVectorDataBase COMPONENT_Core)

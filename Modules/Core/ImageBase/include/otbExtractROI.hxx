@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,8 +32,7 @@ namespace otb
  *
  */
 template <class TInputPixel, class TOutputPixel>
-ExtractROI<TInputPixel, TOutputPixel>
-::ExtractROI() //: ExtractROIBase< itk::Image<TInputPixel, VImageDimension> , itk::Image<TOutputPixel, VImageDimension> >()
+ExtractROI<TInputPixel, TOutputPixel>::ExtractROI() //: ExtractROIBase< itk::Image<TInputPixel, VImageDimension> , itk::Image<TOutputPixel, VImageDimension> >()
 {
   OTB_DISABLE_DYNAMIC_MT;
 }
@@ -42,9 +41,7 @@ ExtractROI<TInputPixel, TOutputPixel>
  *
  */
 template <class TInputPixel, class TOutputPixel>
-void
-ExtractROI<TInputPixel, TOutputPixel>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ExtractROI<TInputPixel, TOutputPixel>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
@@ -56,27 +53,22 @@ ExtractROI<TInputPixel, TOutputPixel>
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton()
+ * \sa ProcessObject::GenerateOutputInformation()
  */
 template <class TInputPixel, class TOutputPixel>
-void
-ExtractROI<TInputPixel, TOutputPixel>
-::GenerateOutputInformation()
+void ExtractROI<TInputPixel, TOutputPixel>::GenerateOutputInformation()
 {
   // Call to the base class method
   Superclass::GenerateOutputInformation();
 }
 
 template <class TInputPixel, class TOutputPixel>
-void
-ExtractROI<TInputPixel, TOutputPixel>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+void ExtractROI<TInputPixel, TOutputPixel>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   itkDebugMacro(<< "Actually executing");
 
   // Get the input and output pointers
-  typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
+  typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
 
   // support progress methods/callbacks
@@ -91,17 +83,17 @@ ExtractROI<TInputPixel, TOutputPixel>
   typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
 
   OutputIterator outIt(outputPtr, outputRegionForThread);
-  InputIterator inIt(inputPtr, inputRegionForThread);
+  InputIterator  inIt(inputPtr, inputRegionForThread);
 
   // walk the output region, and sample the input image
   while (!outIt.IsAtEnd())
-    {
+  {
     // copy the input pixel to the output
     outIt.Set(inIt.Get());
     ++outIt;
     ++inIt;
     progress.CompletedPixel();
-    }
+  }
 }
 
 } // end namespace otb

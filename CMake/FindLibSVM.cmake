@@ -121,13 +121,12 @@ endif ()
 
 # handle REQUIRED and QUIET options
 include ( FindPackageHandleStandardArgs )
-find_package_handle_standard_args ( LibSVM DEFAULT_MSG LIBSVM_LIBRARY
+find_package_handle_standard_args( LibSVM DEFAULT_MSG LIBSVM_LIBRARY
   _LIBSVM_VERSION_MATCH
   LIBSVM_INCLUDE_DIR
   LIBSVM_INCLUDE_DIRS
   LIBSVM_LIBRARIES
-  LIBSVM_ROOT_DIR
-)
+  LIBSVM_ROOT_DIR)
 
 mark_as_advanced (
   LIBSVM_LIBRARY

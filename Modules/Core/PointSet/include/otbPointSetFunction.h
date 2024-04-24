@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,14 +36,12 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TPointSet, class TOutput>
-class ITK_EXPORT PointSetFunction :
-  public itk::SpatialFunction<TOutput, 2 /* TODO : change 2 by PointType::PointDimension*/,
-      typename TPointSet::PointType>
+class ITK_EXPORT PointSetFunction : public itk::SpatialFunction<TOutput, 2 /* TODO : change 2 by PointType::PointDimension*/, typename TPointSet::PointType>
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetFunction                                                 Self;
-  typedef itk::SpatialFunction<TOutput, 2,  typename TPointSet::PointType> Superclass;
+  typedef PointSetFunction Self;
+  typedef itk::SpatialFunction<TOutput, 2, typename TPointSet::PointType> Superclass;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetFunction, itk::SpatialFunction);
@@ -71,13 +69,15 @@ public:
 
 protected:
   PointSetFunction();
-  ~PointSetFunction() override {}
+  ~PointSetFunction() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PointSetFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   PointSetConstPointer m_PointSet;
 

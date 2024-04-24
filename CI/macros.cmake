@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -64,7 +64,7 @@ macro(get_xdk)
 
   # Download xdk :
   #   git clone $REPOSITORY_URL --branch $BRANCH_NAME --depth 1 superbuild-artifact
-  set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact.git")
+  set ( REMOTE "https://gitlab.orfeo-toolbox.org/orfeotoolbox/superbuild-artifact.git")
   execute_process(
     COMMAND ${CTEST_GIT_COMMAND} "clone" "${REMOTE}" "--branch" "${BRANCH_NAME}"
     "--depth" "1" "superbuild-artifact"
@@ -88,7 +88,7 @@ macro(get_xdk)
     message( "clone_res = ${clone_res}" )
     message( "clone_out = ${clone_out}" )
     message( "clone_err = ${clone_err}" )
-    message( FATAL_ERROR "Problem in retreiving the archive")
+    message( FATAL_ERROR "Problem in retrieving the archive")
   endif()
 
   execute_process(
@@ -107,13 +107,13 @@ macro(get_xdk)
     message( "tar_err: '${tar_err}'" )
   endif()
   
-  set( XDK_PATH "${OTB_SOURCE_DIR}/xdk")
+  set( XDK_INSTALL_PATH "${OTB_SOURCE_DIR}/xdk")
   
   if ( DEBUG )
-    if ( EXISTS "${XDK_PATH}")
-      message("Xdk folder exists at ${XDK_PATH}")
+    if ( EXISTS "${XDK_INSTALL_PATH}")
+      message("Xdk folder exists at ${XDK_INSTALL_PATH}")
     else()
-      message("Something went wrong no folder in ${XDK_PATH}")
+      message("Something went wrong no folder in ${XDK_INSTALL_PATH}")
       message("The branch was ${BRANCH_NAME}")
     endif()
   endif()

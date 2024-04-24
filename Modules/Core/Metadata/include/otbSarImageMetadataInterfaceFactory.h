@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,9 +36,9 @@ class OTBMetadata_EXPORT SarImageMetadataInterfaceFactory : public itk::Object
 public:
   /** Standard class typedefs. */
   typedef SarImageMetadataInterfaceFactory Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::Object                      Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Class Methods used to interface with the registered factories */
 
@@ -50,11 +50,10 @@ public:
   typedef SarImageMetadataInterface::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef SarImageMetadataInterface::VectorType               VectorType;
   typedef SarImageMetadataInterface::VariableLengthVectorType VariableLengthVectorType;
-  typedef SarImageMetadataInterface::ImageKeywordlistType     ImageKeywordlistType;
   typedef SarImageMetadataInterface::Pointer                  SarImageMetadataInterfacePointerType;
 
-  /** Create the appropriate SarImageMetadataInterfaceFactory depending on the particulars of the file. */
-  static SarImageMetadataInterfacePointerType CreateIMI(const MetaDataDictionaryType& dict);
+  /** Create the appropriate IMI based on a MetadataSupplier */
+  static SarImageMetadataInterfacePointerType CreateIMI(ImageMetadata & imd, const MetadataSupplierInterface & mds);
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
@@ -64,9 +63,8 @@ protected:
   ~SarImageMetadataInterfaceFactory() override;
 
 private:
-  SarImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SarImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,7 +24,7 @@ SETUP_SUPERBUILD(TINYXML)
 
 ExternalProject_Add(TINYXML
   PREFIX TINYXML
-  URL "http://downloads.sourceforge.net/project/tinyxml/tinyxml/2.6.2/tinyxml_2_6_2.tar.gz"
+  URL "https://downloads.sourceforge.net/project/tinyxml/tinyxml/2.6.2/tinyxml_2_6_2.tar.gz"
   URL_MD5 c1b864c96804a10526540c664ade67f0
   BINARY_DIR ${TINYXML_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

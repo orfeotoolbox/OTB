@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -34,8 +34,8 @@ ADD_SUPERBUILD_CMAKE_VAR(OPENCV PNG_LIBRARY)
 
 ExternalProject_Add(OPENCV
   PREFIX OPENCV
-  URL "https://github.com/opencv/opencv/archive/3.4.1.tar.gz"
-  URL_MD5 a0b7a47899e67b3490ea31edc4f6e8e6
+  URL "https://github.com/opencv/opencv/archive/4.6.0.tar.gz"
+  URL_MD5 2f52df67b255fcc2c36632a9e9f723f6
   BINARY_DIR ${OPENCV_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -125,5 +125,3 @@ ExternalProject_Add(OPENCV
   )
 
 SUPERBUILD_PATCH_SOURCE(OPENCV)
-
-set(_SB_OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)

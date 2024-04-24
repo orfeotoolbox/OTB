@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -34,7 +34,7 @@ ADD_SUPERBUILD_CMAKE_VAR(LIBKML Boost_INCLUDE_DIR)
 
 ExternalProject_Add(LIBKML
   PREFIX LIBKML
-  URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r864+dfsg.orig.tar.gz"
+  URL "https://deb.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r864+dfsg.orig.tar.gz"
   URL_MD5 487e3c8dd1ad03551e361ab6a1b4e083
   BINARY_DIR ${LIBKML_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

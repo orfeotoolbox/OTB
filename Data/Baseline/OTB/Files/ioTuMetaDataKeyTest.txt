@@ -1,0 +1,4 @@
+mytime : 2009-08-10T10:30:08.142149Z
+First try size: 528
+Second try size: 272
+Third try size: 272

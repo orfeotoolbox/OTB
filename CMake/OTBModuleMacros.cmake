@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,16 +27,6 @@ include(${_OTBModuleMacros_DIR}/OTBModuleDoxygen.cmake)
 include(${_OTBModuleMacros_DIR}/OTBModuleHeaderTest.cmake)
 include(${_OTBModuleMacros_DIR}/OTBApplicationMacros.cmake)
 
-# With Apple's GGC <=4.2 and LLVM-GCC <=4.2 visibility of template
-# don't work. Set the option to off and hide it.
-if(APPLE AND CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION  VERSION_LESS "4.3")
-  set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
-elseif(APPLE)
-  #RK:  compiler visibility nor woking on osx with appleclang xcode.
-  #gcc is a symlink to clang
-  set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
-endif()
-
 include(GenerateExportHeaderCustom)
 
 if(OTB_CPPCHECK_TEST)
@@ -56,8 +46,9 @@ macro(otb_module _name)
   set(OTB_MODULE_${otb-module}_DESCRIPTION "description")
   set(OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT 0)
   set(OTB_MODULE_${otb-module}_ENABLE_SHARED 0)
+  set(OTB_MODULE_${otb-module}_COMPONENT Core)
   foreach(arg ${ARGN})
-    if("${arg}" MATCHES "^(DEPENDS|OPTIONAL_DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT)$")
+    if("${arg}" MATCHES "^(DEPENDS|OPTIONAL_DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT|COMPONENT)$")
       set(_doing "${arg}")
     elseif("${arg}" MATCHES "^EXCLUDE_FROM_DEFAULT$")
       set(_doing "")
@@ -86,6 +77,9 @@ macro(otb_module _name)
       set(OTB_MODULE_${otb-module}_DESCRIPTION "${arg}")
     elseif("${_doing}" MATCHES "^DEFAULT")
       message(FATAL_ERROR "Invalid argument [DEFAULT]")
+    elseif("${_doing}" MATCHES "^COMPONENT$")
+      set(_doing "")
+      set(OTB_MODULE_${otb-module}_COMPONENT "${arg}")
     else()
       set(_doing "")
       message(AUTHOR_WARNING "Unknown argument [${arg}]")
@@ -117,6 +111,7 @@ macro(otb_module_impl)
   set(${otb-module}_INSTALL_LIBRARY_DIR ${OTB_INSTALL_LIBRARY_DIR})
   set(${otb-module}_INSTALL_ARCHIVE_DIR ${OTB_INSTALL_ARCHIVE_DIR})
   set(${otb-module}_INSTALL_INCLUDE_DIR ${OTB_INSTALL_INCLUDE_DIR})
+  set(${otb-module}_COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT})
 
   # Collect all sources and headers for IDE projects.
   set(_srcs "")
@@ -163,7 +158,7 @@ macro(otb_module_impl)
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/include)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
-    install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT Development)
+    install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT ${${otb-module}_COMPONENT})
   endif()
 
   if(NOT OTB_SOURCE_DIR)
@@ -230,7 +225,7 @@ macro(otb_module_impl)
     install(FILES
       ${_export_header_file}
       DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
-      COMPONENT Development
+      COMPONENT ${${otb-module}_COMPONENT}
       )
 
     if (BUILD_SHARED_LIBS)
@@ -271,7 +266,7 @@ macro(otb_module_impl)
   install(FILES
     ${${otb-module}_BINARY_DIR}/CMakeFiles/${otb-module}.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}/Modules
-    COMPONENT Development
+    COMPONENT ${${otb-module}_COMPONENT}
     )
   otb_module_doxygen(${otb-module})   # module name
 endmacro()
@@ -336,28 +331,32 @@ macro(otb_module_target_export _name)
   export(TARGETS ${_name} APPEND FILE ${${otb-module}-targets-build})
 endmacro()
 
-macro(otb_module_target_install _name)
+macro(otb_module_target_install _name _component)
   #Use specific runtime components for executables and libraries separately when installing a module,
   #considering that the target of a module could be either an executable or a library.
-  get_property(_ttype TARGET ${_name} PROPERTY TYPE)
-  if("${_ttype}" STREQUAL EXECUTABLE)
-    set(runtime_component Runtime)
-  else()
-    set(runtime_component RuntimeLibraries)
-  endif()
+  # get_property(_ttype TARGET ${_name} PROPERTY TYPE)
+  # if("${_ttype}" STREQUAL EXECUTABLE)
+  #   set(_component Runtime)
+  # else()
+  #   set(_component Dependencies)
+  # endif()
   install(TARGETS ${_name}
     EXPORT  ${${otb-module}-targets}
-    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${runtime_component}
-    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT Development
+    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_component}
+    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
+    ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT ${_component}
     )
 endmacro()
 
 macro(otb_module_target _name)
   set(_install 1)
+  set(_component Core)
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(NO_INSTALL)$")
       set(_install 0)
+    elseif("${arg}" MATCHES "^COMPONENT_[a-zA-Z]+$")
+      string(REPLACE "_" ";" _list_components ${arg})
+      list(GET _list_components 1 _component)
     else()
       message(FATAL_ERROR "Unknown argument [${arg}]")
     endif()
@@ -366,11 +365,6 @@ macro(otb_module_target _name)
   otb_module_target_label(${_name})
   otb_module_target_export(${_name})
   if(_install)
-    otb_module_target_install(${_name})
+    otb_module_target_install(${_name} ${_component})
   endif()
-endmacro()
-
-macro(otb_module_requires_cxx11)
-  message(WARNING "otb_module_requires_cxx11 is deprecated since OTB version 6.2 which build with c++14 by default. You can safely remove the call to this macro.")
-  set(OTB_MODULE_${otb-module}_REQUIRES_CXX11 1)
 endmacro()

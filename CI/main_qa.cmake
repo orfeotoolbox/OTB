@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,27 +18,11 @@
 # limitations under the License.
 #
 
-include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 
-set( ENV{LANG} "C" ) # Only ascii output
 get_filename_component( OTB_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}" DIRECTORY )
 
-set( DEBUG "1" )
-set( CMAKE_COMMAND "cmake" )
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+set( ci_build_type "Debug" )
+set( CTEST_TEST_TIMEOUT 1500)
 
-# retrieve XDK
-get_xdk()
-
-set( INSTALL_DIR "${XDK_PATH}" )
-
-# FIX ME this part might platform dependent
-set( GDAL_DATA "${XDK_PATH}/share/gdal" )
-set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
-set( PROJ_LIB "${XDK_PATH}/share" )
-set( CTEST_ENVIRONMENT "PATH=${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}" )
-
-set( ci_do_cookbook -1 )
-set( ci_do_doxygen -1 )
-
-include( "${CMAKE_CURRENT_LIST_DIR}/main_ci.cmake" )
+include( "${CMAKE_CURRENT_LIST_DIR}/main_superbuild.cmake" )

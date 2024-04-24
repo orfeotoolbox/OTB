@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -32,12 +32,14 @@ if(UNIX)
   ADD_SUPERBUILD_CMAKE_VAR(NETCDF HDF5_INCLUDE_DIR)
   ADD_SUPERBUILD_CMAKE_VAR(NETCDF HDF5_C_LIBRARY)
   ADD_SUPERBUILD_CMAKE_VAR(NETCDF HDF5_HL_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(NETCDF CURL_LIBRARY)
+  ADD_SUPERBUILD_CMAKE_VAR(NETCDF CURL_INCLUDE_DIR)
 endif()
 
 ExternalProject_Add(NETCDF
   PREFIX NETCDF
-  URL "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.4.1.1.tar.gz"
-  URL_MD5 503a2d6b6035d116ed53b1d80c811bda
+  URL "https://downloads.unidata.ucar.edu/netcdf-c/4.9.2/netcdf-c-4.9.2.tar.gz"
+  URL_MD5 f48ee01534365006934f0c63d4055ea0
   SOURCE_DIR ${NETCDF_SB_SRC}
   BINARY_DIR ${NETCDF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -73,6 +75,7 @@ ExternalProject_Add(NETCDF
     -DENABLE_V2_API:BOOL=ON
     -DUSE_HDF5:BOOL=ON
     -DUSE_NETCDF4:BOOL=ON
+    -DCURL_LIBRARIES:PATH=${_SB_CURL_LIBRARY}
     ${NETCDF_SB_CONFIG}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   LOG_DOWNLOAD 1

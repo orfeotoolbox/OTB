@@ -16,7 +16,6 @@
 #define BOOST_ENABLE_ASSERT_HANDLER
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 #define PY_ARRAY_UNIQUE_SYMBOL PyArrayHandle
 #include <boost/python.hpp>
@@ -44,8 +43,8 @@ struct siftfast_exception : std::exception
 {
     siftfast_exception() : std::exception(), _s("unknown exception") {}
     siftfast_exception(const string& s) : std::exception() { _s = "siftfast: " + s; }
-    virtual ~siftfast_exception() throw() {}
-    char const* what() const throw() { return _s.c_str(); }
+    virtual ~siftfast_exception() noexcept {}
+    char const* what() noexcept const { return _s.c_str(); }
     string _s;
 };
 

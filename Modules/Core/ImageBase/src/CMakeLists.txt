@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,14 +22,13 @@ set(OTBImageBase_SRC
   otbImageIOBase.cxx
   otbImage.cxx
   otbVectorImage.cxx
+  otbImageCommons.cxx
   )
 
 add_library(OTBImageBase ${OTBImageBase_SRC})
 target_link_libraries(OTBImageBase 
   ${OTBCommon_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBMetadata_LIBRARIES}
-
   )
 
-otb_module_target(OTBImageBase)
+otb_module_target(OTBImageBase COMPONENT_Core)

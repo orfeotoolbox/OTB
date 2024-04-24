@@ -147,7 +147,7 @@ sensor:  WV02
 support_data.TDI_level:  0
 support_data.azimuth_angle:  0
 support_data.band_id:  Unknown
-support_data.band_name_list:  Unknown
+support_data.band_name_list:  B1 B2
 support_data.bits_per_pixel:  0
 support_data.elevation_angle:  0
 support_data.generation_date:  Unknown

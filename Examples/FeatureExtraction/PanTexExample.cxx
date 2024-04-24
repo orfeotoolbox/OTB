@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
 
-  // We can now instatiate the filter.
+  // We can now instantiate the filter.
 
   PanTexTextureFilterType::Pointer textureFilter = PanTexTextureFilterType::New();
 

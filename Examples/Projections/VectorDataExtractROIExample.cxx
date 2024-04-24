@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,7 @@
 // objects.
 //
 // Most of the time, you won't be interested in the whole area and would like
-// to focuss only on the area corresponding to your satellite image.
+// to focus only on the area corresponding to your satellite image.
 //
 // The \doxygen{otb}{VectorDataExtractROI} is able to extract the area corresponding
 // to your satellite image, even if the image is still in sensor geometry (provided
@@ -38,7 +38,6 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
-#include "otbImageMetadataInterfaceFactory.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -92,11 +91,9 @@ int main(int argc, char* argv[])
   region.SetSize(size);
   region.SetOrigin(index);
 
-  otb::ImageMetadataInterfaceBase::Pointer imageMetadataInterface =
-      otb::ImageMetadataInterfaceFactory::CreateIMI(imageReader->GetOutput()->GetMetaDataDictionary());
-  region.SetRegionProjection(imageMetadataInterface->GetProjectionRef());
+  region.SetRegionProjection(imageReader->GetOutput()->GetProjectionRef());
 
-  region.SetKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  region.SetImageMetadata(imageReader->GetOutput()->GetImageMetadata());
 
   filter->SetRegion(region);
 

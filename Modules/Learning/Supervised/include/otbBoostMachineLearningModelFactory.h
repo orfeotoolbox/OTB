@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,7 +29,7 @@
 namespace otb
 {
 /** \class BoostMachineLearningModelFactory
- * \brief Creation d'un instance d'un objet SVMMachineLearningModel utilisant les object factory.
+ * \brief Create an instance of SVMMachineLearningModel through the object factory.
  *
  * \ingroup OTBSupervised
  */
@@ -38,10 +38,10 @@ class ITK_EXPORT BoostMachineLearningModelFactory : public itk::ObjectFactoryBas
 {
 public:
   /** Standard class typedefs. */
-  typedef BoostMachineLearningModelFactory             Self;
-  typedef itk::ObjectFactoryBase        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef BoostMachineLearningModelFactory Self;
+  typedef itk::ObjectFactoryBase           Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -62,12 +62,11 @@ public:
 
 protected:
   BoostMachineLearningModelFactory();
-  ~BoostMachineLearningModelFactory() override;
+  ~BoostMachineLearningModelFactory() override = default;
 
 private:
-  BoostMachineLearningModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  BoostMachineLearningModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

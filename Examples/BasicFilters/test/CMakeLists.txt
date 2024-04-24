@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -51,7 +51,7 @@ otb_add_test(NAME bfTeDEMToRainbowExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/DEMToRainbowImageGenerator.png
   Execute $<TARGET_FILE:DEMToRainbowExample>
     ${TEMP}/DEMToRainbowImageGenerator.png
-    6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM_srtm
+    6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
 )
 
 
@@ -139,5 +139,5 @@ otb_add_test(NAME bfTeHillShadingExampleTest COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:HillShadingExample>
     ${TEMP}/HillShadingExample.png
     ${TEMP}/HillShadingColorExample.png
-    6.8 45.3 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM_srtm
+    6.8 45.3 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
 )

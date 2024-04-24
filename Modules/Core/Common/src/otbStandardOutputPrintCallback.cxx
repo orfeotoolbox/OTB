@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,23 +23,17 @@
 namespace otb
 {
 
-void
-StandardOutputPrintCallback
-::Call(std::string const& content)
+void StandardOutputPrintCallback::Call(std::string const& content)
 {
   std::cout << content;
 }
 
-void
-StandardOutputPrintCallback
-::Flush()
+void StandardOutputPrintCallback::Flush()
 {
   std::cout << std::flush;
 }
 
-bool
-StandardOutputPrintCallback
-::IsInteractive()
+bool StandardOutputPrintCallback::IsInteractive()
 {
   return m_IsInteractive;
 }

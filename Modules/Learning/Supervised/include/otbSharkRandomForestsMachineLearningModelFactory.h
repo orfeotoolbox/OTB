@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,10 +36,10 @@ class ITK_EXPORT SharkRandomForestsMachineLearningModelFactory : public itk::Obj
 {
 public:
   /** Standard class typedefs. */
-  typedef SharkRandomForestsMachineLearningModelFactory             Self;
-  typedef itk::ObjectFactoryBase        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef SharkRandomForestsMachineLearningModelFactory Self;
+  typedef itk::ObjectFactoryBase                        Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   virtual const char* GetITKSourceVersion(void) const override;
@@ -60,12 +60,11 @@ public:
 
 protected:
   SharkRandomForestsMachineLearningModelFactory();
-  virtual ~SharkRandomForestsMachineLearningModelFactory();
+  ~SharkRandomForestsMachineLearningModelFactory() override = default;
 
 private:
-  SharkRandomForestsMachineLearningModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SharkRandomForestsMachineLearningModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,7 +20,7 @@
 
 
 //  This example illustrates the use of the \doxygen{otb}{ImageList}
-//  class. This class provides the functionnalities needed in order to
+//  class. This class provides the functionalities needed in order to
 //  integrate image lists as data objects into the OTB
 //  pipeline. Indeed, if a \code{std::list< ImageType >} was used, the
 //  update operations on the pipeline might not have the desired

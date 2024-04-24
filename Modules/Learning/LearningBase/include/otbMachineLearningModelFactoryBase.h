@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -64,8 +64,8 @@ protected:
   #endif
 
 private:
-  MachineLearningModelFactoryBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MachineLearningModelFactoryBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

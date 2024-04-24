@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,10 +22,13 @@ INCLUDE_ONCE_MACRO(GEOS)
 
 SETUP_SUPERBUILD(GEOS)
 
+set(GEOS_URL "https://download.osgeo.org/geos/geos-3.12.1.tar.bz2")
+set(GEOS_MD5 36d16fbea7e923c50b33ddb83516c36e)
+
 ExternalProject_Add(GEOS
    PREFIX GEOS
-   URL "http://download.osgeo.org/geos/geos-3.6.1.tar.bz2"
-   URL_MD5 c97e338b3bc81f9848656e9d693ca6cc
+   URL ${GEOS_URL}
+   URL_MD5 ${GEOS_MD5}
    SOURCE_DIR ${GEOS_SB_SRC}
    BINARY_DIR ${GEOS_SB_SRC}
    INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -36,6 +39,7 @@ ExternalProject_Add(GEOS
    -DGEOS_ENABLE_MACOSX_FRAMEWORK:BOOL=OFF
    -DGEOS_BUILD_STATIC:BOOL=${BUILD_STATIC_LIBS}
    -DGEOS_BUILD_SHARED:BOOL=${BUILD_SHARED_LIBS}
+   -DCMAKE_INSTALL_LIBDIR:PATH=lib
    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
    LOG_DOWNLOAD 1
    LOG_CONFIGURE 1
@@ -43,8 +47,6 @@ ExternalProject_Add(GEOS
    LOG_INSTALL 1
    )
 
-# Patch still needed with version 3.6.1 to avoid error during CMake configuration
-# See https://trac.osgeo.org/geos/ticket/753
 SUPERBUILD_PATCH_SOURCE(GEOS)
 
 set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)

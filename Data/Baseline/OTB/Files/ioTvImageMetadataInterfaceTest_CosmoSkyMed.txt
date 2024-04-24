@@ -1,0 +1,31 @@
+SensorID CSK
+Mission CSK
+Instrument SAR-2000
+ProductType SCS_B
+Polarization HH
+Mode ENHANCED SPOTLIGHT
+Swath S1
+OrbitDirection DESCENDING
+TileHintX 128
+TileHintY 128
+DataType 1
+OrbitNumber 13415
+NumberOfLines 14380
+NumberOfColumns 17502
+RedDisplayChannel 0
+GreenDisplayChannel 0
+BlueDisplayChannel 0
+PRF 3321.52
+RadarFrequency 9.6e+09
+LineSpacing 0.70237
+PixelSpacing 0.324295
+AcquisitionStartTime 2011-04-18T18:03:27.915976Z
+AcquisitionStopTime 2011-04-18T18:03:29.380925Z
+SAR <SARParam>
+SARCalib <SARCalib>
+GCP <GCPParam>
+
+GCP
+{"Projection": "GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]", 
+[{"GCP_Id": "1", "GCP_Info": "", "GCP_Row": "0", "GCP_Col": "0", "GCP_X": "1.52086", "GCP_Y": "43.6454", "GCP_Z": "5.53428e-10", }, 
+]}

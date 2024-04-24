@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -35,4 +35,4 @@ target_link_libraries(OTBSupervised
   ${OTBLearningBase_LIBRARIES}
   )
 
-otb_module_target(OTBSupervised)
+otb_module_target(OTBSupervised COMPONENT_Learning)

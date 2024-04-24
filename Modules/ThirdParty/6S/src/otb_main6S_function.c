@@ -13,7 +13,7 @@ extern "C" {
 /* Common Block Declarations */
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     integer nquad;
 } num_quad__;
@@ -21,7 +21,7 @@ struct {
 #define num_quad__1 num_quad__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     integer num_z__;
     doublereal alt_z__[101], taer_z__[101], taer55_z__[101];
@@ -30,7 +30,7 @@ struct {
 #define aeroprof_1 aeroprof_
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     integer iwr;
     logical ier;
@@ -39,7 +39,7 @@ struct {
 #define sixs_ier__1 sixs_ier__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     doublereal rmax, rmin;
     integer icp;
@@ -52,7 +52,7 @@ struct {
 #define mie_in__1 mie_in__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     integer igmax;
 } multorder_;
@@ -60,7 +60,7 @@ struct {
 #define multorder_1 multorder_
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     doublereal zpl[34], ppl[34], tpl[34], whpl[34], wopl[34];
 } sixs_planesim__;
@@ -68,7 +68,7 @@ struct {
 #define sixs_planesim__1 sixs_planesim__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     doublereal xacc;
 } sixs_test__;
@@ -76,7 +76,7 @@ struct {
 #define sixs_test__1 sixs_test__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     doublereal s[1501], wlinf, wlsup;
 } sixs_ffu__;
@@ -84,7 +84,7 @@ struct {
 #define sixs_ffu__1 sixs_ffu__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     doublereal delta, sigma;
 } sixs_del__;
@@ -92,7 +92,7 @@ struct {
 #define sixs_del__1 sixs_del__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     doublereal z__[34], p[34], t[34], wh[34], wo[34];
 } sixs_atm__;
@@ -100,7 +100,7 @@ struct {
 #define sixs_atm__1 sixs_atm__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     doublereal ext[20], ome[20], gasym[20], phase[20], qhase[20], uhase[20];
 } sixs_aer__;
@@ -108,7 +108,7 @@ struct {
 #define sixs_aer__1 sixs_aer__
 
 /*OTB */
-/*Extern*/
+Extern
 struct {
     doublereal roatm[60]	/* was [3][20] */, dtdir[60]	/* was [3][20]
 	     */, dtdif[60]	/* was [3][20] */, utdir[60]	/* was [3][20]

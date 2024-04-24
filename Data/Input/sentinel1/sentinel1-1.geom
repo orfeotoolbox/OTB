@@ -6922,7 +6922,7 @@ support_data.number_samples:  17663
 support_data.orbit_cycle:  51
 support_data.orbit_pass:  ASCENDING
 support_data.product_type:  SLC
-support_data.pulse_repetition_frequency:  1.663478205991845e+03
+support_data.pulse_repetition_frequency:  1663.47814941406
 support_data.radar_frequency:  5.405000454334350e+09
 support_data.range_bandwidth:  4.218944400000000e+07
 support_data.range_looks:  1

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,33 +27,28 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-#ifdef OTB_OPENCV_3
 #include "otbOpenCVUtils.h"
-#else
-class CvDTree;
-#endif
 
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT DecisionTreeMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+class ITK_EXPORT DecisionTreeMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef DecisionTreeMachineLearningModel           Self;
+  typedef DecisionTreeMachineLearningModel Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-  typedef typename Superclass::ProbaSampleType            ProbaSampleType;
+  typedef typename Superclass::InputValueType       InputValueType;
+  typedef typename Superclass::InputSampleType      InputSampleType;
+  typedef typename Superclass::InputListSampleType  InputListSampleType;
+  typedef typename Superclass::TargetValueType      TargetValueType;
+  typedef typename Superclass::TargetSampleType     TargetSampleType;
+  typedef typename Superclass::TargetListSampleType TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType  ConfidenceValueType;
+  typedef typename Superclass::ProbaSampleType      ProbaSampleType;
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(DecisionTreeMachineLearningModel, MachineLearningModel);
@@ -108,13 +103,6 @@ public:
   itkGetMacro(MaxCategories, int);
   itkSetMacro(MaxCategories, int);
 
-  /** If cv_folds > 1 then prune a tree with K-fold cross-validation where K is equal to cv_folds.
-   * Default is 10
-   * \see http://docs.opencv.org/modules/ml/doc/decision_trees.html#CvDTreeParams::CvDTreeParams%28%29
-   */
-  itkGetMacro(CVFolds, int);
-  itkSetMacro(CVFolds, int);
-
   /** If true then a pruning will be harsher. This will make a tree more compact and
    * more resistant to the training data noise but a bit less accurate.
    * Default is true
@@ -157,18 +145,18 @@ public:
   void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string & filename, const std::string & name="") override;
+  void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) override;
+  bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) override;
+  bool CanWriteFile(const std::string&) override;
   //@}
 
 protected:
@@ -176,34 +164,28 @@ protected:
   DecisionTreeMachineLearningModel();
 
   /** Destructor */
-  ~DecisionTreeMachineLearningModel() override;
+  ~DecisionTreeMachineLearningModel() override = default;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr, ProbaSampleType *proba=nullptr) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  DecisionTreeMachineLearningModel(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DecisionTreeMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::DTrees> m_DTreeModel;
-#else
-  CvDTree * m_DTreeModel;
-#endif
 
-  int m_MaxDepth;
-  int m_MinSampleCount;
-  double m_RegressionAccuracy;
-  bool m_UseSurrogates;
-  int m_MaxCategories;
-  int m_CVFolds;
-  bool m_Use1seRule;
-  bool m_TruncatePrunedTree;
+  int                m_MaxDepth;
+  int                m_MinSampleCount;
+  double             m_RegressionAccuracy;
+  bool               m_UseSurrogates;
+  int                m_MaxCategories;
+  bool               m_Use1seRule;
+  bool               m_TruncatePrunedTree;
   std::vector<float> m_Priors;
-
 };
 } // end namespace otb
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,12 +24,13 @@
 #include "itkMacro.h"
 #include "otbFunctorImageFilter.h"
 #include "vnl/algo/vnl_svd.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace otb
 {
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class UnConstrainedLeastSquareFunctor
  *
@@ -39,7 +40,7 @@ namespace Functor {
  *
  * \ingroup OTBUnmixing
  */
-template<class TInput, class TOutput, class TPrecision>
+template <class TInput, class TOutput, class TPrecision>
 class UnConstrainedLeastSquareFunctor
 {
 public:
@@ -60,9 +61,8 @@ public:
   OutputType operator()(const InputType& in) const;
 
 private:
-
   typedef vnl_svd<PrecisionType>     SVDType;
-  typedef boost::shared_ptr<SVDType> SVDPointerType;
+  typedef std::shared_ptr<SVDType> SVDPointerType;
 
   unsigned int   m_OutputSize;
   SVDPointerType m_Svd;
@@ -102,4 +102,3 @@ using UnConstrainedLeastSquareImageFilter =
 #endif
 
 #endif
-

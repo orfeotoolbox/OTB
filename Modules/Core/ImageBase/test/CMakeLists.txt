@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -54,33 +54,12 @@ otb_add_test(NAME bfTvFlexibleDistanceWithMissingValue COMMAND otbImageBaseTestD
   0.000001
   )
 
-otb_add_test(NAME bfTvItkImagePCAShapeModelEstimatorTest COMMAND otbImageBaseTestDriver
-  --compare-n-images ${EPSILON_7} 4
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
-  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc1.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc2.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
-  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc3.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
-  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_MEAN.tif
-  otbImagePCAShapeModelEstimatorTest
-  ${INPUTDATA}/poupees_sub_c1.png
-  ${INPUTDATA}/poupees_sub_c2.png
-  ${INPUTDATA}/poupees_sub_c3.png
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
-  )
-set_property(TEST bfTvItkImagePCAShapeModelEstimatorTest PROPERTY DEPENDS bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator)
-
 otb_add_test(NAME bfTvFunctionToImageFilterTest COMMAND otbImageBaseTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvFunctionToImageFilterTest.tif
   ${TEMP}/bfTvFunctionToImageFilterTest.tif
   otbFunctionToImageFilter
-  ${INPUTDATA}/poupees_1canal.hd
+  ${INPUTDATA}/poupees.tif
   ${TEMP}/bfTvFunctionToImageFilterTest.tif
   2 # radius
   )
@@ -130,14 +109,6 @@ otb_add_test(NAME coTvMultiChannelROI_RGB2RGB_PNG COMMAND otbImageBaseTestDriver
   ${INPUTDATA}/couleurs_extrait.png
   ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG.png
   -channels 1 2 3 )
-
-otb_add_test(NAME coTvMultiChannelROI_5c_BSQ COMMAND otbImageBaseTestDriver
-  --compare-image ${NOTOL} ${BASELINE}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
-  otbMultiChannelExtractROI
-  ${INPUTDATA}/poupees.raw.hdr
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
-  -startX 303 -startY 2 -sizeX 134  -sizeY 330 -channels 1 2 3 2 1 )
 
 otb_add_test(NAME coTvMultiChannelROI_RGB2NG_PNG1 COMMAND otbImageBaseTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
@@ -406,7 +377,7 @@ if(OTB_DATA_USE_LARGEINPUT)
         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_res5.tif
         ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
         otbMultiChannelExtractROI
-        -ushort ${current_file}?resol=5
+        -ushort ${current_file}?&resol=5
         -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif?&box=0:0:128:128
         -channels 1
         -time
@@ -555,26 +526,6 @@ otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2PNG COMMAND otbImageBaseTestDr
   -startX 100 -startY 100 -sizeX 77 -sizeY 300
   -channels 1)
 
-# ---  LUM ----
-otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2LUM COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
-  ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
-  otbMultiChannelExtractROI
-  LARGEINPUT{IKONOS/PARIS/po_79039_nir_0000000.tif}
-  ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
-  -startX 100 -startY 100 -sizeX 77 -sizeY 300
-  -channels 1)
-
-# ---  BSQ ----
-otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2BSQ COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
-  ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
-  otbMultiChannelExtractROI
-  LARGEINPUT{IKONOS/PARIS/po_79039_nir_0000000.tif}
-  ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
-  -startX 100 -startY 100 -sizeX 77 -sizeY 300
-  -channels 1)
-
 # ---  Quickbird PAN  ---
 otb_add_test(NAME   ioTvMultiChannelROI_QuickbirdPAN2TIFF COMMAND otbImageBaseTestDriver
   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
@@ -630,22 +581,22 @@ otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res0 COMMAND otbIma
 
 # Read an area inside one tile at resolution 0 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
-otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50.tif
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
+otb_add_test(NAME   ioTvMultiChannelROI_s2_JPEG2000_2_TIF_res0 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_s2_150_75_100_50.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_s2_150_75_100_50_OUT.tif
   otbMultiChannelExtractROI
-  ${INPUTDATA}/lena512color.jp2?&resol=0
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
+  ${INPUTDATA}/s2a_l2a_t30uxu_20220317T111749.jp2?&resol=0
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_s2_150_75_100_50_OUT.tif
   -startX 150 -startY 75 -sizeX 100 -sizeY 50 )
 
 # Read an area inside one tile at resolution 5 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
-otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res1 COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res1.tif
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res1_OUT.tif
+otb_add_test(NAME   ioTvMultiChannelROI_s2_JPEG2000_2_TIF_res1 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_s2_res1.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_s2_res1_OUT.tif
   otbMultiChannelExtractROI
-  ${INPUTDATA}/lena512color.jp2?&resol=1
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res1_OUT.tif
+  ${INPUTDATA}/s2a_l2a_t30uxu_20220317T111749.jp2?&resol=1
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_s2_res1_OUT.tif
   )
 
 
@@ -775,3 +726,16 @@ otb_add_test(NAME ioTvOtbVectorImageTestRadarsat COMMAND otbImageBaseTestDriver
   otbVectorImageLegacyTest
   LARGEINPUT{/RADARSAT1/GOMA/SCENE01/}
   ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
+
+if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
+  # Unit tests
+  add_executable(otbPixelComponentIteratorTests otbPixelComponentIteratorTest.cxx)
+  target_link_libraries(
+    otbPixelComponentIteratorTests
+    ${OTBImageBase-Test_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+
+  add_test(NAME coTuPixelComponentIterator
+           COMMAND otbPixelComponentIteratorTests
+           WORKING_DIRECTORY ${TEMP})
+endif()

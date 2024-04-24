@@ -1,17 +1,14 @@
 <?xml version="1.0" ?>
 <OTB>
-    <version>3.18</version>
-    <build>18-05-2013</build>
-    <platform>Linux</platform>
+    <version>8.1.1</version>
     <application>
         <name>OrthoRectification</name>
-        <descr>This application allows to ortho-rectify optical images from supported sensors.&#x0A;</descr>
+        <descr>This application allows ortho-rectifying optical and radar images from supported sensors.</descr>
         <doc>
-            <name>Ortho-rectification</name>
-            <longdescr>An inverse sensor model is built from the input image metadata to convert geographical to raw geometry coordinates. This inverse sensor model is then combined with the chosen map projection to build a global coordinate mapping grid. Last, this grid is used to resample using the chosen interpolation algorithm. A Digital Elevation Model can be specified to account for terrain deformations. &#x0A;In case of SPOT5 images, the sensor model can be approximated by an RPC model in order to speed-up computation.</longdescr>
+            <longdescr>This application uses inverse sensor modelling combined with a choice of interpolation functions to resample a sensor geometry image into a ground geometry regular grid. The ground geometry regular grid is defined with respect to a map projection (see map parameter). The application offers several modes to estimate the output grid parameters (origin and ground sampling distance), including automatic estimation of image size, ground sampling distance, or both, from image metadata, user-defined ROI corners, or another ortho-image.A digital Elevation Model along with a geoid file can be specified to account for terrain deformations.In case of SPOT5 images, the sensor model can be approximated by an RPC model in order to speed-up computation.</longdescr>
             <authors>OTB-Team</authors>
-            <limitations>Supported sensors are Pleiades, SPOT5 (TIF format), Ikonos, Quickbird, Worldview2, GeoEye.</limitations>
-            <seealso>Ortho-rectification chapter from the OTB Software Guide</seealso>
+            <limitations>Supported sensors (both optical and radar) are: GeoEye, Ikonos, Pleiades, Quickbird, RadarSat, Sentinel-1, SPOT5 (TIF format), SPOT6/7, TerraSAR-X, Worldview 1/2/3, and any TIF image with embedded RPC tags.&#x0A; Also note that the opt.gridspacing default value may not be suitable for all sensors. In particular, if this value is lower than the target ground sampling distance, the processing time may increase a lot. A warning is issued in this case. Typical values should be half the DEM ground sampling distance.</limitations>
+            <seealso> </seealso>
             <tags>
                 <tag>Geometry</tag>
             </tags>
@@ -20,31 +17,32 @@
             <key>io.in</key>
             <type>InputImage</type>
             <name>Input Image</name>
-            <value>/media/ssh/pc-inglada/media/TeraDisk2/LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF</value>
+            <value>/home/tromain/Data/OTB-LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF</value>
         </parameter>
         <parameter mandatory="true">
             <key>io.out</key>
             <type>OutputImage</type>
             <name>Output Image</name>
-            <value>/home/rashad/repos/orfeo/build/OTB_/test-build/Testing/Temporary/apTvPrOrthorectifTest_UTM_OutXML1.tif</value>
+            <pixtype>float</pixtype>
+            <value>/home/tromain/Devel/builds/otb8/OTB/build/Testing/Temporary/apTvPrOrthorectifTest_UTM_OutXML1.tif</value>
         </parameter>
         <parameter mandatory="true">
             <key>map</key>
             <type>Choice</type>
-            <name>Output Cartographic Map Projection</name>
+            <name>Map Projection</name>
             <value>utm</value>
         </parameter>
         <parameter mandatory="true">
             <key>outputs.ulx</key>
-            <type>Float</type>
+            <type>Double</type>
             <name>Upper Left X</name>
-            <value>374100.8125</value>
+            <value>374100.8</value>
         </parameter>
         <parameter mandatory="true">
             <key>outputs.uly</key>
-            <type>Float</type>
+            <type>Double</type>
             <name>Upper Left Y</name>
-            <value>4829185</value>
+            <value>4829184.8</value>
         </parameter>
         <parameter mandatory="true">
             <key>outputs.sizex</key>
@@ -60,13 +58,13 @@
         </parameter>
         <parameter mandatory="true">
             <key>outputs.spacingx</key>
-            <type>Float</type>
+            <type>Double</type>
             <name>Pixel Size X</name>
             <value>0.5</value>
         </parameter>
         <parameter mandatory="true">
             <key>outputs.spacingy</key>
-            <type>Float</type>
+            <type>Double</type>
             <name>Pixel Size Y</name>
             <value>-0.5</value>
         </parameter>
@@ -74,7 +72,7 @@
             <key>elev.dem</key>
             <type>Directory</type>
             <name>DEM directory</name>
-            <value>/home/rashad/repos/orfeo/OTB-Data/Input/DEM/srtm_directory/</value>
+            <value>/home/tromain/Devel/otb8/Data/Input/DEM/srtm_directory/</value>
         </parameter>
         <parameter mandatory="true">
             <key>interpolator</key>
@@ -83,8 +81,14 @@
             <value>linear</value>
         </parameter>
         <parameter mandatory="false">
+            <key>opt.ram</key>
+            <type>RAM</type>
+            <name>Available RAM (MB)</name>
+            <value>256</value>
+        </parameter>
+        <parameter mandatory="false">
             <key>opt.gridspacing</key>
-            <type>Float</type>
+            <type>Double</type>
             <name>Resampling grid spacing</name>
             <value>4</value>
         </parameter>

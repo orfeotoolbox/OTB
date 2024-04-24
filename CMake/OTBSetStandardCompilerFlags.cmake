@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -57,6 +57,8 @@ function(check_c_compiler_warning_flags c_flag_var)
   set(local_c_flags "")
   set(flag_list "${ARGN}")
   foreach(flag IN LISTS flag_list)
+# This could be replaced by a simple check_c_compiler_flag(<flag> <var>)
+# https://cmake.org/cmake/help/v3.10/module/CheckCCompilerFlag.html?highlight=flags
     OTB_CHECK_C_COMPILER_FLAG(${flag} C_HAS_WARNING${flag})
     if(${C_HAS_WARNING${flag}})
       set(local_c_flags "${local_c_flags} ${flag}")
@@ -70,6 +72,8 @@ function(check_cxx_compiler_warning_flags cxx_flag_var)
   set(local_cxx_flags "")
   set(flag_list "${ARGN}")
   foreach(flag IN LISTS flag_list)
+# This could be replaced by a simple check_cxx_compiler_flag(<flag> <var>)
+# https://cmake.org/cmake/help/v3.10/module/CheckCXXCompilerFlag.html?highlight=checkcxxcompilerflag
     OTB_CHECK_CXX_COMPILER_FLAG(${flag} CXX_HAS_WARNING${flag})
     if(${CXX_HAS_WARNING${flag}})
       set(local_cxx_flags "${local_cxx_flags} ${flag}")
@@ -190,17 +194,42 @@ macro(check_compiler_platform_flags)
        endif()
   endif()
 
-  # CMake adds --enable-all-exports on Cygwin (since Cygwin is
-  # supposed to be UNIX-like), but we need to add it explicitly for
-  # a native windows build with the MinGW tools.
-  if(WIN32 AND MINGW AND CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS
-      "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
-    set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
-      "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
-    set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
-  elseif(MSVC)
-    set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /MANIFEST:NO")
+  if(WIN32)
+    # Some libraries (e.g. vxl libs) have no dllexport markup, so we can
+    # build full shared libraries only with the GNU toolchain. For non
+    # gnu compilers on windows, only Common is shared.  This allows for
+    # plugin type applications to use a dll for OTBCommon which will contain
+    # the static for Modified time.
+    if(CMAKE_COMPILER_IS_GNUCXX)
+      # CMake adds --enable-all-exports on Cygwin (since Cygwin is
+      # supposed to be UNIX-like), but we need to add it explicitly for
+      # a native windows build with the MinGW tools.
+      if(MINGW)
+        set(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS
+          "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
+        set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
+          "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
+        set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
+      endif()
+    else()
+      if(MSVC)
+        set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /MANIFEST:NO")
+      endif()
+      # if CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS is on, then
+      # BUILD_SHARED_LIBS works as it would on other systems
+      if(NOT CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
+        if(BUILD_SHARED_LIBS)
+        # TODO:
+        # OTB_LIBRARY_BUILD_TYPE is never used!
+          set(OTB_LIBRARY_BUILD_TYPE "SHARED")
+        else()
+          set(OTB_LIBRARY_BUILD_TYPE "STATIC")
+        endif()
+        # turn off BUILD_SHARED_LIBS as OTB_LIBRARY_BUILD_TYPE
+        # is used on the libraries that have markup.
+        set(BUILD_SHARED_LIBS OFF)
+      endif()
+    endif()
   endif()
 
   #-----------------------------------------------------------------------------
@@ -212,11 +241,6 @@ macro(check_compiler_platform_flags)
       ("${CMAKE_CXX_COMPILER_VERSION}" VERSION_GREATER "4.8" AND "${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS "4.9") ))
       set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -Wno-array-bounds")
     endif()
-  endif()
-
-  if(APPLE)
-    option(OTB_USE_64BITS_APPLE_TRUNCATION_WARNING "Turn on warnings on 64bits to 32bits truncations." OFF)
-    mark_as_advanced(OTB_USE_64BITS_APPLE_TRUNCATION_WARNING)
   endif()
 
   #-----------------------------------------------------------------------------
@@ -273,6 +297,8 @@ macro(check_compiler_platform_flags)
   if(OTB_USE_SSE_FLAGS)
     message(STATUS "SIMD extensions requested with OTB_USE_SSE_FLAGS=${OTB_USE_SSE_FLAGS}")
     include(OTBCheckSSEFeatures)
+# This should be deleted as it can be done with cmake_host_system_information
+# https://cmake.org/cmake/help/v3.10/command/cmake_host_system_information.html?highlight=sse
     check_sse_features(OTB_SSE_FLAGS)
     if(OTB_SSE_FLAGS)
       message(STATUS "Adding '${OTB_SSE_FLAGS}' to OTB_REQUIRED_CXX_FLAGS")
@@ -303,7 +329,7 @@ macro(check_compiler_platform_flags)
     set(OTB_CXX_DISABLE_OPTIMIZATION_FLAG "-O0")
   endif()
   if(DEFINED OTB_CXX_DISABLE_OPTIMIZATION_FLAG)
-    CHECK_CXX_SOURCE_COMPILES(${OTB_CXX_DISABLE_OPTIMIZATION_FLAG} CXX_HAS_DISABLE_OPTIMIZATION_FLAG)
+    CHECK_CXX_COMPILER_FLAG(${OTB_CXX_DISABLE_OPTIMIZATION_FLAG} CXX_HAS_DISABLE_OPTIMIZATION_FLAG)
   endif()
 endmacro()#End the platform check function
 

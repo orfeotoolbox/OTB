@@ -20,7 +20,8 @@ Describe any changes made to existing applications, or new applications that hav
 
 <!---
 ##### Tests
-Describe the testing strategy for new features.
+Describe the testing strategy for new features. 
+- [ ] validated through ... unitary test
 -->
 
 <!---

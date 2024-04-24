@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -53,11 +53,13 @@ set(OTBMetadata_SRC
   otbSarImageMetadataInterfaceFactory.cxx
   otbSarImageMetadataInterface.cxx
 
-  otbTerraSarImageMetadataInterfaceFactory.cxx
-  otbTerraSarImageMetadataInterface.cxx
+  otbTerraSarXSarImageMetadataInterfaceFactory.cxx
+  otbTerraSarXSarImageMetadataInterface.cxx
 
   otbSentinel1ImageMetadataInterfaceFactory.cxx
   otbSentinel1ImageMetadataInterface.cxx
+  otbSentinel1ThermalNoiseLookupData.cxx
+  otbSentinel1CalibrationLookupData.cxx
 
   otbCosmoImageMetadataInterfaceFactory.cxx
   otbCosmoImageMetadataInterface.cxx
@@ -66,14 +68,30 @@ set(OTBMetadata_SRC
   otbRadarsat2ImageMetadataInterface.cxx
 
   otbNoDataHelper.cxx
+  otbFilterFunctionValues.cxx
+  otbMetaDataKey.cxx
+
+  otbImageMetadata.cxx
+  otbGeometryMetadata.cxx
+  otbSARMetadata.cxx
+
+  otbGeomMetadataSupplier.cxx
+  otbXMLMetadataSupplier.cxx
+
+  otbMetadataStorageInterface.cxx
+  otbMetadataSupplierInterface.cxx
+
+  otbDateTime.cxx
+  otbDimapMetadataHelper.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})
 target_link_libraries(OTBMetadata
   ${OTBBoost_LIBRARIES}
   ${OTBCommon_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
-
+  ${OTBGdalAdapters_LIBRARIES}
+  ${OTBBoostAdapters_LIBRARIES}
+  ${OTBTinyXML_LIBRARIES}
   )
 
-otb_module_target(OTBMetadata)
+otb_module_target(OTBMetadata COMPONENT_Core)

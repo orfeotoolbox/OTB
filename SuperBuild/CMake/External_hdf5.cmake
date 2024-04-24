@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -29,8 +29,8 @@ set(HDF5_SB_CONFIG)
 
 ExternalProject_Add(HDF5
   PREFIX HDF5
-  URL "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.1/src/hdf5-1.10.1.tar.gz"
-  URL_MD5 43a2f9466702fb1db31df98ae6677f15
+  URL "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.3/src/hdf5-1.12.3.tar.gz"
+  URL_MD5 4da24fcd281b9eeb05dae9b258f72a72
   SOURCE_DIR ${HDF5_SB_SRC}
   BINARY_DIR ${HDF5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -39,14 +39,16 @@ ExternalProject_Add(HDF5
   CMAKE_CACHE_ARGS
   ${SB_CMAKE_CACHE_ARGS}
     -DBUILD_TESTING:BOOL=OFF
-    -DHDF5_BUILD_CPP_LIB:BOOL=OFF
-    -DHDF5_BUILD_EXAMPLES:BOOL=ON
+    -DHDF5_BUILD_CPP_LIB:BOOL=ON
+    -DHDF5_BUILD_EXAMPLES:BOOL=OFF
     -DHDF5_BUILD_FORTRAN:BOOL=OFF
     -DHDF5_BUILD_HL_LIB:BOOL=ON
     -DHDF5_BUILD_JAVA:BOOL=OFF
     -DHDF5_BUILD_TOOLS:BOOL=OFF
     -DHDF5_ENABLE_SZIP_SUPPORT:BOOL=OFF
     -DHDF5_ENABLE_Z_LIB_SUPPORT:BOOL=ON
+    –DH5_USE_110_API:BOOL=ON
+    -DDEFAULT_API_VERSION:STRING=v110
     ${HDF5_SB_CONFIG}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   LOG_DOWNLOAD 1

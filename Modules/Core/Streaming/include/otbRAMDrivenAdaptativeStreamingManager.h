@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,7 +32,7 @@ namespace otb
  *  available RAM.
  *
  * This streaming manager uses the TileHint from the
- * MetaDataDictionary to find out the tiling sheme of the input file
+ * MetaDataDictionary to find out the tiling scheme of the input file
  * if available.
  *
  * You can use SetAvailableRAMInMB to set the available RAM. An
@@ -45,15 +45,15 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-template<class TImage>
+template <class TImage>
 class ITK_EXPORT RAMDrivenAdaptativeStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */
   typedef RAMDrivenAdaptativeStreamingManager Self;
-  typedef StreamingManager<TImage>       Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef StreamingManager<TImage>            Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   typedef TImage                          ImageType;
   typedef typename Superclass::RegionType RegionType;
@@ -83,7 +83,7 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
+  void PrepareStreaming(itk::DataObject* input, const RegionType& region) override;
 
 protected:
   RAMDrivenAdaptativeStreamingManager();
@@ -96,8 +96,8 @@ protected:
   double m_Bias;
 
 private:
-  RAMDrivenAdaptativeStreamingManager(const RAMDrivenAdaptativeStreamingManager &);
-  void operator =(const RAMDrivenAdaptativeStreamingManager&);
+  RAMDrivenAdaptativeStreamingManager(const RAMDrivenAdaptativeStreamingManager&);
+  void operator=(const RAMDrivenAdaptativeStreamingManager&);
 };
 
 } // End namespace otb
@@ -107,4 +107,3 @@ private:
 #endif
 
 #endif
-

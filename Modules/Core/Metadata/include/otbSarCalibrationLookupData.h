@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,25 +19,31 @@
  */
 
 #ifndef SarCalibrationLookupData_H
-#define SarCalibrationLookupData_H 1
-#include <string>
+#define SarCalibrationLookupData_H
+
+#include "OTBMetadataExport.h"
+#include "otbMetaDataKey.h"
+
 #include <itkLightObject.h>
 #include <itkNumericTraits.h>
 #include <itkObjectFactory.h>
 
-#include "OTBMetadataExport.h"
+#include <boost/lexical_cast.hpp>
 
-namespace otb {
+#include <string>
 
-class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
+namespace otb
+{
 
-  public:
+class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject
+{
 
-    /** Standard typedefs */
-  typedef SarCalibrationLookupData          Self;
-  typedef itk::LightObject                 Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+public:
+  /** Standard typedefs */
+  typedef SarCalibrationLookupData      Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -47,21 +53,20 @@ class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   typedef itk::IndexValueType IndexValueType;
 
-  enum {
+  enum
+  {
     SIGMA = 0,
     BETA,
     GAMMA,
-    DN
+    DN,
+    NOISE
   };
 
-  SarCalibrationLookupData()
-    :m_Type(0)
+  SarCalibrationLookupData() : m_Type(0)
   {
   }
 
-  ~SarCalibrationLookupData() override
-  {
-  }
+  ~SarCalibrationLookupData() override = default;
 
   virtual double GetValue(const IndexValueType itkNotUsed(x), const IndexValueType itkNotUsed(y)) const
   {
@@ -75,19 +80,30 @@ class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   itkGetMacro(Type, short);
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const override
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     os << indent << " lookup table type:'" << m_Type << "'" << std::endl;
     Superclass::PrintSelf(os, indent);
   }
 
+  /** Keywordlist export */
+  virtual void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const
+  {
+    kwl.insert({prefix + "Sensor", "Default"});
+    kwl.insert({prefix + "Type",
+                 boost::lexical_cast<std::string>(m_Type)});
+  }
+
+  /** Keywordlist import */
+  virtual void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
+  {
+    m_Type = boost::lexical_cast<short>(kwl.at(prefix + "Type"));
+  }
+
 private:
-
   SarCalibrationLookupData(const Self&) = delete;
-  void operator =(const Self&) = delete;
+  void  operator=(const Self&) = delete;
   short m_Type;
-
 };
-
 }
 #endif

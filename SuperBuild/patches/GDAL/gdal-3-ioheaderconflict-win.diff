@@ -1,0 +1,28 @@
+diff -burN gdal_orig/apps/gdaltransform.cpp gdal/apps/gdaltransform.cpp 
+--- gdal_orig/apps/gdaltransform.cpp	2020-05-28 13:20:16.124465749 +0200
++++ gdal/apps/gdaltransform.cpp	2020-05-28 13:26:47.563450287 +0200
+@@ -47,7 +47,9 @@
+ #include "commonutils.h"
+ 
+ #ifdef _WIN32
+-#include <io.h>
++// We need the io.h file from system but io.h from geos conflicts with io.h from system
++//#include <io.h>
++#include <corecrt_io.h>
+ #else
+ #include <unistd.h>
+ #endif
+diff -burN gdal_orig/apps/gdallocationinfo.cpp gdal/apps/gdallocationinfo.cpp 
+--- gdal_orig/apps/gdallocationinfo.cpp	2020-05-28 13:20:16.124465749 +0200
++++ gdal/apps/gdallocationinfo.cpp	2020-05-28 13:26:58.719601480 +0200
+@@ -36,7 +36,9 @@
+ #include <vector>
+ 
+ #ifdef _WIN32
+-#include <io.h>
++// We need the io.h file from system but io.h from geos conflicts with io.h from system
++//#include <io.h>
++#include <corecrt_io.h>
+ #else
+ #include <unistd.h>
+ #endif

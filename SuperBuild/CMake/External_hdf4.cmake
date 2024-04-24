@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -32,8 +32,8 @@ set(HDF4_SB_MF_LIB mfhdfalt)
 
 ExternalProject_Add(HDF4
   PREFIX HDF4
-  URL "http://support.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.gz"
-  URL_MD5 a6aa950b3fce5162b96496d8ea0b82bf
+  URL "https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.15/src/hdf-4.2.15.tar.gz"
+  URL_MD5 0f3ef23a9a0c7b1cbdc8091a5b90d56e
   SOURCE_DIR ${HDF4_SB_SRC}
   BINARY_DIR ${HDF4_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -49,7 +49,7 @@ ExternalProject_Add(HDF4
     -DHDF4_BUILD_UTILS:BOOL=OFF
     -DHDF4_PACK_EXAMPLES:BOOL=OFF
     -DHDF4_BUILD_FORTRAN:BOOL=OFF
-    -DHDF4_BUILD_XDR_LIB:BOOL=OFF
+    -DHDF4_BUILD_XDR_LIB:BOOL=ON
     -DHDF4_DISABLE_COMPILER_WARNINGS:BOOL=OFF
     -DHDF4_ENABLE_COVERAGE:BOOL=OFF
     -DHDF4_ENABLE_DEPRECATED_SYMBOLS:BOOL=ON

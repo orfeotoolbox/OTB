@@ -166,7 +166,7 @@ polygon2->NbCrossing([6, 7], [6, 10]) = 0
 polygon2->NbTouching([6, 7], [6, 10]) = 3
 
 
-Bounding Boxs computation : 
+Bounding Boxes computation : 
 Bounding Box 1
 Index : [2, 3] , Size : [7, 7]
 Bounding Box 2

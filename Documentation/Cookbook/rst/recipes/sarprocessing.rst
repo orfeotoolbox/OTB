@@ -7,7 +7,7 @@ processing.
 Calibration
 -----------
 
-The application SarRadiometricCalibration can deal with the calibration
+The application SARCalibration can deal with the calibration
 of data from four radar sensors: RadarSat2, Sentinel1, COSMO-SkyMed and
 TerraSAR-X.
 
@@ -17,8 +17,8 @@ If SARimg.tif is a TerraSAR-X or a COSMO-SkyMed image:
 
 ::
 
-    otbcli_SarRadiometricCalibration -in SARimg.tif 
-                                     -out SARimg-calibrated.tif 
+    otbcli_SARCalibration -in SARimg.tif
+                          -out SARimg-calibrated.tif
 
 If SARimg.tif is a RadarSat2 or a Sentinel1 image, it is possible to
 specify the look-up table (automatically found in the metadata provided
@@ -26,18 +26,18 @@ with such image):
 
 ::
 
-    otbcli_SarRadiometricCalibration -in SARimg.tif 
-                                     -lut gamma
-                                 -out SARimg-calibrated.tif 
+    otbcli_SARCalibration -in SARimg.tif
+                          -lut gamma
+                          -out SARimg-calibrated.tif
 
 For TerraSAR-X (and soon for RadarSat2 and Sentinel1), it is also
 possible to use a noise LUT to derive calibrated noise profiles:
 
 ::
 
-    otbcli_SarRadiometricCalibration -in SARimg.tif 
-                                     -lut gamma -noise 1
-                                     -out SARimg-calibrated.tif 
+    otbcli_SARCalibration -in SARimg.tif
+                          -lut gamma -removenoise 1
+                          -out SARimg-calibrated.tif
 
 Despeckle
 ---------
@@ -57,18 +57,18 @@ corresponds to band 1, and imaginary part to band 2):
 
 ::
 
-    otbcli_BandMath -il S1-VV-extract.tif 
-                    -exp im1b1^2+im1b2^2 
-                    -out S1-VV-extract-int.tif 
+    otbcli_BandMath -il S1-VV-extract.tif
+                    -exp im1b1^2+im1b2^2
+                    -out S1-VV-extract-int.tif
 
 Then the intensity image is despeckled with the Gamma-MAP filter:
 
 ::
 
-    otbcli_Despeckle -in S1-VV-extract-int.tif 
+    otbcli_Despeckle -in S1-VV-extract-int.tif
                      -filter.gammamap.rad 5
-                     -filter.gammamap.nblooks 1 
-                     -out S1-VV-despeckled-extract.tif 
+                     -filter.gammamap.nblooks 1
+                     -out S1-VV-despeckled-extract.tif
 
 The produced images were then rescaled to intensities ranging from 0 to
 255 in order to be displayed.
@@ -438,99 +438,99 @@ Examples:
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif 
-                                    -inhv imageryC_HV.tif 
+       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif
+                                    -inhv imageryC_HV.tif
                                     -invv imageryC_VV.tif
                                     -conv msinclairtocoherency
-                                    -outc coherency.tif 
+                                    -outc coherency.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif 
-                                    -inhv imageryC_HV.tif 
+       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif
+                                    -inhv imageryC_HV.tif
                                     -invv imageryC_VV.tif
                             -conv msinclairtocovariance
-                                    -outc covariance.tif 
+                                    -outc covariance.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif 
-                                    -inhv imageryC_HV.tif 
+       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif
+                                    -inhv imageryC_HV.tif
                                     -invv imageryC_VV.tif
                                 -conv msinclairtocircovariance
-                                    -outc circ_covariance.tif 
+                                    -outc circ_covariance.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inc coherency.tif 
+       otbcli_SARPolarMatrixConvert -inc coherency.tif
                             -conv mcoherencytomueller
-                                    -outf mueller.tif 
+                                    -outf mueller.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inc covariance.tif 
+       otbcli_SARPolarMatrixConvert -inc covariance.tif
                             -conv mcovariancetocoherencydegree
-                                    -outc coherency_degree.tif 
+                                    -outc coherency_degree.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inc covariance.tif 
+       otbcli_SARPolarMatrixConvert -inc covariance.tif
                         -conv mcovariancetocoherency
-                                    -outc coherency.tif 
+                                    -outc coherency.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inc covariance.tif 
+       otbcli_SARPolarMatrixConvert -inc covariance.tif
                         -conv mlinearcovariancetocircularcovariance
-                                    -outc circ_covariance.tif 
+                                    -outc circ_covariance.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inf mueller.tif 
+       otbcli_SARPolarMatrixConvert -inf mueller.tif
                         -conv muellertomcovariance
-                                    -outc covariance.tif 
+                                    -outc covariance.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif 
-                                    -inhv imageryC_HV.tif 
-                                    -invh imageryC_VH.tif 
+       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif
+                                    -inhv imageryC_HV.tif
+                                    -invh imageryC_VH.tif
                                     -invv imageryC_VV.tif
                         -conv bsinclairtocoherency
-                                    -outc bcoherency.tif 
+                                    -outc bcoherency.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif 
-                                    -inhv imageryC_HV.tif 
-                                    -invh imageryC_VH.tif 
-                                    -invv imageryC_VV.tif 
+       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif
+                                    -inhv imageryC_HV.tif
+                                    -invh imageryC_VH.tif
+                                    -invv imageryC_VV.tif
                         -conv bsinclairtocovariance
-                                    -outc bcovariance.tif 
+                                    -outc bcovariance.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif 
-                                    -inhv imageryC_HV.tif 
-                                    -invh imageryC_VH.tif 
+       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif
+                                    -inhv imageryC_HV.tif
+                                    -invh imageryC_VH.tif
                                     -invv imageryC_VV.tif
                             -conv bsinclairtocircovariance
-                                    -outc circ_bcovariance.tif 
+                                    -outc circ_bcovariance.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif 
-                                    -inhv imageryC_HV.tif 
-                                    -invh imageryC_VH.tif 
-                                    -invv imageryC_VV.tif 
+       otbcli_SARPolarMatrixConvert -inhh imageryC_HH.tif
+                                    -inhv imageryC_HV.tif
+                                    -invh imageryC_VH.tif
+                                    -invv imageryC_VV.tif
                         -conv sinclairtomueller
-                                    -outf mueller.tif 
+                                    -outf mueller.tif
 
 #. ::
 
-       otbcli_SARPolarMatrixConvert -inf mueller.tif 
+       otbcli_SARPolarMatrixConvert -inf mueller.tif
                             -conv muellertopoldegandpower
-                                    -outf degreepower.tif 
+                                    -outf degreepower.tif
 
 Polarimetric decompositions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -569,31 +569,31 @@ forth).
 
 -  ::
 
-       otbcli_ExtractROI -in imagery_HH.tif -out imagery_HH_extract.tif  
-                 -startx 0 -starty 0 
-                         -sizex 1000 -sizey 1000 
+       otbcli_ExtractROI -in imagery_HH.tif -out imagery_HH_extract.tif
+                 -startx 0 -starty 0
+                         -sizex 1000 -sizey 1000
 
 -  ::
 
-       otbcli_ExtractROI -in imagery_HV.tif -out imagery_HV_extract.tif  
+       otbcli_ExtractROI -in imagery_HV.tif -out imagery_HV_extract.tif
                  -startx 0 -starty 0
-                         -sizex 1000 -sizey 1000 
+                         -sizex 1000 -sizey 1000
 
 -  ::
 
-       otbcli_ExtractROI -in imagery_VV.tif -out imagery_VV_extract.tif  
+       otbcli_ExtractROI -in imagery_VV.tif -out imagery_VV_extract.tif
                  -startx 0 -starty 0
-                         -sizex 1000 -sizey 1000 
+                         -sizex 1000 -sizey 1000
 
 Next we apply the H-alpha-A decomposition:
 
 ::
 
-    otbcli_SARDecompositions -inhh imagery_HH_extract.tif 
-                             -inhv imagery_HV_extract.tif 
-                             -invv imagery_VV_extract.tif 
-                 -decomp haa -inco.kernelsize 5 
-                             -out haa_extract.tif 
+    otbcli_SARDecompositions -inhh imagery_HH_extract.tif
+                             -inhv imagery_HV_extract.tif
+                             -invv imagery_VV_extract.tif
+                 -decomp haa -inco.kernelsize 5
+                             -out haa_extract.tif
 
 The result has three bands: entropy (0..1) - alpha (0..90) - anisotropy
 (0..1). It is split into 3 mono-band images thanks to following
@@ -601,7 +601,7 @@ command:
 
 ::
 
-    otbcli_SplitImage -in haa_extract.tif -out haa_extract_splitted.tif 
+    otbcli_SplitImage -in haa_extract.tif -out haa_extract_splitted.tif
 
 Each image is then colored thanks to a color look-up table ’hot’. Notice
 how minimum and maximum values are provided for each polarimetric
@@ -609,25 +609,25 @@ variable.
 
 -  ::
 
-       otbcli_ColorMapping -in haa_extract_splitted_0.tif 
-                           -method continuous -method.continuous.lut hot 
-                           -method.continuous.min 0 
+       otbcli_ColorMapping -in haa_extract_splitted_0.tif
+                           -method continuous -method.continuous.lut hot
+                           -method.continuous.min 0
                            -method.continuous.max 1
-                           -out entropy_hot.tif uint8 
+                           -out entropy_hot.tif uint8
 
 -  ::
 
-       otbcli_ColorMapping -in haa_extract_splitted_1.tif -method continuous 
+       otbcli_ColorMapping -in haa_extract_splitted_1.tif -method continuous
            -method.continuous.lut hot -method.continuous.min 0 -method.continuous.max
-           90 -out alpha_hot.tif uint8 
+           90 -out alpha_hot.tif uint8
 
 -  ::
 
-       otbcli_ColorMapping -in haa_extract_splitted_2.tif 
-                           -method continuous -method.continuous.lut hot 
-                           -method.continuous.min 0 
+       otbcli_ColorMapping -in haa_extract_splitted_2.tif
+                           -method continuous -method.continuous.lut hot
+                           -method.continuous.min 0
                            -method.continuous.max 1
-                           -out anisotropy_hot.tif uint8 
+                           -out anisotropy_hot.tif uint8
 
 The results are shown in the figures below ([fig:entropyimage] ,
 [fig:alphaimage] and [fig:anisotropyimage]).
@@ -708,15 +708,15 @@ were used to produce the LL and LR images:
 
 ::
 
-    otbcli_SARPolarSynth -in imageryC_HH_HV_VH_VV.tif 
-                 -psii 0 -khii 45 -mode co 
-                         -out test-LL.tif 
+    otbcli_SARPolarSynth -in imageryC_HH_HV_VH_VV.tif
+                 -psii 0 -khii 45 -mode co
+                         -out test-LL.tif
 
 ::
 
     otbcli_SARPolarSynth -in imageryC_HH_HV_VH_VV.tif
-                         -psii 0 -khii 45 -mode cross 
-                         -out test-LR.tif 
+                         -psii 0 -khii 45 -mode cross
+                         -out test-LR.tif
 
 The produced images were then rescaled to intensities ranging from 0 to
 255 in order to be displayed.
@@ -743,39 +743,39 @@ We first make an extract from the original image (not mandatory).
 
 -  ::
 
-       otbcli_ExtractROI -in imagery_HH.tif -out imagery_HH_extract.tif 
-                         -startx 0 -starty 6300 
-                         -sizex 2790 -sizey 2400 
+       otbcli_ExtractROI -in imagery_HH.tif -out imagery_HH_extract.tif
+                         -startx 0 -starty 6300
+                         -sizex 2790 -sizey 2400
 
 -  ::
 
-       otbcli_ExtractROI -in imagery_HV.tif -out imagery_HV_extract.tif 
-                         -startx 0 -starty 6300 
-                         -sizex 2790 -sizey 2400 
+       otbcli_ExtractROI -in imagery_HV.tif -out imagery_HV_extract.tif
+                         -startx 0 -starty 6300
+                         -sizex 2790 -sizey 2400
 
 -  ::
 
-       otbcli_ExtractROI -in imagery_VV.tif -out imagery_VV_extract.tif 
-                         -startx 0 -starty 6300 
-                         -sizex 2790 -sizey 2400 
+       otbcli_ExtractROI -in imagery_VV.tif -out imagery_VV_extract.tif
+                         -startx 0 -starty 6300
+                         -sizex 2790 -sizey 2400
 
 Then we compute the amplitude of each band using the **BandMath**
 application:
 
 -  ::
 
-       otbcli_BandMath -il imagery_HH_extract.tif -out HH.tif 
-                       -exp "sqrt(im1b1^2+im1b2^2)" 
+       otbcli_BandMath -il imagery_HH_extract.tif -out HH.tif
+                       -exp "sqrt(im1b1^2+im1b2^2)"
 
 -  ::
 
        otbcli_BandMath -il imagery_HV_extract.tif -out HV.tif
-                       -exp "sqrt(im1b1^2+im1b2^2)" 
+                       -exp "sqrt(im1b1^2+im1b2^2)"
 
 -  ::
 
        otbcli_BandMath -il imagery_VV_extract.tif -out VV.tif
-                       -exp "sqrt(im1b1^2+im1b2^2)" 
+                       -exp "sqrt(im1b1^2+im1b2^2)"
 
 Note that BandMath application interprets the image
 ’imagery\_XX\_extract.tif’ as an image made of two bands, where the
@@ -788,15 +788,15 @@ Then, we rescale the produced images to intensities ranging from 0 to
 
 -  ::
 
-       otbcli_Rescale -in HH.tif -out HH_res.png uint8 
+       otbcli_Rescale -in HH.tif -out HH_res.png uint8
 
 -  ::
 
-       otbcli_Rescale -in HV.tif -out HV_res.png uint8 
+       otbcli_Rescale -in HV.tif -out HV_res.png uint8
 
 -  ::
 
-       otbcli_Rescale -in VV.tif -out VV_res.png uint8 
+       otbcli_Rescale -in VV.tif -out VV_res.png uint8
 
 Figures below ([fig:hhfrisco] , [fig:hvfrisco] and [fig:vvfrisco]) show
 the images obtained:
@@ -822,23 +822,23 @@ We use the BandMath application again:
 -  ::
 
        otbcli_BandMath -il imagery_HH_extract.tif imagery_HV_extract.tif
-                           imagery_VV_extract.tif 
-                       -out Channel1.tif 
-                       -exp "sqrt(((im1b1-im3b1)^2+(im1b2-im3b2)^2))" 
-
--  ::
-
-       otbcli_BandMath -il imagery_HH_extract.tif imagery_HV_extract.tif 
-                       imagery_VV_extract.tif 
-                       -out Channel2.tif 
-                       -exp "sqrt(im2b1^2+im2b2^2)" 
+                           imagery_VV_extract.tif
+                       -out Channel1.tif
+                       -exp "sqrt(((im1b1-im3b1)^2+(im1b2-im3b2)^2))"
 
 -  ::
 
        otbcli_BandMath -il imagery_HH_extract.tif imagery_HV_extract.tif
-       imagery_VV_extract.tif 
-                       -out Channel3.tif 
-                       -exp "sqrt(((im1b1+im3b1)^2+(im1b2+im3b2)^2))" 
+                       imagery_VV_extract.tif
+                       -out Channel2.tif
+                       -exp "sqrt(im2b1^2+im2b2^2)"
+
+-  ::
+
+       otbcli_BandMath -il imagery_HH_extract.tif imagery_HV_extract.tif
+       imagery_VV_extract.tif
+                       -out Channel3.tif
+                       -exp "sqrt(((im1b1+im3b1)^2+(im1b2+im3b2)^2))"
 
 Note that sqrt(2) factors have been omitted purposely, since their
 effects will be canceled by the rescaling step. Then, we rescale the
@@ -846,22 +846,22 @@ produced images to intensities ranging from 0 to 255:
 
 -  ::
 
-       otbcli_Rescale -in Channel1.tif -out Channel1_res.tif uint8 
+       otbcli_Rescale -in Channel1.tif -out Channel1_res.tif uint8
 
 -  ::
 
-       otbcli_Rescale -in Channel2.tif -out Channel2_res.tif uint8 
+       otbcli_Rescale -in Channel2.tif -out Channel2_res.tif uint8
 
 -  ::
 
-       otbcli_Rescale -in Channel3.tif -out Channel3_res.tif uint8 
+       otbcli_Rescale -in Channel3.tif -out Channel3_res.tif uint8
 
 And finally, we merge the three bands into a single RGB image.
 
 ::
 
     otbcli_ConcatenateImages -il Channel1_res.tif Channel2_res.tif Channel3_res.tif
-    -out visuPauli.png 
+    -out visuPauli.png
 
 The result is shown in the figure below ([fig:colorfrisco]).
 

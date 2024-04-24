@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,12 +24,13 @@
 #include "itkNumericTraits.h"
 #include "otbFunctorImageFilter.h"
 #include "vnl/algo/vnl_svd.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace otb
 {
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ISRAUnmixingFunctor
  *
@@ -39,7 +40,7 @@ namespace Functor {
  *
  * \ingroup OTBUnmixing
  */
-template<class TInput, class TOutput, class TPrecision>
+template <class TInput, class TOutput, class TPrecision>
 class ISRAUnmixingFunctor
 {
 public:
@@ -70,17 +71,16 @@ public:
     return m_MaxIteration;
   }
 
-  OutputType operator ()(const InputType& in) const;
+  OutputType operator()(const InputType& in) const;
 
 private:
-
   static bool IsNonNegative(PrecisionType val)
   {
     return val >= 0;
   }
 
   typedef vnl_svd<PrecisionType>     SVDType;
-  typedef boost::shared_ptr<SVDType> SVDPointerType;
+  typedef std::shared_ptr<SVDType> SVDPointerType;
 
   MatrixType     m_U;
   SVDPointerType m_Svd; // SVD of U
@@ -125,4 +125,3 @@ using ISRAUnmixingImageFilter = FunctorImageFilter<Functor::ISRAUnmixingFunctor<
 #endif
 
 #endif
-

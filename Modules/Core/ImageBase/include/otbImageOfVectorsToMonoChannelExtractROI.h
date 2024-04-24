@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,15 +38,14 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputImage, class TOutputImage>
-class OTBImageBase_EXPORT_TEMPLATE ImageOfVectorsToMonoChannelExtractROI :
-  public ExtractROIBase<TInputImage, TOutputImage>
+class OTBImageBase_EXPORT_TEMPLATE ImageOfVectorsToMonoChannelExtractROI : public ExtractROIBase<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageOfVectorsToMonoChannelExtractROI     Self;
+  typedef ImageOfVectorsToMonoChannelExtractROI Self;
   typedef ExtractROIBase<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -80,14 +79,14 @@ public:
   itkGetConstMacro(Channel, unsigned int);
 
   /** ImageDimension enumeration */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      OutputImageType::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, OutputImageType::ImageDimension);
 
 protected:
   ImageOfVectorsToMonoChannelExtractROI();
-  ~ImageOfVectorsToMonoChannelExtractROI() override {}
+  ~ImageOfVectorsToMonoChannelExtractROI() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ExtractImageFilter can produce an image which is a different
@@ -97,18 +96,17 @@ protected:
    * execution model.  The original documentation of this method is
    * below.
    *
-   * \sa ProcessObject::GenerateOutputInformaton()  */
+   * \sa ProcessObject::GenerateOutputInformation()  */
   void GenerateOutputInformation() override;
 
   /** ExtractImageFilter can be implemented as a multithreaded filter.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  ImageOfVectorsToMonoChannelExtractROI(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageOfVectorsToMonoChannelExtractROI(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Channel to process [1...] */
   unsigned int m_Channel;

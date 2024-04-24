@@ -1,0 +1,57 @@
+bias_error : 0
+ce90_absolute : 0
+ce90_relative : 0
+current_adjustment : 0
+height_off : 242
+height_scale : 500
+image_id : 02APR01105228-P1BS-000000128955_01_P001
+lat_off : 43.5668
+lat_scale : 0.0881
+line_off : 14522
+line_scale : 14767
+adjustment_0.adj_param_0.center : 0
+adjustment_0.adj_param_0.description : intrack_offset
+adjustment_0.adj_param_0.lock_flag : 0
+adjustment_0.adj_param_0.parameter : 0
+adjustment_0.adj_param_0.sigma : 50
+adjustment_0.adj_param_0.units : pixel
+adjustment_0.adj_param_1.center : 0
+adjustment_0.adj_param_1.description : crtrack_offset
+adjustment_0.adj_param_1.lock_flag : 0
+adjustment_0.adj_param_1.parameter : 0
+adjustment_0.adj_param_1.sigma : 50
+adjustment_0.adj_param_1.units : pixel
+adjustment_0.adj_param_2.center : 0
+adjustment_0.adj_param_2.description : intrack_scale
+adjustment_0.adj_param_2.lock_flag : 0
+adjustment_0.adj_param_2.parameter : 0
+adjustment_0.adj_param_2.sigma : 50
+adjustment_0.adj_param_2.units : unknown
+adjustment_0.adj_param_3.center : 0
+adjustment_0.adj_param_3.description : crtrack_scale
+adjustment_0.adj_param_3.lock_flag : 0
+adjustment_0.adj_param_3.parameter : 0
+adjustment_0.adj_param_3.sigma : 50
+adjustment_0.adj_param_3.units : unknown
+adjustment_0.adj_param_4.center : 0
+adjustment_0.adj_param_4.description : map_rotation
+adjustment_0.adj_param_4.lock_flag : 0
+adjustment_0.adj_param_4.parameter : 0
+adjustment_0.adj_param_4.sigma : 0.1
+adjustment_0.adj_param_4.units : degrees
+
+{"LineOffset": "14522", 
+"SampleOffset": "13779", 
+"LatOffset": "43.5668", 
+"LonOffset": "1.4635", 
+"HeightOffset": "242", 
+"LineScale": "14767", 
+"SampleScale": "13799", 
+"LatScale": "0.0881", 
+"LonScale": "0.1095", 
+"HeightScale": "500", 
+"LineNum": [ "-0.00139825",  "0.00153793",  "-0.986303",  "0.0160753",  "3.45261e-05",  "-1.10444e-06",  "0.00025058",  "-0.000783885",  "0.00210043",  "-5.89713e-06",  "-8.42682e-07",  "5.24613e-08",  "2.93096e-05",  "0",  "-8.65437e-06",  "-4.4754e-05",  "-1.0574e-05",  "4.18275e-07",  "-4.687e-06",  "1.93054e-07", ], 
+"LineDen": [ "1",  "3.82226e-05",  "0.000565666",  "0.00027757",  "1.71173e-05",  "-4.27783e-07",  "-2.03092e-06",  "6.16391e-06",  "-2.06465e-05",  "1.08768e-05",  "4.17567e-08",  "5.94172e-08",  "-4.37271e-06",  "0",  "3.06573e-08",  "0.00043593",  "7.99703e-08",  "0",  "-1.43435e-05",  "2.29249e-08", ], 
+"SampleNum": [ "-0.00263535",  "1.00384",  "0.0034115",  "0.000261524",  "-0.00232656",  "0.000620898",  "-0.000415032",  "0.00128362",  "-0.00119353",  "7.47621e-06",  "2.39993e-06",  "-2.14036e-05",  "-4.92957e-05",  "-1.14876e-05",  "8.27706e-05",  "-7.63615e-05",  "-2.79215e-07",  "3.04261e-07",  "7.00103e-06",  "-2.55119e-08", ], 
+"SampleDen": [ "1",  "0.00136456",  "0.00234838",  "-0.000621177",  "-5.99001e-05",  "1.56209e-06",  "-1.88818e-06",  "-4.23341e-06",  "3.14449e-05",  "-1.20077e-05",  "-1.56497e-07",  "-7.45329e-08",  "1.97967e-06",  "0",  "-1.26249e-07",  "-1.4791e-06",  "-5.68974e-08",  "3.27442e-08",  "1.06612e-07",  "1.69648e-08", ], 
+}

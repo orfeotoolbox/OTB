@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -30,15 +30,15 @@ ADD_SUPERBUILD_CMAKE_VAR(PNG ZLIB_LIBRARY)
 
 ExternalProject_Add(PNG
   PREFIX PNG
-  URL "http://downloads.sourceforge.net/project/libpng/libpng16/older-releases/1.6.16/lpng1616.zip"
-  URL_MD5 c90c9587c9a5c735327fb3f6900f6b03
+  URL "https://downloads.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.gz"
+  URL_MD5 6c7519f6c75939efa0ed3053197abd54
   BINARY_DIR ${PNG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   DEPENDS ${PNG_DEPENDENCIES}
   CMAKE_CACHE_ARGS
   ${SB_CMAKE_CACHE_ARGS}
-  -DSKIP_INSTALL_EXECUTABLES:BOOL=OFF
+  -DPNG_BUILD_ZLIB:BOOL=ON
   -DPNG_STATIC:BOOL=OFF
   -DPNG_SHARED:BOOL=ON
   -DPNG_TESTS:BOOL=OFF
@@ -46,6 +46,7 @@ ExternalProject_Add(PNG
   -DSKIP_INSTALL_FILES:BOOL=ON
   -DSKIP_INSTALL_EXPORT:BOOL=ON
   -DSKIP_INSTALL_EXECUTABLES:BOOL=OFF
+  -DCMAKE_INSTALL_LIBDIR:STRING=lib
   ${PNG_SB_CONFIG}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   LOG_DOWNLOAD 1

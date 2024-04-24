@@ -43,11 +43,10 @@ type. Two levels of calibration are usually distinguished:
    the water vapor amount, the ozone amount, as well as the composition
    and amount of aerosol gasses.
 
-This transformation can be done either with **OTB Applications** or with
-**Monteverdi** . Sensor-related parameters such as gain, date, spectral
-sensitivity and sensor position are seamlessly read from the image
-metadata. Atmospheric parameters can be tuned by the user. Supported
-sensors are:
+This transformation can be done with OTB Applications. Sensor-related
+parameters such as gain, date, spectral sensitivity and sensor
+position are seamlessly read from the image metadata. Atmospheric
+parameters can be tuned by the user. Supported sensors are:
 
 -  Pleiades
 
@@ -124,9 +123,8 @@ This fusion operation requires two different steps:
    pixels of the multi-spectral and panchromatic image to obtain the
    fused pixels.
 
-Using either **OTB Applications** or modules from **Monteverdi** , it is
-possible to perform both steps in a row, or step-by-step fusion, as
-described in the above sections.
+Using OTB Applications, it is possible to perform both steps in a row,
+or step-by-step fusion, as described in the above sections.
 
 The *BundleToPerfectSensor* application performs both steps in
 a row. Seamless sensor modelling is used to perform zooming and
@@ -226,15 +224,15 @@ both delivered as 1 degree by 1 degree tiles. They are:
    30 metres obtained by stereoscopic processing of the archive of
    the ASTER instrument.
 
-The **Orfeo ToolBox** relies on `OSSIM <http://www.ossim.org/>`_
-capabilities for sensor modelling and DEM handling. Tiles of a given DEM
+The **Orfeo ToolBox** relies on `GDAL <https://www.gdal.org/>`_
+capabilities for DEM handling. Tiles of a given DEM
 are supposed to be located within a single directory. General elevation
 support is also supported from GeoTIFF files.
 
-Whenever an application or **Monteverdi** module requires a DEM, the
-option **elev.dem** sets the DEM directory. This directory must
-contain the DEM tiles, either in DTED or SRTM format or as a GeoTIFF.
-Subdirectories are not supported.
+Whenever an application requires a DEM, the option **elev.dem** sets
+the DEM directory. This directory must contain the DEM tiles, either
+in DTED or SRTM format or as a GeoTIFF.  Subdirectories are not
+supported.
 
 Depending on the reference of the elevation, you also need to use a
 geoid to accurately manage the elevation. For this, you need to specify a
@@ -242,7 +240,7 @@ path to a file which contains the geoid. `Geoid <http://en.wikipedia.org/wiki/Ge
 corresponds to the equipotential surface that would coincide with the mean ocean surface of
 the Earth.
 
-We provide one geoid in the `OTB-Data <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/tree/master/Input/DEM>`_ repository.
+We provide one geoid in the `OTB-Data <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/tree/develop/Data/Input/DEM>`_ repository.
 
 In all applications, the option **elev.geoid** manages the path
 to the geoid. Finally, it is also possible to use an average elevation
@@ -286,12 +284,11 @@ pixels from the raw image to the ortho-rectified one. Pixels from the
 raw image are then interpolated according to this grid in order to fill
 the ortho-rectified pixels.
 
-Ortho-rectification can be performed either with **OTB Applications** or
-**Monteverdi** . Sensor parameters and image meta-data are seamlessly
-read from the image files without needing any user interaction, provided
-that all auxiliary files are available. The sensor for which **Orfeo
-ToolBox** supports ortho-rectification of raw products are the
-following:
+Ortho-rectification can be performed with OTB Applications. Sensor
+parameters and image meta-data are seamlessly read from the image
+files without needing any user interaction, provided that all
+auxiliary files are available. The sensor for which **Orfeo ToolBox**
+supports ortho-rectification of raw products are the following:
 
 -  Pleiades
 
@@ -338,7 +335,7 @@ OTB ReadImageInfo application.
 Check if your product verifies following two conditions:
 
 -  The product is in raw geometry: you should expect the presence of
-   RPC coefficients and a non-empty OSSIM keywordlist.
+   RPC coefficients.
 
 -  The product has a map projection: you should see a projection name
    with physical origin and spacing.

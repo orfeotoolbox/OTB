@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,7 @@
 #define otbSentinel1ImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
-
+#include "otbXMLMetadataSupplier.h"
 
 namespace otb
 {
@@ -37,11 +37,10 @@ namespace otb
 class OTBMetadata_EXPORT Sentinel1ImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-
-  typedef Sentinel1ImageMetadataInterface    Self;
-  typedef SarImageMetadataInterface         Superclass;
+  typedef Sentinel1ImageMetadataInterface Self;
+  typedef SarImageMetadataInterface       Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,176 +53,66 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
-  typedef Superclass::RealType                  RealType;
-  typedef Superclass::LookupDataPointerType LookupDataPointerType;
+  typedef Superclass::RealType                 RealType;
+  typedef Superclass::LookupDataPointerType    LookupDataPointerType;
 
-  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay() const override;
-
-  /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth() const override;
-
-  /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear() const override;
-
-  /** check sensor ID */
-  bool CanRead() const override;
-
-  int GetDay() const override;
-
-  int GetMonth() const override;
-
-  int GetYear() const override;
-
-  int GetHour() const override;
-
-  int GetMinute() const override;
-
-  UIntVectorType GetDefaultDisplay() const override;
-
-  /*SarImageMetadataInterface pure virutals rituals */
-  double GetPRF() const override;
-
-  double GetRSF() const override;
-
-  double GetRadarFrequency() const override;
-
-  double GetCenterIncidenceAngle() const override;
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
   /*get lookup data for calculating backscatter */
-  void CreateCalibrationLookupData(const short type) override;
+  bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const override;
+  bool CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const override;
+
+  /* Read the Sar parameters and GCPs from the annotation xml file, this method can be used 
+    to instantiate a otb::SarModel */
+  void ReadSarParamAndGCPs(const XMLMetadataSupplier &,
+                           SARParam &,
+                           Projection::GCPParam &);
+
+  void ParseGdal(ImageMetadata &) override;
+
+  void ParseGeom(ImageMetadata &) override;
+
+  void Parse(ImageMetadata &) override;
 
 protected:
-
   /* class ctor */
-  Sentinel1ImageMetadataInterface();
+  Sentinel1ImageMetadataInterface() = default;
 
   /* class dtor */
-  ~Sentinel1ImageMetadataInterface() override {}
+  ~Sentinel1ImageMetadataInterface() override = default;
+
+  /* Fetch the AzimuthFmRate metadata */
+  std::vector<AzimuthFmRate> GetAzimuthFmRate(const XMLMetadataSupplier&) const;
+
+  /* Fetch the DopplerCentroid metadata */
+  std::vector<DopplerCentroid> GetDopplerCentroid(const XMLMetadataSupplier&) const;
+
+  /* Fetch the Orbits metadata */
+  std::vector<Orbit> GetOrbits(const XMLMetadataSupplier&) const;
+
+  /* Fetch the burst records */
+  std::vector<BurstRecord> GetBurstRecords(const XMLMetadataSupplier&, const MetaData::Duration & azimuthTimeInterval) const;
+
+  /* Fetch coordinate conversion records (Sr0/Gr0) */
+  std::vector<CoordinateConversionRecord> GetCoordinateConversionRecord(const XMLMetadataSupplier &xmlMS,
+                                                                        const std::string & rg0_path,
+                                                                        const std::string & coeffs_path) const;
+
+  /* Compute the mean terrain elevation */
+  double getBandTerrainHeight(const XMLMetadataSupplier&) const;
+
+  /* create the thermal denoising LUT */
+  bool CreateThermalNoiseLookupData(SARCalib& sarCalib,
+                                                                    const ImageMetadata& imd,
+                                                                    const MetadataSupplierInterface& mds,
+                                                                    const bool geom) const;
 
 private:
-
-  Sentinel1ImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-/* Helper function to parse date and time into a std::vector<std::string>
- * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
- * the date-time string is to be found in keywordlist with key 'key'
- * fills argument dateFields of type std::vector<std::string> which is mutable!
- * TODO: move this method into base class
- */
-  void ParseDateTime(const char* key, std::vector<int>& dateFields) const;
-
-  mutable std::vector<int> m_ProductionDateFields;
-  mutable std::vector<int> m_AcquisitionDateFields;
+  Sentinel1ImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 
-
-struct Sentinel1CalibrationStruct
-{
-public:
-  double timeMJD;
-  double deltaMJD; // time difference to previous MJD in the list
-  int line;
-  std::vector<int> pixels;
-  std::vector<double> deltaPixels;
-  std::vector<float> vect;
-};
-
-class Sentinel1CalibrationLookupData : public SarCalibrationLookupData
-{
-public:
-
-  /** Standard typedefs */
-  typedef Sentinel1CalibrationLookupData   Self;
-  typedef SarCalibrationLookupData         Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
-
-  /** Creation through the object factory */
-  itkNewMacro(Self);
-
-  /** RTTI */
-  itkTypeMacro(Sentinel1CalibrationLookupData, SarCalibrationLookupData);
-
-  typedef itk::IndexValueType IndexValueType;
-
-  Sentinel1CalibrationLookupData()
-    : firstLineTime(0.)
-    , lastLineTime(0.)
-    , numOfLines(0)
-    , count(0)
-    , lineTimeInterval(0.)
-  {
-  }
-
-  ~Sentinel1CalibrationLookupData() override
-  {
-  }
-
-  void InitParameters(short type, double ft, double lt,
-                      int lines, int c,
-                      std::vector<Sentinel1CalibrationStruct> const& vlist)
-  {
-    firstLineTime = ft;
-    lastLineTime = lt;
-    numOfLines = lines;
-    count = c;
-    calibrationVectorList = vlist;
-    this->SetType(type);
-    lineTimeInterval = (lt - ft) / ((lines - 1) * 1.0);
-  }
-
-  double GetValue(const IndexValueType x, const IndexValueType y) const override
-  {
-    const int calVecIdx = GetVectorIndex(y);
-    assert(calVecIdx>=0 && calVecIdx < count-1);
-    const Sentinel1CalibrationStruct & vec0 = calibrationVectorList[calVecIdx];
-    const Sentinel1CalibrationStruct & vec1 = calibrationVectorList[calVecIdx + 1];
-    const double azTime = firstLineTime + y * lineTimeInterval;
-    const double muY = (azTime - vec0.timeMJD) / vec1.deltaMJD;
-    const int pixelIdx = GetPixelIndex(x, calibrationVectorList[calVecIdx]);
-    const double muX = (x - vec0.pixels[pixelIdx]) / vec0.deltaPixels[pixelIdx + 1];
-    const double lutVal
-        = (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1])
-        +       muY * ((1 - muX) * vec1.vect[pixelIdx] + muX * vec1.vect[pixelIdx + 1]);
-    return lutVal;
-  }
-
-  int GetVectorIndex(int y) const
-  {
-    for (int i = 1; i < count; i++)
-      {
-      if (y < calibrationVectorList[i].line)
-        {
-        return i - 1;
-        }
-      }
-    return -1;
-  }
-
-  int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec) const
-  {
-      const int size = calVec.pixels.size();
-      std::vector<int>::const_iterator wh = std::upper_bound(calVec.pixels.begin(), calVec.pixels.end(), x);
-      return wh == calVec.pixels.end() ? size - 2 : std::distance(calVec.pixels.begin(),wh)-1;
-  }
-
-private:
-
-  Sentinel1CalibrationLookupData(const Self&) = delete;
-
-  void operator =(const Self&) = delete;
-
-  double firstLineTime;
-  double lastLineTime;
-  int numOfLines;
-  int count;
-  std::vector<Sentinel1CalibrationStruct> calibrationVectorList;
-  double lineTimeInterval;
-};
 
 
 } // end namespace otb

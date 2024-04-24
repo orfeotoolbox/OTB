@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<baseline>
+  <ossim>
+    <deburstLines count="1">
+      <deburstLine>
+	<first>0</first>
+	<second>16360</second>
+      </deburstLine>
+    </deburstLines>
+  
+    <deburstSamples>
+      <first>0</first>
+      <second>0</second>
+    </deburstSamples>
+  
+    <burstExtractionLines>
+      <first>0</first>
+      <second>16360</second>
+    </burstExtractionLines>
+  
+    <burstExtractionSamples>
+      <first>0</first>
+      <second>0</second>
+    </burstExtractionSamples>
+  
+    <linesBursts count="1">
+      <linesBurst>
+	<first>0</first>
+	<second>16360</second>
+      </linesBurst>
+    </linesBursts>
+  
+    <samplesBursts count="1">
+      <samplesBurst>
+	<first>0</first>
+	<second>16360</second>
+      </samplesBurst>
+    </samplesBursts>
+
+    <linesOffsetOssim>0</linesOffsetOssim>
+  </ossim>
+</baseline>

@@ -1,4 +1,9 @@
 # ![OTB](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/master/Utilities/Doxygen/logoVectoriel.png) Orfeo Toolbox
+
+[![pipeline status](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/badges/develop/pipeline.svg)](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/commits/develop)
+[![coverage status](https://sonar.orfeo-toolbox.org/api/project_badges/measure?project=orfeotoolbox-otb&metric=coverage)](https://sonar.orfeo-toolbox.org/dashboard?id=orfeotoolbox-otb)
+[![Docker pulls](https://img.shields.io/badge/dynamic/json?formatter=metric&color=blue&label=Docker%20pull&query=%24.pull_count&url=https://hub.docker.com/v2/repositories/orfeotoolbox/otb)](https://hub.docker.com/r/orfeotoolbox/otb)
+
 ## Open Source processing of remote sensing images
 
 Orfeo ToolBox (OTB) is an open-source project for state-of-the-art remote
@@ -47,7 +52,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for contributors guidelines.
 Please see the license and the Copyright directory for legal issues on the use of the software.
 
 ### Issues
-Please report any issue you might encouter to [our bugtracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug).
+Please report any issue you might encounter to [our bugtracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug).
 
 ### Governance
 The Orfeo ToolBox project is governed by the [Project Steering Committee](PSC.md) and its members.

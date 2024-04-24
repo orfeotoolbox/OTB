@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,7 +31,7 @@
 
 #include "otbImage.h"
 
-int main(int, char*[])
+int main(int, char* [])
 {
   // Then we must decide with what type to represent the pixels
   // and what the dimension of the image will be. With these two

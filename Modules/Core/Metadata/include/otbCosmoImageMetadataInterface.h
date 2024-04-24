@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,7 @@
 #define otbCosmoImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
-
+#include "otbSARMetadata.h"
 
 namespace otb
 {
@@ -37,10 +37,9 @@ namespace otb
 class OTBMetadata_EXPORT CosmoImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-
-  typedef CosmoImageMetadataInterface    Self;
-  typedef SarImageMetadataInterface         Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
+  typedef CosmoImageMetadataInterface   Self;
+  typedef SarImageMetadataInterface     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
@@ -54,45 +53,27 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
-  typedef Superclass::RealType                  RealType;
-  typedef Superclass::LookupDataPointerType LookupDataPointerType;
+  typedef Superclass::RealType                 RealType;
+  typedef Superclass::LookupDataPointerType    LookupDataPointerType;
 
-  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay() const override;
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
-  /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth() const override;
+  void Parse(ImageMetadata &) override;
 
-  /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear() const override;
+  void ParseGdal(ImageMetadata &) override;
+  
+  void ParseGeom(ImageMetadata &) override;
 
-  /** check sensor ID */
-  bool CanRead() const override;
+  std::vector<std::map<std::string, std::string> > saveMetadataBands(std::string file) ;
 
-  int GetDay() const override;
-
-  int GetMonth() const override;
-
-  int GetYear() const override;
-
-  int GetHour() const override;
-
-  int GetMinute() const override;
-
-  UIntVectorType GetDefaultDisplay() const override;
-
-  /*SarImageMetadataInterface pure virutals rituals */
-  double GetPRF() const override;
-
-  double GetRSF() const override;
-
-  double GetRadarFrequency() const override;
-
-  double GetCenterIncidenceAngle() const override;
+  std::vector<Orbit> getOrbits(const std::string & referenceTime) const;
+  
+  std::vector<BurstRecord> CreateBurstRecord(const std::string & firstLineTimeStr,
+					     const std::string & lastLineTimeStr,
+					     const unsigned long endLine, 
+					     const unsigned long endSample) const;
 
 protected:
-
   /* class ctor */
   CosmoImageMetadataInterface() = default;
 
@@ -100,22 +81,9 @@ protected:
   ~CosmoImageMetadataInterface() = default;
 
 private:
-
-  CosmoImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-/* Helper function to parse date and time into a std::vector<std::string>
- * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
- * the date-time string is to be found in keywordlist with key 'key'
- * fills argument dateFields of type std::vector<std::string> which is mutable!
- * TODO: move this method into base class
- */
-  void ParseDateTime(std::string key, std::vector<int>& dateFields) const;
-
-  mutable std::vector<int> m_ProductionDateFields;
-  mutable std::vector<int> m_AcquisitionDateFields;
+  CosmoImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
-
 
 
 } // end namespace otb

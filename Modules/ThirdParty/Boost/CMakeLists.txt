@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -28,9 +28,11 @@ set(OTBBoost_INCLUDE_DIRS ${OTBBoost_SOURCE_DIR}/src)
 # OTB uses only header only libraries of boost. A non-header only library
 # named 'unit_testing_framework' is used in two tests.
 # why drag a semi-standard c++ library for use in two tests?.
-# if(Boost_LIBRARIES)
-#   set(OTBBoost_LIBRARIES "${Boost_LIBRARIES}")
-# endif()
+# Update OTB 8.0: link with boost libraries as boost::date_time and boost::filesystem are used extensively in core modules.
+if(Boost_LIBRARIES)
+  set(OTBBoost_LIBRARIES ${Boost_LIBRARIES})
+  set(OTBBoost_SYSTEM_LIBRARY_DIRS "${Boost_LIBRARY_DIRS}")
+endif()
 
 set(Boost_VERSION_STRING "${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION}" CACHE INTERNAL "" FORCE)
 
@@ -38,5 +40,5 @@ otb_module_impl()
 
 install(DIRECTORY ${OTBBoost_SOURCE_DIR}/src/boost
   DESTINATION ${OTBBoost_INSTALL_INCLUDE_DIR}
-  COMPONENT Development
+  COMPONENT Core
   )

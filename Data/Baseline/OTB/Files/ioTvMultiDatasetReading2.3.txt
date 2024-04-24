@@ -1,0 +1,79 @@
+VectorImage (000001A1F307D2F0)
+  RTTI typeinfo:   class otb::VectorImage<double,2>
+  Reference Count: 3
+  Modified Time: 124
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (000001A1F37EFCA0) 
+  Source output name: Primary
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 20
+  UpdateMTime: 0
+  RealTimeStamp: 0 seconds 
+  LargestPossibleRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [4800, 4800]
+  BufferedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [0, 0]
+  RequestedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [0, 0]
+  Spacing: [231.65635826375, 231.656358263958]
+  Origin: [-12231339.8881539, 6671587.28982087]
+  Direction: 
+1 0
+0 -1
+
+  IndexToPointMatrix: 
+231.65635826375 0
+0 -231.656358263958
+
+  PointToIndexMatrix: 
+0.00431673884323719 0
+0 -0.00431673884323331
+
+  Inverse Direction: 
+1 0
+0 -1
+
+  VectorLength: 1
+  PixelContainer: 
+    ImportImageContainer (000001A1F3001C20)
+      RTTI typeinfo:   class itk::ImportImageContainer<unsigned __int64,double>
+      Reference Count: 1
+      Modified Time: 11
+      Debug: Off
+      Object Name: 
+      Observers: 
+        none
+      Pointer: 0000000000000000
+      Container manages memory: true
+      Size: 0
+      Capacity: 0
+  {{"ProjectionWKT": "PROJCS["unnamed",
+    GEOGCS["Unknown datum based upon the custom spheroid",
+        DATUM["Not_specified_based_on_custom_spheroid",
+            SPHEROID["Custom spheroid",6371007.181,0]],
+        PRIMEM["Greenwich",0],
+        UNIT["degree",0.0174532925199433,
+            AUTHORITY["EPSG","9122"]]],
+    PROJECTION["Sinusoidal"],
+    PARAMETER["longitude_of_center",0],
+    PARAMETER["false_easting",0],
+    PARAMETER["false_northing",0],
+    UNIT["Meter",1],
+    AXIS["Easting",EAST],
+    AXIS["Northing",NORTH]]",
+"TileHintX": "4800",
+"TileHintY": "4800",
+"DataType": "1",
+}Bands[{},]
+}

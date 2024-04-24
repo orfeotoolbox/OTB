@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include <typeinfo>
 #include <cassert>
 
@@ -31,24 +30,18 @@
 
 namespace otb
 {
-CosmoImageMetadataInterfaceFactory
-::CosmoImageMetadataInterfaceFactory()
+CosmoImageMetadataInterfaceFactory::CosmoImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("SarImageMetadataInterface",
-                         "otbCosmoImageMetadataInterface",
-                         "Cosmo Metadata Interface",
-                         1,
+  this->RegisterOverride("SarImageMetadataInterface", "otbCosmoImageMetadataInterface", "Cosmo Metadata Interface", 1,
                          itk::CreateObjectFunction<CosmoImageMetadataInterface>::New());
 }
 
-const char*
-CosmoImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* CosmoImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-CosmoImageMetadataInterfaceFactory::GetDescription() const
+const char* CosmoImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Cosmo Metadata Interface Factory, handle Cosmo metadata in OTB";
 }

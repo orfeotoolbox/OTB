@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,8 @@
 
 #include "itkImageSource.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class VariadicInputsImageFilter
@@ -53,24 +54,26 @@ namespace otb {
  *
  * \ingroup OTBFunctor
  */
-template<class TOuptut, class ... TInputs> class VariadicInputsImageFilter : public itk::ImageSource<TOuptut>
+template <class TOuptut, class... TInputs>
+class VariadicInputsImageFilter : public itk::ImageSource<TOuptut>
 {
 public:
-  using Self = VariadicInputsImageFilter<TOuptut, TInputs...>;
-  using Pointer =  itk::SmartPointer<Self>;
+  using Self         = VariadicInputsImageFilter<TOuptut, TInputs...>;
+  using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
-  using Superclass = itk::ImageSource<TOuptut>;
-  
+  using Superclass   = itk::ImageSource<TOuptut>;
+
   using InputTypesTupleType = std::tuple<TInputs...>;
-  
-  template <size_t I> using InputImageType = typename std::tuple_element<I,InputTypesTupleType>::type;
-  static constexpr size_t NumberOfInputs = std::tuple_size<InputTypesTupleType>::value; 
+
+  template <size_t I>
+  using InputImageType                   = typename std::tuple_element<I, InputTypesTupleType>::type;
+  static constexpr size_t NumberOfInputs = std::tuple_size<InputTypesTupleType>::value;
 
   // Good old new macro
   itkNewMacro(Self);
 
   // Import definitions for SetInput and GetInput to avoid shadowing
-  // by SetInput<> and GetIntput<> defined in this method
+  // by SetInput<> and GetInput<> defined in this method
   using Superclass::GetInput;
   using Superclass::SetInput;
 
@@ -114,12 +117,12 @@ public:
   }
 
   /**
-   * \param inputs A vararg list of inputs 
+   * \param inputs A vararg list of inputs
    */
   void SetInputs(TInputs*... inputs)
   {
     auto inTuple = std::make_tuple(inputs...);
-    SetInputsImpl(inTuple,std::make_index_sequence<sizeof...(inputs)>{});
+    SetInputsImpl(inTuple, std::make_index_sequence<sizeof...(inputs)>{});
   }
 
   /**
@@ -135,24 +138,27 @@ protected:
   {
     this->SetNumberOfRequiredInputs(sizeof...(TInputs));
   };
-  
+
   ~VariadicInputsImageFilter() = default;
-  
+
 private:
-  template<class Tuple, size_t...Is> auto SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
+  template <class Tuple, size_t... Is>
+  void SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
   {
-    return std::initializer_list<int>{(this->SetInput<Is>(std::get<Is>(t)), 0)...};
+    // Will be easier to write in c++17 with fold expressions 
+    // (this->template SetInput<Is>(std::get<Is>(t)),...);
+    (void) std::initializer_list<int>{(this->template SetInput<Is>(std::get<Is>(t)), 0)...};
   }
 
-  template <size_t...Is> auto GetInputsImpl(std::index_sequence<Is...>)
+  template <size_t... Is>
+  auto GetInputsImpl(std::index_sequence<Is...>)
   {
-    return std::make_tuple(this->GetInput<Is>()...);
+    return std::make_tuple(this->template GetInput<Is>()...);
   }
-  
+
   VariadicInputsImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
-
-}
+} // namespace otb
 
 #endif

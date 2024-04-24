@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -29,8 +29,8 @@ ENABLE_SHARED
     OTBCommon
     OTBITK
     OTBImageBase
-    OTBOSSIMAdapters
-    OTBObjectList
+    OTBMetadata
+    OTBImageList
 
   TEST_DEPENDS
     OTBImageIO
@@ -39,4 +39,7 @@ ENABLE_SHARED
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Core
 )

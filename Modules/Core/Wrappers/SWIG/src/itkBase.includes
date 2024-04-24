@@ -1,0 +1,67 @@
+/*
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef __itkBase_includes
+#define __itkBase_includes
+
+/* kindly stolen from the build files of OTB-Wrapping
+ * (Typedefs/itkBase.includes, Typedefs/wrap_ITKCommonBase.i) */
+
+#include "itkProcessObject.h"
+#include "itkObjectFactoryBase.h"
+
+#include "itkCommand.h"
+
+#include "itkLogOutput.h"
+
+typedef itk::LightObject                itkLightObject;
+typedef itk::LightObject::Pointer       itkLightObject_Pointer;
+typedef itk::Object                     itkObject;
+typedef itk::Object::Pointer            itkObject_Pointer;
+typedef itk::ProcessObject              itkProcessObject;
+typedef itk::ProcessObject::Pointer     itkProcessObject_Pointer;
+typedef itk::ObjectFactoryBase          itkObjectFactoryBase;
+typedef itk::ObjectFactoryBase::Pointer itkObjectFactoryBase_Pointer;
+typedef itk::MetaDataDictionary         itkMetaDataDictionary;
+typedef itk::MetaDataObjectBase         itkMetaDataObjectBase;
+typedef itk::MetaDataObjectBase::Pointer itkMetaDataObjectBase_Pointer;
+typedef itk::Indent                     itkIndent;
+
+typedef itk::Command              itkCommand;
+typedef itk::Command::Pointer     itkCommand_Pointer;
+typedef itk::EventObject          itkEventObject;
+typedef itk::NoEvent              itkNoEvent;
+typedef itk::AnyEvent             itkAnyEvent;
+typedef itk::DeleteEvent          itkDeleteEvent;
+typedef itk::StartEvent           itkStartEvent;
+typedef itk::EndEvent             itkEndEvent;
+typedef itk::ProgressEvent        itkProgressEvent;
+typedef itk::ExitEvent            itkExitEvent;
+typedef itk::ModifiedEvent        itkModifiedEvent;
+typedef itk::IterationEvent       itkIterationEvent;
+typedef itk::PickEvent            itkPickEvent;
+typedef itk::StartPickEvent       itkStartPickEvent;
+typedef itk::EndPickEvent         itkEndPickEvent;
+typedef itk::AbortCheckEvent      itkAbortCheckEvent;
+typedef itk::UserEvent            itkUserEvent;
+
+typedef itk::LogOutput            itkLogOutput;
+
+#endif

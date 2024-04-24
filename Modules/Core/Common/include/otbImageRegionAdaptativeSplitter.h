@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -68,7 +68,7 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class ITK_EXPORT ImageRegionAdaptativeSplitter : public itk::ImageRegionSplitter<VImageDimension>
+class ITK_EXPORT       ImageRegionAdaptativeSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */
@@ -128,14 +128,12 @@ public:
    * number of splits, and call the EstimateSplitMap() method if
    * necessary.
    */
-  unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber) override;
+  unsigned int GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber) override;
 
   /** Calling this method will set the image region and the requested
    * number of splits, and call the EstimateSplitMap() method if
    * necessary. */
-  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region) override;
+  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType& region) override;
 
   /** Make the Modified() method update the IsUpToDate flag */
   void Modified() const override
@@ -148,14 +146,13 @@ public:
   }
 
 protected:
-  ImageRegionAdaptativeSplitter() : m_TileHint(),
-                                    m_ImageRegion(),
-                                    m_RequestedNumberOfSplits(0),
-                                    m_StreamVector(),
-                                    m_IsUpToDate(false)
-                                      {}
+  ImageRegionAdaptativeSplitter() : m_TileHint(), m_ImageRegion(), m_RequestedNumberOfSplits(0), m_StreamVector(), m_IsUpToDate(false)
+  {
+  }
 
-  ~ImageRegionAdaptativeSplitter() override {}
+  ~ImageRegionAdaptativeSplitter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
@@ -163,11 +160,11 @@ private:
   vector */
   void EstimateSplitMap();
 
-  ImageRegionAdaptativeSplitter(const ImageRegionAdaptativeSplitter &) = delete;
-  void operator =(const ImageRegionAdaptativeSplitter&) = delete;
+  ImageRegionAdaptativeSplitter(const ImageRegionAdaptativeSplitter&) = delete;
+  void operator=(const ImageRegionAdaptativeSplitter&) = delete;
 
   // This reflects the input image tiling
-  SizeType   m_TileHint;
+  SizeType m_TileHint{0,0};
 
   // This contains the ImageRegion that is currently being split
   RegionType m_ImageRegion;
@@ -192,7 +189,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionAdaptativeSplitter.hxx"
+#include "otbImageRegionAdaptativeSplitter.hxx"
 #endif
 
 #endif

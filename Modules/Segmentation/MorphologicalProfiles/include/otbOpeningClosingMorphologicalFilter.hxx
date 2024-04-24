@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,8 +32,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>
-::OpeningClosingMorphologicalFilter()
+OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>::OpeningClosingMorphologicalFilter()
 {
   m_Kernel.SetRadius(1);
   m_Kernel.CreateStructuringElement();
@@ -43,9 +42,7 @@ OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>
  * Main computation method
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-void
-OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>
-::GenerateData()
+void OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>::GenerateData()
 {
   // Filters Typedefs (this class is actually a composite filter)
   typedef itk::GrayscaleMorphologicalOpeningImageFilter<InputImageType, OutputImageType, KernelType> OpenFilterType;
@@ -61,10 +58,10 @@ OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>
   progress->SetMiniPipelineFilter(this);
   progress->RegisterInternalFilter(opening, .5f);
   progress->RegisterInternalFilter(closing, .5f);
-  // Internal Pipeline connexion
+  // Internal Pipeline connection
   closing->SetInput(this->GetInput());
   opening->SetInput(closing->GetOutput());
-  // Output connexion
+  // Output connection
   opening->GraftOutput(this->GetOutput());
   opening->Update();
   this->GraftOutput(opening->GetOutput());
@@ -73,9 +70,7 @@ OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>
  * PrintSelf method
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-void
-OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Kernel: " << m_Kernel << std::endl;

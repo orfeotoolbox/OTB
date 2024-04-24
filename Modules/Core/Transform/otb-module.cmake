@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,19 +26,24 @@ from any map projection or sensor model to any map projection or sensor model.")
 otb_module(OTBTransform
   DEPENDS
     OTBBoost
+    OTBBoostAdapters
     OTBCommon
     OTBGDAL
     OTBITK
     OTBInterpolation
-    OTBOSSIMAdapters
+    OTBMetadata
     OTBGdalAdapters
+    OTBIOGDAL
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO
     OTBImageManipulation
-    OTBOssim
     OTBTestKernel
+    OTBProjection
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Core
 )

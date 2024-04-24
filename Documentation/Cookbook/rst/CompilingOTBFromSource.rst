@@ -3,17 +3,15 @@
 Compiling OTB from source
 =========================
 
-This section covers the compilation of OTB from source code using `CMake
-<http://www.cmake.org>`_. If you just need to install OTB and Monteverdi, follow
-instructions from the :doc:`Installation` section.
+This section covers the compilation of OTB from source code using
+`CMake <http://www.cmake.org>`_. If you just need to install OTB,
+follow instructions from the :doc:`Installation` section.
 
 OTB is known to work on:
 
-* Visual Studio 2015 on Windows
+* Visual Studio 2019 on Windows 10
 
-* GCC 4.x, 5.x or Clang 3.x on GNU/Linux
-
-* AppleClang on macOS (10.8 or higher)
+* GCC 5 or higher, Clang 3.4 or higher on GNU/Linux
 
 The C++14 standard is required since version 6.2.0.
 
@@ -23,64 +21,108 @@ majority) are optional and can be activated or not during the build
 process:
 
 .. table:: External libraries used in OTB
-    :align: center
 
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | **Library**                                                      | **Mandatory**         | **Minimum version**      |
-    +==================================================================+=======================+==========================+
-    | `ITK <http://www.itk.org>`_                                      | Yes                   | 4.6.0                    |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `GDAL <http://www.gdal.org>`_                                    | Yes                   | 2.0                      |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `OSSIM <http://www.ossim.org>`_                                  | Yes                   | 1.8.20-3                 |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `libgeotiff <http://trac.osgeo.org/geotiff/>`_                   | Yes                   |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `boost <http://www.boost.org>`_                                  | Yes                   |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `openthreads <http://www.openscenegraph.org>`_                   | Yes                   |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `tinyXML <http://www.grinninglizard.com/tinyxml>`_               | Yes                   |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `6S <http://6s.ltdri.org>`_                                      | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `Curl <http://www.curl.haxx.se>`_                                | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `FFTW <http://www.fftw.org>`_                                    | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `GLEW <http://glew.sourceforge.net/>`_                           | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `GLFW <http://www.glfw.org/>`_                                   | No                    | 3                        |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `GLUT <https://www.opengl.org/resources/libraries/glut/>`_       | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `libKML <https://github.com/google/libkml>`_                     | No                    | 1.2                      |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `libSVM <http://www.csie.ntu.edu.tw/~cjlin/libsvm>`_             | No                    | 2.0                      |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `MPI <https://www.open-mpi.org/>`_                               | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `MuParser <http://www.muparser.sourceforge.net>`_                | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `MuParserX <http://muparserx.beltoforion.de>`_                   | No                    | 4.0.7                    |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `OpenCV <http://opencv.org>`_                                    | No                    | 2 (3.x also supported)   |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `OPENGL <https://www.opengl.org/>`_                              | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `Qt <https://www.qt.io/developers/>`_                            | No                    | 5                        |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `QWT <http://qwt.sourceforge.net>`_                              | No                    | 6                        |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `Shark <http://image.diku.dk/shark/>`_                           | No                    | 3.1                      |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `SiftFast <http://libsift.sourceforge.net>`_                     | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
-    | `SPTW <https://github.com/remicres/sptw.git>`_                   | No                    |                          |
-    +------------------------------------------------------------------+-----------------------+--------------------------+
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | **Library**                                                      | **Mandatory**         | **Minimum version**        | **Superbuild Version**   |
+    +==================================================================+=======================+============================+==========================+
+    | `Boost <http://www.boost.org>`_                                  | Yes                   | 1.73.0                     | 1.82.0                   |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `Expat <https://sourceforge.net/projects/expat/>`_               | Yes                   |                            | 2.5.0                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `Geos <https://libgeos.org/>`_                                   | Yes                   |                            | 3.12.1                   |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `ITK <http://www.itk.org>`_                                      | Yes                   | 4.6.0                      | 4.13.3                   |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `GDAL <http://www.gdal.org>`_                                    | Yes                   | 2.4.1                      | 3.8.3                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `HDF4 <https://www.hdfgroup.org/solutions/hdf4/>`_               | Yes                   |                            | 4.2.13                   |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_               | Yes                   |                            | 1.12.3                   |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `libgeotiff <http://trac.osgeo.org/geotiff/>`_                   | Yes                   |                            | 1.7.1                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `libjpeg-turbo <http://sourceforge.net/projects/libjpeg-turbo>`_ | Yes                   |                            | 2.0.0                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `libpng <https://downloads.sourceforge.net/project/libpng>`_     | Yes                   |                            | 1.6.37                   |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `libtiff <http://www.libtiff.org/>`_                             | Yes                   |                            | 4.6.0                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `NetCDF <https://github.com/Unidata/netcdf-c>`_                  | Yes                   |                            | 4.9.2                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `OpenJPEG <https://github.com/uclouvain/openjpeg>`_              | Yes                   |                            | 2.5.0                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `PROJ <https://proj.org/>`_                                      | Yes                   |                            | 9.3.1                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `SQLITE <https://www.sqlite.org>`_                               | Yes                   |                            | 3.42.0                   |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `tinyXML <http://www.grinninglizard.com/tinyxml>`_               | Yes                   |                            | 2.6.2                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `ZLIB <https://zlib.net>`_                                       | Yes                   |                            | 1.3.1                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `6S <http://6s.ltdri.org>`_                                      | No                    |                            |                          |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `Curl <http://www.curl.haxx.se>`_                                | No                    |                            | 8.2.1                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `FFTW <http://www.fftw.org>`_                                    | No                    |                            | 3.3.10                   |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `libSVM <http://www.csie.ntu.edu.tw/~cjlin/libsvm>`_             | No                    | 2.0                        | 3.25                     |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `MPI <https://www.open-mpi.org/>`_                               | No                    |                            |                          |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `MuParser <http://www.muparser.sourceforge.net>`_                | No                    |                            | 2.3.2                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `MuParserX <http://muparserx.beltoforion.de>`_                   | No                    | 4.0.7                      | 4.0.8                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `OpenCV <http://opencv.org>`_                                    | No                    | 3.0.0                      | 4.6.0                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `Shark <http://image.diku.dk/shark/>`_                           | No                    | 4                          | 4.0                      |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `SiftFast <http://libsift.sourceforge.net>`_                     | No                    |                            |                          |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `SPTW <https://github.com/remicres/sptw.git>`_                   | No                    |                            |                          |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
+    | `SWIG <https://www.swig.org/>`_                                  | No                    |                            | 4.1.1                    |
+    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
 
-GNU/Linux and macOS
--------------------
+GNU/Linux
+---------
+
+System dependencies to build from source
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You have two choices to build from source :
+
+  - **Native build**: you need to install the OTB dependencies packaged in your OS.
+  - **Superbuild build**: you need to install the packages required to build all the OTB dependencies
+
+Common dependencies
++++++++++++++++++++
+
+Debian / Ubuntu
+~~~~~~~~~~~~~~~
+
+  .. code-block:: bash
+
+    apt update -y && apt install -y --no-install-recommends ca-certificates curl make cmake g++ gcc git git-lfs libtool swig python3 python3-dev python3-pip python3-numpy pkg-config patch
+
+    # Additional dependencies if you need to build the documentation
+    apt install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended doxygen graphviz gnuplot dvipng python3-sphinx sphinx-rtd-theme-common python3-sphinx-rtd-theme
+
+
+Additional dependencies for a native build
+++++++++++++++++++++++++++++++++++++++++++
+
+Debian / Ubuntu
+~~~~~~~~~~~~~~~
+
+  .. code-block:: bash
+
+    # Install mandatory dependencies
+    apt install -y --no-install-recommends libboost-filesystem-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libcurl4-gnutls-dev libgdal-dev python3-gdal libexpat1-dev libfftw3-dev libgeotiff-dev libgsl-dev libinsighttoolkit4-dev libgeotiff-dev libpng-dev libtinyxml-dev
+
+    # Install optional dependencies
+    apt install -y --no-install-recommends libmuparser-dev libmuparserx-dev libkml-dev libopencv-core-dev libopencv-ml-dev libopenmpi-dev libsvm-dev
+
 
 Setting up the build environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,7 +167,7 @@ to manage dependencies. Both methods rely on CMake.
   compiled.  This method is the easiest to use and provides a complete OTB with
   minimal effort.
 
-* **Normal build**: OTB dependencies must already be compiled and available on
+* **Native build**: OTB dependencies must already be installed/compiled on
   your system. This method requires more work but provides more flexibility.
 
 If you do not know which method to use and just want to compile OTB with
@@ -136,29 +178,35 @@ Important CMake configuration variables:
 * ``CMAKE_INSTALL_PREFIX``: Installation directory, target for ``make install``
 * ``BUILD_EXAMPLES``: Activate compilation of OTB examples
 * ``BUILD_TESTING``: Activate compilation of the tests
-* ``OTB_BUILD_DEFAULT_MODULES``: Activate all usual modules, required to build the examples
-* ``OTB_USE_XXX``: Activate module *XXX*
-* ``OTBGroup_XXX``: Enable modules in the group *XXX*
+* ``OTB_USE_XXX``: Activate dependency *XXX* such as MUPARSER, OPENCV...
+* ``OTB_BUILD_ModuleName``: Enable building of optional modules (SAR,FeaturesExtraction...) used in the superbuild
+* ``OTBGroup_XXX``: Enable modules in the group *XXX* used in a native build
 * ``OTB_DATA_ROOT``: otb-data repository
 * ``OTB_WRAP_PYTHON``: Enable Python wrapper
+* ``XDK_INSTALL_PATH``: You can choose to build the dependencies in another folder than the otb install prefix. In order to package the dependencies you build, you have to position that variable where you installed the dependencies
 
 SuperBuild only:
 
 * ``DOWNLOAD_LOCATION``: Location to download dependencies
-* ``USE_SYSTEM_XXX``: Use the system’s *XXX* library
 
-SuperBuild: Build OTB and all dependencies
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**IMPORTANT NOTE**
+
+By default the Toolbox is only building the CORE modules, if you want to build the whole toolbox you have to activate the ``OTB_BUILD_ModuleName`` options for each additional module you want to build
+
+SuperBuild: build all OTB dependencies before building the toolbox against these dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OTB’s compilation is customized by specifying configuration variables.
 The most important configuration variables are shown in the
-table above. The simplest way to provide
+table above. The simplest way to provide
 configuration variables is via the command line ``-D`` option:
 
 ::
 
     $ cd ~/OTB/build
-    $ cmake -D CMAKE_INSTALL_PREFIX=~/OTB/install ../otb/SuperBuild
+    # this example command will build the dependencies only for the CORE module of OTB
+    # see below for building the dependencies for the whole toolbox
+    $ cmake -DCMAKE_INSTALL_PREFIX=~/OTB/install -DXDK_INSTALL_PATH=~/OTB/install ../otb/SuperBuild
 
 You can also set variables manually with ``cmake-gui`` or ``ccmake``.
 
@@ -168,20 +216,6 @@ step. Therefore this directory will be used even if you don’t use make
 install target. In fact there is no *make install* target for the
 SuperBuild. Also note that if not specified to cmake, a default install
 dir will be used, located in ``../superbuild_install``.
-
-By default, SuperBuild will not use any of libraries installed on
-system. All ``USE_SYSTEM_XXX`` are set to `OFF`. This is our recommended
-way of using SuperBuild. You are however free to use a system library if
-you want! You must be very much aware of dependencies of those
-libraries you use from system. For example, if libjpeg is not used from
-superbuild then you should not use zlib from superbuild because zlib is
-a dependency of libjpeg. Here SuperBuild will NOT set
-``USE_SYSTEM_ZLIB=FALSE``. One must re-run cmake with
-``-DUSE_SYSTEM_ZLIB=FALSE``. Above example of libjpeg-zlib dependency is
-so simple. Imagine the case for GDAL which depends on zlib, libjpeg,
-libtiff (with big tiff support), geotiff, sqlite, curl, geos, libkml,
-openjpeg. This is one of the reasons we recommend to use SuperBuild
-exclusively.
 
 All dependencies are configured and built in a way that help us to get
 an efficient OTB build. So we enable geotiff (with proj4 support),
@@ -196,38 +230,34 @@ of all our dependencies on `the Orfeo ToolBox website
 <https://www.orfeo-toolbox.org/packages>`_ (pick the ’SuperBuild-archives’
 corresponding to the OTB version you want to build).
 
-**Notes about GDAL:** Since OTB 7.0, SuperBuild's GDAL version is 2.4.1. This version needs pkg-config to correctly find OpenJPEG (needed to read and write images with formats such as .jp2, .j2k), the minimal version is 0.21 for GDAL 2.4.1. You can install it with:
-
-::
-
-    apt-get install pkg-config
-
-**Notes about Qt:** Unlike other dependencies, building Qt5 on all platforms is
-not a trivial task but OTB SuperBuild does its best to facilitate this for the
-user. So there is still some additional package installation, one has to do as a
-pre-requistie for SuperBuild On a GNU/Linux you must have Qt X11 dependencies
-installed. See `Qt 5 documentation
-<https://doc.qt.io/qt-5/linux-requirements.html>`_ for the list of packages that
-need to be installed before starting SuperBuild.
-
-For example for a Debian 8.1 system, all Qt5 dependencies can be installed with the
-following ’apt-get install’ command:
-
-::
-
-    apt-get install libx11-dev libxext-dev libxt-dev libxi-dev libxrandr-dev libgl-dev libglu-dev libxinerama-dev libxcursor-dev
-
-You can also deactivate Qt5 and skip this by passing
-``-DOTB_USE_QT=OFF`` to CMake, but this will install OTB without
-Monteverdi, Mapla and the GUI application launchers.
-
 You are now ready to compile OTB! Simply use the make command (other
 targets can be generated with CMake’s ``-G`` option):
 
+You have to choice for building : have the dependencies installed in another folder than otb or install everything in the same folder.
+The first method is recommended for clarity.
+
+Build the dependencies in another folder than otb install path
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ::
 
-    $ cd ~/OTB/build
-    $ make
+    $ mkdir ~/OTB/buildxdk && cd ~/OTB/buildxdk
+    # here use the OTB_BUILD var that will take care to build all dependencies needed for them
+    $ cmake ../otb/Superbuild -DCMAKE_INSTALL_PREFIX=$PWD/../xdk -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
+    $ make OTB_DEPENDS
+    # now build OTB
+    $ cd .. && mkdir otb_build && cd otb_build
+    $ cmake ../otb -DXDK_INSTALL_PATH=/Path/To/xdk -DCMAKE_PREFIX_PATH=~/Workspace/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/install
+    $ make -j8
+
+Build the dependencies in the same folder as otb install
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    $ mkdir ~/OTB/build && cd ~/OTB/build
+    $ cmake ../otb/SuperBuild -DCMAKE_INSTALL_PREFIX=~/OTB/install -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
+    $ make -j8
 
 Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
 
@@ -238,75 +268,38 @@ Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
 will launch the command line version of the **ExtractROI** application,
 while:
 
-::
-
-    ~/OTB/install/bin/otbgui_ExtractROI
-
-will launch the graphical version.
-
 In order to ensure access to your OTB build from anywhere within your
-system, we recommend setting the following environment variables.
-First, add ``bin/`` directory to your PATH for easy access:
+system, we recommend calling `source ~/OTB/install/otbenv.profile`
 
-::
+Native build with system dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    export PATH=$PATH:~/OTB/install/bin
-
-Second, add the ``lib/`` directory to your ``LD_LIBRARY_PATH``:
-
-::
-
-    export LD_LIBRARY_PATH=~/OTB/install/lib:$LD_LIBRARY_PATH
-
-Monteverdi is part of OTB module and is compiled by the SuperBuild if GLEW, GLUT, OPENGL, Qt and QWT
-modules are activated.
-
-To use OTB applications from within Monteverdi you will need to define
-the ``OTB_APPLICATION_PATH`` environment variable:
-
-::
-
-    export OTB_APPLICATION_PATH=~/OTB/install/lib/otb/applications
-    monteverdi
-
-Normal build: Build only OTB
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Once all OTB dependencies are availables on your system, use CMake to
+Once all OTB dependencies are available on your system, use CMake to
 generate a Makefile:
 
 ::
 
     $ cd ~/OTB/build
-    $ cmake -C configuration.cmake ../otb
-
-The script ``configuration.cmake`` needs to contain dependencies
-location if CMake cannot find them automatically. This can be done with
-the ``XXX_DIR`` variables containing the directories which contain the
-FindXXX.cmake scripts, or with the ``XXX_INCLUDEDIR`` and
-``XXX_LIBRARY`` variables.
+    # if you want to build only the Core module use this command
+    $ cmake ../otb -DCMAKE_INSTALL_PREFIX=/Path/To/OTB_install
+    # if you want to build the whole toolbox not only the Core of OTB, use this command instead
+    $ cmake ../otb -DCMAKE_INSTALL_PREFIX=/Path/To/OTB_install -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
 
 Additionally, decide which module you wish to enable, together with tests and
-examples. Refer to table above for the list of CMake variables.
+examples. Refer to table above for the list of CMake variables.
 
 OTB is modular. It is possible to only build some modules
-instead of the whole set. To deactivate a module (and the ones that
-depend on it) switch off the CMake variable
-``OTB_BUILD_DEFAULT_MODULES``, configure, and then switch off each
-``Module_module_name`` variable.
-
-Some of the OTB capabilities are considered as optional, and you can
-deactivate the related modules thanks to a set of CMake variables
-starting with ``OTB_USE_XXX``. The table below shows which modules
-are associated to these variables. It is very important to notice that
-these variable override the variable ``OTB_BUILD_DEFAULT_MODULES``.
+instead of the whole set. To activate an optional module (and the ones that
+depend on it) you can pass ``OTB_BUILD_ModuleName`` to cmake.
+The activation or deactivation of these variables will automatically switch ON or OFF
+the variable ``OTB_USE_XXX``.
 
 You are now ready to compile OTB! Simply use the make command (other
 targets can be generated with CMake’s ``-G`` option):
 
 ::
 
-    $ make
+    $ make -j8
 
 The installation target will copy the binaries and libraries to the
 installation location:
@@ -317,28 +310,18 @@ installation location:
 
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **CMake variable**        | **3rd party module**   | **Modules depending on it**                                                                                                                                               |
-+===========================+========================+===========================================================================================================================================================================+
-| **OTB\_USE\_LIBKML**      | OTBlibkml              | OTBKMZWriter OTBIOKML OTBAppKMZ                                                                                                                                           |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_QT**          | OTBQt                  | OTBQtWidget                                                                                                                                                               |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_QWT**         | OTBQwt                 | OTBMonteverdiGUI OTBMonteverdi                                                                                                                                            |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_GLEW**        | OTBGlew                | OTBIce OTBMonteverdiGUI OTBMonteverdi                                                                                                                                     |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_OPENGL**      | OTBOpenGL              | OTBIce OTBMonteverdiGUI OTBMonteverdi                                                                                                                                     |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_CURL**        | OTBCurl                |                                                                                                                                                                           |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_MUPARSER**    | OTBMuParser            | OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBMeanShift   |
+| **OTB\_USE\_MUPARSER**    | OTBMuParser            | FeaturesExtraction                                                                                                                                                        |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_MUPARSERX**   | OTBMuParserX           | OTBMathParserX OTBAppMathParserX                                                                                                                                          |
+| **OTB\_USE\_MUPARSERX**   | OTBMuParserX           | FeaturesExtraction                                                                                                                                                        |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_LIBSVM**      | OTBLibSVM              | optional for OTBSupervised OTBAppClassification                                                                                                                           |
+| **OTB\_USE\_LIBSVM**      | OTBLibSVM              | Learning                                                                                                                                                                  |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_OPENCV**      | OTBOpenCV              | optional for OTBSupervised OTBAppClassification                                                                                                                           |
+| **OTB\_USE\_OPENCV**      | OTBOpenCV              | Learning                                                                                                                                                                  |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_SHARK**       | OTBShark               | optional for OTBSupervised OTBAppClassification                                                                                                                           |
+| **OTB\_USE\_SHARK**       | OTBShark               | Learning                                                                                                                                                                  |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_6S**          | OTB6S                  | OTBOpticalCalibration OTBAppOpticalCalibration OTBSimulation                                                                                                              |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -347,13 +330,29 @@ installation location:
 
 Table: Third parties and related modules.
 
-Windows
--------
+Packaging
+---------
 
-Everything that is needed for OTB development on Windows, including
-compiling from source, is covered in details on the OTB wiki at:
+Before OTB 9, the packaging was done using makeself which delivers a .run self extractable file. The main problem of this method was the huge number of
+steps required to have a single package (a successive call to 12 cmake files). In OTB9 we decided to do the packaging with CPack which is included in CMake, making it very simple to package OTB.
+The packaging is done via the "install" routines in the CMake Code.
+The file describing the packaging is Package_OTB.cmake that you can find in the CMake folder.
 
-http://wiki.orfeo-toolbox.org/index.php/OTB_development_on_Windows
+To make the packages for OTB, you should simply call :
+
+::
+
+    $ cd ~/OTB/build
+    $ make package
+
+By default the generated package contains all the modules and will be delivered in the subfolder build_packages.
+If you want to package OTB by module, you can set the variable ``CPACK_ARCHIVE_COMPONENT_INSTALL`` to *ON* :
+
+::
+
+    $ cd ~/OTB/build
+    $ cmake . -DCPACK_ARCHIVE_COMPONENT_INSTALL=ON
+    $ make package
 
 Known issues
 ------------
@@ -363,18 +362,24 @@ Please check `our gitlab tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/
 Tests
 -----
 
-There are more than 2500 tests for OTB. It can take from 20 minutes to 3
+There are more than 2100 tests for OTB. It can take from 20 minutes to 3
 hours to run them all, depending on compilation options
 (release mode does make a difference) and hardware.
 
 To run the tests, first make sure to set the option
-``BUILD_TESTING`` to ``ON`` before building the library.
+``BUILD_TESTING`` to ``ON`` before building the library. If you want to run the tests for the
+python API, you will also need to install the python module `pytest`.
 
-For some of the tests, you also need the test data and the baselines (~1GB):
+For some of the tests, you also need the test data and the baselines (~1GB). These files are stored
+using `git-lfs` in the `Data` folder at the root of otb sources. To download them, you have to make
+sure `git-lfs` is installed before cloning otb (binaries for `git lfs` are available for different
+OS `here <https://github.com/git-lfs/git-lfs/releases>`_).
+
+After downloading, add the binary to $PATH and run `git lfs install`. You can then clone otb sources :
 
 ::
 
-    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git
+    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git
 
 Once OTB is built with the tests, you just have to go to the binary
 directory where you built OTB and run ``ctest -N`` to have a list of all
@@ -385,17 +390,7 @@ files or ``ctest -I 1,10`` to run tests from 1 to 10.
 Compiling documentation
 -----------------------
 
-To build the CookBook documentation, the following python packages are required:
-``numpy, sphinx, sphinx_rtd_theme``. They are available on pip:
-
-::
-
-    pip install numpy sphinx sphinx_rtd_theme
-
-A working installation of ``latex`` is
-required for building the PDF version.
-
-Enable Python bindings and set ``BUILD_COOKBOOK``:
+Enable Python bindings and set ``BUILD_COOKBOOK`` option to ON:
 
 ::
 
@@ -407,6 +402,3 @@ Then, build the target:
 
     make CookbookHTML
 
-::
-
-    make CookBookPDF

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,12 +29,12 @@
 #include <fstream>
 
 const int Dimension = 2;
-typedef otb::VectorImage<unsigned short, Dimension>           ImageType;
+typedef otb::VectorImage<unsigned short, Dimension> ImageType;
 typedef otb::NumberOfLinesStrippedStreamingManager<ImageType> NbLinesStrippedStreamingManagerType;
 typedef otb::RAMDrivenStrippedStreamingManager<ImageType>     RAMDrivenStrippedStreamingManagerType;
 typedef otb::TileDimensionTiledStreamingManager<ImageType>    TileDimensionTiledStreamingManagerType;
 typedef otb::RAMDrivenTiledStreamingManager<ImageType>        RAMDrivenTiledStreamingManagerType;
-typedef otb::RAMDrivenAdaptativeStreamingManager<ImageType>        RAMDrivenAdaptativeStreamingManagerType;
+typedef otb::RAMDrivenAdaptativeStreamingManager<ImageType>   RAMDrivenAdaptativeStreamingManagerType;
 
 
 ImageType::Pointer makeImage(ImageType::RegionType region)
@@ -44,17 +44,15 @@ ImageType::Pointer makeImage(ImageType::RegionType region)
   image->SetRegions(region);
   image->SetNumberOfComponentsPerPixel(10);
 
-  itk::MetaDataDictionary& dict = image->GetMetaDataDictionary();
-
-  itk::EncapsulateMetaData<unsigned int>(dict, otb::MetaDataKey::TileHintX, 64);
-  itk::EncapsulateMetaData<unsigned int>(dict, otb::MetaDataKey::TileHintY, 64);
+  auto & imd = image->GetImageMetadata();
+  imd.Add(otb::MDNum::TileHintX, 64);
+  imd.Add(otb::MDNum::TileHintY, 64);
 
   return image;
 }
 
 
-
-int otbNumberOfLinesStrippedStreamingManager(int itkNotUsed(argc), char * argv[])
+int otbNumberOfLinesStrippedStreamingManager(int itkNotUsed(argc), char* argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -67,7 +65,7 @@ int otbNumberOfLinesStrippedStreamingManager(int itkNotUsed(argc), char * argv[]
   region.SetSize(1, 5727);
 
   streamingManager->SetNumberOfLinesPerStrip(10);
-  streamingManager->PrepareStreaming( makeImage(region), region );
+  streamingManager->PrepareStreaming(makeImage(region), region);
 
   unsigned int nbSplits = streamingManager->GetNumberOfSplits();
 
@@ -86,7 +84,7 @@ int otbNumberOfLinesStrippedStreamingManager(int itkNotUsed(argc), char * argv[]
 }
 
 
-int otbRAMDrivenStrippedStreamingManager(int itkNotUsed(argc), char * argv[])
+int otbRAMDrivenStrippedStreamingManager(int itkNotUsed(argc), char* argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -99,7 +97,7 @@ int otbRAMDrivenStrippedStreamingManager(int itkNotUsed(argc), char * argv[])
   region.SetSize(1, 5727);
 
   streamingManager->SetAvailableRAMInMB(1);
-  streamingManager->PrepareStreaming( makeImage(region), region );
+  streamingManager->PrepareStreaming(makeImage(region), region);
 
   unsigned int nbSplits = streamingManager->GetNumberOfSplits();
 
@@ -115,10 +113,9 @@ int otbRAMDrivenStrippedStreamingManager(int itkNotUsed(argc), char * argv[])
   outfile << split << std::endl;
 
   return EXIT_SUCCESS;
-
 }
 
-int otbTileDimensionTiledStreamingManager(int itkNotUsed(argc), char * argv[])
+int otbTileDimensionTiledStreamingManager(int itkNotUsed(argc), char* argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -131,7 +128,7 @@ int otbTileDimensionTiledStreamingManager(int itkNotUsed(argc), char * argv[])
   region.SetSize(1, 5727);
 
   streamingManager->SetTileDimension(100);
-  streamingManager->PrepareStreaming( makeImage(region), region );
+  streamingManager->PrepareStreaming(makeImage(region), region);
 
   unsigned int nbSplits = streamingManager->GetNumberOfSplits();
 
@@ -149,7 +146,7 @@ int otbTileDimensionTiledStreamingManager(int itkNotUsed(argc), char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbRAMDrivenTiledStreamingManager(int itkNotUsed(argc), char * argv[])
+int otbRAMDrivenTiledStreamingManager(int itkNotUsed(argc), char* argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -162,7 +159,7 @@ int otbRAMDrivenTiledStreamingManager(int itkNotUsed(argc), char * argv[])
   region.SetSize(1, 5727);
 
   streamingManager->SetAvailableRAMInMB(1);
-  streamingManager->PrepareStreaming( makeImage(region), region );
+  streamingManager->PrepareStreaming(makeImage(region), region);
 
   unsigned int nbSplits = streamingManager->GetNumberOfSplits();
 
@@ -181,7 +178,7 @@ int otbRAMDrivenTiledStreamingManager(int itkNotUsed(argc), char * argv[])
 }
 
 
-int otbRAMDrivenAdaptativeStreamingManager(int itkNotUsed(argc), char * argv[])
+int otbRAMDrivenAdaptativeStreamingManager(int itkNotUsed(argc), char* argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -194,7 +191,7 @@ int otbRAMDrivenAdaptativeStreamingManager(int itkNotUsed(argc), char * argv[])
   region.SetSize(1, 5727);
 
   streamingManager->SetAvailableRAMInMB(1);
-  streamingManager->PrepareStreaming( makeImage(region), region );
+  streamingManager->PrepareStreaming(makeImage(region), region);
 
   unsigned int nbSplits = streamingManager->GetNumberOfSplits();
 

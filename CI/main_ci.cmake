@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -71,11 +71,7 @@ if(BUILD_DIR)
 else()
   set (CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/")
 endif()
-if(INSTALL_DIR)
-  set (CTEST_INSTALL_DIRECTORY "${INSTALL_DIR}")
-else()
-  set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/")
-endif()
+set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/")
 set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 
 # Ctest command value
@@ -146,6 +142,8 @@ file ( WRITE
 
 if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
+  #don't execute tests as the build failed
+  set(ci_skip_testing 1)
 endif()
 
 # ----------------------------- Test -------------------------------------------
@@ -183,3 +181,4 @@ if(ENABLE_DOXYGEN)
               CAPTURE_CMAKE_ERROR _doxy_error
               )
 endif()
+

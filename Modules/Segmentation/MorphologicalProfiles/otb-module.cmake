@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,7 +26,7 @@ otb_module(OTBMorphologicalProfiles
     OTBCommon
     OTBITK
     OTBImageBase
-    OTBObjectList
+    OTBImageList
     OTBFunctor
 
   TEST_DEPENDS
@@ -35,4 +35,7 @@ otb_module(OTBMorphologicalProfiles
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

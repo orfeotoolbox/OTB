@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,12 +20,21 @@
 #ifndef otbSharkKMeansMachineLearningModel_h
 #define otbSharkKMeansMachineLearningModel_h
 
-#include "boost/shared_ptr.hpp"
+#include <memory>
+
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
 
+// Quiet a deprecation warning
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
+
+#if (defined (__GNUC__) && (__GNUC__ >= 9)) || (defined (__clang__) && (__clang_major__ >= 10))
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#endif
+
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
@@ -69,7 +78,7 @@
  */
 namespace otb
 {
-template<class TInputValue, class TTargetValue>
+template <class TInputValue, class TTargetValue>
 class ITK_EXPORT SharkKMeansMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
@@ -79,51 +88,51 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-  typedef typename Superclass::ConfidenceSampleType       ConfidenceSampleType;
-  typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
-  typedef typename Superclass::ProbaSampleType             ProbaSampleType;
-  typedef typename Superclass::ProbaListSampleType        ProbaListSampleType;
-  typedef shark::HardClusteringModel<shark::RealVector>   ClusteringModelType;
-  typedef ClusteringModelType::OutputType                 ClusteringOutputType;
+  typedef typename Superclass::InputValueType           InputValueType;
+  typedef typename Superclass::InputSampleType          InputSampleType;
+  typedef typename Superclass::InputListSampleType      InputListSampleType;
+  typedef typename Superclass::TargetValueType          TargetValueType;
+  typedef typename Superclass::TargetSampleType         TargetSampleType;
+  typedef typename Superclass::TargetListSampleType     TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType      ConfidenceValueType;
+  typedef typename Superclass::ConfidenceSampleType     ConfidenceSampleType;
+  typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
+  typedef typename Superclass::ProbaSampleType          ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType      ProbaListSampleType;
+  typedef shark::HardClusteringModel<shark::RealVector> ClusteringModelType;
+  typedef ClusteringModelType::OutputType               ClusteringOutputType;
 
   /** Run-time type information (and related methods). */
-  itkNewMacro( Self );
-  itkTypeMacro( SharkKMeansMachineLearningModel, MachineLearningModel );
+  itkNewMacro(Self);
+  itkTypeMacro(SharkKMeansMachineLearningModel, MachineLearningModel);
 
   /** Train the machine learning model */
   virtual void Train() override;
 
   /** Save the model to file */
-  virtual void Save(const std::string &filename, const std::string &name = "") override;
+  virtual void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  virtual void Load(const std::string &filename, const std::string &name = "") override;
+  virtual void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &) override;
+  virtual bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &) override;
+  virtual bool CanWriteFile(const std::string&) override;
   //@}
 
   /** Get the maximum number of iteration for the kMeans algorithm.*/
-  itkGetMacro( MaximumNumberOfIterations, unsigned );
+  itkGetMacro(MaximumNumberOfIterations, unsigned);
   /** Set the maximum number of iteration for the kMeans algorithm.*/
-  itkSetMacro( MaximumNumberOfIterations, unsigned );
+  itkSetMacro(MaximumNumberOfIterations, unsigned);
 
   /** Get the number of class for the kMeans algorithm.*/
-  itkGetMacro( K, unsigned );
+  itkGetMacro(K, unsigned);
   /** Set the number of class for the kMeans algorithm.*/
-  itkSetMacro( K, unsigned );
+  itkSetMacro(K, unsigned);
 
   /** Initialize the centroids for the kmeans algorithm */
   void SetCentroidsFromData(const shark::Data<shark::RealVector>& data)
@@ -142,30 +151,28 @@ protected:
   virtual ~SharkKMeansMachineLearningModel();
 
   /** Predict values using the model */
-  virtual TargetSampleType
-  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = nullptr, ProbaSampleType *proba=nullptr) const override;
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
-  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int &startIndex, const unsigned int &size,
-                              TargetListSampleType *, ConfidenceListSampleType * = nullptr, ProbaListSampleType * = nullptr) const override;
+  virtual void DoPredictBatch(const InputListSampleType*, const unsigned int& startIndex, const unsigned int& size, TargetListSampleType*,
+                              ConfidenceListSampleType* = nullptr, ProbaListSampleType* = nullptr) const override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream &os, itk::Indent indent) const override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SharkKMeansMachineLearningModel(const Self &) = delete;
-  void operator=(const Self &) = delete;
+  SharkKMeansMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Parameters set by the user
   unsigned int m_K;
   unsigned int m_MaximumNumberOfIterations;
-  bool m_CanRead;
+  bool         m_CanRead;
 
   /** Centroids results form kMeans */
   shark::Centroids m_Centroids;
 
   /** shark Model could be SoftClusteringModel or HardClusteringModel */
-  boost::shared_ptr<ClusteringModelType> m_ClusteringModel;
-
+  std::shared_ptr<ClusteringModelType> m_ClusteringModel;
 };
 } // end namespace otb
 

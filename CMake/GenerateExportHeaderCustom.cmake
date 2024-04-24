@@ -1,7 +1,7 @@
 # Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
 # file Copyright.txt or https://cmake.org/licensing for details.
 
-# Copyright (C) 2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2022 Centre National d'Etudes Spatiales (CNES)
 # - Added support of XXX_EXPORT_TEMPLATE and XXX_EXPORT_EXPLICIT_TEMPLATE macros
 
 #.rst:
@@ -191,7 +191,7 @@
 #
 # The macro ``SOMELIB_EXPORT_TEMPLATE`` should be used when declaring template
 # classes or functions. The macro ``SOMELIB_EXPORT_EXPLICIT_TEMPLATE`` should be
-# used when compiling explicit instanciations of template classes/functions.
+# used when compiling explicit instantiations of template classes/functions.
 
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)

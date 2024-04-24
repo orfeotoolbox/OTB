@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,7 +25,7 @@
 //  This example shows how to read a list of images and concatenate
 //  them into a vector image. We will write a program which is able to
 //  perform this operation taking advantage of the streaming
-//  functionnalities of the processing pipeline. We will assume that
+//  functionalities of the processing pipeline. We will assume that
 //  all the input images have the same size and a single band.
 //
 //  The following header files will be needed:

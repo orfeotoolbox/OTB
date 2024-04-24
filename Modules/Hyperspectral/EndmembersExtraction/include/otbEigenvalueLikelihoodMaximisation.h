@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,7 +37,7 @@ namespace otb
  * This filter applies the ELM (Eigenvalue Likelihood Maximisation) algorithm to a
  * hyperspectral image and outputs the number of endmember.
  * It takes as input the covariance and correlation matrices of the input data,
- * the number of observed pixel for thoses matrices estimations,
+ * the number of observed pixel for those matrices estimations,
  * and outputs the number of endmembers, and the log-likelihood.
  *
  * References :
@@ -53,16 +53,15 @@ namespace otb
  *
  * \ingroup OTBEndmembersExtraction
  */
-template<class TPrecision>
-class ITK_EXPORT EigenvalueLikelihoodMaximisation :
-  public itk::LightObject
+template <class TPrecision>
+class ITK_EXPORT EigenvalueLikelihoodMaximisation : public itk::LightObject
 {
 public:
   /** Standard Self typedef */
-  typedef EigenvalueLikelihoodMaximisation           Self;
-  typedef itk::LightObject                           Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef EigenvalueLikelihoodMaximisation Self;
+  typedef itk::LightObject                 Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -73,8 +72,8 @@ public:
   /** Types to use for computations. */
   typedef TPrecision PrecisionType;
 
-  typedef vnl_vector<PrecisionType>   VectorType;
-  typedef vnl_matrix<PrecisionType>   MatrixType;
+  typedef vnl_vector<PrecisionType> VectorType;
+  typedef vnl_matrix<PrecisionType> MatrixType;
 
   void SetCovariance(const MatrixType& m)
   {
@@ -105,22 +104,22 @@ public:
 
 protected:
   EigenvalueLikelihoodMaximisation();
-  ~EigenvalueLikelihoodMaximisation() override {}
+  ~EigenvalueLikelihoodMaximisation() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  EigenvalueLikelihoodMaximisation(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  EigenvalueLikelihoodMaximisation(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   MatrixType m_Covariance;
   MatrixType m_Correlation;
 
   unsigned int m_NumberOfPixels;
   unsigned int m_NumberOfEndmembers;
-  VectorType m_Likelihood;
-
+  VectorType   m_Likelihood;
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

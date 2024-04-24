@@ -1,37 +1,37 @@
 ------ IMAGE --------
 Spacing [1, 1]
-Origin [0, 0]
+Origin [0.5, 0.5]
 Projection REF 
-GCP Projection GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433],AUTHORITY["EPSG","4326"]]
+GCP Projection GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]
 GCP Count 4
 GCP[0] Id 1
 GCP[0] Info 
-GCP[0] Row 1
-GCP[0] Col 1
+GCP[0] Row 0.5
+GCP[0] Col 0.5
 GCP[0] X 51.1515
 GCP[0] Y 36.0442
 GCP[0] Z 0
 ----------------
 GCP[1] Id 2
 GCP[1] Info 
-GCP[1] Row 1
-GCP[1] Col 6000
+GCP[1] Row 0.5
+GCP[1] Col 5999.5
 GCP[1] X 51.8029
 GCP[1] Y 35.9172
 GCP[1] Z 0
 ----------------
 GCP[2] Id 3
 GCP[2] Info 
-GCP[2] Row 6000
-GCP[2] Col 6000
+GCP[2] Row 5999.5
+GCP[2] Col 5999.5
 GCP[2] X 51.6467
 GCP[2] Y 35.3907
 GCP[2] Z 0
 ----------------
 GCP[3] Id 4
 GCP[3] Info 
-GCP[3] Row 6000
-GCP[3] Col 1
+GCP[3] Row 5999.5
+GCP[3] Col 0.5
 GCP[3] X 50.9995
 GCP[3] Y 35.5173
 GCP[3] Z 0
@@ -46,3 +46,4 @@ Corners
  LL[1] -> 6000
  LR[0] -> 6000
  LR[1] -> 6000
+

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,7 +46,7 @@
 
 #include "otbVectorImage.h"
 
-int main(int, char*[])
+int main(int, char* [])
 {
   // The VectorImage class is templated over the type used to represent
   // the coordinate in space and over the dimension of the space.  In

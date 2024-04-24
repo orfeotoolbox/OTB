@@ -1,29 +1,26 @@
 Welcome to Orfeo ToolBox!
 =========================
 
-`Orfeo ToolBox (OTB) <http://orfeo-toolbox.org>`_ is an open-source project for
+`Orfeo ToolBox (OTB) <https://www.orfeo-toolbox.org/>`_ is an open-source project for
 state-of-the-art remote sensing. Built on the shoulders of the open-source
 geospatial community, it can process high resolution optical, multispectral and
 radar images at the terabyte scale. A wide variety of applications are
 available: from ortho-rectification or pansharpening, all the way to
 classification, SAR processing, and much more!
 
-All of OTB's algorithms are accessible from Monteverdi, QGIS, Python, the
-command line or C++. Monteverdi is an easy to use visualization tool with an
-emphasis on hardware accelerated rendering for high resolution imagery (optical
-and SAR).  With it, end-users can visualize huge raw imagery products and
-access all of the applications in the toolbox. From resource limited laptops
-to high performance MPI clusters, OTB is available on Windows, Linux and Mac.
-It is community driven, extensible and heavily documented.  Orfeo ToolBox is
-not a black box!
+All of OTB's algorithms are accessible from QGIS, Python, the command
+line or C++. A ready to use Docker container is also available. From
+resource limited laptops to high performance MPI clusters, OTB is
+available on Windows, Linux and Mac.  It is community driven,
+extensible and heavily documented.  Orfeo ToolBox is not a black box!
 
-This is the CookBook documentation for users. If you are new to OTB and
-Monteverdi, start here. It will go through how to install OTB on your system,
-how to start using Monteverdi and OTB applications to view and process your
-data, and recipes on how to accomplish typical remote sensing tasks.
-Finally, there is also documentation on every application shipped with OTB.
+This is the CookBook documentation for users. If you are new to OTB,
+start here. It will go through how to install OTB on your system, how
+to start using OTB applications to view and process your data, and
+recipes on how to accomplish typical remote sensing tasks.  Finally,
+there is also documentation on every application shipped with OTB.
 
-Get started now with the :doc:`Installation` chapter.
+Get started now with the :doc:`First_Steps` chapter.
 
 Get help, share your experience and contribute to the Orfeo-Toolbox project by
 joining `our community <https://www.orfeo-toolbox.org/community/>`_ and
@@ -32,7 +29,7 @@ joining `our community <https://www.orfeo-toolbox.org/community/>`_ and
 For other documentation, be sure to read:
 
 - OTB's website: `www.orfeo-toolbox.org <https://www.orfeo-toolbox.org/>`_
-- `Doxygen <http://orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
+- `Doxygen <https://www.orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
   of the C++ API.
 
 Table of Contents
@@ -42,15 +39,18 @@ Table of Contents
     :maxdepth: 1
     :caption: Get Started
 
+    First_Steps
     Installation
-    Monteverdi
+    Common_Use_Cases
+    Modules
+    Supported_Sensors
+    ReleaseNote9
 
 .. toctree::
     :maxdepth: 1
-    :caption: Applications
+    :caption: Usage
 
     CliInterface
-    GraphicalInterface
     PythonAPI
     QGISInterface
     Applications
@@ -68,6 +68,7 @@ Table of Contents
     recipes/featextract.rst
     recipes/stereo.rst
     recipes/hyperspectral.rst
+    recipes/bandmathX.rst
 
 .. toctree::
     :maxdepth: 1
@@ -76,9 +77,7 @@ Table of Contents
     C++/SystemOverview.rst
     C++/Tutorial.rst
     C++/UserGuide.rst
-    C++/AboutBandMathX.rst
     C++/Examples.rst
-
     C++/DeveloperGuide.rst
 
 .. toctree::
@@ -88,5 +87,6 @@ Table of Contents
     EnvironmentVariables
     ExtendedFilenames
     CompilingOTBFromSource
+    RemoteModules
     FAQ
     Contributors

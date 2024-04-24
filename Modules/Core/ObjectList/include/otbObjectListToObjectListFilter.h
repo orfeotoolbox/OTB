@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -77,14 +77,16 @@ public:
   typedef itk::DataObject::Pointer DataObjectPointer;
 
   using Superclass::SetInput;
-  virtual void SetInput(const InputListType *input);
-  const InputListType * GetInput(void);
+  virtual void SetInput(const InputListType* input);
+  const InputListType* GetInput(void);
 
 protected:
   /** Constructor */
   ObjectListToObjectListFilter();
   /** Destructor */
-  ~ObjectListToObjectListFilter() override {}
+  ~ObjectListToObjectListFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -96,10 +98,12 @@ protected:
 
   virtual void BeforeThreadedGenerateData();
 
-  virtual void AfterThreadedGenerateData() {}
+  virtual void AfterThreadedGenerateData()
+  {
+  }
 
-  virtual int SplitRequestedRegion(itk::ThreadIdType threadId, int threadCount, unsigned int requestedElements,
-                                   unsigned int& startIndex, unsigned int& stopIndex);
+  virtual int SplitRequestedRegion(itk::ThreadIdType threadId, int threadCount, unsigned int requestedElements, unsigned int& startIndex,
+                                   unsigned int& stopIndex);
 
   /** startIndex and stopIndex represent the indices of the Objects
    * to examine in thread threadId */
@@ -125,9 +129,8 @@ protected:
   /** End Multi-threading implementation */
 
 private:
-  ObjectListToObjectListFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ObjectListToObjectListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

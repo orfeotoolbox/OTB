@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,6 +30,7 @@
 #include "itkVectorImage.h"
 #endif
 #include "otbImageMetadataInterfaceBase.h"
+#include "otbImageCommons.h"
 #include "OTBImageBaseExport.h"
 
 namespace otb
@@ -41,20 +42,19 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TPixel, unsigned int VImageDimension = 2>
-class OTBImageBase_EXPORT_TEMPLATE VectorImage : public itk::VectorImage<TPixel, VImageDimension>
+class OTBImageBase_EXPORT_TEMPLATE VectorImage
+  : public itk::VectorImage<TPixel, VImageDimension>
+  , public ImageCommons
 {
 public:
-
   /** Standard class typedefs. */
-  typedef VectorImage                               Self;
-  typedef itk::VectorImage<TPixel, VImageDimension> Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
-  typedef itk::WeakPointer<const Self>              ConstWeakPointer;
+  using Self = VectorImage;
+  using Superclass = itk::VectorImage<TPixel, VImageDimension>;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
+  using ConstWeakPointer = itk::WeakPointer<const Self>;
 
-  typedef ImageMetadataInterfaceBase::VectorType           VectorType;
-  typedef ImageMetadataInterfaceBase::ImageKeywordlistType ImageKeywordlistType;
-  typedef ImageMetadataInterfaceBase::Pointer              ImageMetadataInterfacePointerType;
+  using VectorType = ImageMetadataInterfaceBase::VectorType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -79,15 +79,14 @@ public:
 
   /** Accessor type that convert data between internal and external
   *  representations.  */
-  //typedef itk::DefaultVectorPixelAccessor< InternalPixelType > AccessorType;
+  // typedef itk::DefaultVectorPixelAccessor< InternalPixelType > AccessorType;
 
   /** Functor to provide a common API between DefaultPixelAccessor and
    * DefaultVectorPixelAccessor */
   typedef itk::DefaultVectorPixelAccessorFunctor<Self> AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
-  typedef itk::VectorImageNeighborhoodAccessorFunctor<
-      Self>              NeighborhoodAccessorFunctorType;
+  typedef itk::VectorImageNeighborhoodAccessorFunctor<Self> NeighborhoodAccessorFunctorType;
 
   /** Dimension of the image.  This constant is used by functions that are
    * templated over image type (as opposed to being templated over pixel type
@@ -121,65 +120,43 @@ public:
    * of the index (0, 0). */
   typedef typename Superclass::PointType PointType;
 
-  /** Get the projection coordinate system of the image. */
-  virtual std::string GetProjectionRef(void) const;
-
-  virtual void SetProjectionRef(const std::string& wkt);
-
-  /** Get the GCP projection coordinates of the image. */
-  virtual std::string GetGCPProjection(void) const;
-
-  virtual unsigned int GetGCPCount(void) const;
-
-  virtual OTB_GCP& GetGCPs(unsigned int GCPnum);
-  virtual const OTB_GCP& GetGCPs(unsigned int GCPnum) const;
-
-  virtual std::string GetGCPId(unsigned int GCPnum) const;
-  virtual std::string GetGCPInfo(unsigned int GCPnum) const;
-  virtual double GetGCPRow(unsigned int GCPnum) const;
-  virtual double GetGCPCol(unsigned int GCPnum) const;
-  virtual double GetGCPX(unsigned int GCPnum) const;
-  virtual double GetGCPY(unsigned int GCPnum) const;
-  virtual double GetGCPZ(unsigned int GCPnum) const;
-
   /** Get the six coefficients of affine geoTtransform. */
   virtual VectorType GetGeoTransform(void) const;
 
-    /** Get signed spacing */
+  /** Get image corners. */
+  // TODO: GenericRSTransform should be instantiated to translate from physical
+  // space to EPSG:4328 ?
+  VectorType GetUpperLeftCorner(void) const;
+  VectorType GetUpperRightCorner(void) const;
+  VectorType GetLowerLeftCorner(void) const;
+  VectorType GetLowerRightCorner(void) const;
+
+
+  /** Get signed spacing */
   SpacingType GetSignedSpacing() const;
 
   /** Set signed spacing */
-  virtual void SetSignedSpacing( SpacingType spacing );
-  virtual void SetSignedSpacing( double spacing[ VImageDimension ] );
+  virtual void SetSignedSpacing(SpacingType spacing);
+  virtual void SetSignedSpacing(double spacing[VImageDimension]);
 
-  /** Get image corners. */
-  virtual VectorType GetUpperLeftCorner(void) const;
-  virtual VectorType GetUpperRightCorner(void) const;
-  virtual VectorType GetLowerLeftCorner(void) const;
-  virtual VectorType GetLowerRightCorner(void) const;
-
-  /** Get image keyword list */
-  virtual ImageKeywordlistType GetImageKeywordlist(void);
-  virtual const ImageKeywordlistType GetImageKeywordlist(void) const;
-
-  virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
+  virtual void SetNumberOfComponentsPerPixel(unsigned int n) override;
 
   /// Copy metadata from a DataObject
-  void CopyInformation(const itk::DataObject *) override;
+  void CopyInformation(const itk::DataObject*) override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Return the Pixel Accessor object */
-//   AccessorType GetPixelAccessor( void )
-//   {
-//     return AccessorType( this->GetNumberOfComponentsPerPixel() );
-//   }
+  //   AccessorType GetPixelAccessor( void )
+  //   {
+  //     return AccessorType( this->GetNumberOfComponentsPerPixel() );
+  //   }
 
-//   /** Return the Pixel Accesor object */
-//   const AccessorType GetPixelAccessor( void ) const
-//   {
-//     return AccessorType( this->GetNumberOfComponentsPerPixel() );
-//   }
+  //   /** Return the Pixel Accessor object */
+  //   const AccessorType GetPixelAccessor( void ) const
+  //   {
+  //     return AccessorType( this->GetNumberOfComponentsPerPixel() );
+  //   }
 
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
@@ -195,19 +172,13 @@ public:
 
 protected:
   VectorImage();
-  ~VectorImage() override {}
+  ~VectorImage() override
+  {
+  }
 
 private:
-  VectorImage(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-  /** Return the ImageMetadataInterfacePointer associated to the data
-   *  and creates it on first call
-   */
-  ImageMetadataInterfacePointerType GetMetaDataInterface() const;
-
-  // The image metadata accessor object. Don't use it directly. Instead use GetMetaDataInterface()
-  mutable ImageMetadataInterfacePointerType m_ImageMetadataInterface;
+  VectorImage(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
@@ -218,10 +189,11 @@ private:
 
 #include <complex>
 
-namespace otb {
+namespace otb
+{
 
-// Prevent implicit instanciation of common types to improve build performance
-// Explicit instanciations are provided in the .cxx
+// Prevent implicit instantiation of common types to improve build performance
+// Explicit instantiations are provided in the .cxx
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned int, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<int, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned char, 2>;
@@ -230,11 +202,10 @@ extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned short, 2
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<short, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<float, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<double, 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<int> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<short> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<float> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<double> , 2>;
-
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<int>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<short>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<float>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<double>, 2>;
 }
 
 #endif

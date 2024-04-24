@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,13 +22,11 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbSarImageMetadataInterfaceTest);
-  REGISTER_TEST(otbImageMetadataInterfaceBaseTest);
-  REGISTER_TEST(otbSarDefaultImageMetadataInterface);
-  REGISTER_TEST(otbOpticalImageMetadataInterfaceTest);
-  REGISTER_TEST(otbOpticalDefaultImageMetadataInterface);
-  REGISTER_TEST(otbDefaultImageMetadataInterface);
-  REGISTER_TEST(otbImageMetadataInterfaceTest2);
+  REGISTER_TEST(otbImageMetadataInterfaceTest);
   REGISTER_TEST(otbNoDataHelperTest);
   REGISTER_TEST(otbSarCalibrationLookupDataTest);
+  REGISTER_TEST(otbImageMetadataTest);
+  REGISTER_TEST(otbGeomMetadataSupplierTest);
+  REGISTER_TEST(otbXMLMetadataSupplierTest);
+  REGISTER_TEST(otbSentinel1ThermalNoiseLutTest);
 }

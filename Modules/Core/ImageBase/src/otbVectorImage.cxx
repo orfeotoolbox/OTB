@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,9 +20,10 @@
 
 #include "otbVectorImage.h"
 
-namespace otb {
+namespace otb
+{
 
-// Explicit instanciation of common types
+// Explicit instantiation of common types
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<unsigned int, 2>;
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<int, 2>;
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<unsigned char, 2>;
@@ -35,6 +36,4 @@ template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<std::complex<in
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<std::complex<short>, 2>;
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<std::complex<float>, 2>;
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<std::complex<double>, 2>;
-
 }
-

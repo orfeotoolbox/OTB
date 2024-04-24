@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,4 +29,3 @@ itk::SimpleMutexLock MachineLearningModelFactoryBase::mutex;
 std::mutex MachineLearningModelFactoryBase::mutex;
 #endif
 } // end namespace otb
-

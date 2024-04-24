@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -41,7 +41,15 @@ find_path( MUPARSER_INCLUDE_DIR muParser.h
 
 if(EXISTS "${MUPARSER_INCLUDE_DIR}/muParserDef.h")
   file(READ "${MUPARSER_INCLUDE_DIR}/muParserDef.h" _muParserDef_h_CONTENTS)
-  string(REGEX REPLACE ".*# *define MUP_VERSION *_T\\(\"([0-9.]+)\"\\).*" "\\1" MUPARSER_VERSION "${_muParserDef_h_CONTENTS}")
+  
+  # Try to find the version for muparser < 2.3
+  string(REGEX REPLACE ".*# *define MUP_VERSION *_T\\(\"([0-9.]+)\"\\).*" "\\1" 
+    MUPARSER_VERSION_OLD_STYLE "${_muParserDef_h_CONTENTS}")
+
+  # Try to find the version for muparser >= 2.3
+  string(REGEX REPLACE ".*static *const *string_type *ParserVersion *= *string_type\\(_T\\(\"([0-9.]+)([^0-9.]+)?\"\\)\\);.*" 
+      "\\1" MUPARSER_VERSION "${MUPARSER_VERSION_OLD_STYLE}")
+  
   if(MUPARSER_VERSION MATCHES "^[0-9]+\$")
     set(MUPARSER_VERSION "${MUPARSER_VERSION}.0.0")
   endif()
@@ -66,7 +74,7 @@ find_library( MUPARSER_LIBRARY
 # handle the QUIETLY and REQUIRED arguments and set MUPARSER_FOUND to TRUE if
 # all listed variables are TRUE
 include( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( MuParser DEFAULT_MSG MUPARSER_LIBRARY MUPARSER_INCLUDE_DIR )
+find_package_handle_standard_args( MuParser DEFAULT_MSG MUPARSER_LIBRARY MUPARSER_INCLUDE_DIR )
 
 mark_as_advanced( MUPARSER_INCLUDE_DIR MUPARSER_LIBRARY )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,15 +23,17 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbGenericRSTransformWithSRID);
-  REGISTER_TEST(otbCreateInverseForwardSensorModel);
-  REGISTER_TEST(otbCreateProjectionWithOSSIM);
   REGISTER_TEST(otbLogPolarTransformResample);
   REGISTER_TEST(otbLogPolarTransform);
   REGISTER_TEST(otbGeocentricTransform);
-  REGISTER_TEST(otbCreateProjectionWithOTB);
   REGISTER_TEST(otbGenericMapProjection);
   REGISTER_TEST(otbStreamingWarpImageFilter);
+  REGISTER_TEST(otbStreamingWarpImageFilterEmptyRegion);
   REGISTER_TEST(otbInverseLogPolarTransform);
   REGISTER_TEST(otbInverseLogPolarTransformResample);
   REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);
+  REGISTER_TEST(otbRPCTransformTest);
+  REGISTER_TEST(otbSarTransformTest);
+  REGISTER_TEST(otbRPCSolverTest);
+  REGISTER_TEST(otbLeastSquareAffineTransformEstimator);
 }

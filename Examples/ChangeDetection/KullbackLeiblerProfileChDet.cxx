@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -57,9 +57,9 @@ int main(int argc, char* argv[])
   // the types of the two input images and the type of the generated change
   // image (which is now of multi-components), in a similar way as the
   // KullbackLeiblerDistanceImageFilter.
-  using ImageType       = otb::Image<PixelType, Dimension>;
-  using VectorImageType = otb::VectorImage<PixelType, Dimension>;
-  using FilterType      = otb::KullbackLeiblerProfileImageFilter<ImageType, ImageType, VectorImageType>;
+  using ImageType           = otb::Image<PixelType, Dimension>;
+  using VectorImageType     = otb::VectorImage<PixelType, Dimension>;
+  using FilterType          = otb::KullbackLeiblerProfileImageFilter<ImageType, ImageType, VectorImageType>;
   using OutVectorImageType  = otb::VectorImage<OutPixelType, Dimension>;
   using ReaderType          = otb::ImageFileReader<ImageType>;
   using WriterType          = otb::ImageFileWriter<OutVectorImageType>;
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
   // of the analysis window. The program will begin by performing change
   // detection through the smaller window size and then applying moments update
   // by incrementing the radius of the analysis window (i.e. add a ring of
-  // width 1 pixel around the current neightborhood shape). The process is
+  // width 1 pixel around the current neighborhood shape). The process is
   // applied until the larger window size is reached.
   FilterType::Pointer filter = FilterType::New();
   filter->SetRadius((winSizeMin - 1) / 2, (winSizeMax - 1) / 2);

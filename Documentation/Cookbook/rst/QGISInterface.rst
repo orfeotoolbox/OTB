@@ -1,85 +1,91 @@
 QGIS interface
 ==============
 
-The QGIS-OTB plugin (requires QGIS > 3.0)
------------------------------------------
+OTB Applications can be used with QGis:
 
-With QGIS 3.0.2 or later, you will need to manually install the plugin.
-Clone qgis-otb-plugin repository and set ``QGIS_PLUGINPATH``:
+- Since QGis 3.8 and until 3.34, OTB provider is fully integrated
+- Since QGis 3.36, OTB provider is available in QGis plugin's catalog
 
-For Linux/Unix/MacOSX
-^^^^^^^^^^^^^^^^^^^^^
+.. warning:: Since QGIS 3.22 and until 3.34: the plugin is not activated by default. It should be activated in the plugins settings (``Plugins/Manage and Install Plugins...`` toolbar). The plugin should then be configured as detailed in the QGIS documentation (see the links provided above).
 
-::
+Plugin installation
+-------------------
 
-    mkdir $HOME/projects; cd $HOME/projects
-    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin
-    export QGIS_PLUGINPATH=$HOME/projects/qgis-otb-plugin
+.. note:: Instructions only valid since QGis 3.36
 
-For Windows
-^^^^^^^^^^^
+The easiest method is to install OTB provider plugin from QGis catalog:
 
-Clone qgis-otb-plugin repository to ``C:\qgis-plugins\qgis-otb-plugin``
+- :menuselection:`Plugin --> Manage and Install Plugins...`
+- Go to :guilabel:`Not installed` list and search for otb
+- Install plugin, it should be available in :guilabel:`Installed` list
 
-::
+If you need the plugin on a terminal disconnected from public network, use the following instructions. You need at least one terminal connected to network and a way to transfer plugin from one terminal to another:
 
-    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin
+- Download plugin from https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-qgis-plugin ( :guilabel:`Code` button on right then :guilabel:`zip` in download source code section)
+- Transfer you files from one terminal to another and unzip it somewhere
+- copy only ``orfeoToolbox_provider`` folder to ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+- Plugin should be available
 
-Then set the ``QGIS_PLUGINPATH`` variable:
+.. image:: Art/plugins.png
 
-* System properties (``Windows Key + R -> sysdm.cpl`` ) 
-* Select Advanced Tab -> Environment variables. 
-* Under "user variables for " 
-* Add or Edit variable ``QGIS_PLUGINPATH`` and set value to ``C:\qgis-plugins\qgis-otb-plugin``
+Plugin configuration/parameters
+-------------------------------
 
-Download and Install OTB
-^^^^^^^^^^^^^^^^^^^^^^^^
+When installed, to use OTB in QGIS you need to setup the provider plugin:
 
-OTB is not distributed with qgis-otb-plugin. It is a seperate project and has its own git repository.
-Download latest OTB version: https://www.orfeo-toolbox.org/download/.
+- Open the processing settings: :menuselection:`Settings --> Options --> Processing`
+- You can see ``OTB`` under :menuselection:`Providers` menu (see following picture), expand the :guilabel:`OTB` entry.
 
-Configure plugin in QGIS
-^^^^^^^^^^^^^^^^^^^^^^^^
+The following parameters can be personnalized:
 
-Restart QGIS, then install the OTB plugin:
-`Plugins -> Manage and Install Plugins`.
+- **Mandatory parameter** :guilabel:`OTB folder`, i.e. the location of the root of your OTB installation.
+- **Mandatory parameter** :guilabel:`OTB application folder`. The location of your OTB applications (e.g. :file:`<PATH_TO_OTB_INSTALLATION>/lib/otb/applications`). Multiple paths are allowed.
+- :guilabel:`Logger level`, an optional parameter indicates level of logger used by OTB applications.
+  The level of logging controls the amount of detail printed during
+  algorithm execution. Possible values from less to most verbose are:
+  ``CRITICAL``, ``WARNING``, ``INFO`` and ``DEBUG``. Default to ``INFO``.
+- :guilabel:`Maximum RAM to use`, an optional and advanced parameter. By default, OTB applications use all available system RAM.
+  You can, however, instruct OTB to use a specific amount of RAM (in megabytes). A value of 256 is ignored by the OTB processing provider.
+- :guilabel:`Geoid file`, optional and advanced parameter. Path to the geoid file.
+  This option sets the value of the *elev.dem.geoid* and *elev.geoid*
+  parameters in OTB applications.
+  Setting this value globally enables users to share it across multiple
+  processing algorithms. Empty by default.
+- :guilabel:`SRTM tiles folder`, an optional and advanced parameter. The directory where SRTM tiles are available. SRTM data can be stored locally to avoid downloading of files during processing. This option sets the value of *elev.dem.path*
+  and *elev.dem* parameters in OTB applications. Setting this value
+  globally enables users to share it across multiple processing algorithms.
+  Empty by default.
 
-Click on `Installed` tab on left and make sure box next to `OrfeoToolBox (OTB)` is checked.
+.. image:: Art/plugins_config.png
 
-Open processing settings
-^^^^^^^^^^^^^^^^^^^^^^^^
 
-`Settings -> Options -> Processing (left panel)`
+Compatibility between QGIS and OTB versions
+-------------------------------------------
 
-You can see OTB under "Providers":
+There are compatibility issues between the different versions of OTB and QGIS. Any version
+of OTB compiled with GDAL 3.X is not compatible with QGIS 3.12 or below. This is the case
+for the binary packages of OTB 7.1 and above. In this case QGIS 3.14 or more should be used.
 
-* Expand OTB tab
-* Tick Activate option
-* Set OTB folder. This is location of your OTB installation.
-* Set OTB application folder. This is location of your OTB applications. ``<OTB_FOLDER>/lib/otb/applications``
-* Click "ok" to save settings and close dialog. If settings are correct, you will have OTB algorithms loaded  in Processing toolbox
+The table below summarizes which version of OTB can be used with which version of QGIS.
 
-Using the processing toolbox (for QGIS < 3.0)
----------------------------------------------
++---------------+-----------------+-----------------+-----------------+-----------------+
+|               | QGIS 3.8 - 3.12 | QGIS 3.14       | QGIS 3.16       | QGIS >= 3.18    |
++---------------+-----------------+-----------------+-----------------+-----------------+
+| OTB 6.6.1     | Compatible      | Compatible      | Compatible      | Compatible      |
++---------------+-----------------+-----------------+-----------------+-----------------+
+| OTB 7.0.0     | Compatible      | Compatible      | Compatible      | Compatible      |
++---------------+-----------------+-----------------+-----------------+-----------------+
+| OTB 7.1.0     | Not Compatible  | Compatible      | Compatible      | Compatible      |
++---------------+-----------------+-----------------+-----------------+-----------------+
+| OTB 7.2.0     | Not Compatible  | Compatible      | Compatible      | Compatible      |
++---------------+-----------------+-----------------+-----------------+-----------------+
+| OTB 8.x.0     | Not Compatible  | Not Compatible  | Not Compatible  | Compatible      |
++---------------+-----------------+-----------------+-----------------+-----------------+
+| OTB 9.x.0     | Not Compatible  | Not Compatible  | Not Compatible  | Compatible      |
++---------------+-----------------+-----------------+-----------------+-----------------+
 
-In older QGIS version (3.0 or before), OTB applications are available from QGIS.
-Use them from the processing toolbox, which is accessible under `Processing
--> ToolBox`. Switch to “advanced interface” in the bottom of the
-application widget and OTB applications will be there.
+Issue tracking
+--------------
 
-.. figure:: Art/QtImages/qgis-otb.png
-
-Using a custom OTB
-^^^^^^^^^^^^^^^^^^
-
-If QGIS cannot find OTB, the “applications folder” and “binaries folder”
-can be set from the settings found under Processing :math:`\rightarrow`
-Settings :math:`\rightarrow` “service provider”.
-
-.. figure:: Art/QtImages/qgis-otb-settings.png
-
-On some versions of QGIS, if an existing OTB installation is found, the
-textfield settings will not be shown. To use a custom OTB instead of the
-existing one, you will need to replace the otbcli, otbgui and library
-files in QGIS installation directly.
-
+If you encounter issues with integration of OTB application into QGIS,
+please `fill an issue in otb-qgis-plugin board <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-qgis-plugin/-/issues/new?issue[assignee_id]=&issue[milestone_id]=>`_ .

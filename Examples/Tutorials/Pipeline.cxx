@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[2]);
 
   // Now that we have all the elements, we connect the pipeline,
-  // pluging the output of the reader to the input of the writer.
+  // plugging the output of the reader to the input of the writer.
 
   writer->SetInput(reader->GetOutput());
 

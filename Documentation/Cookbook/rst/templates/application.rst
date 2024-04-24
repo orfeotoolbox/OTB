@@ -1,4 +1,4 @@
-.. _{label}:
+.. _{label}: 
 
 {heading}
 
@@ -10,6 +10,8 @@ Description
 -----------
 
 {longdescription}
+
+{multiwriting_string}
 
 Parameters
 ----------

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,13 +24,14 @@ SETUP_SUPERBUILD(GSL)
 
 ExternalProject_Add(GSL
   PREFIX GSL
-  URL "https://github.com/ampl/gsl/archive/v2.3.0.tar.gz"
-  DOWNLOAD_NAME gsl_v2.3.0.tar.gz
-  URL_MD5 7e0478f7c5e62696fef480b9a46f708c
+  URL "https://github.com/ampl/gsl/archive/v2.7.0.tar.gz"
+  DOWNLOAD_NAME gsl_v2.7.0.tar.gz
+  URL_MD5 566ca5f5f08057aa6572aecf7fd67eb9
   BINARY_DIR ${GSL_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
+  -DNO_AMPL_BINDINGS:BOOL=ON
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   DEPENDS ${GSL_DEPENDENCIES}
   LOG_DOWNLOAD 1

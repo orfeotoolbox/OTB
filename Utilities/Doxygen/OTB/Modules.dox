@@ -561,7 +561,7 @@ These objects are the basic system objects used in building ITK.
 
 
 /**
-  \defgroup ShouldBeThreaded Filters that can potentialy be modified to be Threaded
+  \defgroup ShouldBeThreaded Filters that can potentially be modified to be Threaded
   \ingroup MultithreadingGroup
   Filter on this category could be implemented to use several processing threads
 */

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -121,11 +121,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
       set(PATCH_ARGS "--binary")
     endif()
   else()
-    if(APPLE)
-      set(DIFF_FILE_MATCH_STRING "macx")
-    else() #Linux
-      set(DIFF_FILE_MATCH_STRING "linux")
-    endif()
+     set(DIFF_FILE_MATCH_STRING "linux")
   endif() #WIN32
 
   #if an optional diff file is mentioned. then only that is applied
@@ -135,7 +131,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
     #If DOT_DIFF_FILES is empty,
     #we try to list files ending with all.diff of <DIFF_FILE_MATCH_STRING>.diff
     #the final list is stored in DOT_DIFF_FILES and applied using patch.cmake
-    #Custom patches requrired for...
+    #Custom patches required for...
 
     #glob all files ending with DIFF_FILE_MATCH_STRING.diff
     file(GLOB files_list "${${project}_PATCH_DIR}/${patch_dir_prefix}*${DIFF_FILE_MATCH_STRING}.diff")

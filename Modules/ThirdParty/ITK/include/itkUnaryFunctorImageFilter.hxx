@@ -45,7 +45,7 @@ UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton()
+ * \sa ProcessObject::GenerateOutputInformation()
  */
 template< class TInputImage, class TOutputImage, class TFunction >
 void

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,7 +35,6 @@ namespace otb
 class OTBMetadata_EXPORT IkonosImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-
   typedef IkonosImageMetadataInterface  Self;
   typedef ImageMetadataInterfaceBase    Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -51,74 +50,27 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias() const override;
+  void Parse(ImageMetadata &) override;
 
-  /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain() const override;
+protected:
+  IkonosImageMetadataInterface() = default;
+  ~IkonosImageMetadataInterface() override = default;
 
-  /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance() const override;
+private:
+  IkonosImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  /** Get the imaging acquisition day from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetDay() const override;
 
-  /** Get the imaging acquisition month from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetMonth() const override;
+  void FetchProductionDate(const std::string & productionDate, ImageMetadata &imd);
 
-  /** Get the imaging acquisition year from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetYear() const override;
-
-  /** Get the imaging acquisition hour from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetHour() const override;
-
-  /** Get the imaging acquisition year from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetMinute() const override;
-
-  /** Get the imaging production day from the ossim metadata : "Creation Date" metadata variable */
-  int GetProductionDay() const override;
-
-  /** Get the imaging production month from the ossim metadata : "Creation Date" metadata variable */
-  int GetProductionMonth() const override;
-
-  /** Get the imaging production year from the ossim metadata : "Creation Date" metadata variable */
-  int GetProductionYear() const override;
-
-  /** Get the sat elevation from the ossim metadata */
-  double GetSatElevation() const override;
-
-  /** Get the sat azimuth from the ossim metadata */
-  double GetSatAzimuth() const override;
-
-  /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths() const override;
-
-  /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths() const override;
-
-  bool CanRead() const override;
-
-  /** Get the enhanced band names of Ikonos data*/
-  std::vector<std::string> GetEnhancedBandNames() const override;
-
-  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const override;
+  void FetchAcquisitionDate(const std::string & acquisitionDate,
+                            const std::string & acquisitionTime,
+                            ImageMetadata &imd);
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override;
-
-protected:
-  IkonosImageMetadataInterface();
-  ~IkonosImageMetadataInterface() override {}
-
-private:
-
-  IkonosImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  void FetchSpectralSensitivity(const std::string & bandName, ImageMetadata &imd);
 
 };
 

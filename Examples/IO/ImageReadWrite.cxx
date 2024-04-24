@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,7 +33,7 @@
 //  the scenes by a family of classes of type
 //  \doxygen{itk}{ImageIO}. Actually, the OTB image Readers and
 //  Writers are very similar to those of ITK, but provide new
-//  functionnalities which are specific to remote sensing images.
+//  functionalities which are specific to remote sensing images.
 //
 //  The first step for performing reading and writing is to include the
 //  following headers.

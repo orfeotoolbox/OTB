@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -82,17 +82,15 @@ public:
   typedef TLabelObject LabelObjectType;
 
   /** Const iterator over LabelObject lines */
-  typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
+  typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
   /** Labeled image type */
   typedef TLabelImage LabelImageType;
 
   /** Flusser moments typedef */
   typedef typename TLabelObject::PolygonType PolygonType;
-  typedef Functor::LabelObjectToPolygonFunctor
-  <LabelObjectType, PolygonType>           PolygonFunctorType;
+  typedef Functor::LabelObjectToPolygonFunctor<LabelObjectType, PolygonType> PolygonFunctorType;
   typedef FlusserPathFunction<PolygonType> FlusserPathFunctionType;
-  typedef SimplifyPathFunctor<PolygonType,
-                              PolygonType> SimplifyPolygonFunctorType;
+  typedef SimplifyPathFunctor<PolygonType, PolygonType> SimplifyPolygonFunctorType;
 
   typedef unsigned int DimensionType;
 
@@ -105,11 +103,13 @@ public:
   ShapeAttributesLabelObjectFunctor();
 
   /** Destructor */
-  virtual ~ShapeAttributesLabelObjectFunctor() {}
+  virtual ~ShapeAttributesLabelObjectFunctor()
+  {
+  }
 
   /** The comparators */
-  bool operator !=(const Self& self);
-  bool operator ==(const Self& self);
+  bool operator!=(const Self& self);
+  bool operator==(const Self& self);
 
   /** Set the compute perimeter flag */
   void SetComputePerimeter(bool flag);
@@ -143,15 +143,15 @@ public:
 
   /** Set the label image (used only to compute
    *  the Feret diameter */
-  void SetLabelImage(const TLabelImage * image);
+  void SetLabelImage(const TLabelImage* image);
 
   /** Get the label image */
-  const TLabelImage * GetLabelImage() const;
+  const TLabelImage* GetLabelImage() const;
 
   /** This is the functor implementation
    *  Calling the functor on a label object
    *  will update its shape attributes */
-  inline void operator ()(LabelObjectType * lo);
+  inline void operator()(LabelObjectType* lo);
 
 private:
   /** Convenience internal method */
@@ -172,7 +172,7 @@ private:
   /** Convenience internal method  */
   static double hyperSphereRadiusFromVolume(double volume);
 
-  double ComputePerimeter(LabelObjectType *labelObject, const RegionType & region);
+  double ComputePerimeter(LabelObjectType* labelObject, const RegionType& region);
 
   typedef itk::Offset<2>                                                          Offset2Type;
   typedef itk::Offset<3>                                                          Offset3Type;
@@ -184,9 +184,9 @@ private:
   typedef std::map<Offset3Type, itk::SizeValueType, OffsetLexicographicCompare3>  MapIntercept3Type;
   template<class TMapIntercept, class TSpacing> double PerimeterFromInterceptCount( TMapIntercept & intercepts, const TSpacing & spacing );
 
-#if ! defined(ITK_DO_NOT_USE_PERIMETER_SPECIALIZATION)
-  double PerimeterFromInterceptCount( MapIntercept2Type & intercepts, const Spacing2Type spacing );
-  double PerimeterFromInterceptCount( MapIntercept3Type & intercepts, const Spacing3Type spacing );
+#if !defined(ITK_DO_NOT_USE_PERIMETER_SPECIALIZATION)
+  double PerimeterFromInterceptCount(MapIntercept2Type& intercepts, const Spacing2Type spacing);
+  double PerimeterFromInterceptCount(MapIntercept3Type& intercepts, const Spacing3Type spacing);
 #endif
 
   /** Do we compute the feret diameter ? */
@@ -235,14 +235,9 @@ private:
  *
  * \ingroup OTBLabelMap
  */
-template<class TImage,
-    class TLabelImage = Image<typename TImage::PixelType,
-        TImage::ImageDimension> >
+template <class TImage, class TLabelImage = Image<typename TImage::PixelType, TImage::ImageDimension>>
 class ITK_EXPORT ShapeAttributesLabelMapFilter
-  : public otb::LabelMapFeaturesFunctorImageFilter
-  <TImage,
-      typename Functor::ShapeAttributesLabelObjectFunctor
-      <typename TImage::LabelObjectType, TLabelImage> >
+    : public otb::LabelMapFeaturesFunctorImageFilter<TImage, typename Functor::ShapeAttributesLabelObjectFunctor<typename TImage::LabelObjectType, TLabelImage>>
 {
 public:
   /** Template parameters typedefs */
@@ -250,17 +245,15 @@ public:
   typedef typename ImageType::LabelObjectType LabelObjectType;
   typedef typename ImageType::RegionType      InputImageRegionType;
   typedef TLabelImage                         LabelImageType;
-  typedef Functor::ShapeAttributesLabelObjectFunctor
-  <LabelObjectType, LabelImageType>                      FunctorType;
+  typedef Functor::ShapeAttributesLabelObjectFunctor<LabelObjectType, LabelImageType> FunctorType;
 
   /** Standard class typedefs. */
   typedef ShapeAttributesLabelMapFilter Self;
-  typedef LabelMapFeaturesFunctorImageFilter
-  <ImageType, FunctorType>                               Superclass;
+  typedef LabelMapFeaturesFunctorImageFilter<ImageType, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename ImageType::Pointer         ImagePointer;
+  typedef typename ImageType::Pointer ImagePointer;
 
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
@@ -299,9 +292,9 @@ public:
     * Set/Get whether the Flussrer moments should be computed or not. The default value
     * is true, to assure backward compatibility.
     */
-   void SetComputeFlusser(bool flag);
-   bool GetComputeFlusser() const;
-   itkBooleanMacro(ComputeFlusser);
+  void SetComputeFlusser(bool flag);
+  bool GetComputeFlusser() const;
+  itkBooleanMacro(ComputeFlusser);
 
 
   /** Set/get the ReducedAttributesSet flag */
@@ -311,15 +304,19 @@ public:
 
   /** Set/Get the label image (this is used only to compute the Feret
    *  diameter) */
-  void SetLabelImage(const TLabelImage *);
-  const TLabelImage * GetLabelImage() const;
+  void               SetLabelImage(const TLabelImage*);
+  const TLabelImage* GetLabelImage() const;
 
 protected:
   /** Constructor */
-  ShapeAttributesLabelMapFilter(){}
+  ShapeAttributesLabelMapFilter()
+  {
+  }
 
   /** Destructor */
-  ~ShapeAttributesLabelMapFilter() override{}
+  ~ShapeAttributesLabelMapFilter() override
+  {
+  }
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
@@ -331,11 +328,11 @@ protected:
 
   void GenerateInputRequestedRegion() override;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *) override{};
+  void EnlargeOutputRequestedRegion(itk::DataObject*) override{};
 
 private:
-  ShapeAttributesLabelMapFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ShapeAttributesLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 

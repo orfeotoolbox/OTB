@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
   // the image:
 
   // necessary for sensors
-  filter->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  filter->SetOutputImageMetadata(&(imageReader->GetOutput()->GetImageMetadata()));
   // necessary for sensors
   filter->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   // necessary for sensors

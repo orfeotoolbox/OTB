@@ -5,7 +5,7 @@ Output Size : [27551, 29108]
 
 Output Parameters for SRID : 32631 (UTM 31 N)
 Output Origin : [367031, 4.83474e+06]
-Output Spacing : [0.641015, -0.671574]
+Output Spacing : [0.641015, -0.671575]
 Output Size : [27919, 29498]
 
 Output Parameters for SRS : Lambert II Etendu

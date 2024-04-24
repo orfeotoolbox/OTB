@@ -1,9 +1,7 @@
 Size: [1100, 1100]
 Origin: [374150, 4.82918e+06]
 Spacing: [0.6, -0.6]
-Keywordlist: 
-   Ossim Keyword list:
-  ProjectionRef:
+ProjectionRef:
 PROJCS["WGS 84 / UTM zone 31N",
     GEOGCS["WGS 84",
         DATUM["WGS_1984",
@@ -37,12 +35,10 @@ Dictionary keys:
   - ProjectionRef
   - ResolutionFactor
   - SubDatasetIndex
-  - TileHintX
-  - TileHintY
   - UpperLeftCorner
   - UpperRightCorner
 RAM usage (in Bytes): 520
-Input requested: ImageRegion (0x7ffd877b79c0)
+Input requested: ImageRegion (0x7fff772acea0)
   Dimension: 2
   Index: [9, 9]
   Size: [9, 9]

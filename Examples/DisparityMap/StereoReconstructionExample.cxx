@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
   using DisparityToElevationFilterType = otb::DisparityMapToDEMFilter<FloatImageType, FloatImageType, FloatImageType, FloatVectorImageType, FloatImageType>;
 
   double avgElevation = atof(argv[5]);
-  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(avgElevation);
+  otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(avgElevation);
 
   ImageReaderType::Pointer leftReader  = ImageReaderType::New();
   ImageReaderType::Pointer rightReader = ImageReaderType::New();
@@ -220,7 +220,7 @@ int main(int argc, char* argv[])
 #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
   std::string leftExpr = "inleft != 0 ? 255 : 0";
 #else
-  std::string leftExpr  = "if(inleft != 0,255,0)";
+  std::string leftExpr = "if(inleft != 0,255,0)";
 #endif
 
   m_LBandMathFilter->SetExpression(leftExpr);

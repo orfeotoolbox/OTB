@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,33 +27,28 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-#ifdef OTB_OPENCV_3
 #include "otbOpenCVUtils.h"
-#else
-class CvBoost;
-#endif
 
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT BoostMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+class ITK_EXPORT BoostMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef BoostMachineLearningModel           Self;
+  typedef BoostMachineLearningModel Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-  typedef typename Superclass::ProbaSampleType            ProbaSampleType;
+  typedef typename Superclass::InputValueType       InputValueType;
+  typedef typename Superclass::InputSampleType      InputSampleType;
+  typedef typename Superclass::InputListSampleType  InputListSampleType;
+  typedef typename Superclass::TargetValueType      TargetValueType;
+  typedef typename Superclass::TargetSampleType     TargetSampleType;
+  typedef typename Superclass::TargetListSampleType TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType  ConfidenceValueType;
+  typedef typename Superclass::ProbaSampleType      ProbaSampleType;
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(BoostMachineLearningModel, MachineLearningModel);
@@ -65,14 +60,6 @@ public:
    */
   itkGetMacro(BoostType, int);
   itkSetMacro(BoostType, int);
-
-  /** Setters/Getters to the split criteria
-   *  It can be CvBoost::DEFAULT, CvBoost::GINI, CvBoost::MISCLASS, CvBoost::SQERR
-   *  Default is CvBoost::DEFAULT. It uses default value according to \c BoostType
-   *  \see http://docs.opencv.org/modules/ml/doc/boosting.html#cvboost-predict
-   */
-  itkGetMacro(SplitCrit, int);
-  itkSetMacro(SplitCrit, int);
 
   /** Setters/Getters to the number of weak classifiers.
    *  Default is 100.
@@ -102,18 +89,18 @@ public:
   void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string & filename, const std::string & name="") override;
+  void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) override;
+  bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) override;
+  bool CanWriteFile(const std::string&) override;
   //@}
 
 protected:
@@ -121,28 +108,24 @@ protected:
   BoostMachineLearningModel();
 
   /** Destructor */
-  ~BoostMachineLearningModel() override;
+  ~BoostMachineLearningModel() override = default;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr, ProbaSampleType *proba=nullptr) const override;
-  
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
+
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BoostMachineLearningModel(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  BoostMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::Boost> m_BoostModel;
-#else
-  CvBoost * m_BoostModel;
-#endif
-  int m_BoostType;
-  int m_WeakCount;
+
+  int    m_BoostType;
+  int    m_WeakCount;
   double m_WeightTrimRate;
-  int m_SplitCrit;
-  int m_MaxDepth;
+  int    m_MaxDepth;
 };
 } // end namespace otb
 

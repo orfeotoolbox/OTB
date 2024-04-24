@@ -216,20 +216,20 @@ parameters:
 -``-structype`` the choice of the structuring element type
    (ball/cross) (default value is ball)
 
--``(-structype.ball.xradius)`` the ball structuring element X Radius
-   (only if structype==ball) (default value is 5 pixels)
+-``(-xradius)`` the ball structuring element X Radius
+   (default value is 5 pixels)
 
--``(-structype.ball.yradius)`` the ball structuring element Y Radius
-   (only if structype==ball) (default value is 5 pixels)
+-``(-yradius)`` the ball structuring element Y Radius
+   (default value is 5 pixels)
 
 -``-filter`` the choice of the morphological operation
    (dilate/erode/opening/closing) (default value is dilate)
 
--``(-filter.dilate.foreval)`` the foreground value for the dilation
-   (idem for filter.erode/opening/closing) (default value is 1)
+-``(-foreval)`` the foreground value
+   (Used for dilate/erode/opening/closing morphological operations) (default value is 1)
 
--``(-filter.dilate.backval)`` the background value for the dilation
-   (idem for filter.erode/opening/closing) (default value is 0)
+-``(-backval)`` the background value
+   (Used for dilate/erode/opening morphological operations) (default value is 0)
 
 -``-out`` the output filtered image
 
@@ -243,8 +243,8 @@ The application can be used as follows:
                                          -structype.ball.xradius 10
                                          -structype.ball.yradius 5
                                          -filter                 opening
-                                         -filter.opening.foreval 1.0
-                                         -filter.opening.backval 0.0
+                                         -foreval                1.0
+                                         -backval                0.0
                                          -out                    OutputImage
 
 Gray scale morphological operations
@@ -514,7 +514,7 @@ Remote Sensing Letters, vol. 4, n. 2, 2007, pp 260-264.
 The texture is computed for each pixel using its neighborhood. User can
 set the spatial threshold that is the max line length, the spectral
 threshold that is the max difference authorized between a pixel of the
-line and the center pixel of the current neighborhood. The adjustement
+line and the center pixel of the current neighborhood. The adjustment
 constant alpha and the ratio Maximum Consideration Number, which
 describes the shape contour around the central pixel, are used to
 compute the :math:`w - mean` value.

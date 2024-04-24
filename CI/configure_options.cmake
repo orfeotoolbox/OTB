@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,9 +27,16 @@
 
 set (otb_build_project_option
 "BUILD_COOKBOOK:BOOL=OFF
-BUILD_EXAMPLES:BOOL=ON
+BUILD_EXAMPLES:BOOL=OFF
 BUILD_SHARED_LIBS:BOOL=ON
 BUILD_TESTING:BOOL=ON")
+
+if(WIN32)
+  set(otb_build_project_option
+"${otb_build_project_option}
+CMAKE_C_COMPILER_LAUNCHER=buildcache
+CMAKE_CXX_COMPILER_LAUNCHER=buildcache")
+endif()
 
 set (otb_qa_option
 "CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON")
@@ -37,26 +44,10 @@ set (otb_qa_option
 set (otb_use_option
 "OTB_USE_6S:BOOL=ON
 OTB_USE_CURL:BOOL=ON
-OTB_USE_GLEW:BOOL=ON
-OTB_USE_GLFW:BOOL=ON
-OTB_USE_GLUT:BOOL=ON
 OTB_USE_GSL:BOOL=ON
 OTB_USE_LIBKML:BOOL=OFF
-OTB_USE_LIBSVM:BOOL=ON
-OTB_USE_MPI:BOOL=OFF
-OTB_USE_MUPARSER:BOOL=ON
-OTB_USE_MUPARSERX:BOOL=ON
-OTB_USE_OPENCV:BOOL=ON
-OTB_USE_OPENGL:BOOL=ON
-OTB_USE_OPENMP:BOOL=OFF
-OTB_USE_QT:BOOL=ON
-OTB_USE_QWT:BOOL=ON
-OTB_USE_SHARK:BOOL=ON
 OTB_USE_SIFTFAST:BOOL=ON
-OTB_USE_SPTW:BOOL=ON
 OTB_USE_SSE_FLAGS:BOOL=ON")
-
-# Usefull if MPI is ON : OTB_MPIEXEC_OPT:STRING=--allow-run-as-root
 
 set (otb_wrap_option
 "OTB_WRAP_PYTHON:BOOL=ON")
@@ -66,11 +57,11 @@ set (cmake_configure_option
 CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
 
 # extra options for XDK builds
-if(XDK_PATH)
+if(XDK_INSTALL_PATH)
 set(cmake_configure_option
 "${cmake_configure_option}
-CMAKE_PREFIX_PATH=${XDK_PATH}")
-foreach(remote_module OTBTemporalGapFilling Mosaic SertitObject DiapOTBModule)#otbGRM
+CMAKE_PREFIX_PATH=${XDK_INSTALL_PATH}")
+foreach(remote_module OTBTemporalGapFilling SertitObject otbGRM S1TilingSupportApplications) #DiapOTBModule
   set(cmake_configure_option
 "${cmake_configure_option}
 Module_${remote_module}:BOOL=ON")

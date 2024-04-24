@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -31,20 +31,24 @@ import time
 import xml.etree.ElementTree as ET
 
 
-trace = False
+trace = True
 
 """
 Check needed environment parameters
 """
-def CheckEnvParameters(params):
+def CheckEnvParameters(params, verbose=True):
   for p in params:
     if not p in os.environ.keys():
-      print("Missing environment variable '"+p+"'")
+      if verbose:
+        print("Missing environment variable '"+p+"'")
       return False
   return True
 
+class CDashException(Exception):
+  pass
+
 """
-Handler class to retrieve build informations
+Handler class to retrieve build information
 """
 class Handler:
   def __init__ (self):
@@ -77,8 +81,7 @@ class Handler:
         print ( configure_xml )
       self.configure_path = configure_xml
       return self.configure_path
-    print("Could not find the Configure.xml produced by ctest")
-    sys.exit(1)
+    raise CDashException("Could not find the Configure.xml produced by ctest")
 
   def ParseConfigureFile(self):
     """
@@ -97,22 +100,19 @@ class Handler:
     if trace:
       print( root.attrib )
     if not 'Name' in root.keys():
-      print("Can't find site name in Configure.XML")
-      sys.exit(1)
+      raise CDashException("Can't find site name in Configure.XML")
     if not 'BuildName' in root.keys():
-      print("Can't find build name in Configure.XML")
-      sys.exit(1)
+      raise CDashException("Can't find build name in Configure.XML")
     if not 'BuildStamp' in root.keys():
-      print("Can't find build stamp in Configure.XML")
-      sys.exit(1)
+      raise CDashException("Can't find build stamp in Configure.XML")
     self.site = root.get('Name')
     self.name = root.get('BuildName')
     self.stamp = root.get('BuildStamp')
 
   def GetBuildId (self, **kwargs):
     """
-    This function is returning the buildid. Dict can be passed with the 
-    different informations
+    This function is returning the buildid. Dict can be passed with the
+    different information
     """
     site = self.site
     stamp = self.stamp
@@ -128,11 +128,10 @@ class Handler:
       if key == "project":
         project = value
     if ( site == "" or stamp == "" or name == "" or project == ""):
-      print( "Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-      sys.exit(1)
+      raise CDashException("Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     elif trace:
       print( "Argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-    buildid_api = "/api/v1/getbuildid.php?"
+    buildid_api = "/api/getbuildid.php?"
     buildid_params = urllib.parse.urlencode({'project': project, 'site': site, 'stamp': stamp , 'name': name})
     full_url = self.url + buildid_api + buildid_params
     if trace:
@@ -156,8 +155,7 @@ class Handler:
         print ( "build id is ", self.buildid)
       return buildid.group(1)
     else:
-      print("Error in recovering buildid")
-      sys.exit(1)
+      raise CDashException("Error in recovering buildid")
 
   def GetBuildUrl (self , buildid = "" ):
     """
@@ -183,7 +181,7 @@ class Handler:
     if ( buildid == "" ):
       print( "Missing argument to build Status")
       return
-    full_url = self.url + "/api/v1/buildSummary.php?buildid=" + buildid
+    full_url = self.url + "/api/buildSummary.php?buildid=" + buildid
     response = urllib.request.urlopen(full_url).read().decode()
     full_status = json.loads(response)
     state = "success"
@@ -236,7 +234,7 @@ class Handler:
     K8S_SECRET_API_TOKEN      -> Token for Gitlab API
     CI_MERGE_REQUEST_REF_PATH -> Ref name to push the status (only for merge request pipeline)
     CI_COMMIT_REF_NAME        -> Ref name to push the status
-  They can be overriden by a full command line :
+  They can be overridden by a full command line :
     cdash_handler.py commit_sha1  project_id  project_directory  token  ref_name
 """
 if __name__ == "__main__":
@@ -245,6 +243,12 @@ if __name__ == "__main__":
   if ( len(sys.argv) < 6 and len(sys.argv) > 1 ):
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id project_directory token ref_name")
     sys.exit(1)
+
+  if os.environ.get('CI_SKIP_CDASH', False):
+    sys.exit(0)
+
+  allow_failure = os.environ.get('CI_ALLOW_FAILURE', False)
+
   if ( len(sys.argv) >= 6):
     sha1 = sys.argv[1]
     proj = sys.argv[2]
@@ -255,12 +259,13 @@ if __name__ == "__main__":
     if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'CI_COMMIT_REF_NAME']):
       sys.exit(1)
     sha1 = os.environ['CI_COMMIT_SHA']
+    refn = os.environ['CI_COMMIT_REF_NAME']
     proj = os.environ['CI_PROJECT_ID']
     pdir = os.environ['CI_PROJECT_DIR']
-    if 'CI_MERGE_REQUEST_REF_PATH' in os.environ.keys():
-      refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
-    else:
-      refn = os.environ['CI_COMMIT_REF_NAME']
+    if CheckEnvParameters(['CI_MERGE_REQUEST_REF_PATH', 'CI_MERGE_REQUEST_PROJECT_ID'], verbose=False):
+      targetProj = os.environ['CI_MERGE_REQUEST_PROJECT_ID']
+      if proj == targetProj:
+        refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
     if CheckEnvParameters(['K8S_SECRET_API_TOKEN']):
       token = os.environ['K8S_SECRET_API_TOKEN']
     else:
@@ -270,25 +275,35 @@ if __name__ == "__main__":
   if trace:
     print("build_dir is: " + build_dir)
   handler.build_dir = build_dir
-  handler.GetConfigureFile()
-  handler.ParseConfigureFile()
-  if handler.GetBuildId() is None:
-    cdash_url = "https://cdash.orfeo-toolbox.org"
-    state = 'failed'
-    error = "Failed to get build id"
-  else:
-    cdash_url = handler.GetBuildUrl()
-    ( state , error ) = handler.GetLogStatus( os.path.join( pdir , "log") )
-  print("CDash build URL : "+cdash_url)
-  if token is None:
-    sys.exit(0)
-  gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
-  gitlab_url += proj + "/statuses/" + sha1
+
+  try:
+    handler.GetConfigureFile()
+    handler.ParseConfigureFile()
+    if handler.GetBuildId() is None:
+      cdash_url = "https://cdash.orfeo-toolbox.org"
+      state = 'failed'
+      error = "Failed to get build id"
+    else:
+      cdash_url = handler.GetBuildUrl()
+      ( state , error ) = handler.GetLogStatus( os.path.join( pdir , "log") )
+    print("CDash build URL : "+cdash_url)
+    if token is None:
+      sys.exit(0)
+    gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
+    gitlab_url += proj + "/statuses/" + sha1
+  except CDashException as e:
+    if allow_failure:
+      state = 'success'
+    else:
+      print(e)
+      sys.exit(1)
+
   params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\
    'target_url' : cdash_url , 'description' : error , 'ref' : refn })
   gitlab_request = urllib.request.Request(gitlab_url)
   gitlab_request.add_header('PRIVATE-TOKEN' , token )
-  res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
   if trace:
     print ("gitlab_request.url: " + gitlab_request.full_url)
+  res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
+  if trace:
     print ("gitlab_request.text: " + res.read().decode())

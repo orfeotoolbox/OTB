@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -31,8 +31,8 @@ endif()
 
 ExternalProject_Add(MUPARSERX
   PREFIX MUPARSERX
-  URL "https://github.com/beltoforion/muparserx/archive/v4.0.7.zip"
-  URL_MD5 67819fc478436ea8f647c804e6f2e1a2
+  URL "https://github.com/beltoforion/muparserx/archive/v4.0.8.zip"
+  URL_MD5 b4cbf819a7a8a3d74fd1dcc1890a3670
   BINARY_DIR ${MUPARSERX_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,10 +22,13 @@ INCLUDE_ONCE_MACRO(SQLITE)
 
 SETUP_SUPERBUILD(SQLITE)
 
+set(SQLITE_URL "https://www.sqlite.org/2023/sqlite-amalgamation-3420000.zip")
+set(SQLITE_MD5 eb9a6e56044bc518e6705521a1a929ed)
+
 ExternalProject_Add(SQLITE
   PREFIX SQLITE
-  URL "http://www.sqlite.org/2015/sqlite-amalgamation-3080801.zip"
-  URL_MD5 b1cbcbd710bdfd762dc169f1676053b5
+  URL ${SQLITE_URL}
+  URL_MD5 ${SQLITE_MD5}
   SOURCE_DIR ${SQLITE_SB_SRC}
   BINARY_DIR ${SQLITE_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

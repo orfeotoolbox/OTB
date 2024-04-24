@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -38,11 +38,8 @@
 #----------------------------------------------------------------------
 
 set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1000000)
+set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 300)
 set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 50)
-
-if(NOT DEFINED CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS)
-  set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 300)
-endif()
 
 set(CTEST_CUSTOM_COVERAGE_EXCLUDE
  ${CTEST_CUSTOM_COVERAGE_EXCLUDE}
@@ -65,8 +62,6 @@ set(CTEST_CUSTOM_COVERAGE_EXCLUDE
  ".*/Modules/Wrappers/SWIG/src/python/otbApplicationPYTHON_wrap.*"
  ".*/Modules/Wrappers/SWIG/src/java/otbApplicationJAVA_wrap.*"
 
- # Exclude Qt moc file
- ".*moc_.*"
  )
 
 set(CTEST_CUSTOM_WARNING_EXCEPTION
@@ -84,6 +79,7 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*gdal_priv.h.*[Ww]arning.*"
   ".*cpl_string.h.*[Ww]arning.*"
   ".*ogr_feature.h.*[Ww]arning.*"
+  ".*abstract.h.*warning.*"
 
   # Ignore clang's summary warning, assuming prior text has matched some
   # other warning expression:
@@ -99,8 +95,6 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*otbCurlHelper.cxx:.*warning.*maxConnect.*"
   ".*include.ITK-4.*warning.*"
   ".*include.curl.curl.h.*warning.*"
-  ".*include.ossim.*warning.*"
-  ".*include.ossim.*note.*"
   ".*include.ogr_core.h.*warning.*"
   ".*include.ogr_srs_api.h.*warning.*"
   ".*include.ogrsf_frmts.h.*warning.*"

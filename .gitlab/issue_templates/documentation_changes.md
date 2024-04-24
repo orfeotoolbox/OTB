@@ -1,7 +1,9 @@
-### Target documentation ressources
+### Target documentation resources
 
-Can be a combination of Software guide, cookbook, doxygen, blog, applications doc, websites
+Can be a combination of CookBook, doxygen, blog, applications doc, websites
 
 ### Change requested
 
 Describe precisely the changes that are required.
+
+/label ~documentation 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -83,5 +83,5 @@ otb_add_test(NAME maTeMarkovRegularizationExampleTest COMMAND ${OTB_TEST_DRIVER}
     0.2
     20
     0.0
-    1 # true to use always the same rand() sample, false otherwis
+    1 # true to use always the same rand() sample, false otherwise
 )

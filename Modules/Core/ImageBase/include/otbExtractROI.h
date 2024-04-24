@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,15 +40,14 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputPixel, class TOutputPixel>
-class OTBImageBase_EXPORT_TEMPLATE ExtractROI :
-  public ExtractROIBase<Image<TInputPixel, 2>, Image<TOutputPixel, 2> >
+class OTBImageBase_EXPORT_TEMPLATE ExtractROI : public ExtractROIBase<Image<TInputPixel, 2>, Image<TOutputPixel, 2>>
 {
 public:
   /** Standard class typedefs. */
-  typedef ExtractROI                                                     Self;
-  typedef ExtractROIBase<Image<TInputPixel, 2>, Image<TOutputPixel, 2> > Superclass;
-  typedef itk::SmartPointer<Self>                                        Pointer;
-  typedef itk::SmartPointer<const Self>                                  ConstPointer;
+  typedef ExtractROI Self;
+  typedef ExtractROIBase<Image<TInputPixel, 2>, Image<TOutputPixel, 2>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -75,28 +74,26 @@ public:
   typedef typename InputImageType::SizeType   InputImageSizeType;
 
   /** ImageDimension enumeration */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      OutputImageType::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, OutputImageType::ImageDimension);
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 protected:
   ExtractROI();
-  ~ExtractROI() override {}
+  ~ExtractROI() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ExtractROI
    *
-   * \sa ExtractROIBase::GenerateOutputInformaton()  */
+   * \sa ExtractROIBase::GenerateOutputInformation()  */
   void GenerateOutputInformation() override;
 
 private:
-  ExtractROI(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ExtractROI(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

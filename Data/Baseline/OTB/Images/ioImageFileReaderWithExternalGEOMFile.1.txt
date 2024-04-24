@@ -1,0 +1,11 @@
+{"ProductionDate": "2004-05-25T19:49:03Z","AcquisitionDate": "2002-04-01T10:52:28.415362Z","SatAzimuth": "359","SunAzimuth": "154.8","SatElevation": "72.4","SunElevation": "48.6","GreenDisplayChannel": "1","SensorID": "QB02","RPC": "<RPCParam>","Mission": "Quickbird","ProductType": "Multi","TileHintX": "250","Instrument": "BGIS2000","TileHintY": "2","ProjectionWKT": "GEOGCS["WGS 84",
+    DATUM["WGS_1984",
+        SPHEROID["WGS 84",6378137,298.257223563,
+            AUTHORITY["EPSG","7030"]],
+        AUTHORITY["EPSG","6326"]],
+    PRIMEM["Greenwich",0],
+    UNIT["degree",0.0174532925199433,
+        AUTHORITY["EPSG","9122"]],
+    AXIS["Latitude",NORTH],
+    AXIS["Longitude",EAST],
+    AUTHORITY["EPSG","4326"]]","DataType": "9","RedDisplayChannel": "2","AreaOrPoint": "Area","BlueDisplayChannel": "0",}

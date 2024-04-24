@@ -169,6 +169,12 @@ parameters:
 -  ``ParameterType_RAM`` : parameter storing the maximum amount of RAM
    to be used.
 
+-  ``ParameterType_Field`` : parameter storing a list of field from a given
+   vector data (support multi-choice and single-choice).
+
+-  ``ParameterType_Band`` : parameter storing a list of band from a given
+   raster data (support multi-choice and single-choice).
+
 Parameters description
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -294,14 +300,14 @@ images, you have two options :
    the input image parameter (with functions
    ``SetParameterInputImage()`` and ``GetParameterOutputImage()``). It
    will connect the pipelines in applications A and B, to form an
-   “in-memory” connexion. This has to be done between the calls to
+   “in-memory” connection. This has to be done between the calls to
    ``DoExecute()`` of application A and B.
 
 -  Use a temporary filename to store the output image ``a.out`` and read
    it with ``b.in``. In this case, you have to manually call the writers
    of parameter ``a.out``.
 
-At the moment, the in-memory connexion of vector data parameters is not
+At the moment, the in-memory connection of vector data parameters is not
 supported.
 
 Orchestration
@@ -340,17 +346,12 @@ name.
 Execute your application
 ------------------------
 
-There are different ways to launch applicatons :
+There are different ways to launch applications :
 
 CommandLine :
     The command line option is invoked using
     *otbApplicationLauncherCommandLine* executable followed by the
     classname, the application dir and the application parameters.
-
-QT :
-    Application can be encapsuled in Qt framework using
-    *otbApplicationLauncherQt* executable followed by the classname and
-    the application dir.
 
 Python :
     A Python wrapper is also available.

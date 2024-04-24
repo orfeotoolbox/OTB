@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,7 +23,10 @@ INCLUDE_ONCE_MACRO(TIFF)
 SETUP_SUPERBUILD(TIFF)
 
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(TIFF ZLIB JPEG)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(TIFF ZLIB JPEG LERC)
+
+set(TIFF_URL "https://download.osgeo.org/libtiff/tiff-4.6.0.tar.gz")
+set(TIFF_MD5 fc7d49a9348b890b29f91a4ecadd5b49)
 
 if(MSVC)
   set(TIFF_C_FLAGS "/D_CRT_SECURE_NO_WARNINGS /DWIN32")
@@ -31,8 +34,8 @@ endif()
 
 ExternalProject_Add(TIFF
   PREFIX TIFF
-  URL "http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz"
-  URL_MD5 2a7d1c1318416ddf36d5f6fa4600069b
+  URL ${TIFF_URL}
+  URL_MD5 ${TIFF_MD5}
   SOURCE_DIR ${TIFF_SB_SRC}
   BINARY_DIR ${TIFF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -49,6 +52,7 @@ ExternalProject_Add(TIFF
   -Dlzma:BOOL=FALSE
   -Djbig:BOOL=FALSE
   -Dzlib:BOOL=TRUE
+  -Dlerc:BOOL=TRUE
   -DWITH_OPENGL:BOOL=FALSE
   -Dpixarlog:BOOL=TRUE
   -Dcxx:BOOL=FALSE
@@ -64,10 +68,10 @@ ExternalProject_Add(TIFF
   LOG_BUILD 1
   LOG_INSTALL 1
   )
-    
+
 SUPERBUILD_PATCH_SOURCE(TIFF)
 
-#do we really need these variables? 
+#do we really need these variables?
 set(_SB_TIFF_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
   set(_SB_TIFF_LIBRARY ${SB_INSTALL_PREFIX}/lib/tiff.lib)

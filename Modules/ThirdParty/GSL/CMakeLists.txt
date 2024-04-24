@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,6 +22,7 @@ project(OTBGSL)
 set(OTBGSL_THIRD_PARTY 1)
 
 set(OTBGSL_SYSTEM_INCLUDE_DIRS ${GSL_INCLUDE_DIR})
+set(OTBGSL_SYSTEM_LIBRARY_DIRS ${GSL_LIBRARY_DIRS})
 set(OTBGSL_LIBRARIES ${GSL_LIBRARY})
 
 otb_module_impl()

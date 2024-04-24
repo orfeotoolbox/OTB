@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,7 @@
 */
 
 
-// This example illustrates the use of the \doxygen{otb}{AssymmetricFusionOfLineDetectorImageFilter}.
+// This example illustrates the use of the \doxygen{otb}{AsymmetricFusionOfLineDetectorImageFilter}.
 //
 // The first step required to use this filter is to include its header file.
 
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
   writer->SetInput(rescaler->GetOutput());
 
   //  The methods \code{SetLengthLine()} and \code{SetWidthLine()}
-  //  allow setting the minimum length and the typical witdh of the
+  //  allow setting the minimum length and the typical width of the
   //  lines which are to be detected.
   //
   //  \index{otb::AsymmetricFusionOfDetector!SetWidthLine()}

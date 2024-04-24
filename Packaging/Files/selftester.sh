@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -67,7 +67,7 @@ REF_SIZE=$(nb_report_lines)
 # Check 1 : check binaries
 OTB_SO_LIBRARIES=$(find lib -name '*.so*' | grep -v 'python')
 OTB_DY_LIBRARIES=$(find lib -name '*.dylib')
-OTB_EXE="bin/mapla bin/monteverdi bin/otbApplicationLauncherQt bin/otbApplicationLauncherCommandLine"
+OTB_EXE="bin/otbApplicationLauncherCommandLine"
 for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
     F_OUTPUT=$(file "$name")
   if echo "$F_OUTPUT" | grep -q 'cannot open'; then
@@ -95,9 +95,9 @@ done
 
 REPORT_SIZE=$(nb_report_lines)
 if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
-  echo "Check 1/4 : FAIL"
+  echo "Check 1/3 : FAIL"
 else
-  echo "Check 1/4 : PASS"
+  echo "Check 1/3 : PASS"
 fi
 REF_SIZE=$REPORT_SIZE
 
@@ -120,41 +120,6 @@ for app in $OTB_APPS; do
       echo_and_report "ERROR: bin/otbcli_$app\n$CLI_OUTPUT"
     fi
   fi
-  # test the gui launcher only on 2 first applications
-  if [ ! -f "bin/otbgui_$app" ]; then
-    echo_and_report "ERROR: missing gui launcher for application $app"
-  elif [ $app_index -lt 2 ]; then
-    echo "" >tmp.log
-    "bin/otbgui_$app" >tmp.log 2>&1 &
-    GUI_PID=$!
-    CHILD_PID=""
-    NEXT_CHILD_PID=""
-    nb_try=0
-    while [ -z "$NEXT_CHILD_PID" -a $nb_try -lt 10 ]; do
-      sleep 1s
-      CHILD_PROC=$(ps_children $GUI_PID | grep " bin/otbgui $app")
-      if [ -n "$CHILD_PROC" ]; then
-        CHILD_PID=$(get_pid "$CHILD_PROC")
-        NEXT_CHILD_PROC=$(ps_children "$CHILD_PID" | grep 'otbApplicationLauncherQt')
-        if [ -n "$NEXT_CHILD_PROC" ]; then
-          NEXT_CHILD_PID=$(get_pid "$NEXT_CHILD_PROC")
-        fi
-      fi
-      nb_try=$(( nb_try + 1 ))
-    done
-    if [ -n "$NEXT_CHILD_PID" ]; then
-      kill -9 "$NEXT_CHILD_PID"
-      wait "$NEXT_CHILD_PID" 2>/dev/null
-    elif [ -n "$CHILD_PID" ]; then
-      echo "ERROR: otbApplicationLauncherQt $app failed to launch"
-      tee -a selftest_report.log < tmp.log
-      exit_if
-    else
-      echo "ERROR: bin/otbgui_$app failed to launch"
-      tee -a selftest_report.log < tmp.log
-      exit_if
-    fi
-  fi
   app_index=$(( app_index + 1 ))
 done
 
@@ -167,64 +132,21 @@ fi
 
 REPORT_SIZE=$(nb_report_lines)
 if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
-  echo "Check 2/4 : FAIL"
+  echo "Check 2/3 : FAIL"
 else
-  echo "Check 2/4 : PASS"
+  echo "Check 2/3 : PASS"
 fi
 REF_SIZE=$REPORT_SIZE
-
-# Check 3 : OTB binaries monteverdi & mapla
-# Monteverdi
-echo "" >tmp.log
-bin/monteverdi >tmp.log 2>&1 &
-MVD_PID=$!
-sleep 5s
-if pgrep monteverdi | grep -q $MVD_PID; then
-  MVD_LOG=$(grep -i -e 'error' -e 'exception' tmp.log)
-  if [ -n "$MVD_LOG" ]; then
-    echo_and_report "ERROR: launching monteverdi"
-    tee -a selftest_report.log < tmp.log
-  fi
-  kill -9 $MVD_PID
-  wait $MVD_PID 2>/dev/null
-else
-  echo_and_report "ERROR: failed to launch monteverdi"
-  tee -a selftest_report.log < tmp.log
-fi
-# Mapla
-echo "" >tmp.log
-bin/mapla >tmp.log 2>&1 &
-MAPLA_PID=$!
-sleep 5s
-if pgrep mapla | grep -q $MAPLA_PID; then
-  MAPLA_LOG=$(grep -i -e 'error' -e 'exception' tmp.log)
-  if [ -n "$MAPLA_LOG" ]; then
-    echo_and_report "ERROR: launching mapla"
-    tee -a selftest_report.log < tmp.log
-  fi
-  kill -9 $MAPLA_PID
-  wait $MAPLA_PID 2>/dev/null
-else
-  echo_and_report "ERROR: failed to launch mapla"
-  tee -a selftest_report.log < tmp.log
-fi
-
-REPORT_SIZE=$(nb_report_lines)
-if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
-  echo "Check 3/4 : FAIL"
-else
-  echo "Check 3/4 : PASS"
-fi
 
 grep_cmd=$(which grep)
 grep_out=$($grep_cmd -Rs "/usr/" "$CUR_DIR/lib/cmake/" | $grep_cmd -v "/usr/include/libdrm")
 grep_ret=$?
 if [ $grep_ret -ne 1 ]; then
-    echo "Check 4/4 : FAIL"
+    echo "Check 3/3 : FAIL"
     echo "ERROR: your cmake files contains references to /usr. Is this normal?"
     echo_and_report "$grep_out"
 else
-    echo "Check 4/4 : PASS"
+    echo "Check 3/3 : PASS"
 fi
 
 # clean any background process

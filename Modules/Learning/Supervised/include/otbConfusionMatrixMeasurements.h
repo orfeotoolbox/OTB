@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,16 +49,15 @@ namespace otb
  *
  * \ingroup OTBSupervised
  */
-template <class TConfusionMatrix = itk::VariableSizeMatrix<unsigned long>, class TLabel = int >
-class ITK_EXPORT ConfusionMatrixMeasurements :
-  public itk::Object
+template <class TConfusionMatrix = itk::VariableSizeMatrix<unsigned long>, class TLabel = int>
+class ITK_EXPORT ConfusionMatrixMeasurements : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ConfusionMatrixMeasurements               Self;
-  typedef itk::Object                               Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef ConfusionMatrixMeasurements   Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConfusionMatrixMeasurements, itk::Object);
@@ -66,15 +65,15 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef TLabel                                    ClassLabelType;
-  typedef std::map<ClassLabelType, int>             MapOfClassesType;
-  typedef std::map<int, ClassLabelType>             MapOfIndicesType;
+  typedef TLabel ClassLabelType;
+  typedef std::map<ClassLabelType, int> MapOfClassesType;
+  typedef std::map<int, ClassLabelType> MapOfIndicesType;
 
   /** Type for the confusion matrix */
-  typedef TConfusionMatrix                          ConfusionMatrixType;
+  typedef TConfusionMatrix ConfusionMatrixType;
 
   /** Type for the measurement */
-  typedef itk::VariableLengthVector<double>         MeasurementType;
+  typedef itk::VariableLengthVector<double> MeasurementType;
 
 
   /** Computes the measurements over m_ConfusionMatrix. */
@@ -105,15 +104,15 @@ public:
   /* Gives the correspondence between a class label
    * and its index in the confusion matrix
    */
-  virtual void SetMapOfClasses(const MapOfClassesType _arg)
+  virtual void SetMapOfClasses(const MapOfClassesType &_arg)
   {
     m_MapOfClasses = _arg;
     typename MapOfClassesType::iterator itMapOfClasses;
     m_MapOfIndices.clear();
     for (itMapOfClasses = m_MapOfClasses.begin(); itMapOfClasses != m_MapOfClasses.end(); ++itMapOfClasses)
-      {
+    {
       m_MapOfIndices[itMapOfClasses->second] = itMapOfClasses->first;
-      }
+    }
   }
 
   MapOfClassesType GetMapOfClasses() const
@@ -125,15 +124,15 @@ public:
   /* Gives the correspondence between an index in the
    * confusion matrix and the class label
    */
-  virtual void SetMapOfIndices(const MapOfIndicesType _arg)
+  virtual void SetMapOfIndices(const MapOfIndicesType &_arg)
   {
     m_MapOfIndices = _arg;
     typename MapOfIndicesType::iterator itMapOfIndices;
     m_MapOfClasses.clear();
     for (itMapOfIndices = m_MapOfIndices.begin(); itMapOfIndices != m_MapOfIndices.end(); ++itMapOfIndices)
-      {
+    {
       m_MapOfClasses[itMapOfIndices->second] = itMapOfIndices->first;
-      }
+    }
   }
 
   MapOfIndicesType GetMapOfIndices() const
@@ -143,13 +142,15 @@ public:
 
 protected:
   ConfusionMatrixMeasurements();
-  ~ConfusionMatrixMeasurements() override {}
-  //void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ConfusionMatrixMeasurements() override
+  {
+  }
+  // void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
 private:
-  ConfusionMatrixMeasurements(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ConfusionMatrixMeasurements(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double m_KappaIndex;
   double m_OverallAccuracy;
@@ -179,7 +180,6 @@ private:
   unsigned long  m_NumberOfSamples;
 
   ConfusionMatrixType m_ConfusionMatrix;
-
 };
 } // end of namespace otb
 

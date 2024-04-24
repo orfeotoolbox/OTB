@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,7 +33,7 @@ namespace otb
  * \brief Models a decision tree
  *
  * A decision tree holds an attribute that is being tested and 2
- * maps (STL): one for subtrees and anoter for labels (for the case
+ * maps (STL): one for subtrees and another for labels (for the case
  * where there are no subtrees). These maps as keys a pair (STL) which
  * holds the value of the attribute being tested as well as the type
  * of test (LT, LE, EQ, GE, GT).
@@ -61,8 +61,16 @@ template <class AttributeValueType, class LabelType>
 class ITK_EXPORT DecisionTree : public itk::DataObject
 {
 public:
-
-  enum DecisionTreeTestType { MIN, LT=MIN, LE, EQ, GE, GT, MAX=GT};
+  enum DecisionTreeTestType
+  {
+    MIN,
+    LT = MIN,
+    LE,
+    EQ,
+    GE,
+    GT,
+    MAX = GT
+  };
   /** Standard typedefs */
   typedef DecisionTree                  Self;
   typedef itk::DataObject               Superclass;
@@ -74,10 +82,10 @@ public:
   /** Runtime information macro */
   itkTypeMacro(DecisionTree, DataObject);
 
-  typedef typename std::pair< AttributeValueType, DecisionTreeTestType > KeyType;
-  typedef typename std::map< KeyType, Pointer >                          TreeMapType;
-  typedef typename std::map< KeyType, LabelType >                        LabelMapType;
-  typedef std::vector<AttributeValueType>                                ExampleType;
+  typedef typename std::pair<AttributeValueType, DecisionTreeTestType> KeyType;
+  typedef typename std::map<KeyType, Pointer>                          TreeMapType;
+  typedef typename std::map<KeyType, LabelType>                        LabelMapType;
+  typedef std::vector<AttributeValueType> ExampleType;
 
   itkSetMacro(Attribute, unsigned int);
   itkGetMacro(Attribute, unsigned int);
@@ -94,7 +102,7 @@ public:
       EQ case*/
   void AddBranch(AttributeValueType attr, LabelType label);
 
-  LabelType Decide(const ExampleType example);
+  LabelType Decide(const ExampleType& example);
 
 protected:
   /** Constructor */
@@ -107,8 +115,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  DecisionTree(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DecisionTree(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Map holding the subtrees */
   TreeMapType* m_TreeMap;
@@ -121,8 +129,6 @@ private:
   bool m_IsFinal;
 
   LabelType m_Label;
-
-
 };
 } // end namespace otb
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,22 +18,40 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.12)
 
 project(sqlite)
 
 option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
 
 include_directories("${CMAKE_SOURCE_DIR}")
-add_definitions(-DSQLITE_ENABLE_COLUMN_METADATA=1)
-add_definitions(-DSQLITE_ENABLE_RTREE=1)
-add_definitions(-DSQLITE_OMIT_LOAD_EXTENSION=1)
-add_definitions(-DSQLITE_THREADSAFE=1)
-add_library(sqlite3 sqlite3_win.c)
-if(UNIX)
-  set(CMAKE_C_FLAGS "-pthread")
-endif()  
-install(TARGETS sqlite3
+add_compile_definitions(SQLITE_ENABLE_COLUMN_METADATA)
+add_compile_definitions(SQLITE_ENABLE_RTREE)
+add_compile_definitions(SQLITE_THREADSAFE=1)
+
+if(WIN32)
+  add_library(sqlite3 STATIC sqlite3.c)
+else()
+  add_library(sqlite3 sqlite3.c)
+endif()
+
+add_executable(sqlite3-bin shell.c sqlite3.c)
+if(WIN32)
+  target_link_libraries(sqlite3-bin sqlite3)
+else()
+  find_package( Threads )
+  target_link_libraries(sqlite3-bin sqlite3 m ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+endif()
+
+set_target_properties(sqlite3-bin PROPERTIES OUTPUT_NAME sqlite3)
+set_target_properties(sqlite3-bin sqlite3
+    PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
+install(TARGETS sqlite3 sqlite3-bin 
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,12 +24,12 @@
 */
 
 
-// OTB relies on OSSIM for elevation handling. Since release 3.16, there is a
-// single configuration class \doxygen{otb}{DEMHandler} to manage elevation (in
-// image projections or localization functions for example).  This configuration
+// Since release 8.0, OTB relies on GDAL for elevation handling. Since release 3.16,
+// there is a single configuration class \doxygen{otb}{DEMHandler} to manage elevation
+// (in image projections or localization functions for example). This configuration
 // is managed by the a proper instantiation and parameters setting of this
-// class.  These instantiations must be done before any call to geometric
-// filters or functionalities. Ossim internal accesses to elevation are also
+// class. These instantiations must be done before any call to geometric
+// filters or functionalities. GDAL internal accesses to elevation are also
 // configured by this class and this will ensure consistency throughout the
 // library.
 
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
   // This class is a singleton, the New() method is deprecated and will be removed
   // in future release. We need to use the \code{Instance()} method instead.
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
+  auto & demHandler = otb::DEMHandler::GetInstance();
 
   bool fail = false;
 
@@ -66,16 +66,16 @@ int main(int argc, char* argv[])
   // allows inputting a geoid file as well. Last, a default height above ellipsoid
   // can be set using the \code{SetDefaultHeightAboveEllipsoid()} method.
 
-  demHandler->SetDefaultHeightAboveEllipsoid(defaultHeight);
+  demHandler.SetDefaultHeightAboveEllipsoid(defaultHeight);
 
-  if (!demHandler->IsValidDEMDirectory(demdir.c_str()))
+  if (!demHandler.IsValidDEMDirectory(demdir.c_str()))
   {
     std::cerr << "IsValidDEMDirectory(" << demdir << ") = false" << std::endl;
     fail = true;
   }
 
-  demHandler->OpenDEMDirectory(demdir);
-  demHandler->OpenGeoidFile(geoid);
+  demHandler.OpenDEMDirectory(demdir);
+  demHandler.OpenGeoidFile(geoid);
 
   // We can now retrieve height above ellipsoid or height above Mean Sea Level
   // (MSL) using the methods \code{GetHeightAboveEllipsoid()} and
@@ -107,15 +107,11 @@ int main(int argc, char* argv[])
 
   double height = -32768;
 
-  height = demHandler->GetHeightAboveMSL(point);
+  height = demHandler.GetHeightAboveMSL(point);
   std::cout << "height above MSL (" << longitude << "," << latitude << ") = " << height << " meters" << std::endl;
 
-  height = demHandler->GetHeightAboveEllipsoid(point);
+  height = demHandler.GetHeightAboveEllipsoid(point);
   std::cout << "height above ellipsoid (" << longitude << ", " << latitude << ") = " << height << " meters" << std::endl;
-
-  // Note that OSSIM internal calls for sensor
-  // modelling use the height above ellipsoid, and follow the same logic as the
-  // \code{GetHeightAboveEllipsoid()} method.
 
   // Check for Nan
   if (vnl_math_isnan(height))

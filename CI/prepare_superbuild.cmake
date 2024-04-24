@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -137,7 +137,7 @@ file (REMOVE ${SB_TXT})
 ####################################
 file ( WRITE "${OTB_SOURCE_DIR}/sb_branch.txt" "${IMAGE_NAME}/${SB_MD5}")
 message( "Checking out git for existence of archive")
-set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact/")
+set ( REMOTE "https://gitlab.orfeo-toolbox.org/orfeotoolbox/superbuild-artifact/")
 set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
 
 execute_process(
@@ -186,9 +186,9 @@ else()
   # goes wrong
   set ( SB_ARTIFACT_GIT "${OTB_SOURCE_DIR}/superbuild-artifact" )
   
-  # REPOSITORY_GIT_URL and REMOTE whould be the same. Right now there are
+  # REPOSITORY_GIT_URL and REMOTE would be the same. Right now there are
   # different because one is https and one is ssh. Both should be ssh.
-  set( REPOSITORY_GIT_URL "git@gitlab.orfeo-toolbox.org:gbonnefille/superbuild-artifact.git")
+  set( REPOSITORY_GIT_URL "git@gitlab.orfeo-toolbox.org:orfeotoolbox/superbuild-artifact.git")
   # We clone master to have a basic configuration, mainly a correct .gitattribute
   # git clone $REMOTE --branch master --depth 1 superbuild-artifact
   execute_process(

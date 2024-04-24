@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -65,8 +65,8 @@ endif()
 macro( otb_module_headertest _name )
   if( NOT ${_name}_THIRD_PARTY
       AND EXISTS ${${_name}_SOURCE_DIR}/include
-      AND PYTHON_EXECUTABLE
-      AND NOT (PYTHON_VERSION_STRING VERSION_LESS 2.6)
+      AND Python_EXECUTABLE
+      AND NOT (Python_VERSION VERSION_LESS 3)
       AND NOT (${_name} STREQUAL OTBTestKernel)
       AND NOT (CMAKE_GENERATOR MATCHES "^Visual Studio 10.*"))
 
@@ -96,23 +96,21 @@ macro( otb_module_headertest _name )
 
     # We check to see if the headers are changed.  If so, remove the header test
     # source files so they are regenerated.
-    if( ${CMAKE_VERSION} VERSION_GREATER 2.8.6 ) # for string( MD5
-      set( _headers_list_md5 "${${_name}_BINARY_DIR}/test/CMakeFiles/HeadersList.md5" )
-      list( SORT _header_files )
-      string( MD5 _new_md5 "${_header_files}" )
-      set( _regenerate_sources FALSE )
-      if( NOT EXISTS "${_headers_list_md5}" )
+    set( _headers_list_md5 "${${_name}_BINARY_DIR}/test/CMakeFiles/HeadersList.md5" )
+    list( SORT _header_files )
+    string( MD5 _new_md5 "${_header_files}" )
+    set( _regenerate_sources FALSE )
+    if( NOT EXISTS "${_headers_list_md5}" )
+      set( _regenerate_sources TRUE )
+    else()
+      file( READ "${_headers_list_md5}" _old_md5 )
+      if( NOT ("${_old_md5}" STREQUAL "${_new_md5}"))
         set( _regenerate_sources TRUE )
-      else()
-        file( READ "${_headers_list_md5}" _old_md5 )
-        if( NOT ("${_old_md5}" STREQUAL "${_new_md5}"))
-          set( _regenerate_sources TRUE )
-        endif()
       endif()
-      file( WRITE "${_headers_list_md5}" "${_new_md5}" )
-      if( ${_regenerate_sources} )
-        file( REMOVE ${_outputs} )
-      endif()
+    endif()
+    file( WRITE "${_headers_list_md5}" "${_new_md5}" )
+    if( ${_regenerate_sources} )
+      file( REMOVE ${_outputs} )
     endif()
 
     set( _test_num 1 )
@@ -120,7 +118,7 @@ macro( otb_module_headertest _name )
       get_filename_component( _test_name ${_header_test_src} NAME_WE )
       add_custom_command(
         OUTPUT ${_header_test_src}
-        COMMAND ${PYTHON_EXECUTABLE} ${OTB_CMAKE_DIR}/../Utilities/Maintenance/BuildHeaderTest.py
+        COMMAND ${Python_EXECUTABLE} ${OTB_CMAKE_DIR}/../Utilities/Maintenance/BuildHeaderTest.py
         ${_name}
         ${${_name}_SOURCE_DIR}
         ${${_name}_BINARY_DIR}

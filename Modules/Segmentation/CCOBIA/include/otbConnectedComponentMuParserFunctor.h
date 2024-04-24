@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,7 +25,7 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
-
+#include "otbBinarySpectralAngleFunctor.h"
 
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
@@ -46,7 +46,7 @@ namespace otb
  * p1bX, p2bX, where X denote band index.
  *
  * Specific Functor additional input :
- * distance : euclidian distance
+ * distance : euclidean distance
  * spectralAngle : NOT IMPLEMENTED
  *
  * OTB additional functions:
@@ -70,12 +70,12 @@ namespace otb
 namespace Functor
 {
 
-template<class TInput>
+template <class TInput>
 class ITK_EXPORT ConnectedComponentMuParserFunctor
 {
 
 public:
-  typedef Parser ParserType;
+  typedef Parser                            ParserType;
   typedef ConnectedComponentMuParserFunctor Self;
 
   std::string GetNameOfClass()
@@ -83,70 +83,48 @@ public:
     return "ConnectedComponentMuParserFunctor";
   }
 
-  inline bool operator()(const TInput &p1, const TInput &p2)
+  inline bool operator()(const TInput& p1, const TInput& p2)
   {
 
     double value;
 
     if (p1.GetSize() != m_NbOfBands)
-      {
+    {
       this->SetNumberOfBands(p1.GetSize());
-      }
+    }
 
     // we fill the buffer
     for (unsigned int i = 0; i < m_NbOfBands; ++i)
-      {
-      m_AImageP1[i] = static_cast<double> (p1[i]);
-      m_AImageP2[i] = static_cast<double> (p2[i]);
-      }
+    {
+      m_AImageP1[i] = static_cast<double>(p1[i]);
+      m_AImageP2[i] = static_cast<double>(p2[i]);
+    }
 
-    m_Distance = 0.0;
+    m_Distance    = 0.0;
     m_IntensityP1 = 0.0;
     m_IntensityP2 = 0.0;
 
     for (unsigned int i = 0; i < m_NbOfBands; ++i)
-      {
+    {
       m_Distance += (p1[i] - p2[i]) * (p1[i] - p2[i]);
       m_IntensityP1 += p1[i];
       m_IntensityP2 += p2[i];
-      }
+    }
 
-    m_IntensityP1 = m_IntensityP1 / (static_cast<double> (m_NbOfBands));
-    m_IntensityP2 = m_IntensityP2 / (static_cast<double> (m_NbOfBands));
+    m_IntensityP1 = m_IntensityP1 / (static_cast<double>(m_NbOfBands));
+    m_IntensityP2 = m_IntensityP2 / (static_cast<double>(m_NbOfBands));
 
     m_Distance = std::sqrt(m_Distance);
-
-    //compute spectralAngle
-    double scalarProd = 0.0;
-    double normProd = 0.0;
-    double normProd1 = 0.0;
-    double normProd2 = 0.0;
-
-    for (unsigned int i = 0; i < p1.Size(); ++i)
-      {
-      scalarProd += p1[i] * p2[i];
-      normProd1 += p1[i] * p1[i];
-      normProd2 += p2[i] * p2[i];
-      }
-    normProd = normProd1 * normProd2;
-
-    if (normProd == 0.0)
-      {
-      m_SpectralAngle = 0.0;
-      }
-    else
-      {
-      m_SpectralAngle = std::acos(scalarProd / std::sqrt(normProd));
-      }
-
-    //
+    
+    BinarySpectralAngleFunctor<TInput, TInput, double> spectralAngleFunctor;
+    m_SpectralAngle = spectralAngleFunctor(p1, p2);
 
     value = m_Parser->Eval();
 
-    return static_cast<bool> (value);
+    return static_cast<bool>(value);
   }
 
-  void SetExpression(const std::string expression)
+  void SetExpression(const std::string &expression)
   {
     m_Expression = expression;
     m_Parser->SetExpr(m_Expression);
@@ -174,23 +152,22 @@ public:
     m_AImageP2.resize(NbOfBands, 0.0);
 
     for (unsigned int i = 0; i < NbOfBands; ++i)
-      {
+    {
       varName << "p1b" << i + 1;
       m_Parser->DefineVar(varName.str(), &(m_AImageP1[i]));
       varName.str("");
       varName << "p2b" << i + 1;
       m_Parser->DefineVar(varName.str(), &(m_AImageP2[i]));
       varName.str("");
-      }
+    }
     // customized data
-    //m_NbVar++;
-    //this->SetDataSize(m_NbVar);
+    // m_NbVar++;
+    // this->SetDataSize(m_NbVar);
     m_Parser->DefineVar("distance", &m_Distance);
     m_Parser->DefineVar("spectralAngle", &m_SpectralAngle);
     m_Parser->DefineVar("intensity_p1", &m_IntensityP1);
     m_Parser->DefineVar("intensity_p2", &m_IntensityP2);
-    //this->SetVarName(m_NbVar-1,"spectralDistance");
-
+    // this->SetVarName(m_NbVar-1,"spectralDistance");
   }
 
   const std::map<std::string, Parser::ValueType*>& GetVar() const
@@ -200,41 +177,37 @@ public:
 
   Parser::FunctionMapType GetFunList() const
   {
-     return this->m_Parser->GetFunList();
+    return this->m_Parser->GetFunList();
   }
 
   ConnectedComponentMuParserFunctor()
-  {
-    m_Parser = ParserType::New();
-    m_NbOfBands = 0;
-  }
+    :  m_Parser(ParserType::New()), m_NbOfBands(0)
+    {}
 
   ~ConnectedComponentMuParserFunctor()
   {
   }
 
 private:
+  ConnectedComponentMuParserFunctor(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  ConnectedComponentMuParserFunctor(const Self &) = delete;
-  void operator =(const Self &) = delete;
-
-  std::string m_Expression;
-  ParserType::Pointer m_Parser;
-  std::vector<double> m_AImageP1;
-  std::vector<double> m_AImageP2;
-  double m_Distance;
-  double m_IntensityP1;
-  double m_IntensityP2;
-  double m_SpectralAngle;
+  std::string              m_Expression;
+  ParserType::Pointer      m_Parser;
+  std::vector<double>      m_AImageP1;
+  std::vector<double>      m_AImageP2;
+  double                   m_Distance;
+  double                   m_IntensityP1;
+  double                   m_IntensityP2;
+  double                   m_SpectralAngle;
   std::vector<std::string> m_VarName;
-  unsigned int m_NbOfBands;
-  double m_ParserResult;
-
+  unsigned int             m_NbOfBands;
+  double                   m_ParserResult;
 };
 } // end of Functor namespace
 
 
-}//end namespace otb
+} // end namespace otb
 
 
 #endif

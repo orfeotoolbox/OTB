@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -61,8 +61,8 @@ macro( otb_module_doxygen _name )
     )
   endif()
   if(OTB_SOURCE_DIR AND NOT ${_name}_THIRD_PARTY AND EXISTS ${${_name}_SOURCE_DIR}/include)
-    if(PYTHON_EXECUTABLE)
-      otb_add_test(NAME ${_name}InDoxygenGroup COMMAND ${PYTHON_EXECUTABLE} "${OTB_SOURCE_DIR}/Utilities/Doxygen/mcdoc.py" check ${_name} ${${_name}_SOURCE_DIR}/include)
+    if(Python_EXECUTABLE)
+      otb_add_test(NAME ${_name}InDoxygenGroup COMMAND ${Python_EXECUTABLE} "${OTB_SOURCE_DIR}/Utilities/Doxygen/mcdoc.py" check ${_name} ${${_name}_SOURCE_DIR}/include)
       otb_memcheck_ignore(${_name}InDoxygenGroup)
     endif()
   endif()

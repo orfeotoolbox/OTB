@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,9 +31,7 @@ namespace otb
 {
 
 template <class TImage>
-RAMDrivenAdaptativeStreamingManager<TImage>::RAMDrivenAdaptativeStreamingManager()
-  : m_AvailableRAMInMB(0),
-    m_Bias(1.0)
+RAMDrivenAdaptativeStreamingManager<TImage>::RAMDrivenAdaptativeStreamingManager() : m_AvailableRAMInMB(0), m_Bias(1.0)
 {
 }
 
@@ -43,26 +41,29 @@ RAMDrivenAdaptativeStreamingManager<TImage>::~RAMDrivenAdaptativeStreamingManage
 }
 
 template <class TImage>
-void
-RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
+void RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming(itk::DataObject* input, const RegionType& region)
 {
-  unsigned long nbDivisions =
-      this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
+  unsigned long nbDivisions = this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
 
   typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::SizeType tileHint;
 
-  unsigned int tileHintX(0), tileHintY(0);
+  auto inputImage = dynamic_cast<TImage*>(input);
 
-  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
-                                    MetaDataKey::TileHintX,
-                                    tileHintX);
+  tileHint[0] = 0;
+  tileHint[1] = 0;
 
-  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
-                                    MetaDataKey::TileHintY,
-                                    tileHintY);
-
-  tileHint[0] = tileHintX;
-  tileHint[1] = tileHintY;
+  if (inputImage)
+  {
+    const auto & imd = inputImage->GetImageMetadata();
+    if (imd.Has(MDNum::TileHintX))
+    {
+      tileHint[0] = imd[MDNum::TileHintX];
+    }
+    if (imd.Has(MDNum::TileHintY))
+    {
+      tileHint[1] = imd[MDNum::TileHintY];
+    }
+  }
 
   typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::Pointer splitter =
       otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::New();

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,13 +21,12 @@
 find_package ( OpenCV REQUIRED )
 mark_as_advanced( OpenCV_DIR )
 
-if("${OpenCV_VERSION}" VERSION_LESS "2.4.0")
-  message(WARNING "The OpenCV version detected (${OpenCV_VERSION}) is older than 2.4.0, "
-    "it may not be fully compatible with OTB")
+if("${OpenCV_VERSION}" VERSION_LESS "3.0.0")
+  message(ERROR " The OpenCV version detected (${OpenCV_VERSION}) is older than the minimum supported version (3.0.0) ")
 endif()
 
-if(OpenCV_VERSION_MAJOR EQUAL 3)
-set(OTB_OPENCV_3 1)
+if(OpenCV_VERSION_MAJOR EQUAL 4)
+set(OTB_OPENCV_4 1)
 else()
-set(OTB_OPENCV_3 0)
+set(OTB_OPENCV_4 0)
 endif()

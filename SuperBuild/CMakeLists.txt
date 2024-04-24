@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10.2)
 
 project(OTB-SuperBuild)
 
@@ -36,21 +36,22 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 include(ExternalProject)
+
 include(OTBCheckTargetSystemArch)
 
-option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
-option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
+set(LINUX FALSE)
+if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+  set(LINUX TRUE)
+endif()
+
+option(BUILD_SHARED_LIBS "Build Superbuild with shared libraries." ON)
+mark_as_advanced(BUILD_SHARED_LIBS)
+option(BUILD_GEOS_STATIC_LIBS "Build GEOS with static libraries." OFF)
+mark_as_advanced(BUILD_GEOS_STATIC_LIBS)
 option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
-
-if(APPLE)
-  if(POLICY CMP0042)
-    cmake_policy(SET CMP0042 NEW)
-  endif()
-  set(CMAKE_MACOSX_RPATH TRUE)
-endif()
 
 # use, i.e. don't skip the full RPATH for the build tree
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
@@ -109,12 +110,6 @@ set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VER
 
 message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 
-# Special setting for low kernel versions
-if(UNIX)
-  option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
-endif()
-
-
 # Default install prefix
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)
@@ -156,7 +151,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE /D_ENABLE_EXTENDED_ALIGNED_STORAGE")
   if(MSVC_VERSION GREATER 1310)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
   endif()
@@ -175,10 +170,6 @@ list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_PREFIX:PATH=${SB_INSTALL_PREFIX}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_PREFIX_PATH:PATH=${SB_CMAKE_PREFIX_PATH}")
-
-if(APPLE)
-  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_MACOSX_RPATH:BOOL=${CMAKE_MACOSX_RPATH}")
-endif()
 
 if(UNIX)
   list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_SKIP_BUILD_RPATH:BOOL=${CMAKE_SKIP_BUILD_RPATH}")
@@ -257,85 +248,52 @@ list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
 
+if(WIN32)
+  # Force all dll in the bin folder
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin)
+endif()
+
 set(FROM_SYSTEM_LIST)
 set(FROM_SUPERBUILD_LIST)
+set(USE_SYSTEM_PCRE ON)
+set(USE_SYSTEM_SWIG ON)
+option(USE_SYSTEM_OPENSSL OFF)
 
-#TODO: enforce check from ITK on directory length
-# Setup third parties
-option(USE_SYSTEM_ZLIB "Use a system build of zlib" OFF)
-option(USE_SYSTEM_JPEG "Use a system build of JPEG" OFF)
-option(USE_SYSTEM_EXPAT "Use a system build of expat" OFF)
-option(USE_SYSTEM_PNG "Use a system build of libpng" OFF)
-option(USE_SYSTEM_TIFF "Use a system build of libtiff" OFF)
-option(USE_SYSTEM_PROJ  "Use a system build of Proj.4" OFF)
-option(USE_SYSTEM_GEOTIFF  "Use a system build of GeoTIFF" OFF)
-option(USE_SYSTEM_SQLITE  "Use a system build of sqlite" OFF)
-option(USE_SYSTEM_GEOS "Use a system build of GEOS" OFF)
-option(USE_SYSTEM_OPENJPEG "Use a system build of OpenJPEG" OFF)
-option(USE_SYSTEM_BOOST "Use a system build of Boost" OFF)
-option(USE_SYSTEM_LIBKML  "Use a system build of LibKML" OFF)
-option(USE_SYSTEM_CURL  "Use a system build of cURL" OFF)
-option(USE_SYSTEM_OPENSSL  "Use a system build of OpenSSL" OFF)
-option(USE_SYSTEM_GDAL "Use a system build of GDAL" OFF)
-option(USE_SYSTEM_FFTW "Use a system build of FFTW" OFF)
-option(USE_SYSTEM_ITK "Use a system build of ITK" OFF)
-option(USE_SYSTEM_OPENTHREADS  "Use a system build of OpenThreads" OFF)
-option(USE_SYSTEM_OSSIM  "Use a system build of OSSIM" OFF)
-option(USE_SYSTEM_MUPARSER  "Use a system build of muParser" OFF)
-option(USE_SYSTEM_MUPARSERX "Use a system build of  muParserX" OFF)
-option(USE_SYSTEM_TINYXML  "Use a system build of TinyXML" OFF)
-option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
-option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
-option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
-option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_QT5 "Use a system build of QT5"  OFF)
-option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
-option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
-option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
-option(USE_SYSTEM_GLUT  "Use a system build of glut" OFF)
-option(USE_SYSTEM_FREETYPE "Use a system build of freetype" OFF)
-option(USE_SYSTEM_SHARK "Use a system build of Shark" OFF)
-option(USE_SYSTEM_HDF4 "Use a system build of HDF4" OFF)
-option(USE_SYSTEM_HDF5 "Use a system build of HDF5" OFF)
-option(USE_SYSTEM_NETCDF "Use a system build of NetCDF" OFF)
-option(USE_SYSTEM_GSL "Use a system build of GSL" OFF)
+# Modular building options
+option(OTB_BUILD_Core "Enable building only core modules" ON)
+option(OTB_BUILD_FeaturesExtraction "Enable building image processing module" OFF)
+option(OTB_BUILD_Hyperspectral "Enable building Hyperspectral module" OFF)
+option(OTB_BUILD_Learning "Enable building of the machine learning module" OFF)
+option(OTB_BUILD_Miscellaneous "Enable building of the miscelanous algorithms module" OFF)
+option(OTB_BUILD_SAR "Enable building of SAR module" OFF)
+option(OTB_BUILD_Segmentation "Enable building of segmentation module" OFF)
+option(OTB_BUILD_StereoProcessing "Enable building of Stereo module" OFF)
+option(OTB_BUILD_RemoteModules "Enable building of Remote modules" OFF)
 
-# Call OTB
+# Dependencies options
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
 option(OTB_USE_CURL "Enable module Curl in OTB" ON)
-#RK: disabled libkml. problems on windows msvc
-if(MSVC)
-  option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
-else()
-  option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
-endif()
-option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
-option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
-option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
-option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
-option(OTB_USE_QT "Enable module QT5 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
-option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
-option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
-
-#Cannot activate GLUT on OSX. See Mantis issue #1194")
-# do not activate GLFW by default on osx. see failing test
-# https://dash.orfeo-toolbox.org/testDetails.php?test=59844554&build=287120
-if(APPLE)
-  option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
-  option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
+option(OTB_USE_GSL "Enable module GSL in OTB" ON)
+option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
+#option() does not change the value in cache so we have to set the option via the set CACHE FORCE method
+if(OTB_BUILD_Learning MATCHES ON)
+  set(OTB_USE_LIBSVM ON CACHE BOOL "Enable module LibSVM in OTB" FORCE)
+  set(OTB_USE_OPENCV ON CACHE BOOL "Enable module OPENCV in OTB" FORCE)
+  set(OTB_USE_SHARK ON CACHE BOOL "Enable module Shark in OTB" FORCE)
 else()
-  option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
-  option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
+  set(OTB_USE_LIBSVM OFF CACHE BOOL "Enable module LibSVM in OTB" FORCE)
+  set(OTB_USE_OPENCV OFF CACHE BOOL "Enable module OPENCV in OTB" FORCE)
+  set(OTB_USE_SHARK OFF CACHE BOOL "Enable module Shark in OTB" FORCE)
+endif()
+if(OTB_BUILD_FeaturesExtraction MATCHES ON)
+  set(OTB_USE_MUPARSER ON CACHE BOOL "Enable module MuParser in OTB" FORCE)
+  set(OTB_USE_MUPARSERX ON CACHE BOOL "Enable module MuParserX in OTB" FORCE)
+else()
+  set(OTB_USE_MUPARSER OFF CACHE BOOL "Enable module MuParser in OTB" FORCE)
+  set(OTB_USE_MUPARSERX OFF CACHE BOOL "Enable module MuParserX in OTB" FORCE)
 endif()
 
-option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
-include (CMakeDependentOption)
-CMAKE_DEPENDENT_OPTION( OTB_USE_QWT "Enable module QWT in OTB" ON "OTB_USE_QT" OFF)
-option(OTB_USE_GSL "Enable module GSL in OTB" ON)
-
-option(OTB_USE_MPI "Enable MPI in OTB" OFF)
-option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT
@@ -345,46 +303,17 @@ find_path(OTB_DATA_ROOT
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
+option(OTB_WRAP_QGIS "Enable QGIS descriptor compilation" ON)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
 
-# do a system checkup
-if (NOT EXISTS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
-  file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
-endif()
-execute_process(COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR}/CMake/SystemCheckup
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMake/SystemCheckup
-                OUTPUT_QUIET
-                ERROR_QUIET)
-file(STRINGS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup/SystemCheckupResult.txt" _SYSTEM_CHECKUP_CONTENT)
-message(STATUS "|----------------------------------------------------------")
-message(STATUS "|----------------- System checkup results -----------------")
-message(STATUS "| The following libraries have been found on your system.")
-message(STATUS "| You can choose to use them (instead of superbuild versions)")
-message(STATUS "| by setting the corresponding option USE_SYSTEM_XXX.")
-message(STATUS "|----------------------------------------------------------")
-foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
-  message(STATUS "| ${lib}")
-  message(STATUS "|----------------------------------------------------------")
-endforeach()
-
 # Python
-# This should set the following variables (and more):
-#   -PYTHON_EXECUTABLE
-#   -PYTHON_INCLUDE_DIR
-#   -PYTHON_LIBRARY
-set ( Python_ADDITIONAL_VERSIONS "3;2" )
-set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
-set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
-find_package( PythonInterp )
-if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
-    message (WARNING "Python3 not found. There is no longer support of \
-    wrapping in python2 in OTB, but it can still be used.")
+find_package( Python REQUIRED COMPONENTS Interpreter Development)
+if(Python_FOUND)
+  message(STATUS "Python Library directory : ${Python_LIBRARY_DIRS}")
+  message(STATUS "Python Headers directory : ${Python_INCLUDE_DIRS}")
 endif()
-set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-find_package ( PythonLibs )
-
 include(External_otb)
 
 if(FROM_SYSTEM_LIST)

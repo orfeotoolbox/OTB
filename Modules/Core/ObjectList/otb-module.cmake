@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,9 +19,7 @@
 #
 
 set(DOCUMENTATION "This module contains classes that allow manipulating an
-ITK/OTB object list with the appropriate formalism. For instance, it is possible to
-apply a given scalar image filter to a list of images. or to produce an output
-corresponding to the elements selected from an image list. and so on.")
+ITK/OTB object list with the appropriate formalism.")
 
 otb_module(OTBObjectList
   DEPENDS
@@ -36,4 +34,6 @@ otb_module(OTBObjectList
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

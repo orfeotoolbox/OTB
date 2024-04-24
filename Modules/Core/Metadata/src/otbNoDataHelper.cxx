@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,21 +26,75 @@
 
 namespace otb
 {
-
-bool ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool> & flags, std::vector<double> & values)
+bool ReadNoDataFlags(const ImageMetadata & imd, std::vector<bool>& flags, std::vector<double>& values)
 {
-  bool ret = itk::ExposeMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,flags);
+  flags.clear();
+  values.clear();
 
-  if (ret)
-    ret = itk::ExposeMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,values);
+  // at least one no data flag
+  bool ret = false;
+
+  // 1) Search for no data in bands
+  for (const auto & band: imd.Bands)
+  {
+    if (band.Has(MDNum::NoData))
+    {
+      ret = true;
+      flags.push_back(true);
+      values.push_back(band[MDNum::NoData]);
+    }
+    else
+    {
+      flags.push_back(false);
+      values.push_back(0.);
+    }
+  }
   
+  if (ret)
+  {
+    return true;
+  }
+
+  // 2) Search in the main metadata domain
+  // Handle the case where there is no band metadata
+  unsigned int outputSize = imd.Bands.size() > 0 ? imd.Bands.size() : 1;
+
+  if (imd.Has(MDNum::NoData))
+  {
+    ret = true;
+    flags = std::vector<bool>(outputSize, true);
+    values = std::vector<double>(outputSize, imd[MDNum::NoData]);
+  }
+  else
+  {
+    flags = std::vector<bool>(outputSize, false);
+    values = std::vector<double>(outputSize, 0.);
+  }
+
   return ret;
 }
 
-void WriteNoDataFlags(const std::vector<bool> & flags, const std::vector<double> & values, itk::MetaDataDictionary& dict)
+void WriteNoDataFlags(const std::vector<bool>& flags, const std::vector<double>& values, ImageMetadata & imd)
 {
- itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,flags);
- itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,values);
+  auto size = flags.size();
+  assert(size == values.size());
+
+  if (imd.Bands.size() < size)
+  {
+    imd.Bands.resize(size);
+  }
+
+  auto itFlags = flags.cbegin();
+  auto itValues = values.cbegin();
+  auto itBands = imd.Bands.begin();
+
+  for (; itFlags != flags.cend(); itFlags++, itValues++, itBands++)
+  {
+    if (*itFlags)
+    {
+      itBands->Add(MDNum::NoData, *itValues);
+    }
+  }
 }
 
 } // End namespace otb

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +23,8 @@
 
 #include "itkObject.h"
 #include "otbImageMetadataInterfaceBase.h"
+#include "otbMetadataSupplierInterface.h"
+#include "otbImageMetadata.h"
 
 namespace otb
 {
@@ -50,11 +52,13 @@ public:
   typedef ImageMetadataInterfaceBase::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef ImageMetadataInterfaceBase::VectorType               VectorType;
   typedef ImageMetadataInterfaceBase::VariableLengthVectorType VariableLengthVectorType;
-  typedef ImageMetadataInterfaceBase::ImageKeywordlistType     ImageKeywordlistType;
   typedef ImageMetadataInterfaceBase::Pointer                  ImageMetadataInterfaceBasePointerType;
 
-  /** Create the appropriate ImageMetadataInterfaceFactory depending on the particulars of the file. */
-  static ImageMetadataInterfaceBasePointerType CreateIMI(const MetaDataDictionaryType& dict);
+  // TODO: the input ImageMetadata is here to inject some metadatas parsed by
+  // GDALImageIO and initialize the correct number of bands. It should not be
+  // needed once we have a merge() function,
+  /** Create the appropriate IMI based on a MetadataSupplier */
+  static ImageMetadataInterfaceBasePointerType CreateIMI(ImageMetadata & imd, const MetadataSupplierInterface & mds);
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
@@ -64,9 +68,8 @@ protected:
   ~ImageMetadataInterfaceFactory() override;
 
 private:
-  ImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

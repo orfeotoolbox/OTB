@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -20,3 +20,8 @@
 
 project(OTBFunctor)
 otb_module_impl()
+
+install(DIRECTORY ${OTBFunctor_SOURCE_DIR}/include/
+        DESTINATION ${OTBFunctor_INSTALL_INCLUDE_DIR}
+        COMPONENT Common
+        )

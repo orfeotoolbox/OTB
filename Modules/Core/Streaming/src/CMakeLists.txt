@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,9 +25,7 @@ set(OTBStreaming_SRC
 add_library(OTBStreaming ${OTBStreaming_SRC})
 target_link_libraries(OTBStreaming 
   ${OTBImageBase_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBCommon_LIBRARIES}
-
   )
 
-otb_module_target(OTBStreaming)
+otb_module_target(OTBStreaming COMPONENT_Core)

@@ -145,7 +145,7 @@ samp_off:  20750
 samp_scale:  20749.5
 sensor:  PHR 1A
 support_data.azimuth_angle:  """80.2522912450309 79.9972007995515 79.7424588085454 """
-support_data.band_name_list:  """P """
+support_data.band_name_list:  """P Q R"""
 support_data.elevation_angle:  """70.6794398393405 70.6639265028018 70.6478415472195 """
 support_data.image_date:  2012-07-19T15:34:14.1Z
 support_data.image_id:  565234101-001
@@ -156,7 +156,7 @@ support_data.instrument_index:  1A
 support_data.line_period:  0
 support_data.ll_ground_point:  18.474937683268 -72.4019514529938 0 WGE
 support_data.lr_ground_point:  18.4745584022313 -72.2113475033199 0 WGE
-support_data.number_bands:  1
+support_data.number_bands:  3
 support_data.number_of_azimuth_angle:  3
 support_data.number_of_elevation_angle:  3
 support_data.number_of_incident_angle:  3
