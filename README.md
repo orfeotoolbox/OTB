@@ -2,6 +2,7 @@
 
 [![pipeline status](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/badges/develop/pipeline.svg)](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/commits/develop)
 [![coverage status](https://sonar.orfeo-toolbox.org/api/project_badges/measure?project=orfeotoolbox-otb&metric=coverage)](https://sonar.orfeo-toolbox.org/dashboard?id=orfeotoolbox-otb)
+[![Docker pulls](https://img.shields.io/badge/dynamic/json?formatter=metric&color=blue&label=Docker%20pull&query=%24.pull_count&url=https://hub.docker.com/v2/repositories/orfeotoolbox/otb)](https://hub.docker.com/r/orfeotoolbox/otb)
 
 ## Open Source processing of remote sensing images
 
