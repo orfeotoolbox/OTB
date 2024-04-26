@@ -94,12 +94,11 @@ else()
   option(BUILD_SHARED_LIBS "Build with shared libraries." ${OTB_BUILD_SHARED})
   mark_as_advanced(BUILD_SHARED_LIBS)
 
-  # Add the OTB_MODULES_DIR to the CMAKE_MODULE_PATH and then use the binary
+  # Add the OTB_MODULES_DIRS to the CMAKE_MODULE_PATH and then use the binary
   # directory for the project to write out new ones to.
-  if(OTB_MODULES_DIR)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${OTB_MODULES_DIR})
+  if(OTB_MODULES_DIRS)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${OTB_MODULES_DIRS})
   endif()
-  set(OTB_MODULES_DIR "${OTB_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
 
   #include(OTBExternalData)
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt)

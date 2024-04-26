@@ -346,7 +346,6 @@ private:
     {
       // Print results
       oss.str(std::string(""));
-      // NOTE TLA
       oss << " className  requiredSamples  totalSamples  rate\n";
       MapRateType rates = m_CalculatorList->GetRatesByClass(i);
       if (!rates.empty())

@@ -78,14 +78,14 @@ macro(otb_test_application)
     otb_add_test(NAME ${TESTAPPLICATION_NAME}
                   COMMAND otbTestDriver
                   ${TESTAPPLICATION_VALID}
-                  Execute $<TARGET_FILE:Otb::otbApplicationLauncherCommandLine>
+                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                   ${TESTAPPLICATION_APP}
                   $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
                   ${TESTAPPLICATION_OPTIONS}
                   -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
     # Be sure that the ${otb-module}-all target triggers the build of commandline launcher and testdriver
-    add_dependencies(${otb-module}-all Otb::otbApplicationLauncherCommandLine)
-    add_dependencies(${otb-module}-all Otb::otbTestDriver)
+    add_dependencies(${otb-module}-all otbApplicationLauncherCommandLine)
+    add_dependencies(${otb-module}-all otbTestDriver)
   else()
     add_test(NAME ${TESTAPPLICATION_NAME}
             COMMAND otbTestDriver

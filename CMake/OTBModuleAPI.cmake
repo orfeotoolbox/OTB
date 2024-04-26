@@ -66,7 +66,15 @@ endmacro()
 #  <module>_LIBRARY_DIRS     = Library search path (for outside dependencies)
 macro(otb_module_load mod)
   if(NOT ${mod}_LOADED)
-    include("${OTB_MODULES_DIR}/${mod}.cmake" OPTIONAL)
+    # since OTB 9.1, module can be separated in different folders, thus a list
+    # OTB_MODULES_DIRS is constructed in the different Config.cmake
+    # files of modules
+    foreach(__mod_dir IN LISTS OTB_MODULES_DIRS)
+      if (EXISTS "${__mod_dir}/${mod}.cmake")
+        include("${__mod_dir}/${mod}.cmake" OPTIONAL)
+      endif()
+    endforeach()
+
     if(NOT ${mod}_LOADED)
       message(FATAL_ERROR "No such module: \"${mod}\"")
     endif()

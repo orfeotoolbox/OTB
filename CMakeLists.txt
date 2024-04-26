@@ -253,7 +253,7 @@ endif()
 if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/lib)
 endif()
-set(OTB_MODULES_DIR "${OTB_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
+set(OTB_MODULES_DIRS "${OTB_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
 
 #-----------------------------------------------------------------------------
 # By default, OTB does not build the Examples that are illustrated in the Software Guide
@@ -310,7 +310,7 @@ include(OTBModuleEnablement)
 #----------------------------------------------------------------------
 # Generate OTBConfig.cmake for the build tree.
 set(OTB_CONFIG_CODE "
-set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")")
+set(OTB_MODULES_DIRS \"${OTB_MODULES_DIRS}\")")
 set(OTB_CONFIG_CMAKE_DIR "${OTB_SOURCE_DIR}/CMake")
 set(OTB_USE_FILE "${OTB_CONFIG_CMAKE_DIR}/UseOTB.cmake")
 
@@ -321,9 +321,9 @@ endif()
 
 set(OTB_CONFIG_APPLICATION_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION " AND NOT OTB_BINARY_DIR")
-set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/CoreTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "${OTB_SOURCE_DIR}/CMake/OTBModuleAPI.cmake")
 set(OTB_CONFIG_APPLI_MACROS_FILE "${OTB_SOURCE_DIR}/CMake/OTBApplicationMacros.cmake")
+
 configure_file(CMake/OTBConfig.cmake.in OTBConfig.cmake @ONLY)
 
 # Generate OTBConfig.cmake for the install tree.
@@ -338,7 +338,7 @@ foreach(p ${_count})
 get_filename_component(OTB_INSTALL_PREFIX \"\${OTB_INSTALL_PREFIX}\" PATH)")
 endforeach()
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
-set(OTB_MODULES_DIR \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/Modules\")")
+set(OTB_MODULES_DIRS \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/Modules\")")
 set(OTB_USE_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/UseOTB.cmake")
 set(OTB_CONFIG_CMAKE_DIR "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}")
 
@@ -349,7 +349,6 @@ endif()
 
 set(OTB_CONFIG_APPLICATION_PATH "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION "")
-set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/CoreTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBModuleAPI.cmake")
 set(OTB_CONFIG_APPLI_MACROS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBApplicationMacros.cmake")
 
@@ -662,6 +661,17 @@ endforeach()
 message("\nCMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator\n")
 
 message("======================= End of OTB cmake summary =======================")
+
+# create all needed config files here
+get_property(GROUPS_ENABLED GLOBAL PROPERTY OTB_GROUPS_ENABLED)
+foreach(otb-group IN LISTS GROUPS_ENABLED)
+  get_property(GROUP_DEPS GLOBAL PROPERTY ${otb-group}_MOD_DEPS)
+  configure_file(CMake/GenericGroupConfig.cmake.in CMakeFiles/${otb-group}Config.cmake @ONLY)
+  install(FILES ${OTB_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
+          DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
+          COMPONENT ${otb-group})
+endforeach() # otb-group IN GROUPS_ENABLED
+
 
 #don't need this one anymore. so unset it.
 unset(option_list)
