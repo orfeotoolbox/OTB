@@ -237,7 +237,7 @@ windows-10-prepare:
   script:
     - call ./CI/dev_env.bat x64 xdk 10
     - buildcache.exe -s
-    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
 
 windows-10-build:
@@ -247,7 +247,7 @@ windows-10-build:
   script:
     - call ./CI/dev_env.bat x64 otb 10
     - buildcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
     - call ./CI/copy_boost_dlls.bat
     - ctest -V -S CI/superbuild_packaging.cmake -DPACKAGE_BY_MODULE:BOOL=OFF
