@@ -936,8 +936,8 @@ unsigned int OGRIOHelper::ProcessNodeWrite(InternalTreeNodeType* source, GDALDat
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       //      ogrFeature->SetField("Name", dataNode->GetNodeId());
-      ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
       ogrFeature->GetDefnRef()->UnSeal();
+      ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
       ogrFeature->SetGeometry(ogrMultiPolygon);
       ogrFeature->GetDefnRef()->Seal();
 
