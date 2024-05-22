@@ -290,7 +290,7 @@ macro(otb_module_impl)
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-build}")
   # create a file with variables for build
-  configure_file(${_OTBModuleMacros_DIR}/OTBModuleInfo.cmake.in "${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}.cmake" @ONLY)
+  configure_file(${_OTBModuleMacros_DIR}/OTBModuleInfo.cmake.in "${OTB_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}.cmake" @ONLY)
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-install}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-install}")
   # then for install
@@ -324,17 +324,13 @@ macro(otb_module_impl)
   set_property(GLOBAL PROPERTY ${${otb-module}_COMPONENT}_MOD_DEPS
                                ${MODULE_DEPENDS_OF_COMPONENT})
 
-  # get_property(component_target_exported GLOBAL PROPERTY ${${otb-module}-targets}_EXPORTED DEFINED)
   if (NOT DEFINED ${${otb-module}-targets}_EXPORTED)
-    # extract path from
-    # install(EXPORT CoreTargets DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-    # COMPONENT Core)
     install(EXPORT ${${otb-module}-targets}
             FILE ${${otb-module}_COMPONENT}Targets.cmake
             DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
             COMPONENT ${${otb-module}_COMPONENT})
     # define variable in cmake CACHE to make it global
-    set(${${otb-module}-targets}_EXPORTED 1 CACHE INTERNAL "Bool to not install multiple times ${${otb-module}-targets}.cmake file")
+    set(${${otb-module}-targets}_EXPORTED 1 CACHE INTERNAL "Bool to not declare multiple times ${${otb-module}-targets}.cmake file")
   endif() # NOT DEFINED ${${otb-module}-targets}_EXPORTED
   otb_module_doxygen(${otb-module})   # module name
 endmacro()
@@ -409,7 +405,7 @@ macro(otb_module_target_install _name _component)
   #   set(_component Dependencies)
   # endif()
   # do not add COMPONENT ${_component} to INCLUDE as it will be interpreted
-  # as another directory to include and not cmake keywords
+  # as another directory to include and not a cmake keyword
   install(TARGETS ${_name}
     EXPORT  ${${otb-module}-targets}
     RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_component}

@@ -374,20 +374,8 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/GenerateExportHeaderCustom.cmake
               CMake/exportheader.cmake.in
               CMake/NamespaceHandler.cmake
-  DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-  COMPONENT Core)
-get_property(CoreTargets_MODULES GLOBAL PROPERTY CoreTargets_MODULES)
-# if(CoreTargets_MODULES)
-#   # NOTE TLA: target file is isntalled here
-#   install(EXPORT CoreTargets DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-#           COMPONENT Core)
-# else()
-#   set(CMAKE_CONFIGURABLE_FILE_CONTENT "# No targets!")
-#   configure_file(${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in
-#                  ${OTB_BINARY_DIR}/CMakeFiles/CoreTargets.cmake @ONLY)
-#   install(FILES ${OTB_BINARY_DIR}/CMakeFiles/CoreTargets.cmake
-#           DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
-# endif()
+        DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
+        COMPONENT Core)
 
 if(XDK_INSTALL_PATH)
     # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell

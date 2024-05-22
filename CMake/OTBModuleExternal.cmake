@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -111,10 +111,7 @@ else()
   set(${otb-module}-targets ${otb-module}Targets)
   set(${otb-module}-targets-install "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/${otb-module}Targets.cmake")
   set(${otb-module}_TARGETS_FILE_INSTALL "${${otb-module}-targets-install}")
-  # NOTE TLA
   set(${otb-module}-targets-build "${OTB_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}Targets.cmake")
-  # is this var used ?
-  set(${otb-module}_TARGETS_FILE_BUILD "${${otb-module}-targets-build}")
   otb_module_impl()
 
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt AND NOT ${otb-module}_NO_SRC AND "${${otb-module}-targets}")

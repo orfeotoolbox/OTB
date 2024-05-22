@@ -39,7 +39,7 @@ When installed, to use OTB in QGIS you need to setup the provider plugin:
 The following parameters can be personnalized:
 
 - **Mandatory parameter** :guilabel:`OTB folder`, i.e. the location of the root of your OTB installation.
-- **Mandatory parameter** :guilabel:`OTB application folder`. The location of your OTB applications (e.g. :file:`<PATH_TO_OTB_INSTALLATION>/lib/otb/applications`). Multiple paths are allowed.
+- **Mandatory parameter** :guilabel:`OTB application folder`. The location of your OTB applications (e.g. :file:`<PATH_TO_OTB_INSTALLATION>/lib/otb/applications`). Multiple paths are allowed, it helps to use remote modules or an otb component installed in separated folder (for otb modular installation see: :ref:`mod_install`).
 - :guilabel:`Logger level`, an optional parameter indicates level of logger used by OTB applications.
   The level of logging controls the amount of detail printed during
   algorithm execution. Possible values from less to most verbose are:
