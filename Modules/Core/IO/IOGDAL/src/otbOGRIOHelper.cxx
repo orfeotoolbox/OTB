@@ -936,9 +936,14 @@ unsigned int OGRIOHelper::ProcessNodeWrite(InternalTreeNodeType* source, GDALDat
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       //      ogrFeature->SetField("Name", dataNode->GetNodeId());
+      #if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3,9,0)
+        ogrFeature->GetDefnRef()->Unseal(true);
+      #endif
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
       ogrFeature->SetGeometry(ogrMultiPolygon);
-
+      #if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3,9,0)
+        ogrFeature->GetDefnRef()->Seal(true);
+      #endif
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
       {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
