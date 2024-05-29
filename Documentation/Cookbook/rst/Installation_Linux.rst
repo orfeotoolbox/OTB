@@ -24,42 +24,50 @@ You can download the package from the website and extract it in your file manage
 Advanced Installation : Modular installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Because OTB is a quite big software, the modular installation helps you to have only the needed software instead of all OTB. You need at least the Core and Dependencies modules and you can install only the components that matters to you.
+
 Download
 ````````
 
 In order to run OTB you will need the **OTB-Dependencies-9.0.tar.gz** package to run the Core **AND** optional packages that you can install afterwards.
-Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning. 
-In that case you will just need to download the OTB-Learning package, and untar it where you installed the Core package. 
+
+Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning.
+In that case you will just need to download the OTB-Learning package and its dependencies.
 You can then use directly the applications packaged in the Learning package alongside the other Core apps.
 
 .. code-block:: bash
 
-   # Download mandatory packages to run OTB
+   # Download mandatory packages to run OTB: Core and Dependencies
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o OTB-9.0.0-Linux-Core.tar.gz
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Dependencies.tar.gz -o OTB-9.0.0-Linux-Dependencies.tar.gz
-   # Download optional packages
+   # Download optional packages, note that Learning needs FeaturesExtraction
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o OTB-9.0.0-Linux-FeaturesExtraction.tar.gz
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Learning.tar.gz -o OTB-9.0.0-Linux-Learning.tar.gz
    ...
 
+.. _mod_install:
+
 Installation
 ````````````
 
-These packages are self-extractable tar.gz archives. You may uncompress the files with a
-right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
+These packages are self-extractable tar.gz archives. You may uncompress the files with: :menuselection:`right-click --> Extract to --> folder-you-want` or tar command line tool.
+
+Unless specific needs we advice you to extract all packages on the same directory (like OTB-|release|). Nevertheless, since OTB-9.1 packages can be installed in different directories **except for Core and Dependencies that should be on the same folder**.
 
 .. code-block:: bash
 
    # Install each tar gz in the same "top level" folder
    tar xvf OTB-9.0.0-Linux-Core.tar.gz --one-top-level="/Path/To/Install/OTB"
    tar xvf OTB-9.0.0-Linux-FeaturesExtraction.tar.gz --one-top-level="/Path/To/Install/OTB"
-   # It is necessary to install the dependencies AFTER the other modules*
+   # It is necessary to install the dependencies AFTER the other modules
    tar xvf OTB-9.0.0-Linux-Dependencies.tar.gz --one-top-level="/Path/To/Install/OTB"
    ...
    source /Path/To/Install/OTB/otbenv.profile
 
 Be careful to install the dependencies *AFTER* the modules because the paths in the cmake files are made modular only when you install
 the dependencies : the resulting installation can be moved elsewhere on the disk. See the section "move installation below"
+
+**If you choose to install module in different folders** the otbenv.profile script can not guess where you installed them, thus you must manually add module folders to the ``OTB_APPLICATION_PATH`` variable.
 
 Installation folder description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -33,6 +33,18 @@ if(OTB_CPPCHECK_TEST)
   include(${_OTBModuleMacros_DIR}/OTBModuleCPPCheckTest.cmake)
 endif()
 
+# Declare usefull OTB_MODULE_ vars
+# OUTPUT:
+# - OTB_MODULE_${otb-module}_DECLARED == 1
+# - OTB_MODULE_${otb-module}-Test_DECLARED == 1
+# - OTB_MODULE_${otb-module}_DEPENDS empty by default, can be set with DEPENDS arg. This list is sorted
+# - OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS same as DEPENDS. This list is sorted
+# - OTB_MODULE_${otb-module}_Test_DEPENDS same as DEPENDS. This list is sorted
+# - OTB_MODULE_${otb-module}_DESCRIPTION == "description", can be changed by DESCRIPTION
+# - OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT == 0 by default but can be set with EXCLUDE_FROM_DEFAULT and EXCLUDE_FROM_ALL
+# - OTB_MODULE_${otb-module}_ENABLE_SHARED == 0 but can be changed with ENABLE_SHARED arg
+# - OTB_MODULE_${otb-module}_COMPONENT == Core, can be changed with COMPONENT arg
+# - OTB_MODULE_${otb-module}_IS_DEPRECATED which can be declared and set with DEPRECATED arg
 macro(otb_module _name)
   otb_module_check_name(${_name})
   set(otb-module ${_name})
@@ -106,7 +118,8 @@ macro(otb_module_check_name _name)
 endmacro()
 
 macro(otb_module_impl)
-  include(otb-module.cmake) # Load module meta-data
+  # Load module meta-data, this declare all needed vars with otb_module macro
+  include(otb-module.cmake)
   set(${otb-module}_INSTALL_RUNTIME_DIR ${OTB_INSTALL_RUNTIME_DIR})
   set(${otb-module}_INSTALL_LIBRARY_DIR ${OTB_INSTALL_LIBRARY_DIR})
   set(${otb-module}_INSTALL_ARCHIVE_DIR ${OTB_INSTALL_ARCHIVE_DIR})
@@ -138,6 +151,8 @@ macro(otb_module_impl)
     endif()
   endforeach()
 
+  # create a list ${otb_module}_LIBRARIES containing all needed lib
+  # (required and optionals if activated)
   if(NOT DEFINED ${otb-module}_LIBRARIES)
     set(${otb-module}_LIBRARIES "")
 
@@ -156,6 +171,7 @@ macro(otb_module_impl)
     endif()
   endif()
 
+  # install include if present
   if(EXISTS ${${otb-module}_SOURCE_DIR}/include)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
     install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT ${${otb-module}_COMPONENT})
@@ -197,11 +213,16 @@ macro(otb_module_impl)
     endif()
   endif()
 
+  
   if(EXISTS ${${otb-module}_SOURCE_DIR}/src/CMakeLists.txt)
-    set_property(GLOBAL APPEND PROPERTY OTBTargets_MODULES ${otb-module})
+    # append module to "<component-name>Targets_MODULES" property which
+    # has GLOBAL scope
+    set_property(GLOBAL APPEND PROPERTY ${OTB_MODULE_${otb-module}_COMPONENT}Targets_MODULES ${otb-module})
+    # execute cmakelists of src
     add_subdirectory(src)
   endif()
 
+  # execute app cmakelist
   if(EXISTS ${${otb-module}_SOURCE_DIR}/app/CMakeLists.txt AND NOT ${otb-module}_NO_SRC)
     add_subdirectory(app)
   endif()
@@ -251,23 +272,66 @@ macro(otb_module_impl)
   endforeach()
   set(otb-module-LIBRARIES "${${otb-module}_LIBRARIES}")
   set(otb-module-INCLUDE_DIRS-build "${${otb-module}_INCLUDE_DIRS}")
-  set(otb-module-INCLUDE_DIRS-install "\${OTB_INSTALL_PREFIX}/${${otb-module}_INSTALL_INCLUDE_DIR}")
+  # As Group can be separated and installed to different places, ensure
+  # that includes and library path are not relative to OTB but to Group
+  # location
+  # here use ${GROUP_${${otb-module}_COMPONENT}_LOCATION} that will be init
+  # when reading the <GROUP>Config.cmake file to the root of the Group
+  set(otb-module-INCLUDE_DIRS-install "\${GROUP_${${otb-module}_COMPONENT}_LOCATION}/${${otb-module}_INSTALL_INCLUDE_DIR}")
   if(${otb-module}_SYSTEM_INCLUDE_DIRS)
     list(APPEND otb-module-INCLUDE_DIRS-build "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
     list(APPEND otb-module-INCLUDE_DIRS-install "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
   endif()
-  set(otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
+  set(otb-module-LIBRARY_DIRS "\${GROUP_${${otb-module}_COMPONENT}_LOCATION}/lib")
+  # add system lib dir if it exists
+  if (${${otb-module}_SYSTEM_LIBRARY_DIRS})
+    list(APPEND otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
+  endif()
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-build}")
-  configure_file(${_OTBModuleMacros_DIR}/OTBModuleInfo.cmake.in ${OTB_MODULES_DIR}/${otb-module}.cmake @ONLY)
+  # create a file with variables for build
+  configure_file(${_OTBModuleMacros_DIR}/OTBModuleInfo.cmake.in "${OTB_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}.cmake" @ONLY)
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-install}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-install}")
+  # then for install
   configure_file(${_OTBModuleMacros_DIR}/OTBModuleInfo.cmake.in CMakeFiles/${otb-module}.cmake @ONLY)
   install(FILES
     ${${otb-module}_BINARY_DIR}/CMakeFiles/${otb-module}.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}/Modules
     COMPONENT ${${otb-module}_COMPONENT}
     )
+
+  # construct a list of the MODULES dependencies. It will help later in
+  # <MODULE>Config.cmake file to scan the correct module dependencies before
+  # the module targets
+  #
+  # Use a intermediate list and put its value to those of property to be able
+  # to use list operation
+  # Here if property does not exists yet, the variable is empty
+  get_property(MODULE_DEPENDS_OF_COMPONENT
+               GLOBAL PROPERTY ${${otb-module}_COMPONENT}_MOD_DEPS)
+  foreach(dep IN LISTS ${otb-module}_LIBRARIES)
+    # add the component of each dep. Here use the ${OTB_MODULE_${dep}_COMPONENT}
+    # var instead of ${dep}_component because this last may not been already
+    # declared
+    list(APPEND MODULE_DEPENDS_OF_COMPONENT ${OTB_MODULE_${dep}_COMPONENT})
+  endforeach()
+  list(REMOVE_DUPLICATES MODULE_DEPENDS_OF_COMPONENT)
+  # name of own module can be present in dependencies, remove it
+
+  list(REMOVE_ITEM MODULE_DEPENDS_OF_COMPONENT "${OTB_MODULE_${otb-module}_COMPONENT}")
+  # redefine property with the cleaned improved list
+  set_property(GLOBAL PROPERTY ${${otb-module}_COMPONENT}_MOD_DEPS
+                               ${MODULE_DEPENDS_OF_COMPONENT})
+
+  if (NOT DEFINED ${${otb-module}-targets}_EXPORTED)
+    install(EXPORT ${${otb-module}-targets}
+            FILE ${${otb-module}_COMPONENT}Targets.cmake
+            DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
+            COMPONENT ${${otb-module}_COMPONENT})
+    # define variable in cmake CACHE to make it global
+    set(${${otb-module}-targets}_EXPORTED 1 CACHE INTERNAL "Bool to not declare multiple times ${${otb-module}-targets}.cmake file")
+  endif() # NOT DEFINED ${${otb-module}-targets}_EXPORTED
   otb_module_doxygen(${otb-module})   # module name
 endmacro()
 
@@ -315,15 +379,15 @@ macro(otb_module_target_name _name)
   get_property(_target_type TARGET ${_name} PROPERTY TYPE)
   if (NOT ${_target_type} STREQUAL "EXECUTABLE")
     if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
-      set_property(TARGET ${_name} PROPERTY VERSION 1)
-      set_property(TARGET ${_name} PROPERTY SOVERSION 1)
+      set_property(TARGET ${_name} PROPERTY VERSION ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
+      set_property(TARGET ${_name} PROPERTY SOVERSION ${OTB_VERSION_MAJOR})
     endif()
     if("${_name}" MATCHES "^[Oo][Tt][Bb]")
       set(_otb "")
     else()
       set(_otb "otb")
     endif()
-    set_property(TARGET ${_name} PROPERTY OUTPUT_NAME ${_otb}${_name}-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+    set_property(TARGET ${_name} PROPERTY OUTPUT_NAME ${_otb}${_name})
   endif()
 endmacro()
 
@@ -340,11 +404,14 @@ macro(otb_module_target_install _name _component)
   # else()
   #   set(_component Dependencies)
   # endif()
+  # do not add COMPONENT ${_component} to INCLUDE as it will be interpreted
+  # as another directory to include and not a cmake keyword
   install(TARGETS ${_name}
     EXPORT  ${${otb-module}-targets}
     RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_component}
     LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
     ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT ${_component}
+    INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
     )
 endmacro()
 
@@ -356,6 +423,7 @@ macro(otb_module_target _name)
       set(_install 0)
     elseif("${arg}" MATCHES "^COMPONENT_[a-zA-Z]+$")
       string(REPLACE "_" ";" _list_components ${arg})
+      # get the first element of the list
       list(GET _list_components 1 _component)
     else()
       message(FATAL_ERROR "Unknown argument [${arg}]")
@@ -363,8 +431,8 @@ macro(otb_module_target _name)
   endforeach()
   otb_module_target_name(${_name})
   otb_module_target_label(${_name})
-  otb_module_target_export(${_name})
   if(_install)
     otb_module_target_install(${_name} ${_component})
   endif()
+  otb_module_target_export(${_name})
 endmacro()

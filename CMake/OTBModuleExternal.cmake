@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -94,12 +94,11 @@ else()
   option(BUILD_SHARED_LIBS "Build with shared libraries." ${OTB_BUILD_SHARED})
   mark_as_advanced(BUILD_SHARED_LIBS)
 
-  # Add the OTB_MODULES_DIR to the CMAKE_MODULE_PATH and then use the binary
+  # Add the OTB_MODULES_DIRS to the CMAKE_MODULE_PATH and then use the binary
   # directory for the project to write out new ones to.
-  if(OTB_MODULES_DIR)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${OTB_MODULES_DIR})
+  if(OTB_MODULES_DIRS)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${OTB_MODULES_DIRS})
   endif()
-  set(OTB_MODULES_DIR "${OTB_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
 
   #include(OTBExternalData)
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt)
@@ -113,7 +112,6 @@ else()
   set(${otb-module}-targets-install "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/${otb-module}Targets.cmake")
   set(${otb-module}_TARGETS_FILE_INSTALL "${${otb-module}-targets-install}")
   set(${otb-module}-targets-build "${OTB_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}Targets.cmake")
-  set(${otb-module}_TARGETS_FILE_BUILD "${${otb-module}-targets-build}")
   otb_module_impl()
 
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt AND NOT ${otb-module}_NO_SRC AND "${${otb-module}-targets}")

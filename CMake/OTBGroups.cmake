@@ -31,6 +31,7 @@ set(group_list
   StereoProcessing
   ThirdParty
   )
+set_property(GLOBAL PROPERTY OTB_GROUPS_LIST ${group_list})
 
 set(Core_documentation "This group contains the core module used in Orfeo ToolBox")
 set(FeaturesExtraction_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
@@ -116,6 +117,9 @@ endforeach()
 option(OTBGroup_Core  "Request building Core modules" ON)
 option(OTBGroup_ThirdParty "Request using thirdparty modules" ON)
 
+# create a list of enable groups to later generate needed Config.cmake files
+get_property(GROUPS_ENABLED_LIST GLOBAL PROPERTY OTB_GROUPS_ENABLED)
+
 foreach( group ${group_list})
     if(NOT DEFINED OTBGroup_${group})
       if(DEFINED OTB_BUILD_${group})
@@ -125,6 +129,7 @@ foreach( group ${group_list})
       endif()
     endif()
     if (OTBGroup_${group})
+      list(APPEND GROUPS_ENABLED_LIST ${group})
       foreach (otb-module ${_${group}_on_module_list} )
          list(APPEND OTB_MODULE_${otb-module}_REQUEST_BY OTBGroup_${group})
       endforeach()
@@ -136,6 +141,8 @@ foreach( group ${group_list})
       set_property(CACHE OTBGroup_${group} PROPERTY TYPE BOOL)
     endif()
 endforeach()
+list(REMOVE_DUPLICATES GROUPS_ENABLED_LIST)
+set_property(GLOBAL PROPERTY OTB_GROUPS_ENABLED ${GROUPS_ENABLED_LIST})
 
 if(OTBGroup_Learning MATCHES ON)
   set(OTB_USE_LIBSVM ON CACHE BOOL "Enable module LibSVM in OTB" FORCE)
