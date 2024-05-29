@@ -24,6 +24,9 @@
 #include "otbImageMetadata.h"
 #include "otbSpot5Metadata.h"
 #include "otbGeocentricTransform.h"
+#include "otbBilinearProjection.h"
+#include "otbPolygon.h"
+
 
 #include "itkPoint.h"
 #include <itkMatrix.h>
@@ -51,6 +54,8 @@ public:
   using Point3DType = itk::Point<double, 3>;
   using MatrixType = itk::Matrix<double, 3, 3>;
   using Vector3DType = itk::Vector<double, 3>;
+  using PolygonType = otb::Polygon<>;
+  using ContinuousIndexType = PolygonType::ContinuousIndexType;
 
 
   using TimeType = MetaData::TimePoint;
@@ -148,12 +153,16 @@ private:
 
   void LineToAzimuthTime(double line, TimeType & azimuthTime) const;
 
+  void InitBilinearTransform();
+
   /** Coordinate transformation from ECEF to geographic */
   itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint) const;
 
   /** Coordinate transformation from geographic to ECEF */
   itk::Point<double, 3> WorldToEcef(const itk::Point<double, 3> & worldPoint) const;
 
+  ContinuousIndexType Point2DToIndex(const itk::Point<double, 2> point) const;
+  ContinuousIndexType Point3DToIndex(const itk::Point<double, 3> point) const;
 
   std::string m_ProductType;
   Projection::GCPParam m_GCP;
@@ -170,6 +179,13 @@ private:
 
   // True if the input product is a ground product
   bool m_IsGrd;
+
+  // Bilinear transform
+  BilinearProjection::Pointer m_BilinearProj;
+
+  // Image and ground polygon
+  PolygonType::Pointer m_ImageRect; 
+  PolygonType::Pointer m_GroundRect;
 
   otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::Pointer m_EcefToWorldTransform;
   otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::Pointer m_WorldToEcefTransform;

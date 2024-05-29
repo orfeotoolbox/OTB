@@ -24,7 +24,7 @@
 #include <vector>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-#include "otbLeastSquareAffineTransformEstimator.h"
+#include "otbLeastSquareBilinearTransformEstimator.h"
 
 namespace otb
 {
@@ -45,7 +45,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
   using Point2DType = itk::Point<double, 2>;
   using Point3DType = itk::Point<double, 3>;
-  using LSQREstimatorType = otb::LeastSquareAffineTransformEstimator<Point3DType>;
+  using LSQREstimatorType = otb::LeastSquareBilinearTransformEstimator<Point2DType>;
   using MatrixType = itk::Matrix<double, 3, 1>;
 
   /** Method for creation through the object factory. */
@@ -107,11 +107,10 @@ private:
 
   std::vector<Point2DType> m_LineSamplePoints;
   std::vector<Point3DType> m_worldPoints;
-  LSQREstimatorType::Pointer m_LatFit;
   LSQREstimatorType::Pointer m_LonFit;
+  LSQREstimatorType::Pointer m_LatFit;
   LSQREstimatorType::Pointer m_XFit;
   LSQREstimatorType::Pointer m_YFit;
-
 };
 
 } // end namespace otb

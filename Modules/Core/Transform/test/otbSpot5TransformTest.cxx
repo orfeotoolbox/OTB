@@ -35,6 +35,8 @@
 #include "otbSpot5SensorModel.h"
 #include "otbSpot5Metadata.h"
 
+#include "otbPolygon.h"
+
 
 using Point2DType = itk::Point<double, 2>;
 using Point3DType = itk::Point<double, 3>;
@@ -48,6 +50,8 @@ using GenericRSTransformType = otb::GenericRSTransform<double, 3, 3>;
 using DistanceType = itk::Statistics::EuclideanDistanceMetric<Point2DType>;
 using GeographicalDistanceType = otb::GeographicalDistance<Point3DType>;
 
+using PolygonType = otb::Polygon<>;
+using ContinuousIndexType = PolygonType::ContinuousIndexType;
 
 int otbSpot5TransformTest(int itkNotUsed(argc), char* argv[])
 {
@@ -60,6 +64,10 @@ int otbSpot5TransformTest(int itkNotUsed(argc), char* argv[])
 
   Point2DType imPt; 
   otb::Ephemeris imRay;
+
+  /// DEBUG POLYGON
+  ContinuousIndexType ul, ur, lr, ll, test;
+  bool res, res2;
 
 
 
@@ -93,28 +101,69 @@ int otbSpot5TransformTest(int itkNotUsed(argc), char* argv[])
   }
 
 
-  imagePoint[0] = 100;
-  imagePoint[1] = 100;
-
-  // Point3DType intersectPt;
-
-  // NearestIntersection(ray, heightAboveEllipsoid, intersectPt);
+  imagePoint[0] = 5999;
+  imagePoint[1] = 5999;
+  // 1000 5000
 
 
   std::cout << "Testing geopoint: " << imagePoint << "\n\n";
   auto geoPoint = ForwardTransform->TransformPoint(imagePoint);
   std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
-  
-  geo3dPoint[0] = -122.332683260625586285641475115;
-  geo3dPoint[1] = 38.6647750923265505207382375374;
-  geo3dPoint[2] = 0;
+
+  // geoPoint[0] = -122.332683260625586285641475115;
+  // geoPoint[1] = 38.6647750923265505207382375374;
+  // geoPoint[2] = 0;
+
+
+  // geoPoint[0] = -122.376769101238778603146784008;
+  // geoPoint[1] = 38.215802365236257287506305147;
+  // geoPoint[2] = 0;
 
   auto newImagePoint = InverseTransform->TransformPoint(geoPoint);
 
-  std::cout << "Testing InverseSensorModel: " << geo3dPoint << " -> " << newImagePoint << "\n";
+  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
+
+  
+  imagePoint[0] = 5999;
+  imagePoint[1] = 1000;
+  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
+  geoPoint = ForwardTransform->TransformPoint(imagePoint);
+  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
+  newImagePoint = InverseTransform->TransformPoint(geoPoint);
+  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
+
+  imagePoint[0] = 5999;
+  imagePoint[1] = 2000;
+  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
+  geoPoint = ForwardTransform->TransformPoint(imagePoint);
+  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
+  newImagePoint = InverseTransform->TransformPoint(geoPoint);
+  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
+
+  imagePoint[0] = 5999;
+  imagePoint[1] = 3000;
+  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
+  geoPoint = ForwardTransform->TransformPoint(imagePoint);
+  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
+  newImagePoint = InverseTransform->TransformPoint(geoPoint);
+  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
+
+  imagePoint[0] = 5999;
+  imagePoint[1] = 5000;
+  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
+  geoPoint = ForwardTransform->TransformPoint(imagePoint);
+  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
+  newImagePoint = InverseTransform->TransformPoint(geoPoint);
+  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
 
 
-
+  imagePoint[0] = 5999;
+  imagePoint[1] = 5999;
+  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
+  geoPoint = ForwardTransform->TransformPoint(imagePoint);
+  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
+  newImagePoint = InverseTransform->TransformPoint(geoPoint);
+  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
 
 }
 
