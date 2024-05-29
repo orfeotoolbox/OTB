@@ -65,6 +65,41 @@ protected:
   DEMSubjectInterface& operator=(DEMSubjectInterface const&) = delete;
 };
 
+/** \ class DEMHeightContainer
+ * 
+ * \brief Classes to cache the height for a given lon lat
+ * \ingroup OTBIOGDAL
+ */
+class DEMHeightContainer
+{
+  public:
+    DEMHeightContainer(const double &lon,const double &lat, const double &height) : m_longitude(lon),m_latitude(lat),m_height(height){};
+    ~DEMHeightContainer() = default;
+    double GetHeight() const
+    {
+        return m_height;
+    };
+
+    bool IsSamePosition(const double &lon,const double &lat)
+    {
+      return m_longitude == lon && m_latitude == lat;
+    }
+
+    void SetHeight(double &height)
+    {
+      m_height = height;
+    };
+
+  private:
+    //Non copyable
+    DEMHeightContainer(DEMHeightContainer const&) = delete;
+    void operator=(DEMHeightContainer const&) = delete;
+
+    double m_longitude;
+    double m_latitude;
+    double m_height;
+} ;
+
 // Forward declaration of the class at this point. No need to expose the
 // full class definition.
 class DEMHandlerTLS;
@@ -148,9 +183,9 @@ public:
    * \param[in] lat input latitude
    * \return height above ellipsoid
   */
-  double GetHeightAboveEllipsoid(double lon, double lat) const;
+  double GetHeightAboveEllipsoid(double lon, double lat);
 
-  double GetHeightAboveEllipsoid(const PointType& geoPoint) const;
+  double GetHeightAboveEllipsoid(const PointType& geoPoint);
 
   /** Return the height above the mean sea level.
    * - SRTM and geoid both available: srtm_value
@@ -233,7 +268,7 @@ public:
    * This function is just a facade that caches the static thread local
    * `DEMHandlerTLS` attributed to the current thread.
    */
-  DEMHandlerTLS const& GetHandlerForCurrentThread() const;
+  DEMHandlerTLS& GetHandlerForCurrentThread() const;
 
 protected:
   /**
@@ -302,12 +337,12 @@ private:
  * return
  */
 /// @{
-double GetHeightAboveEllipsoid(DEMHandlerTLS const&, double lon, double lat);
-double GetHeightAboveMSL      (DEMHandlerTLS const&, double lon, double lat);
-double GetGeoidHeight         (DEMHandlerTLS const&, double lon, double lat);
-double GetHeightAboveEllipsoid(DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
-double GetHeightAboveMSL      (DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
-double GetGeoidHeight         (DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
+double GetHeightAboveEllipsoid(DEMHandlerTLS&, double lon, double lat);
+double GetHeightAboveMSL      (DEMHandlerTLS&, double lon, double lat);
+double GetGeoidHeight         (DEMHandlerTLS&, double lon, double lat);
+double GetHeightAboveEllipsoid(DEMHandlerTLS&, itk::Point<double, 2> geoPoint);
+double GetHeightAboveMSL      (DEMHandlerTLS&, itk::Point<double, 2> geoPoint);
+double GetGeoidHeight         (DEMHandlerTLS&, itk::Point<double, 2> geoPoint);
 /// @}
 
 }
