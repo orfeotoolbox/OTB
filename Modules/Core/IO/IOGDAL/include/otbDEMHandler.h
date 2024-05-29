@@ -177,7 +177,7 @@ public:
   /** Return the height above the ellipsoid.
    * - SRTM and geoid both available: srtm_value + geoid_offset
    * - No SRTM but geoid available: geoid_offset
-   * - SRTM available, but no geoid: srtm_value
+   * - SRTM available, but no geoid: srtm_valstaticue
    * - No SRTM and no geoid available: default height above ellipsoid
    * \param[in] lon input longitude
    * \param[in] lat input latitude
@@ -249,6 +249,8 @@ public:
   static constexpr char const* DEM_WARPED_DATASET_PATH  = "/vsimem/otb_dem_warped_dataset.vrt";
   static constexpr char const* DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
 
+  std::vector<DEMHeightContainer *>& GetDEMCache();
+
   /** Accessor to the current (thread-wise) DEM handler.
    *
    * Returns the instance of `DEMHandlerTLS` that is meant to be used
@@ -269,6 +271,8 @@ public:
    * `DEMHandlerTLS` attributed to the current thread.
    */
   DEMHandlerTLS& GetHandlerForCurrentThread() const;
+
+  double GetCachedHeightAboveEllipsoid(double const& lon, double const& lat);
 
 protected:
   /**
@@ -321,8 +325,10 @@ private:
 
   /** Pool of actual thread local DEM handlers. */
   mutable std::vector<std::shared_ptr<DEMHandlerTLS>> m_tlses;
-};
 
+  /** DEM Cache */
+  std::vector<DEMHeightContainer *> m_DEMCache;
+};
 
 /**\name Fast conviennce access functions
  * \ingroup OTBIOGDAL

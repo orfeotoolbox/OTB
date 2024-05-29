@@ -343,7 +343,6 @@ public:
   }
   ~DEMHandlerTLS() {
     otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandlerTLS::~DEMHandlerTLS() --> " << this);
-    m_CachedHeightsForThread.clear();
   }
 
   bool OpenDEMVRTFile();
@@ -371,8 +370,6 @@ private:
 
   /** Pointer to the geoid dataset */
   DEMDetails::DatasetCache m_GeoidDS;
-
-  std::vector<DEMHeightContainer *> m_CachedHeightsForThread;
 };
 
 DEMHandlerTLS& DEMHandler::GetHandlerForCurrentThread() const
@@ -467,6 +464,7 @@ DEMHandler::~DEMHandler()
     const std::lock_guard<std::mutex> lock(demMutex);
     m_tlses.clear();
   }
+  m_DEMCache.clear();
   otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandler::destructor() END");
 }
 
@@ -492,6 +490,11 @@ bool DEMHandlerTLS::OpenDEMVRTFile()
   return !! m_DEMDS;
 }
 
+std::vector<DEMHeightContainer *>& DEMHandler::GetDEMCache()
+{
+    return m_DEMCache;
+}
+
 void DEMHandler::OpenDEMFile(std::string path)
 {
   otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandler::OpenDEMFile("<<path<<")");
@@ -507,6 +510,42 @@ void DEMHandler::OpenDEMFile(std::string path)
       nullptr, nullptr, nullptr);
   // Need to close the dataset, so it is flushed into memory.
   GDALClose(close_me);
+  //Check if the cache has been filled once
+  if(m_DEMCache.size() == 0)
+  {
+    //Fill the dem cache with the current datasetCache
+    int rasterSizeX = m_DatasetList[0]->GetDataSet()->GetRasterXSize();
+    int rasterSizeY = m_DatasetList[0]->GetDataSet()->GetRasterYSize();
+    m_DEMCache.reserve(rasterSizeX*rasterSizeY);
+    auto ds = m_DatasetList[0]->GetDataSet();
+    double elevData[rasterSizeX*rasterSizeY];
+
+    auto err = ds->GetRasterBand(1)->RasterIO(GF_Read, 0, 0, rasterSizeX, rasterSizeY,
+      elevData, rasterSizeX, rasterSizeY, GDT_Float64,
+      0, 0, nullptr);
+
+    if(err){
+      otbLogMacro(Warning, << "Error when opening the DEM Dataset for caching");
+      return;
+    }
+
+    double lon=0.0,lat=0.0;
+    double padfTransform[6] = {};
+    ds->GetGeoTransform(padfTransform);
+    for(auto x = 0; x < rasterSizeX; x++)
+    {
+      for(auto y = 0; y < rasterSizeY ; y++)
+      {
+        //Convert x and y to lon lat
+        lon = padfTransform[0] + x*padfTransform[1] + y*padfTransform[2];
+        lat = padfTransform[3] + x*padfTransform[4] + y*padfTransform[5];
+        //Store info
+        DEMHeightContainer* heightInfo = new DEMHeightContainer(lon,lat,elevData[(x+1)*y]);
+        m_DEMCache.push_back(heightInfo);
+      }
+    }
+    GDALClose(ds);
+  }
   for (auto tls : m_tlses)
   {
     if (! tls->OpenDEMVRTFile())
@@ -815,14 +854,6 @@ boost::optional<double> DEMHandlerTLS::GetGeoidHeight(double lon, double lat) co
 
 double DEMHandlerTLS::GetHeightAboveEllipsoid(double lon, double lat, double defaultHeight)
 {
-  //Detect if the point height is already in the cache
-  std::vector<DEMHeightContainer*>::iterator heightInfo = std::find_if(m_CachedHeightsForThread.begin(),m_CachedHeightsForThread.end(),[&](const auto& currentPoint){ return currentPoint->IsSamePosition(lon,lat); });
-  if(heightInfo != m_CachedHeightsForThread.end())
-  {
-    return (*heightInfo)->GetHeight();
-  }
-
-  //If height not in cache, compute it
   boost::optional<double> DEMresult   = GetHeightAboveMSL(lon, lat);
   boost::optional<double> geoidResult = GetGeoidHeight(lon, lat);
 
@@ -838,8 +869,6 @@ double DEMHandlerTLS::GetHeightAboveEllipsoid(double lon, double lat, double def
     {
       result += *geoidResult;
     }
-    DEMHeightContainer heightInfo(lon,lat,result);
-    m_CachedHeightsForThread.push_back(&heightInfo);
     return result;
   }
   else
@@ -920,7 +949,6 @@ void DEMHandlerTLS::ClearElevationParameters()
 {
   m_GeoidDS.release();
   m_DEMDS.release();
-  m_CachedHeightsForThread.clear();
 }
 
 void DEMHandler::ClearElevationParameters()
@@ -938,7 +966,7 @@ void DEMHandler::ClearElevationParameters()
     m_DEMDirectories.clear();
   }
   // TODO: ¿ shouldn't we erase the files as well ?
-
+  m_DEMCache.clear();
   Notify();
 }
 
@@ -961,6 +989,17 @@ void DEMHandler::Notify() const
     observer->Update();
   }
 };
+
+double DEMHandler::GetCachedHeightAboveEllipsoid(double const& lon, double const& lat)
+{
+  std::vector<DEMHeightContainer*>::iterator heightInfo = std::find_if(m_DEMCache.begin(),m_DEMCache.end(),[&](const auto& currentPoint){ return currentPoint->IsSamePosition(lon,lat); });
+  if(heightInfo != m_DEMCache.end())
+  {
+    return (*heightInfo)->GetHeight();
+  }
+  otbLogMacro(Warning, << "No DEM Cached value found for "<< lon << " longitude, and "<< lat << "latitude, returning Default Height above ellipsoid");
+  return m_DefaultHeightAboveEllipsoid;
+}
 
 double GetHeightAboveEllipsoid(DEMHandlerTLS& tls, double lon, double lat)
 { return tls.GetHeightAboveEllipsoid(lon, lat, DEMHandler::GetInstance().GetDefaultHeightAboveEllipsoid()); }
