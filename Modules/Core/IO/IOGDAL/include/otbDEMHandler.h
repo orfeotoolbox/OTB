@@ -27,6 +27,9 @@
 #include <list>
 #include <vector>
 #include <memory>
+#include "otbMdSpan.h"
+
+class GDALDataset;
 
 namespace otb
 {
@@ -65,40 +68,55 @@ protected:
   DEMSubjectInterface& operator=(DEMSubjectInterface const&) = delete;
 };
 
-/** \ class DEMHeightContainer
- * 
- * \brief Classes to cache the height for a given lon lat
- * \ingroup OTBIOGDAL
- */
-class DEMHeightContainer
+
+class ElevationCache
 {
-  public:
-    DEMHeightContainer(const double &lon,const double &lat, const double &height) : m_longitude(lon),m_latitude(lat),m_height(height){};
-    ~DEMHeightContainer() = default;
-    double GetHeight() const
-    {
-        return m_height;
-    };
+  using elevations_view_t = mdspan<double, dynamic_extent, dynamic_extent>;
 
-    bool IsSamePosition(const double &lon,const double &lat)
-    {
-      return m_longitude == lon && m_latitude == lat;
-    }
+public:
+  ElevationCache() = default;
+  // not thread-safe!!!
+  bool reset(int x_min, int x_max, int y_min, int y_max, GDALDataset & ds);
 
-    void SetHeight(double &height)
-    {
-      m_height = height;
-    };
+  bool holds(int x, int y) const noexcept {
+    auto const actual_x = x - m_x0;
+    auto const actual_y = y - m_y0;
+    return
+      0 <= actual_y && actual_y < m_elevations.extent(0) &&
+      0 <= actual_x && actual_x < m_elevations.extent(1);
+  }
 
-  private:
-    //Non copyable
-    DEMHeightContainer(DEMHeightContainer const&) = delete;
-    void operator=(DEMHeightContainer const&) = delete;
+  int size()
+  {
+    return m_elevations.extent(0);
+  }
 
-    double m_longitude;
-    double m_latitude;
-    double m_height;
-} ;
+  void read(int x, int y, Span<double> out) const {
+    assert(out.size() == 4);
+    assert(holds(x, y));
+    auto const actual_x = x - m_x0;
+    auto const actual_y = y - m_y0;
+    out[0] = m_elevations(actual_x,   actual_y);
+    out[1] = m_elevations(actual_x+1, actual_y);
+    out[2] = m_elevations(actual_x,   actual_y+1);
+    out[3] = m_elevations(actual_x+1, actual_y+1);
+  }
+
+  void write(int x, int y, double height)
+  {
+    auto const actual_x = x - m_x0;
+    auto const actual_y = y - m_y0;
+    m_elevations(actual_x,actual_y) = height;
+  }
+private:
+  ElevationCache(ElevationCache const&) = delete;
+  ElevationCache operator=(ElevationCache const&) = delete;
+
+  std::vector<double> m_buffer;
+  elevations_view_t   m_elevations;
+  int                 m_x0 = 0;
+  int                 m_y0 = 0;
+};
 
 // Forward declaration of the class at this point. No need to expose the
 // full class definition.
@@ -173,6 +191,8 @@ public:
    * \param[in] geoidFile input geoid path
    */
   bool OpenGeoidFile(std::string geoidFile);
+
+  void CacheElevations();
 
   /** Return the height above the ellipsoid.
    * - SRTM and geoid both available: srtm_value + geoid_offset
@@ -249,8 +269,6 @@ public:
   static constexpr char const* DEM_WARPED_DATASET_PATH  = "/vsimem/otb_dem_warped_dataset.vrt";
   static constexpr char const* DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
 
-  std::vector<DEMHeightContainer *>& GetDEMCache();
-
   /** Accessor to the current (thread-wise) DEM handler.
    *
    * Returns the instance of `DEMHandlerTLS` that is meant to be used
@@ -272,7 +290,10 @@ public:
    */
   DEMHandlerTLS& GetHandlerForCurrentThread() const;
 
-  double GetCachedHeightAboveEllipsoid(double const& lon, double const& lat);
+  /** dem_elevation_cache getter. */
+  ElevationCache const& GetDemElevationCache() const noexcept { return m_dem_elevation_cache;}
+  /** geoid_elevation_cache getter. */
+  ElevationCache const& GetGeoidElevationCache() const noexcept { return m_geoid_elevation_cache;}
 
 protected:
   /**
@@ -287,6 +308,8 @@ protected:
    */
   ~DEMHandler();
 
+  ElevationCache m_dem_elevation_cache;
+  ElevationCache m_geoid_elevation_cache;
 private:
 
   /** Internal function to fetch from the pool or create a new
@@ -326,8 +349,6 @@ private:
   /** Pool of actual thread local DEM handlers. */
   mutable std::vector<std::shared_ptr<DEMHandlerTLS>> m_tlses;
 
-  /** DEM Cache */
-  std::vector<DEMHeightContainer *> m_DEMCache;
 };
 
 /**\name Fast conviennce access functions

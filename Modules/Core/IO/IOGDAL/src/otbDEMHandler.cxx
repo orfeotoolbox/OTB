@@ -53,7 +53,7 @@ std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
 {
   std::vector<std::string> fileList;
 
-  if ( !boost::filesystem::exists( directoryPath) )
+  if ( !boost::filesystem::exists(directoryPath) )
   {
     return fileList;
   }
@@ -242,7 +242,7 @@ private:
  * \return elevation according to DEM at {lot, lat} position
  * \internal
  */
-boost::optional<double> GetDEMValue(double lon, double lat, DatasetCache const& dsc)
+boost::optional<double> GetDEMValue(double lon, double lat, DatasetCache const& dsc,ElevationCache const& elevation_cache)
 {
   if (!dsc.convert_lon_lat(lon, lat))
   {
@@ -273,17 +273,25 @@ boost::optional<double> GetDEMValue(double lon, double lat, DatasetCache const& 
   auto const deltaY = y - y_int;
 
   // Bilinear interpolation.
-  double elevData[4];
+  std::array<double, 4> elevData;
 
-  auto const err = dsc->GetRasterBand(1)->RasterIO( GF_Read, x_int, y_int, 2, 2,
-      elevData, 2, 2, GDT_Float64,
-      0, 0, nullptr);
-
-  if (err)
+  if (elevation_cache.holds(x_int, y_int))
   {
-    return boost::none;
+    elevation_cache.read(x_int, y_int, elevData);
   }
+  else 
+  {
+    auto const err = dsc->GetRasterBand(1)->RasterIO(
+        GF_Read, x_int, y_int, 2, 2,
+        elevData.data(), 2, 2, GDT_Float64,
+        0, 0, nullptr);
 
+    if (err)
+    {
+      return boost::none;
+    }
+
+  }
   // Test for no data. Don't return a value if any pixel of the
   // interpolation has no data.
   auto const no_data = dsc.GetNoDataValue();
@@ -334,9 +342,13 @@ bool HasGeoTransform(GDALDataset & gdalds)
 class DEMHandlerTLS
 {
 public:
-  double GetHeightAboveEllipsoid(double lon, double lat, double defaultHeight);
-  boost::optional<double> GetHeightAboveMSL(double lon, double lat) const;
-  boost::optional<double> GetGeoidHeight(double lon, double lat) const;
+  double GetHeightAboveEllipsoid(double lon, double lat, double defaultHeight,
+      ElevationCache const& dem_elevation_cache,
+      ElevationCache const& geoid_elevation_cache) const;
+  boost::optional<double> GetHeightAboveMSL(double lon, double lat,
+      ElevationCache const& dem_elevation_cache) const;
+  boost::optional<double> GetGeoidHeight(double lon, double lat,
+      ElevationCache const& geoid_elevation_cache) const;
 
   DEMHandlerTLS() {
     otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandlerTLS::DEMHandlerTLS() --> " << this);
@@ -464,7 +476,6 @@ DEMHandler::~DEMHandler()
     const std::lock_guard<std::mutex> lock(demMutex);
     m_tlses.clear();
   }
-  m_DEMCache.clear();
   otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandler::destructor() END");
 }
 
@@ -490,9 +501,43 @@ bool DEMHandlerTLS::OpenDEMVRTFile()
   return !! m_DEMDS;
 }
 
-std::vector<DEMHeightContainer *>& DEMHandler::GetDEMCache()
+void DEMHandler::CacheElevations()
 {
-    return m_DEMCache;
+  // Check if the cache has been filled once
+  if(m_dem_elevation_cache.size() == 0)
+  {
+    //Fill the dem cache with the current datasetCache
+    int rasterSizeX = m_DatasetList[0]->GetDataSet()->GetRasterXSize();
+    int rasterSizeY = m_DatasetList[0]->GetDataSet()->GetRasterYSize();
+    //m_DEMCache.reserve(rasterSizeX*rasterSizeY);
+    auto ds = m_DatasetList[0]->GetDataSet();
+    double elevData[rasterSizeX*rasterSizeY];
+
+    auto err = ds->GetRasterBand(1)->RasterIO(GF_Read, 0, 0, rasterSizeX, rasterSizeY,
+      elevData, rasterSizeX, rasterSizeY, GDT_Float64,
+      0, 0, nullptr);
+
+    if(err){
+      otbLogMacro(Warning, << "Error when opening the DEM Dataset for caching");
+      return;
+    }
+
+    int lon=0,lat=0;
+    double padfTransform[6] = {};
+    ds->GetGeoTransform(padfTransform);
+    for(auto x = 0; x < rasterSizeX; x++)
+    {
+      for(auto y = 0; y < rasterSizeY ; y++)
+      {
+        //Convert x and y to lon lat
+        lon = padfTransform[0] + x*padfTransform[1] + y*padfTransform[2];
+        lat = padfTransform[3] + x*padfTransform[4] + y*padfTransform[5];
+        //Store info
+        m_dem_elevation_cache.write(lon,lat,elevData[(x*rasterSizeY) + y]);
+      }
+    }
+    GDALClose(ds);
+  }
 }
 
 void DEMHandler::OpenDEMFile(std::string path)
@@ -510,42 +555,6 @@ void DEMHandler::OpenDEMFile(std::string path)
       nullptr, nullptr, nullptr);
   // Need to close the dataset, so it is flushed into memory.
   GDALClose(close_me);
-  //Check if the cache has been filled once
-  if(m_DEMCache.size() == 0)
-  {
-    //Fill the dem cache with the current datasetCache
-    int rasterSizeX = m_DatasetList[0]->GetDataSet()->GetRasterXSize();
-    int rasterSizeY = m_DatasetList[0]->GetDataSet()->GetRasterYSize();
-    m_DEMCache.reserve(rasterSizeX*rasterSizeY);
-    auto ds = m_DatasetList[0]->GetDataSet();
-    double elevData[rasterSizeX*rasterSizeY];
-
-    auto err = ds->GetRasterBand(1)->RasterIO(GF_Read, 0, 0, rasterSizeX, rasterSizeY,
-      elevData, rasterSizeX, rasterSizeY, GDT_Float64,
-      0, 0, nullptr);
-
-    if(err){
-      otbLogMacro(Warning, << "Error when opening the DEM Dataset for caching");
-      return;
-    }
-
-    double lon=0.0,lat=0.0;
-    double padfTransform[6] = {};
-    ds->GetGeoTransform(padfTransform);
-    for(auto x = 0; x < rasterSizeX; x++)
-    {
-      for(auto y = 0; y < rasterSizeY ; y++)
-      {
-        //Convert x and y to lon lat
-        lon = padfTransform[0] + x*padfTransform[1] + y*padfTransform[2];
-        lat = padfTransform[3] + x*padfTransform[4] + y*padfTransform[5];
-        //Store info
-        DEMHeightContainer* heightInfo = new DEMHeightContainer(lon,lat,elevData[(x+1)*y]);
-        m_DEMCache.push_back(heightInfo);
-      }
-    }
-    GDALClose(ds);
-  }
   for (auto tls : m_tlses)
   {
     if (! tls->OpenDEMVRTFile())
@@ -834,28 +843,31 @@ void DEMHandlerTLS::CreateShiftedDatasetOnce() const
   GDALClose(poVRTDS);
 }
 
-boost::optional<double> DEMHandlerTLS::GetHeightAboveMSL(double lon, double lat) const
-{
-  if (m_DEMDS)
-  {
-    return DEMDetails::GetDEMValue(lon, lat, m_DEMDS);
-  }
-  return boost::none;
-}
+/*===============================[ DEMHandlerTLS data accessors ]============*/
+boost::optional<double> DEMHandlerTLS::GetHeightAboveMSL(double lon, double lat, ElevationCache const& dem_elevation_cache) const
+ {
+   if (m_DEMDS)
+   {
+    return DEMDetails::GetDEMValue(lon, lat, m_DEMDS, dem_elevation_cache);
+   }
+   return boost::none;
+ }
 
-boost::optional<double> DEMHandlerTLS::GetGeoidHeight(double lon, double lat) const
+boost::optional<double> DEMHandlerTLS::GetGeoidHeight(double lon, double lat, ElevationCache const& geoid_elevation_cache) const
 {
   if (m_GeoidDS)
   {
-    return DEMDetails::GetDEMValue(lon, lat, m_GeoidDS);
+    return DEMDetails::GetDEMValue(lon, lat, m_GeoidDS, geoid_elevation_cache);
   }
   return boost::none;
 }
 
-double DEMHandlerTLS::GetHeightAboveEllipsoid(double lon, double lat, double defaultHeight)
+double DEMHandlerTLS::GetHeightAboveEllipsoid(double lon, double lat, double defaultHeight, 
+    ElevationCache const& dem_elevation_cache,
+    ElevationCache const& geoid_elevation_cache) const
 {
-  boost::optional<double> DEMresult   = GetHeightAboveMSL(lon, lat);
-  boost::optional<double> geoidResult = GetGeoidHeight(lon, lat);
+  boost::optional<double> DEMresult   = GetHeightAboveMSL(lon, lat, dem_elevation_cache);
+  boost::optional<double> geoidResult = GetGeoidHeight(lon, lat, geoid_elevation_cache);
 
   if (DEMresult || geoidResult)
   {
@@ -878,7 +890,7 @@ double DEMHandlerTLS::GetHeightAboveEllipsoid(double lon, double lat, double def
 double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
 {
   auto & tls = GetHandlerForCurrentThread();
-  return tls.GetHeightAboveEllipsoid(lon, lat, m_DefaultHeightAboveEllipsoid);
+  return tls.GetHeightAboveEllipsoid(lon, lat, m_DefaultHeightAboveEllipsoid,m_dem_elevation_cache, m_geoid_elevation_cache);
 }
 double DEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint)
 {
@@ -888,7 +900,7 @@ double DEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint)
 double DEMHandler::GetGeoidHeight(double lon, double lat) const
 {
   auto & tls = GetHandlerForCurrentThread();
-  return tls.GetGeoidHeight(lon, lat).value_or(0);
+  return tls.GetGeoidHeight(lon, lat, m_geoid_elevation_cache).value_or(0);
 }
 double DEMHandler::GetGeoidHeight(const PointType& geoPoint) const
 {
@@ -898,7 +910,7 @@ double DEMHandler::GetGeoidHeight(const PointType& geoPoint) const
 double DEMHandler::GetHeightAboveMSL(double lon, double lat) const
 {
   auto & tls = GetHandlerForCurrentThread();
-  return tls.GetHeightAboveMSL(lon, lat).value_or(0);
+  return tls.GetHeightAboveMSL(lon, lat,m_dem_elevation_cache).value_or(0);
 }
 double DEMHandler::GetHeightAboveMSL(const PointType& geoPoint) const
 {
@@ -966,7 +978,6 @@ void DEMHandler::ClearElevationParameters()
     m_DEMDirectories.clear();
   }
   // TODO: ¿ shouldn't we erase the files as well ?
-  m_DEMCache.clear();
   Notify();
 }
 
@@ -990,25 +1001,20 @@ void DEMHandler::Notify() const
   }
 };
 
-double DEMHandler::GetCachedHeightAboveEllipsoid(double const& lon, double const& lat)
+double GetHeightAboveEllipsoid(DEMHandlerTLS& tls, double lon, double lat)
 {
-  std::vector<DEMHeightContainer*>::iterator heightInfo = std::find_if(m_DEMCache.begin(),m_DEMCache.end(),[&](const auto& currentPoint){ return currentPoint->IsSamePosition(lon,lat); });
-  if(heightInfo != m_DEMCache.end())
-  {
-    return (*heightInfo)->GetHeight();
-  }
-  otbLogMacro(Warning, << "No DEM Cached value found for "<< lon << " longitude, and "<< lat << "latitude, returning Default Height above ellipsoid");
-  return m_DefaultHeightAboveEllipsoid;
+  auto const& dem_handler = DEMHandler::GetInstance();
+  return tls.GetHeightAboveEllipsoid(lon, lat,
+    dem_handler.GetDefaultHeightAboveEllipsoid(),
+    dem_handler.GetDemElevationCache(),
+    dem_handler.GetGeoidElevationCache());
 }
 
-double GetHeightAboveEllipsoid(DEMHandlerTLS& tls, double lon, double lat)
-{ return tls.GetHeightAboveEllipsoid(lon, lat, DEMHandler::GetInstance().GetDefaultHeightAboveEllipsoid()); }
-
 double GetHeightAboveMSL      (DEMHandlerTLS& tls, double lon, double lat)
-{ return tls.GetHeightAboveMSL(lon, lat).value_or(0); }
+{ return tls.GetHeightAboveMSL(lon, lat, DEMHandler::GetInstance().GetDemElevationCache()).value_or(0); }
 
 double GetGeoidHeight         (DEMHandlerTLS& tls, double lon, double lat)
-{ return tls.GetGeoidHeight(lon, lat).value_or(0); }
+{ return tls.GetGeoidHeight(lon, lat, DEMHandler::GetInstance().GetGeoidElevationCache()).value_or(0); }
 
 double GetHeightAboveEllipsoid(DEMHandlerTLS& tls, itk::Point<double, 2> geoPoint)
 { return GetHeightAboveEllipsoid(tls, geoPoint[0], geoPoint[1]); }
@@ -1018,5 +1024,25 @@ double GetHeightAboveMSL      (DEMHandlerTLS& tls, itk::Point<double, 2> geoPoin
 
 double GetGeoidHeight         (DEMHandlerTLS& tls, itk::Point<double, 2> geoPoint)
 { return GetGeoidHeight(tls, geoPoint[0], geoPoint[1]); }
+
+bool ElevationCache::reset(int x_min, int x_max, int y_min, int y_max, GDALDataset & ds)
+{
+    int const dx = x_max - x_min + 1;
+    int const dy = y_max - y_min + 1;
+    m_buffer.resize(dx * dy);
+    auto const err = ds.GetRasterBand(1)->RasterIO(
+        GF_Read, x_min, y_min, dx, dy,
+        m_buffer.data(), dx, dy, GDT_Float64,
+        0, 0, nullptr);
+    if (err != CE_None) {
+      m_elevations = elevations_view_t();
+      m_x0 = 0;
+      m_y0 = 0;
+      return false;
+    }
+    m_elevations = elevations_view_t(m_buffer.data(), narrow{}, dy, dx);
+    m_x0 = x_min;
+    m_y0 = y_min;
+}
 
 } // namespace otb
