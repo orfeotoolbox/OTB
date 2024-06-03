@@ -324,13 +324,16 @@ macro(otb_module_impl)
   set_property(GLOBAL PROPERTY ${${otb-module}_COMPONENT}_MOD_DEPS
                                ${MODULE_DEPENDS_OF_COMPONENT})
 
-  if (NOT DEFINED ${${otb-module}-targets}_EXPORTED)
+  if (NOT ${${otb-module}-targets}_EXPORTED)
+    if (CMAKE_DEBUG)
+      message(STATUS "[CMAKE_DEBUG] Exporting target ${${otb-module}-targets} part of component ${${otb-module}_COMPONENT} in file ${${otb-module}_COMPONENT}Targets.cmake located at ${OTB_INSTALL_PACKAGE_DIR}")
+    endif()
     install(EXPORT ${${otb-module}-targets}
             FILE ${${otb-module}_COMPONENT}Targets.cmake
             DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
             COMPONENT ${${otb-module}_COMPONENT})
     # define variable in cmake CACHE to make it global
-    set(${${otb-module}-targets}_EXPORTED 1 CACHE INTERNAL "Bool to not declare multiple times ${${otb-module}-targets}.cmake file")
+    set(${${otb-module}-targets}_EXPORTED 1 CACHE INTERNAL "Bool to not declare multiple times ${${otb-module}-targets}.cmake file" FORCE)
   endif() # NOT DEFINED ${${otb-module}-targets}_EXPORTED
   otb_module_doxygen(${otb-module})   # module name
 endmacro()
@@ -363,6 +366,9 @@ macro(otb_module_warnings_disable)
   endforeach()
 endmacro()
 
+# Set the "LABELS" target property to $otb-module if it exists. Otherwise
+# to ${_OTBModuleMacros_DEFAULT_LABEL} (which is OTBModular)
+# Also if ${otb-module}-all target exists, add "_target_name" module as a dependency
 macro(otb_module_target_label _target_name)
   if(otb-module)
     set(_label ${otb-module})
@@ -375,6 +381,11 @@ macro(otb_module_target_label _target_name)
   set_property(TARGET ${_target_name} PROPERTY LABELS ${_label})
 endmacro()
 
+# Set if not executable target:
+# - TARGET property "VERSION" to ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}
+# - TARGET property "SOVERSION" to ${OTB_VERSION_MAJOR}
+# - TARGET property "OUTPUT_NAME" to _name and prefixed with otb if _name does not
+# begin with
 macro(otb_module_target_name _name)
   get_property(_target_type TARGET ${_name} PROPERTY TYPE)
   if (NOT ${_target_type} STREQUAL "EXECUTABLE")
@@ -391,10 +402,8 @@ macro(otb_module_target_name _name)
   endif()
 endmacro()
 
-macro(otb_module_target_export _name)
-  export(TARGETS ${_name} APPEND FILE ${${otb-module}-targets-build})
-endmacro()
-
+# put Target information into the correct cmake export that will be installed
+# later
 macro(otb_module_target_install _name _component)
   #Use specific runtime components for executables and libraries separately when installing a module,
   #considering that the target of a module could be either an executable or a library.
@@ -415,6 +424,12 @@ macro(otb_module_target_install _name _component)
     )
 endmacro()
 
+# Set the correct property for the "_name" target:
+# - if target is not executable, set VERSION and SOVERSION properties
+# - add otb to OUTPUT_NAME property if not present*
+# - add otb-module to LABELS property
+# - export cmake target file (maybe not needed anymore)
+# - add _name targets properties in ${${otb-module}-targets} exported later
 macro(otb_module_target _name)
   set(_install 1)
   set(_component Core)
@@ -434,5 +449,4 @@ macro(otb_module_target _name)
   if(_install)
     otb_module_target_install(${_name} ${_component})
   endif()
-  otb_module_target_export(${_name})
 endmacro()

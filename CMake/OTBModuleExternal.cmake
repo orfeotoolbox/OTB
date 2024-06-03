@@ -114,7 +114,20 @@ else()
   set(${otb-module}-targets-build "${OTB_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}Targets.cmake")
   otb_module_impl()
 
-  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt AND NOT ${otb-module}_NO_SRC AND "${${otb-module}-targets}")
+  if (CMAKE_DEBUG)
+    set(__cmakelist_exists FALSE)
+    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt)
+      set(__cmakelist_exists TRUE)
+    endif()
+
+    message(STATUS "[CMAKE_DEBUG] Does ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt exists: ${__cmakelist_exists}")
+    message(STATUS "[CMAKE_DEBUG] ${otb-module}_NO_SRC == ${${otb-module}_NO_SRC}")
+    message(STATUS "[CMAKE_DEBUG] ${otb-module}-targets == ${${otb-module}-targets}")
+  endif()
+
+  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt
+     AND NOT ${otb-module}_NO_SRC
+     AND "${${otb-module}-targets}")
     install(EXPORT ${${otb-module}-targets} DESTINATION "${OTB_INSTALL_PACKAGE_DIR}/Modules"
       COMPONENT ${${otb-module}_COMPONENT})
   endif()
