@@ -150,7 +150,7 @@ legal-check:
 ## Ubuntu superbuild
 ubuntu-22-prepare:
   extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base2:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
