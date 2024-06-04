@@ -162,7 +162,7 @@ ubuntu-24-prepare:
 
 ubuntu-22-build:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full
     - mv build/CookBook-*-html.tar.gz . || true
