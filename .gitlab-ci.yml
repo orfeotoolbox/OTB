@@ -164,7 +164,7 @@ ubuntu-22-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
@@ -175,9 +175,9 @@ ubuntu-22-build:
     - job: ubuntu-22-prepare
       artifacts: true
 
-# Ubuntu 22 build needed for gdal bindings with python 3.10. We package the compiled bindings for python 3.10, this package will be downloaded and extracted automatically when
+# Ubuntu 24 build needed for gdal bindings with python 3.12. We package the compiled bindings for python 3.12, this package will be downloaded and extracted automatically when
 # a user lauches the otbenv profile after unpacking the official archive for the first time (which contains bindings for ubuntu 20 and python 3.8 initially)
-ubuntu-24-gdal-bindings:
+python3.12-gdal-bindings:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   only:
@@ -187,9 +187,9 @@ ubuntu-24-gdal-bindings:
       - /^release-[0-9]+\.[0-9]+$/
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
-    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py310.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
  
 ## RedHat superbuild
