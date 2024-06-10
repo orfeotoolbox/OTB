@@ -161,6 +161,7 @@ macro(otb_module_target_install _name _component)
     RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_component}
     LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
     ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT ${_component}
+    INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
     )
 endmacro()
 
