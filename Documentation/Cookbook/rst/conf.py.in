@@ -81,7 +81,10 @@ release = '@OTB_VERSION_STRING@'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['@RST_BUILD_DIR@', 'templates/*.rst']
+
+# exclude Installation_Linux.rst as it declare a label. As this file is include
+# by another, rst warns about duplicate label
+exclude_patterns = ['@RST_BUILD_DIR@', 'templates/*.rst','Installation_Linux.rst']
 #exclude_patterns = ['_build']
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
