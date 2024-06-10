@@ -58,6 +58,11 @@ compatibility as other modules in the toolkit.")
 #------------------------------------------------
 # Find the modules in each group and the module name line in otb-module.cmake
 foreach( group ${group_list} )
+  if (CMAKE_DEBUG)
+    message(STATUS "[CMAKE_DEBUG] ${group}Targets_EXPORTED == ${${group}Targets_EXPORTED} before turning it to 0")
+  endif()
+  set(${group}Targets_EXPORTED 0 CACHE INTERNAL "Bool to not declare multiple times ${group}Targets.cmake file" FORCE)
+
   set( _${group}_module_list )
   file( GLOB_RECURSE _${group}_module_files ${OTB_SOURCE_DIR}/Modules/${group}/otb-module.cmake )
   foreach( _module_file ${_${group}_module_files} )
