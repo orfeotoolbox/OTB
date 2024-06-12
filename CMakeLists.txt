@@ -652,10 +652,12 @@ message("======================= End of OTB cmake summary ======================
 get_property(GROUPS_ENABLED GLOBAL PROPERTY OTB_GROUPS_ENABLED)
 foreach(otb-group IN LISTS GROUPS_ENABLED)
   get_property(GROUP_DEPS GLOBAL PROPERTY ${otb-group}_MOD_DEPS)
+  set(__ENABLED_MODULES ${OTB_${otb-group}_MODULES_ENABLED})
   configure_file(CMake/GenericGroupConfig.cmake.in CMakeFiles/${otb-group}Config.cmake @ONLY)
   install(FILES ${OTB_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
           DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
           COMPONENT ${otb-group})
+  unset(__ENABLED_MODULES)
 endforeach() # otb-group IN GROUPS_ENABLED
 
 
