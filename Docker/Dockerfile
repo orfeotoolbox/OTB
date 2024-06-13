@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 ARG OTB_RELEASE=9.0.0
 
 # Install system dependencies
@@ -31,18 +31,21 @@ RUN apt-get update -y \
 # Install pre-compiled OTB binaries
 RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux.tar.gz -o OTB-$OTB_RELEASE-Linux.tar.gz
 
-RUN tar xvf OTB-$OTB_RELEASE-Linux.tar.gz --one-top-level="/app" \
+RUN tar xvf OTB-$OTB_RELEASE-Linux.tar.gz --one-top-level="/app/otb" && rm OTB-$OTB_RELEASE-Linux.tar.gz
 
 # Persistent env
-ENV CMAKE_PREFIX_PATH=/app/OTB-${OTB_RELEASE}-Linux
-ENV PYTHONPATH=/app/OTB-$OTB_RELEASE-Linux/lib/python3/dist-packages:/app/OTB-${OTB_RELEASE}-Linux/lib/otb/python
+ENV CMAKE_PREFIX_PATH=/app/otb
+ENV PYTHONPATH=/app/otb/lib/python3/dist-packages:/app/otb/lib/otb/python
 ENV GDAL_DRIVER_PATH=disable
-ENV GDAL_DATA=/app/OTB-${OTB_RELEASE}-Linux/share/gdal
-ENV PROJ_LIB=/app/OTB-${OTB_RELEASE}-Linux/share/proj
-ENV PATH=/app/OTB-${OTB_RELEASE}-Linux/bin:$PATH
-ENV LD_LIBRARY_PATH=/app/OTB-${OTB_RELEASE}-Linux/lib:$LD_LIBRARY_PATH
-ENV OTB_APPLICATION_PATH=/app/OTB-${OTB_RELEASE}-Linux/lib/otb/applications
+ENV GDAL_DATA=/app/otb/share/gdal
+ENV PROJ_LIB=/app/otb/share/proj
+ENV PATH=/app/otb/bin:$PATH
+ENV LD_LIBRARY_PATH=/app/otb/lib:$LD_LIBRARY_PATH
+ENV OTB_APPLICATION_PATH=/app/otb/lib/otb/applications
+ENV OTB_INSTALL_DIR=/app/otb
 ENV LC_NUMERIC=C
 
 # Default command when using 'docker run' or 'docker create'
+RUN sh /app/otb/tools/post_install.sh && sh /app/otb/recompile_bindings.sh
+
 CMD /bin/bash
