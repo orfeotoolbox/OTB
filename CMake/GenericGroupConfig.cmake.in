@@ -35,6 +35,8 @@ set(GROUP_DEPENDENCIES "@GROUP_DEPS@")
 # unfound
 set(@otb-group@_FOUND 0)
 
+set(OTB_@otb-group@_MODULES_ENABLED "@__ENABLED_MODULES@")
+
 foreach(__group IN LISTS GROUP_DEPENDENCIES)
   message(STATUS "[@otb-group@Config] Try to find needed ${__group} dependency")
   # When using find_package, cmake will look for directories using the name of
@@ -47,6 +49,7 @@ foreach(__group IN LISTS GROUP_DEPENDENCIES)
 
   # Force the REQUIRED there as we are trying to find a dependency
   find_package(${__group} CONFIG REQUIRED PATH_SUFFIXES "lib/cmake/OTB-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@")
+  #list(APPEND OTB_@otb-group@_MODULES_ENABLED "${OTB_${__group}_MODULES_ENABLED}")
 endforeach()
 
 # if we are here in the process as all dependency has been found, otherwise
