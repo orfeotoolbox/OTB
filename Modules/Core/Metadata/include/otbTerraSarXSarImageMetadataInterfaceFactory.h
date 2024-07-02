@@ -23,7 +23,6 @@
 
 #include "OTBMetadataExport.h"
 #include "itkObjectFactoryBase.h"
-#include "OTBIOMSTARExport.h"
 
 namespace otb
 {

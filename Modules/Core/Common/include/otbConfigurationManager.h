@@ -26,7 +26,6 @@
 #if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
 #include "itksys/FundamentalType.h"
 #else
-#include "itk_kwiml.h"
 #endif
 
 #include <string>
@@ -52,7 +51,7 @@ public:
 #if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
   typedef ::itksysFundamentalType_UInt64 RAMValueType;
 #else
-  typedef KWIML_INT_uint64_t RAMValueType;
+  typedef uint64_t RAMValueType;
 #endif
 
   /**
@@ -102,7 +101,7 @@ public:
    * decoded), level is INFO.
    *
    */
-  static itk::LoggerBase::PriorityLevelType GetLoggerLevel();
+  static itk::LoggerBaseEnums::PriorityLevel GetLoggerLevel();
 
   /**
    * If OpenMP is enabled, the number of threads for openMP is set to the

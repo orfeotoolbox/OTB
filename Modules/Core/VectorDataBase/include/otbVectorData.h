@@ -21,9 +21,10 @@
 #ifndef otbVectorData_h
 #define otbVectorData_h
 
-#include "itkTreeContainer.h"
 #include "itkDataObject.h"
 #include "otbDataNode.h"
+#include <boost/graph/graph_as_tree.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 namespace otb
 {
@@ -75,8 +76,9 @@ public:
   // define VDimension Dimension;
   typedef otb::DataNode<TPrecision, VDimension, TValuePrecision> DataNodeType;
   typedef typename DataNodeType::Pointer          DataNodePointerType;
-  typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
-  typedef typename DataTreeType::Pointer          DataTreePointerType;
+  typedef boost::adjacency_list< boost::vecS, boost::vecS, boost::directedS, boost::property< boost::vertex_name_t, std::string > > DataTreeType;
+  typedef boost::graph_traits< DataTreeType >::vertex_descriptor vertex_t;
+  typedef std::unique_ptr<DataTreeType> DataTreePointerType;
 
   typedef typename DataNodeType::PointType   PointType;
   typedef typename DataNodeType::LineType    LineType;
@@ -84,9 +86,6 @@ public:
 
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2>  OriginType;
-
-  itkGetObjectMacro(DataTree, DataTreeType);
-  itkGetConstObjectMacro(DataTree, DataTreeType);
 
   virtual void SetProjectionRef(const std::string& projectionRef);
   virtual std::string GetProjectionRef() const;
@@ -130,6 +129,11 @@ public:
    * VectorDataSource::GraftOutput(). */
   void Graft(const itk::DataObject* data) override;
 
+  const std::unique_ptr<DataTreeType> GetDataTree()
+  {
+    return m_DataTree;
+  }
+
 protected:
   /** Constructor */
   VectorData();
@@ -146,7 +150,7 @@ private:
 
   /** Data tree */
   DataTreePointerType m_DataTree;
-
+  DataNodePointerType m_root;
   SpacingType m_Spacing;
   OriginType  m_Origin;
 };

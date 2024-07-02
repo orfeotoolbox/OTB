@@ -22,11 +22,6 @@
 #define otbPipelineMemoryPrintCalculator_h
 
 #include "itkProcessObject.h"
-#if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
-#include "itksys/FundamentalType.h"
-#else
-#include "itk_kwiml.h"
-#endif
 #include <set>
 #include <iosfwd>
 
@@ -84,11 +79,7 @@ public:
   typedef ProcessObjectType::Pointer ProcessObjectPointerType;
   typedef itk::DataObject            DataObjectType;
   typedef DataObjectType::Pointer    DataObjectPointerType;
-#if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
-  typedef ::itksysFundamentalType_UInt64 MemoryPrintType;
-#else
-  typedef KWIML_INT_uint64_t MemoryPrintType;
-#endif
+  typedef uint64_t MemoryPrintType;
   typedef std::set<const ProcessObjectType*> ProcessObjectPointerSetType;
 
   /** Run-time type information (and related methods). */

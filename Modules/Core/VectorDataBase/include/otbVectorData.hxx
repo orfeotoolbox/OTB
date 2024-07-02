@@ -22,7 +22,6 @@
 #define otbVectorData_hxx
 
 #include "otbVectorData.h"
-#include "itkPreOrderTreeIterator.h"
 #include "otbMetaDataKey.h"
 
 namespace otb
@@ -31,10 +30,10 @@ namespace otb
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 VectorData<TPrecision, VDimension, TValuePrecision>::VectorData()
 {
-  m_DataTree               = DataTreeType::New();
-  DataNodePointerType root = DataNodeType::New();
-  root->SetNodeId("Root");
-  m_DataTree->SetRoot(root);
+  m_DataTree               = std::make_unique<DataTreeType>();
+  m_root = DataNodeType::New();
+  m_root->SetNodeId("Root");
+  boost::add_vertex(m_root, m_DataTree);
   m_Origin.Fill(0);
   m_Spacing.Fill(1);
 }
@@ -105,13 +104,14 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::SetOrigin(const float 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool VectorData<TPrecision, VDimension, TValuePrecision>::Clear()
 {
-  return m_DataTree->Clear();
+  boost::remove_vertex(m_root);
+  return true;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 int VectorData<TPrecision, VDimension, TValuePrecision>::Size() const
 {
-  return m_DataTree->Count();
+  return 0; //TODO boost::num_vertices(m_DataTree);
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
@@ -120,12 +120,11 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::PrintSelf(std::ostream
   Superclass::PrintSelf(os, indent);
   os << std::endl;
 
-  itk::PreOrderTreeIterator<DataTreeType> it(m_DataTree);
-  it.GoToBegin();
+  boost::graph_traits<DataTreeType>::adjacency_iterator it(m_DataTree);
 
-  while (!it.IsAtEnd())
+  while (!it.end())
   {
-    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
+    boost::graph_traits<DataTreeType>::adjacency_iterator itParent = it;
     bool                                    goesOn   = true;
     while (itParent.HasParent() && goesOn)
     {
