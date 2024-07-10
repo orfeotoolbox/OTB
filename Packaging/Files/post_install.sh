@@ -31,7 +31,8 @@ sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')"
 if [ "$pyversion" = "31" ]; then
     echo "*** Python 3.12 detected, downloading gdal bindings compiled for python 3.12 ***"
-    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-GDAL-bindings-py310.tar.gz -o "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
+    PACKAGE_GDAL_VERSION="$(ls lib/libgdal.so.*.*.* | egrep -o "[0-9]+\.[0-9]+\.[0-9]$")"
+    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-GDAL-$PACKAGE_GDAL_VERSION-bindings-py312.tar.gz -o "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
     tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz -C "$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
     rm "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
     echo "*** GDAL bindings for python 3.12 successfully installed ***"
