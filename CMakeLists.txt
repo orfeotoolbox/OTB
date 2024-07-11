@@ -372,6 +372,9 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/GenerateExportHeaderCustom.cmake
               CMake/exportheader.cmake.in
               CMake/NamespaceHandler.cmake
+              # both CMake files used for P0 modules
+              CMake/OTBModuleInfo.cmake.in
+              CMake/GenericGroupConfig.cmake.in
         DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
         COMPONENT Core)
 

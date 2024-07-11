@@ -147,6 +147,9 @@ foreach(otb-module ${OTB_MODULES_ALL})
 endforeach()
 
 # Follow dependencies.
+# Marks "otb-module" and its dependencies "_needed_by" ENABLED with the variable
+# ${otb-module}_ENABLED. All of its dependencies in "_needed_by" list will
+# also be marked enabled with the same var.
 macro(otb_module_enable otb-module _needed_by)
   if(NOT Module_${otb-module})
     if(NOT ${otb-module}_TESTED_BY OR
@@ -201,6 +204,8 @@ endforeach()
 # Build final list of enabled modules.
 set(OTB_MODULES_ENABLED "")
 set(OTB_MODULES_DISABLED "")
+# for all enabled modules, add them in
+# component_module list
 foreach(otb-module ${OTB_MODULES_ALL})
   if(${otb-module}_ENABLED)
     list(APPEND OTB_MODULES_ENABLED ${otb-module})
