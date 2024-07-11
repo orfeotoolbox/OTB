@@ -23,6 +23,12 @@
 #
 # @otb-group@Config.cmake - OTB CMake configuration file for external projects.
 # This file is read by cmake when the "find_package(OTB COMPONENTS @otb-group@)" is used
+# To correctly configure this file you need the following variables:
+# - otb-group
+# - GROUP_DEPS
+# - __ENABLED_MODULES
+# - OTB_VERSION_MAJOR
+# - OTB_VERSION_MINOR
 
 # do not read file twice
 if (DEFINED @otb-group@_FOUND)
