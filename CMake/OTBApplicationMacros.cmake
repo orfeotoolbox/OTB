@@ -51,6 +51,7 @@ macro(otb_create_application)
    endif()
 
    if (APPLICATION_INSTALL_PATH)
+     message(STATUS "APPLICATION_INSTALL_PATH is TRUE")
      if(otb-module)
        # use the EXPORT keyword create CMake commands relative to this target
        # in the appropriate target file
@@ -64,9 +65,10 @@ macro(otb_create_application)
                COMPONENT Dependencies)
      endif()
    else()
-     install(TARGETS ${APPLICATION_TARGET_NAME}
-             LIBRARY DESTINATION lib
-             COMPONENT Dependencies)
+    message(STATUS "APPLICATION_INSTALL_PATH is FALSE")
+    install(TARGETS ${APPLICATION_TARGET_NAME}
+            LIBRARY DESTINATION lib
+            COMPONENT Dependencies)
    endif()
 
    # What is the path to the applications

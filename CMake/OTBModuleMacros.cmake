@@ -299,7 +299,7 @@ macro(otb_module_impl)
     ${${otb-module}_BINARY_DIR}/CMakeFiles/${otb-module}.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}/Modules
     COMPONENT ${${otb-module}_COMPONENT}
-    )
+  )
 
   # construct a list of the MODULES dependencies. It will help later in
   # <MODULE>Config.cmake file to scan the correct module dependencies before
