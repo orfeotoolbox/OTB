@@ -59,31 +59,9 @@ else()
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OTB_DIR}/lib)
   endif()
 
-  # OTB installation structure
-  if(NOT OTB_INSTALL_RUNTIME_DIR)
-    set(OTB_INSTALL_RUNTIME_DIR bin)
-  endif()
-  if(NOT OTB_INSTALL_LIBRARY_DIR)
-    set(OTB_INSTALL_LIBRARY_DIR lib)
-  endif()
-  if(NOT OTB_INSTALL_ARCHIVE_DIR)
-    set(OTB_INSTALL_ARCHIVE_DIR lib)
-  endif()
-  if(NOT OTB_INSTALL_INCLUDE_DIR)
-    set(OTB_INSTALL_INCLUDE_DIR include/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
-  endif()
-  if(NOT OTB_INSTALL_DATA_DIR)
-    set(OTB_INSTALL_DATA_DIR share/otb)
-  endif()
-  if(NOT OTB_INSTALL_DOC_DIR)
-    set(OTB_INSTALL_DOC_DIR share/doc/otb)
-  endif()
-  if(NOT OTB_INSTALL_PACKAGE_DIR)
-    set(OTB_INSTALL_PACKAGE_DIR "lib/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-  endif()
-  if(NOT OTB_INSTALL_APP_DIR)
-    set(OTB_INSTALL_APP_DIR lib/otb/applications)
-  endif()
+  # Retrieve all OTB_INSTALL_XXX consts
+  include(OTBConstants)
+  get_install_const()
 
   # Use OTB's flags.
   set(CMAKE_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_C_FLAGS}")
@@ -129,7 +107,7 @@ else()
      AND NOT ${otb-module}_NO_SRC
      AND "${${otb-module}-targets}")
     install(EXPORT ${${otb-module}-targets} DESTINATION "${OTB_INSTALL_PACKAGE_DIR}/Modules"
-      COMPONENT ${${otb-module}_COMPONENT})
+      COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT})
   endif()
 
   set(OTB_TEST_OUTPUT_DIR "${CMAKE_BINARY_DIR}/Testing/Temporary")
