@@ -372,8 +372,6 @@ macro(otb_module_impl)
   set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
   set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
-  # For P0 module the path is the same as OTB install path
-  set(P0_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
   if(BUILD_TESTING)
     enable_testing()
   endif()
@@ -437,6 +435,7 @@ macro(otb_module_impl)
       list(REMOVE_DUPLICATES ${otb-module}_LIBRARIES)
     endif()
   endif()
+
 
   set(${otb-module}_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 
