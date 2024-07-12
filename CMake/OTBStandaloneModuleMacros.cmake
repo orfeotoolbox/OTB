@@ -119,7 +119,7 @@ function(otb_add_test_mpi)
 endfunction()
 
 
-macro(otb_module_target_label _target_name)
+function(otb_module_target_label _target_name)
   if(otb-module)
     set(_label ${otb-module})
     if(TARGET ${otb-module}-all)
@@ -129,26 +129,56 @@ macro(otb_module_target_label _target_name)
     set(_label ${_OTBModuleMacros_DEFAULT_LABEL})
   endif()
   set_property(TARGET ${_target_name} PROPERTY LABELS ${_label})
-endmacro()
+endfunction()
 
-macro(otb_module_target_name _name)
+# Set the VERSION, SOVERSION (both for libs) and OUTPUT_NAME Target properties
+# of target "_name"
+# VERSION and SOVERSION are set accordingly:
+# - If it is an OTB module or OTB P0 module, the otb version is used
+# - If set the project version is used
+# - Otherwise it is versioned 1.0.0
+# OUTPUT_NAME is "_name" prefixed with "otb" if not already in "_name"
+function(otb_module_target_name _name)
+  set(__major_version 1)
+  set(__minor_version 0)
+  set(__patch_version 0)
+
+  # if we are in OTB build tree or using a P0 module
+  if (OTB_SOURCE_DIR OR IS_P0_MODULE)
+    set(__major_version ${OTB_VERSION_MAJOR})
+    set(__minor_version ${OTB_VERSION_MINOR})
+    set(__patch_version ${OTB_VERSION_PATCH})
+  else() # not OTB or P0 module, use project vars if exists
+    if (PROJECT_VERSION_MAJOR)
+      set(__major_version ${PROJECT_VERSION_MAJOR})
+    endif()
+    if (PROJECT_VERSION_MINOR)
+      set(__minor_version ${PROJECT_VERSION_MINOR})
+    endif()
+    if (PROJECT_VERSION_PATCH)
+      set(__patch_version ${PROJECT_VERSION_PATCH})
+    endif()
+  endif()
+
   get_property(_target_type TARGET ${_name} PROPERTY TYPE)
   if (NOT ${_target_type} STREQUAL "EXECUTABLE")
     if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
-      set_property(TARGET ${_name} PROPERTY VERSION 1)
-      set_property(TARGET ${_name} PROPERTY SOVERSION 1)
+      set_property(TARGET ${_name} PROPERTY VERSION ${__major_version}.${__minor_version}.${__patch_version})
+      set_property(TARGET ${_name} PROPERTY SOVERSION ${__major_version})
     endif()
     if("${_name}" MATCHES "^[Oo][Tt][Bb]")
       set(_otb "")
     else()
       set(_otb "otb")
     endif()
-    set_property(TARGET ${_name} PROPERTY OUTPUT_NAME ${_otb}${_name}-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+    set_property(TARGET ${_name} PROPERTY OUTPUT_NAME ${_otb}${_name})
   endif()
-endmacro()
+  unset(__major_version)
+  unset(__minor_version)
+  unset(__patch_version)
+endfunction()
 
-# NOTE TLA: could be a function?
-macro(otb_module_target_install _name _component)
+function(otb_module_target_install _name _component)
   #Use specific runtime components for executables and libraries separately when installing a module,
   #considering that the target of a module could be either an executable or a library.
   # get_property(_ttype TARGET ${_name} PROPERTY TYPE)
@@ -160,48 +190,64 @@ macro(otb_module_target_install _name _component)
   include(GNUInstallDirs)
   set(${otb-module}_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_INCLUDEDIR})
   # by default name the target depending of project
-  set(export_name ${PROJECT_NAME}Targets)
-  # NOTE TLA: maybe there is a better path by default, or just do not
-  # install target file if it is not for P0 module?
+  set(__export_name ${PROJECT_NAME}Targets)
+  if (_component)
+    set(__export_name ${_component}Targets)
+  endif()
+  if (CMAKE_DEBUG)
+    message(STATUS "[CMAKE_DEBUG] In \"otb_module_target_install\" __export_name == ${__export_name}")
+  endif()
+  # By default set the install path of target file to lib/cmake/<project_name>
   set(target_file_dir ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-  message(STATUS "export_name == ${export_name}")
 
   if (${IS_P0_MODULE})
-    set(${otb-module}_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_INCLUDEDIR}/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
-    set(export_name ${OTB_MODULE_${otb-module-test}_TARGET})
-    set(target_file_dir ${P0_CMAKE_DIR})
+    set(${otb-module}_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+    set(target_file_dir "${CMAKE_INSTALL_LIBDIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
   endif()
 
-  install(TARGETS ${_name}
-    EXPORT  ${export_name}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${_component}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_component}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_component}
-    INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
-  )
-  get_property(is_target_exported GLOBAL PROPERTY ${export_name}_EXPORTED DEFINED)
-  message(STATUS "is_target_exported == ${is_target_exported}")
+  if (_component)
+    install(TARGETS ${_name}
+      EXPORT  ${__export_name}
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${_component}
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_component}
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_component}
+      INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
+    )
+  else()
+    install(TARGETS ${_name}
+            EXPORT  ${__export_name}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
+    )
+  endif()
+
+  get_property(is_target_exported GLOBAL PROPERTY ${__export_name}_EXPORTED DEFINED)
   if (NOT ${is_target_exported})
-    message(STATUS "yooooooolooooo")
-    install(EXPORT ${export_name}
-            FILE ${export_name}.cmake
-            DESTINATION ${target_file_dir}
-            COMPONENT ${_component})
-    message(STATUS "    install(EXPORT ${export_name}
-            FILE ${export_name}.cmake
-            DESTINATION ${target_file_dir}
-            COMPONENT ${_component})")
-    set_property(GLOBAL PROPERTY ${export_name}_EXPORTED TRUE)
+    if (CMAKE_DEBUG)
+      message(STATUS "[CMAKE_DEBUG] Exporting target ${__export_name} part of component ${_component} in file ${__export_name}.cmake located at ${target_file_dir}")
+    endif()
+    if (_component)
+      install(EXPORT ${__export_name}
+              FILE ${__export_name}.cmake
+              DESTINATION ${target_file_dir}
+              COMPONENT ${_component})
+    else()
+      install(EXPORT ${__export_name}
+              FILE ${__export_name}.cmake
+              DESTINATION ${target_file_dir})
+    endif()
+    set_property(GLOBAL PROPERTY ${__export_name}_EXPORTED TRUE)
   endif()
+  unset(__export_name)
+endfunction()
 
-  unset(export_name)
-  unset(${otb-module}_INSTALL_INCLUDE_DIR)
-  unset(target_file_dir)
-endmacro()
-
-macro(otb_module_target _name)
+function(otb_module_target _name)
   set(_install 1)
-  set(_component Remote)
+  # by default component var is project name. It does not means the project
+  # have a component. This name is used to install cmake file a correct path
+  set(_component "0")
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(NO_INSTALL)$")
       set(_install 0)
@@ -217,7 +263,7 @@ macro(otb_module_target _name)
   if(_install)
     otb_module_target_install(${_name} ${_component})
   endif()
-endmacro()
+endfunction()
 
 macro(otb_module _name)
   otb_module_check_name(${_name})
@@ -326,14 +372,17 @@ macro(otb_module_impl)
   set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
   set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
-  # For P0 module the path is the same as OTB install path
-  set(P0_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
   if(BUILD_TESTING)
     enable_testing()
   endif()
 
   include(otb-module.cmake) # Load module meta-data
-  # NOTE TLA: does these variables are used?
+  # Now we have the otb-module var that comes from the previous cmake file reads
+  set(__current_component ${OTB_MODULE_${otb-module}_COMPONENT})
+  # NOTE TLA: does these variables are used? Not in other OTB files
+  # but can it be used by third parties module (like SiftFast).
+  # But it is strange to install other project part depending of one (except if it)
+  # is OTB path
   set(${otb-module}_INSTALL_RUNTIME_DIR ${CMAKE_INSTALL_PREFIX}/bin)
   set(${otb-module}_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_PREFIX}/lib)
   set(${otb-module}_INSTALL_ARCHIVE_DIR ${CMAKE_INSTALL_PREFIX}/lib)
@@ -387,19 +436,28 @@ macro(otb_module_impl)
     endif()
   endif()
 
+
   set(${otb-module}_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 
   if (${IS_P0_MODULE})
     set(${otb-module}_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_INCLUDEDIR}/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
-    message(STATUS "THIS IS A OTB P0 MODULE! Includes are packaged in $${otb-module}_INSTALL_INCLUDE_DIR. A cmake file to get module var will be packaged in lib/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+    message(STATUS "THIS IS AN OTB P0 MODULE! Includes are packaged in \"${${otb-module}_INSTALL_INCLUDE_DIR}\". A cmake file to get module var will be packaged in lib/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
   endif()
 
   # Add ${${otb-module}_SOURCE_DIR}/include to ${otb-module}_INCLUDE_DIRS
   # install them in the right path
   if(EXISTS ${${otb-module}_SOURCE_DIR}/include)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
-    # not the last / of directory path to avoid copying include folder but only its files
-    install(DIRECTORY ${${otb-module}_SOURCE_DIR}/include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT})
+    # /!\ Note the last / of directory path to avoid copying include folder
+    # but only its files
+    if (__current_component)
+      install(DIRECTORY ${${otb-module}_SOURCE_DIR}/include/
+              DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
+              COMPONENT ${__current_component})
+    else()
+        install(DIRECTORY ${${otb-module}_SOURCE_DIR}/include/
+                DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR})
+    endif()
   endif()
 
   if(NOT OTB_SOURCE_DIR)
@@ -462,14 +520,17 @@ macro(otb_module_impl)
     generate_export_header(${otb-module}
       EXPORT_FILE_NAME ${_export_header_file}
       EXPORT_MACRO_NAME ${otb-module}_EXPORT
+      DEPRECATED_MACRO_NAME ${otb-module}_DEPRECATED
       NO_EXPORT_MACRO_NAME ${otb-module}_HIDDEN
       STATIC_DEFINE OTB_STATIC )
-    install(FILES
-      ${_export_header_file}
-      DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
-      COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT}
-    )
-
+    if (__current_component)
+      install(FILES ${_export_header_file}
+              DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
+              COMPONENT ${__current_component})
+    else()
+      install(FILES ${_export_header_file}
+              DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR})
+    endif()
     if (BUILD_SHARED_LIBS)
       # export flags are only added when building shared libs, they cause
       # mismatched visibility warnings when building statically.
@@ -482,7 +543,7 @@ macro(otb_module_impl)
   set(otb-module-EXPORT_CODE-build "${${otb-module}_EXPORT_CODE_BUILD}")
   set(otb-module-EXPORT_CODE-install "${${otb-module}_EXPORT_CODE_INSTALL}")
 
-  # create a macro for this part
+  # TODO TLA: create a macro for this part as it is the same in otb modules
   if (${IS_P0_MODULE})
     # Define variables used by OTBModuleInfo that will be configured in ${otb-module}Info
 
@@ -500,16 +561,15 @@ macro(otb_module_impl)
     # location
     # here use ${GROUP_${${otb-module}_COMPONENT}_LOCATION} that will be init
     # when reading the <GROUP>Config.cmake file to the root of the Group
-    # TODO TLA: rename ${OTB_MODULE_${otb-module}_COMPONENT} to ${${otb-module}_COMPONENT}
-    # or find a naming convention between OTBStandaloneModuleMacro and OTBModuleMacro
-    set(otb-module-INCLUDE_DIRS "\${GROUP_${OTB_MODULE_${otb-module}_COMPONENT}_LOCATION}/${${otb-module}_INSTALL_INCLUDE_DIR}")
+    set(otb-module-INCLUDE_DIRS "\${GROUP_${__current_component}_LOCATION}/${${otb-module}_INSTALL_INCLUDE_DIR}")
     if(${otb-module}_SYSTEM_INCLUDE_DIRS)
       list(APPEND otb-module-INCLUDE_DIRS "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
     endif()
 
     # LIBS
     set(otb-module-LIBRARIES "${${otb-module}_LIBRARIES}")
-    set(otb-module-LIBRARY_DIRS "\${GROUP_${OTB_MODULE_${otb-module}_COMPONENT}_LOCATION}/lib")
+    set(otb-module-LIBRARY_DIRS "\${GROUP_${__current_component}_LOCATION}/lib")
+
     # add system lib dir if it exists
     if (${${otb-module}_SYSTEM_LIBRARY_DIRS})
       list(APPEND otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
@@ -518,11 +578,12 @@ macro(otb_module_impl)
 
     # create a file with variables previously fields
     # file will be installed in lib/cmake/OTB-X.X/Module
+    # For P0 module the path is the same as OTB install path
     configure_file(${OTB_DIR}/OTBModuleInfo.cmake.in "${CMAKE_BINARY_DIR}/CMakeFiles/${otb-module}.cmake" @ONLY)
     install(FILES ${CMAKE_BINARY_DIR}/CMakeFiles/${otb-module}.cmake
-            DESTINATION ${P0_CMAKE_DIR}/Modules
-            COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT}}
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}/Modules"
+            COMPONENT ${__current_component}}
     )
   endif()
-  unset(P0_CMAKE_DIR)
-endmacro()
+  unset(__current_component)
+endmacro() # otb_module_impl
