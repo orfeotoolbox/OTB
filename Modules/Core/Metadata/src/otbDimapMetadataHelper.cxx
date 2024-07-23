@@ -400,6 +400,11 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
     spot5Param.AttitudesSamplesTimes.push_back(sampletime);
   }
 
+  if (yaw_vector.empty()||pitch_vector.empty()||roll_vector.empty()||time_vector.empty())
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject, <<"Missing attitudes informations");
+  }
+
   /* Look Angles */
 
   // Use look angles from Green band
@@ -409,12 +414,18 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   std::string expr;
 
   hasValue = false;
-  while (i < m_Data.BandIDs.size() && !bandFound ){
-    expr = prefix + "Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".BAND_INDEX";
-    mds.GetMetadataValue(expr, hasValue) == "2" ? bandFound=true:i++;
-  }
 
-  expr = "Dimap_Document.Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".Look_Angles_List.Look_Angles";           
+  if (m_Data.BandIDs.size()>1){
+    while (i < m_Data.BandIDs.size() && !bandFound ){
+      expr = prefix + "Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".BAND_INDEX";
+      mds.GetMetadataValue(expr, hasValue) == "2" ? bandFound=true:i++;
+    }
+    expr = "Dimap_Document.Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".Look_Angles_List.Look_Angles";           
+  }
+  else{
+    expr = "Dimap_Document.Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles.Look_Angles_List.Look_Angles";           
+  }
+  
   ParseVector(mds, expr, "PSI_X", spot5Param.PixelLookAngleX);  
   ParseVector(mds, expr, "PSI_Y", spot5Param.PixelLookAngleY); 
 
