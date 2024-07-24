@@ -72,15 +72,9 @@ void BilinearProjection::worldToLineSample(const Point3DType& worldPoint,
 
    m_XFit->lsFitValue(worldptMatrix, x);
    m_YFit->lsFitValue(worldptMatrix, y);
-
    lineSampPt[0] = x;
    lineSampPt[1] = y;
-   //worldptMatrix[2] = worldPoint[2];
 
-   // Result is a 3DPoint (3,3 * 3,1 matrix) that we have to convert to 2D points after
-   // auto line = m_LineFit->TransformPoint(worldptMatrix);
-   // lineSampPt[0] = line[0];
-   // lineSampPt[1] = line[1];
 }
 
 void BilinearProjection::lineSampleToWorld(const Point2DType& lineSampPt,
@@ -98,12 +92,6 @@ void BilinearProjection::lineSampleHeightToWorld(const Point2DType& lineSampPt,
    itk::Vector<double,2> lineSampMatrix;
    lineSampMatrix[0] = lineSampPt[0];
    lineSampMatrix[1] = lineSampPt[1];
-   //lineSampMatrix[2] = heightAboveEllipsoid;
-   // Debug pas a pas pour être sûr des index et dimensions des matrices 
-   // Cmp avec ossim 
-   // auto world = m_WorldFit->TransformPoint(lineSampMatrix);
-   // worldPt[0] = world[0];
-   // worldPt[1] = world[1];   
    double lon, lat;
    m_LonFit->lsFitValue(lineSampMatrix, lon);
    m_LatFit->lsFitValue(lineSampMatrix, lat);
@@ -127,54 +115,28 @@ void BilinearProjection::getTiePoints(std::vector<Point2DType>& lsPt, std::vecto
 
 void BilinearProjection::computeLS()
 {
-   bool theInterpolationPointsHaveNanFlag = imgPointsHaveNan()||worldPointsHaveNan();
-   bool theInverseSupportedFlag = false;
-   if(!theInverseSupportedFlag)
+
+   if (m_LineSamplePoints.size() != m_worldPoints.size())
    {
-    
-      if (m_LineSamplePoints.size() != m_worldPoints.size())
-      {
-         return;
-      }
-
-      // m_worldPoints[0][0] = -122.34084821584338;
-      // m_worldPoints[0][1] = 38.675762668083742;
-      // m_LineSamplePoints[0][0] = 0;
-      // m_LineSamplePoints[0][1] = 0;
-
-      // m_worldPoints[1][0] = -121.66016339894738;
-      // m_worldPoints[1][1] = 38.532947750775932;
-      // m_LineSamplePoints[1][0] = 5999;
-      // m_LineSamplePoints[1][1] = 0;
-
-      // m_worldPoints[2][0] = -121.84186663463954;
-      // m_worldPoints[2][1] = 38.009529736493917;
-      // m_LineSamplePoints[2][0] = 5999;
-      // m_LineSamplePoints[2][1] = 5999;
-
-      // m_worldPoints[3][0] = -122.51781909963989;
-      // m_worldPoints[3][1] = 38.15164177227139;
-      // m_LineSamplePoints[3][0] = 0;
-      // m_LineSamplePoints[3][1] = 5999;
-      
-      for (auto i = 0; i < m_LineSamplePoints.size(); ++i)
-      {
-         Point2DType currentWorldPoint;
-         currentWorldPoint[0] = m_worldPoints[i][0];
-         currentWorldPoint[1] = m_worldPoints[i][1];
-         m_LatFit->AddTiePoints(m_LineSamplePoints[i], currentWorldPoint[1]);
-         m_LonFit->AddTiePoints(m_LineSamplePoints[i], currentWorldPoint[0]);
-         m_XFit->AddTiePoints(currentWorldPoint, m_LineSamplePoints[i][0]);
-         m_YFit->AddTiePoints(currentWorldPoint, m_LineSamplePoints[i][1]);
-      }
-
-      m_LatFit->Compute();
-      m_LonFit->Compute();
-      m_XFit->Compute();
-      m_YFit->Compute();      
+      otbGenericExceptionMacro(itk::ExceptionObject, <<"Difference between the number of linesample points and world points");
+   }
+   
+   for (auto i = 0; i < m_LineSamplePoints.size(); ++i)
+   {
+      Point2DType currentWorldPoint;
+      currentWorldPoint[0] = m_worldPoints[i][0];
+      currentWorldPoint[1] = m_worldPoints[i][1];
+      m_LatFit->AddTiePoints(m_LineSamplePoints[i], currentWorldPoint[1]);
+      m_LonFit->AddTiePoints(m_LineSamplePoints[i], currentWorldPoint[0]);
+      m_XFit->AddTiePoints(currentWorldPoint, m_LineSamplePoints[i][0]);
+      m_YFit->AddTiePoints(currentWorldPoint, m_LineSamplePoints[i][1]);
    }
 
-   //TODO update boolean flags like ossim
+   m_LatFit->Compute();
+   m_LonFit->Compute();
+   m_XFit->Compute();
+   m_YFit->Compute();      
+
 }
 
 bool BilinearProjection::imgPointsHaveNan()
