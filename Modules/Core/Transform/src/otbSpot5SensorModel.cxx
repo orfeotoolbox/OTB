@@ -29,19 +29,10 @@
 namespace otb
 {
 
-/*double DotProduct(const itk::Point<double, 3> & pt1, const itk::Point<double, 3> & pt2)
-{
-  return std::inner_product(pt1.Begin(), pt1.End(), pt2.Begin(), 0.);
-}*/
-
-Spot5SensorModel::Spot5SensorModel( const std::string & productType,
-                                const Spot5Param & Spot5Param,
-                                const Projection::GCPParam & gcps)
-                            : m_ProductType(productType),
-                              m_GCP(gcps),
+Spot5SensorModel::Spot5SensorModel(const std::string & productType,
+                                const Spot5Param & Spot5Param
+                                ):           
                               m_Spot5Param(Spot5Param),
-                              m_AzimuthTimeOffset(MetaData::Duration::Seconds(0)),
-                              m_RangeTimeOffset(0.),
                               m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
                               m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
 
@@ -51,8 +42,7 @@ Spot5SensorModel::Spot5SensorModel( const std::string & productType,
 
 Spot5SensorModel::Spot5SensorModel(const ImageMetadata & imd)
           : Spot5SensorModel(imd.Has(MDStr::ProductType) ? imd[MDStr::ProductType] : "UNKNOWN",
-                            boost::any_cast<Spot5Param>(imd[MDGeom::Spot5Geometry]),
-                            imd.GetGCPParam())
+                            boost::any_cast<Spot5Param>(imd[MDGeom::Spot5Geometry]))
 {
 }
 
@@ -67,19 +57,18 @@ void Spot5SensorModel::InitBilinearTransform(){
     lr[0] = m_Spot5Param.ImageSize[0] - 1;
     lr[1] = m_Spot5Param.ImageSize[1] - 1;
 
-    LineSampleToWorld(ul, ulg);
-    LineSampleToWorld(ur, urg);
-    LineSampleToWorld(lr, lrg);
-    LineSampleToWorld(ll, llg);
-
     m_ImageRect = PolygonType::New();
-    m_GroundRect = PolygonType::New();
-
     m_ImageRect->AddVertex(Point2DToIndex(ul));
     m_ImageRect->AddVertex(Point2DToIndex(ur));
     m_ImageRect->AddVertex(Point2DToIndex(lr));
     m_ImageRect->AddVertex(Point2DToIndex(ll));
 
+    LineSampleToWorld(ul, ulg);
+    LineSampleToWorld(ur, urg);
+    LineSampleToWorld(lr, lrg);
+    LineSampleToWorld(ll, llg);
+
+    m_GroundRect = PolygonType::New();
     m_GroundRect->AddVertex(Point3DToIndex(ulg));
     m_GroundRect->AddVertex(Point3DToIndex(urg));
     m_GroundRect->AddVertex(Point3DToIndex(lrg));
@@ -126,56 +115,17 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
   Point3DType wdp (inGeoPoint);
 
   if (!(m_GroundRect->IsInside(Point3DToIndex(wdp))||m_GroundRect->IsOnEdge(Point3DToIndex(wdp)))){
-    // outLineSample[0] = 0;
-    // outLineSample[1] = 0;
-    // return;
     m_BilinearProj->worldToLineSample(wdp, outLineSample);
-    if (abs(outLineSample[0]) < 20 || abs(outLineSample[1]) < 20){
-      int test;
-      test = 5;
-    }
     return;
-
   }
-  //   if ((!recursionFlag)&&!(theBoundGndPolygon.pointWithin(wdp)))
 
-  //  if((theBoundGndPolygon.getNumberOfVertices() > 0)&&
-  //     (!theBoundGndPolygon.hasNans()))
-  //  {
-  //     if (!(theBoundGndPolygon.pointWithin(wdp)))
-  //     {
-  //        if(theSeedFunction.valid())
-  //        {
-  //           theSeedFunction->worldToLineSample(worldPoint, ip);
-  //        }
-  //        else if(!theExtrapolateGroundFlag) // if I am not already in the extrapolation routine
-
-  //        {
-  //        //      recursionFlag = true;
-  //           ip = extrapolate(worldPoint);
-  //        //      recursionFlag = false;
-  //        }
-  //        return;
-  //     }         
-  //  }
 
   double height = inGeoPoint[2];
 
 
-  // TODO seed function if else
+  // Initialize with binilear interpolation
   Point2DType ip;
-  ip[0] = m_Spot5Param.ImageSize[0] / 2;
-  ip[1] = m_Spot5Param.ImageSize[1] / 2;
-
   m_BilinearProj->worldToLineSample(wdp, ip);
-
-
-  // ip[0] = 97.737153095193207;
-  // ip[1] = 99.127843534966814;
-
-  // ip[0] = 988.13952568720561;
-  // ip[1] = 4996.469456019724;
-
 
   Point2DType ip_du;
   Point2DType ip_dv;
@@ -243,44 +193,29 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
 
   outLineSample = ip - m_Spot5Param.SubImageOffset;
 
-
-
-
-
-  
-
 }
 
 void Spot5SensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
                                              double  heightAboveEllipsoid,
                                              Point3DType& worldPt) const
 {
-  Ephemeris ray;
 
-  double epsilon = 1.0 - FLT_EPSILON;
   // Outside the image
-  // if (!((imPt[0] >= -epsilon) &&
-  //     (imPt[0] <= (m_Spot5Param.ImageSize[0]+epsilon-1)) &&
-  //     (imPt[1] >= -epsilon) &&
-  //     (imPt[1] <= (m_Spot5Param.ImageSize[1]+epsilon-1))))
-  if (!(m_ImageRect->IsInside(Point2DToIndex(imPt))||m_ImageRect->IsOnEdge(Point2DToIndex(imPt))))
+  if (!insideImage(imPt, 1.0 - FLT_EPSILON))
   {
     m_BilinearProj->lineSampleToWorld(imPt, worldPt);
     return;
   }
 
+  Ephemeris ray;
   ImagingRay(imPt, ray);
 
   // Ecef coordinate point intersection
   Point3DType intersectPt;
-
   NearestIntersection(ray, heightAboveEllipsoid, intersectPt);
 
   // Conversion to lat long coordinates
   worldPt = EcefToWorld(intersectPt);
-
-  
-
 
 }
 
@@ -288,32 +223,15 @@ void Spot5SensorModel::LineSampleToWorld(const Point2DType& imPt,
                                              Point3DType& worldPt) const
 {
 
-  //***
-  // Extrapolate if image point is outside image:
-  //***
-  // TODO ALEX
-  // if (!insideImage(image_point)&&(!theExtrapolateImageFlag))
-  // {
-  //   gpt = extrapolate(image_point);
-  //   return;
-  // }
+  if (!insideImage(imPt, 2.0))
+  {
+    m_BilinearProj->lineSampleToWorld(imPt, worldPt);
+    return;
+  }
 
-  //***
-  // Determine imaging ray and invoke elevation source object's services to
-  // intersect ray with terrain model:
-  //***
+  // Determine ray and intersect with terrain model
   Ephemeris ray;
   ImagingRay(imPt, ray);
-
-  // ray.position[0] = -3095369.7618377847;
-  // ray.position[1] = -4697042.7939339997;
-  // ray.position[2] = 4493592.0991315609;
-
-  // ray.velocity[0] = 0.51252240549774686;
-  // ray.velocity[1] = 0.57856884187777025;
-  // ray.velocity[2] = -0.63449103939379559;
-
-
   IntersectRay(ray, worldPt);
 
 }
@@ -426,8 +344,6 @@ void Spot5SensorModel::GetLagrangeInterpolation(
     p[0] = p[0] * numerator / denominator;
     p[1] = p[1] * numerator / denominator;
     p[2] = p[2] * numerator / denominator;
-    // p = p * numerator;
-    // p = p / denominator;
 
     S[0] += p[0];
     S[1] += p[1];
@@ -442,19 +358,15 @@ void Spot5SensorModel::GetLagrangeInterpolation(
 void Spot5SensorModel::GetPositionEcf(const double& time,
                                                Point3DType& ecef)  const
 {
-  //Point3DType tempPt;
-
   if((m_Spot5Param.EcefPosSamples.size() < 8)||
     (m_Spot5Param.EcefTimeSamples.size() < 8))
   {
     GetBilinearInterpolation(time, m_Spot5Param.EcefPosSamples, m_Spot5Param.EcefTimeSamples, ecef);
   }
-  else{
+  else
+  {
     GetLagrangeInterpolation(time, m_Spot5Param.EcefPosSamples, m_Spot5Param.EcefTimeSamples, ecef);
-  }
-  // TODO Lagrange ?
-  // ossim do 3d point -> ecef conversion, necesary?
-                   
+  }                                       
 }
 
 
@@ -466,10 +378,10 @@ void Spot5SensorModel::GetVelocityEcf(const double& time,
   {
     GetBilinearInterpolation(time, m_Spot5Param.EcefVelSamples, m_Spot5Param.EcefTimeSamples, ecef);
   }
-  else {
+  else
+  {
     GetLagrangeInterpolation(time, m_Spot5Param.EcefVelSamples, m_Spot5Param.EcefTimeSamples, ecef);
   }
-  // TODO Lagrange?                   
 }
 
 void Spot5SensorModel::GetPixelLookAngleXY(unsigned int line,
@@ -477,59 +389,25 @@ void Spot5SensorModel::GetPixelLookAngleXY(unsigned int line,
 {
   if (line >= m_Spot5Param.PixelLookAngleX.size())
   {
-    /*setErrorStatus();
-    pa = ossim::nan();
-
-    return;*/
+    otbGenericExceptionMacro(itk::ExceptionObject, <<"Line > number of element in PixelLookAngleX");
   }
-
+  if (line >= m_Spot5Param.PixelLookAngleY.size())
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject, <<"Line > number of element in PixelLookAngleY");
+  }
   psiX = m_Spot5Param.PixelLookAngleX[line];
   psiY = m_Spot5Param.PixelLookAngleY[line];
 
-  // double line0 = floor(line);
-  // double line1 = ceil(line);
-  // if (line0 == line1){
-  //   psiX = m_Spot5Param.PixelLookAngleX[line];
-  //   psiY = m_Spot5Param.PixelLookAngleY[line];
-  // }
-  // else{
-
-  //   double angleX0 = m_Spot5Param.PixelLookAngleX[line0];
-  //   double angleX1 = m_Spot5Param.PixelLookAngleX[line1];
-  //   psiX = (angleX0*(line1-line) + angleX1*(line-line0))/(line1-line0);
-
-  //   double angleY0 = m_Spot5Param.PixelLookAngleY[line0];
-  //   double angleY1 = m_Spot5Param.PixelLookAngleY[line1];
-  //   psiY = (angleY0*(line1-line) + angleY1*(line-line0))/(line1-line0);
-  // }
-  
 }
 
-// Alex from SpotDimapSupport
-void Spot5SensorModel::GetAttitude(const double& time,
-                                            Point3DType& at)  const
+void Spot5SensorModel::GetAttitude(const double& time, Point3DType& at)  const
 {
-   if (m_Spot5Param.AttitudesSamplesTimes.empty())
-   {
-     // Error
-   }
-
-  // TODO
-  //  if ((time <  AttitudesSamplesTimes.front()) ||
-  //      (time >= AttitudesSamplesTimes.back() ))
-  //  {
-  //     extrapolateAttitude(time, at);
-  //     return;
-  //  }
-
-   /* Search the attitude sampling time array for surrounding samples: */
   GetBilinearInterpolation(time, m_Spot5Param.AttitudesSamples, m_Spot5Param.AttitudesSamplesTimes, at);
 }
 
-// ok 
 bool Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double& offset, Point3DType& worldPt) const
 {
-  // WGS 84 parameters
+  // WGS 84 parameters conversion
   double wgsA = 6378137.000;
   double wgsB = 6356752.3142;
   double flattening = (wgsA * wgsB) / wgsA;
@@ -553,14 +431,12 @@ bool Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double&
               ((start[1]*start[1])/wgsASquared) +
               ((start[2]*start[2])/wgsBSquared) - 1.0;
    
-  //***
   // solve the quadratic
-  //***
   double root = b*b - 4*a*c;
   double t;
   if(root < 0.0)
   {
-    return false;
+    otbGenericExceptionMacro(itk::ExceptionObject, <<"No intersection found for the point, point not valid");
   }
   else
   {
@@ -568,10 +444,7 @@ bool Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double&
     double t1 = (-b + squareRoot ) / (2.0*a);
     double t2 = (-b - squareRoot ) / (2.0*a);
 
-    //***
-    // sort t1 and t2 and take the nearest intersection if they
-    // are in front of the ray.
-    //***
+    // sort t1 and t2 and take the nearest intersection if they are in front of the ray.
     if(t2 < t1)
     {
         double temp = t1;
@@ -590,7 +463,6 @@ bool Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double&
 
 }
 
-// Tout ok manque gestion Nan
 void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt, double defaultElevation) const 
 {
 
@@ -607,47 +479,26 @@ void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt
 
   worldPt = EcefToWorld(prev_intersect_pt);
 
-  //
   // Loop to iterate on ray intersection with variable elevation surface:
-  //
   do
   {
-    //
+    
     // Intersect ray with ellipsoid inflated by h_ellips:
-    //
     h_ellips = DEMHandler::GetInstance().GetHeightAboveEllipsoid(worldPt[0], worldPt[1]);
     
 
-    intersected = NearestIntersection(imRay,
-                                      h_ellips,
-                                      new_intersect_pt);
-    if (!intersected)
-    {
-        //
-        // No intersection (looking over the horizon), point not valid
-        //
-        // gpt.makeNan();
-        done = true;
-    }
+    NearestIntersection(imRay, h_ellips, new_intersect_pt);
+
+    // Assign the ground point to the latest iteration's intersection point:
+    worldPt = EcefToWorld(new_intersect_pt);
+    
+    // Determine if convergence achieved:
+    //
+    distance = (new_intersect_pt - prev_intersect_pt).GetNorm();
+    if (distance < CONVERGENCE_THRESHOLD)
+      done = true;
     else
-    {
-        //
-        // Assign the ground point to the latest iteration's intersection
-        // point:
-        //
-        worldPt = EcefToWorld(new_intersect_pt);
-        
-        //
-        // Determine if convergence achieved:
-        //
-        distance = (new_intersect_pt - prev_intersect_pt).GetNorm();
-        if (distance < CONVERGENCE_THRESHOLD)
-          done = true;
-        else
-        {
           prev_intersect_pt = new_intersect_pt;
-        }
-    }
 
     iteration_count++;
 
@@ -655,15 +506,12 @@ void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt
 
   if (iteration_count == MAX_NUM_ITERATIONS)
   {
-    otbLogMacro(Warning, << "WARNING Spot5Model::IntersectRay: Max number of iterations reached solving for ground "
+    otbLogMacro(Warning, << "WARNING Spot5SensorModel::IntersectRay: Max number of iterations reached solving for ground "
                                     << "point. Result is probably inaccurate." << std::endl);
-    
   }
   
 }
 
-// Parametres ajustables ?
-// Sinon ok
 void Spot5SensorModel::ComputeSatToOrbRotation(MatrixType& result, double t) const
 {
 
@@ -671,15 +519,8 @@ void Spot5SensorModel::ComputeSatToOrbRotation(MatrixType& result, double t) con
   Point3DType att;
   GetAttitude(t, att);
 
-
   /* Apply the attitude adjustable parameters: */
   double dt = m_Spot5Param.RefLineTime - t;
-   
-  // TODO offset and rate to implement in OTB?
-  //  att.x     += thePitchOffset + dt*thePitchRate;
-  //  att.y     += theRollOffset  + dt*theRollRate;
-  //  att.z     += theYawOffset   + dt*theYawRate;
-
   
   /* Compute trig functions to populate rotation matrices: ANGLES IN RADIANS */
   double cp = cos(att[0]);
@@ -701,7 +542,6 @@ void Spot5SensorModel::ComputeSatToOrbRotation(MatrixType& result, double t) con
   result(2, 2) =  cp*cr;
 }
 
-// offset? ok sinon
 void Spot5SensorModel::ImagingRay(const Point2DType& imPt, Ephemeris& imRay)  const
 {
   Point3DType sensorPos; 
@@ -725,13 +565,10 @@ void Spot5SensorModel::ImagingRay(const Point2DType& imPt, Ephemeris& imRay)  co
   double psiX, psiY;
   GetPixelLookAngleXY(imPtTmp[0], psiX, psiY);
 
-  // Offset theFocalLenOffset à mettre ?
-  // ossim ordre sur ce vecteur y,x,z? 
   Vector3DType u_sat;
   u_sat[0] = -tan(psiY);
   u_sat[1] =  tan(psiX);
   u_sat[2] = -1.0;
-
 
   /* 4. Transform vehicle LSR space look direction vector to orbital LSR space (S_orb): */
   MatrixType satToOrbit;
@@ -740,13 +577,11 @@ void Spot5SensorModel::ImagingRay(const Point2DType& imPt, Ephemeris& imRay)  co
   Vector3DType uOrb = satToOrbit*u_sat;
   uOrb.Normalize();
 
-  //
   // 5. Transform orbital LSR space look direction vector to ECF.
   //
   //   a. S_orb space Z-axis (zOrb) is || to the ECF radial vector (P_ecf),
   //   b. xOrb axis is computed as cross-product between velocity and radial,
   //   c. yOrb completes the orthogonal S_orb coordinate system.
-  //
   Vector3DType zOrb, xOrb, yOrb, tmpVec;
   zOrb[0] = ecfPos[0];
   zOrb[1] = ecfPos[1];

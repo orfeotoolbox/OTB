@@ -40,9 +40,7 @@ class Spot5SensorModel
 {
 public:
 
-  Spot5SensorModel(const std::string & productType,
-                 const Spot5Param & Spot5Param,
-                 const Projection::GCPParam & gcps);
+  Spot5SensorModel(const std::string & productType, const Spot5Param & Spot5Param);
 
   Spot5SensorModel(const ImageMetadata & imd);
   virtual ~Spot5SensorModel() = default;
@@ -67,23 +65,6 @@ public:
                          Point2DType& outLineSample) const;
 
 
-  /** Transform world point (lat,lon,hgt) to input image point
-  (col,row) and YZ frame */
-  // Alex useless
-  //void WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DType& cr, Point2DType& yz) const;
-
-  /** Transform world point (lat,lon,hgt) to satellite position (x,y,z) and satellite velocity */
-  bool WorldToSatPositionAndVelocity(const Point3DType& inGeoPoint, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
-
-  /** Transform line index to satellite position (x,y,z) and satellite velocity */
-  bool LineToSatPositionAndVelocity(double line, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
-
-  bool WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
-                                          TimeType & azimuthTime, 
-                                          double & rangeTime, 
-                                          Point3DType& sensorPos, 
-                                          Vector3DType& sensorVel) const;
-
   void LineSampleHeightToWorld(const Point2DType& imPt,
                                double heightAboveEllipsoid,
                                Point3DType& worldPt) const;
@@ -92,12 +73,10 @@ public:
   void LineSampleToWorld(const Point2DType& imPt,
                          Point3DType& worldPt) const;
 
-  /*! DOC OSSIM
+  /*
    * Given an image point, returns a ray originating at some arbitrarily high
    * point (ideally at the sensor position) and pointing towards the target.
   */
-  // Alex type ossimEcefRay contenant position et direction, remplace par ephemeris
-  // TODO  changer par une meilleure struct
   void ImagingRay(const Point2DType& imPt,
                           Ephemeris&   epPt) const;
 
@@ -133,26 +112,6 @@ protected:
 
 private:
 
-   /**
-    * Interpolate sensor position and velocity at given azimuth time
-    * using lagragian interpolation of orbital records.
-    *
-    * \param[in] azimuthTime The time at which to interpolate
-    * \param[out] sensorPos Interpolated sensor position
-    * \param[out] sensorvel Interpolated sensor velocity
-    * \param[in] deg Degree of lagragian interpolation
-    */
-   void interpolateSensorPosVel(const TimeType & azimuthTime, 
-                                Point3DType& sensorPos, 
-                                Vector3DType& sensorVel, 
-                                unsigned int deg = 8) const;
-
-  Point3DType projToSurface(const GCP & gcp,
-                            const Point2DType & imPt,
-                            std::function<double(double, double)> heightFunction) const;
-
-  void LineToAzimuthTime(double line, TimeType & azimuthTime) const;
-
   void InitBilinearTransform();
 
   /** Coordinate transformation from ECEF to geographic */
@@ -164,8 +123,15 @@ private:
   ContinuousIndexType Point2DToIndex(const itk::Point<double, 2> point) const;
   ContinuousIndexType Point3DToIndex(const itk::Point<double, 3> point) const;
 
+  virtual bool insideImage(const itk::Point<double, 2> point, double epsilon) const
+  {
+      return (point[0] >= -epsilon) &&
+      (point[0] <= (m_Spot5Param.ImageSize[0]+epsilon-1)) &&
+      (point[1] >= -epsilon) &&
+      (point[1] <= (m_Spot5Param.ImageSize[1]+epsilon-1));
+  }
+
   std::string m_ProductType;
-  Projection::GCPParam m_GCP;
   Spot5Param m_Spot5Param;
 
   TimeType m_FirstLineTime;
