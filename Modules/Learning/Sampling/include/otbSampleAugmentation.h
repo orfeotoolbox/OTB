@@ -21,6 +21,8 @@
 #ifndef otbSampleAugmentation_h
 #define otbSampleAugmentation_h
 
+#include <otbMacro.h>
+
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -213,12 +215,30 @@ synthetic minority over-sampling technique, Journal of artificial
 intelligence research, 16(), 321–357 (2002).
 http://dx.doi.org/10.1613/jair.953
 */
-void Smote(const SampleVectorType& inSamples, const size_t nbSamples, SampleVectorType& newSamples, const int nbNeighbors, const int seed = std::time(nullptr))
+void Smote(const SampleVectorType& inSamples, const size_t nbSamples, SampleVectorType& newSamples, int nbNeighbors, const int seed = std::time(nullptr))
 {
   newSamples.resize(nbSamples);
   const long long nbSamplesLL = static_cast<long long>(nbSamples);
   NNVectorType    nnVector;
+
+  // This should never be 0, it's checked in SampleAugmentationFilter::ExtractSamples
+  assert(!inSamples.empty());
+
+  if (inSamples.size() == 1)
+  {
+    otbGenericExceptionMacro("Cannot run SMOTE with only one input sample");
+  }
+
+  // The neighbors won't include the selected sample, so we need at least one more
+  if (inSamples.size() - 1 < nbNeighbors)
+  {
+    nbNeighbors = inSamples.size() - 1;
+
+    otbGenericWarningMacro("Too few input samples, using only " << nbNeighbors << " neighbor(s)");
+  }
+
   FindKNNIndices(inSamples, nbNeighbors, nnVector);
+
   // The input samples are selected randomly with replacement
   std::srand(seed);
 #ifdef _OPENMP
