@@ -134,17 +134,8 @@ private:
   std::string m_ProductType;
   Spot5Param m_Spot5Param;
 
-  TimeType m_FirstLineTime;
-  TimeType m_LastLineTime;
-
-  DurationType m_AzimuthTimeOffset;
-  double m_RangeTimeOffset; // Offset in seconds
-
   // Speed of light 
   static constexpr double C = 299792458;
-
-  // True if the input product is a ground product
-  bool m_IsGrd;
 
   // Bilinear transform
   BilinearProjection::Pointer m_BilinearProj;
