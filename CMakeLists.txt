@@ -253,7 +253,7 @@ endif()
 if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/lib)
 endif()
-set(OTB_MODULES_DIR "${OTB_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
+set(OTB_MODULES_DIRS "${OTB_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
 
 #-----------------------------------------------------------------------------
 # By default, OTB does not build the Examples that are illustrated in the Software Guide
@@ -295,23 +295,7 @@ set(TEMP           ${OTB_BINARY_DIR}/Testing/Temporary)
 set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
-set(NOTOL      0.0)
-set(EPSILON_1  0.1)
-set(EPSILON_2  0.01)
-set(EPSILON_3  0.001)
-set(EPSILON_4  0.0001)
-set(EPSILON_5  0.00001)
-set(EPSILON_6  0.000001)
-set(EPSILON_7  0.0000001)
-set(EPSILON_8  0.00000001)
-set(EPSILON_9  0.000000001)
-set(EPSILON_10 0.0000000001)
-set(EPSILON_11 0.00000000001)
-set(EPSILON_12 0.000000000001)
-set(EPSILON_13 0.0000000000001)
-set(EPSILON_14 0.00000000000001)
-set(EPSILON_15 0.000000000000001)
-
+include(TestConstants)
 # Location of OTB Example Data.
 set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 
@@ -326,7 +310,7 @@ include(OTBModuleEnablement)
 #----------------------------------------------------------------------
 # Generate OTBConfig.cmake for the build tree.
 set(OTB_CONFIG_CODE "
-set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")")
+set(OTB_MODULES_DIRS \"${OTB_MODULES_DIRS}\")")
 set(OTB_CONFIG_CMAKE_DIR "${OTB_SOURCE_DIR}/CMake")
 set(OTB_USE_FILE "${OTB_CONFIG_CMAKE_DIR}/UseOTB.cmake")
 
@@ -336,10 +320,9 @@ set(OTB_PYTHONPATH \"${OTB_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}\")")
 endif()
 
 set(OTB_CONFIG_APPLICATION_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}")
-set(OTB_CONFIG_TARGETS_CONDITION " AND NOT OTB_BINARY_DIR")
-set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/OTBTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "${OTB_SOURCE_DIR}/CMake/OTBModuleAPI.cmake")
 set(OTB_CONFIG_APPLI_MACROS_FILE "${OTB_SOURCE_DIR}/CMake/OTBApplicationMacros.cmake")
+
 configure_file(CMake/OTBConfig.cmake.in OTBConfig.cmake @ONLY)
 
 # Generate OTBConfig.cmake for the install tree.
@@ -354,7 +337,7 @@ foreach(p ${_count})
 get_filename_component(OTB_INSTALL_PREFIX \"\${OTB_INSTALL_PREFIX}\" PATH)")
 endforeach()
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
-set(OTB_MODULES_DIR \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/Modules\")")
+set(OTB_MODULES_DIRS \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/Modules\")")
 set(OTB_USE_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/UseOTB.cmake")
 set(OTB_CONFIG_CMAKE_DIR "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}")
 
@@ -364,8 +347,6 @@ set(OTB_PYTHONPATH \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PYTHON_DIR}\")")
 endif()
 
 set(OTB_CONFIG_APPLICATION_PATH "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_APP_DIR}")
-set(OTB_CONFIG_TARGETS_CONDITION "")
-set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBTargets.cmake")
 set(OTB_CONFIG_MODULE_API_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBModuleAPI.cmake")
 set(OTB_CONFIG_APPLI_MACROS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBApplicationMacros.cmake")
 
@@ -385,24 +366,14 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/OTBApplicationMacros.cmake
               CMake/OTBModuleAPI.cmake
               CMake/OTBStandaloneModuleMacros.cmake
+              CMake/TestConstants.cmake
               CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
               CMake/GenerateExportHeaderCustom.cmake
               CMake/exportheader.cmake.in
               CMake/NamespaceHandler.cmake
-  DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-  COMPONENT Core)
-get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)
-if(OTBTargets_MODULES)
-  install(EXPORT OTBTargets DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-          COMPONENT Core)
-else()
-  set(CMAKE_CONFIGURABLE_FILE_CONTENT "# No targets!")
-  configure_file(${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in
-                 ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake @ONLY)
-  install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake
-          DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
-endif()
+        DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
+        COMPONENT Core)
 
 if(XDK_INSTALL_PATH)
     # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell
@@ -676,6 +647,19 @@ endforeach()
 message("\nCMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator\n")
 
 message("======================= End of OTB cmake summary =======================")
+
+# create all needed config files here
+get_property(GROUPS_ENABLED GLOBAL PROPERTY OTB_GROUPS_ENABLED)
+foreach(otb-group IN LISTS GROUPS_ENABLED)
+  get_property(GROUP_DEPS GLOBAL PROPERTY ${otb-group}_MOD_DEPS)
+  set(__ENABLED_MODULES ${OTB_${otb-group}_MODULES_ENABLED})
+  configure_file(CMake/GenericGroupConfig.cmake.in CMakeFiles/${otb-group}Config.cmake @ONLY)
+  install(FILES ${OTB_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
+          DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
+          COMPONENT ${otb-group})
+  unset(__ENABLED_MODULES)
+endforeach() # otb-group IN GROUPS_ENABLED
+
 
 #don't need this one anymore. so unset it.
 unset(option_list)

@@ -161,6 +161,7 @@ macro(otb_module_target_install _name _component)
     RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_component}
     LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
     ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT ${_component}
+    INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
     )
 endmacro()
 
@@ -365,7 +366,8 @@ macro(otb_module_impl)
   endif()
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/src/CMakeLists.txt)
-    set_property(GLOBAL APPEND PROPERTY OTBTargets_MODULES ${otb-module})
+    # add the current otb-module to global list property ${${otb-module}-targets}_MODULES
+    set_property(GLOBAL APPEND PROPERTY ${${otb-module}-targets}_MODULES ${otb-module})
     add_subdirectory(src)
   endif()
 
@@ -423,7 +425,11 @@ macro(otb_module_impl)
     list(APPEND otb-module-INCLUDE_DIRS-build "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
     list(APPEND otb-module-INCLUDE_DIRS-install "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
   endif()
-  set(otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
+  set(otb-module-LIBRARY_DIRS "${OTB_INSTALL_PREFIX}/lib")
+  # add system lib dir if it exists
+  if (${${otb-module}_SYSTEM_LIBRARY_DIRS})
+    list(APPEND otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
+  endif()
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-build}")
 endmacro()

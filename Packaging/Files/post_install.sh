@@ -20,8 +20,6 @@
 #
 echo "***** First time launching OTB after installation, doing some post installation steps before use *****"
 # Apply necessary patches for a modular install because cmake generates these file at configure time, not at packaging time
-sed -i "s/FATAL_ERROR/WARNING/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-9.0/OTBTargets.cmake
-sed -i "s/FATAL_ERROR/WARNING/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-9.0/OTBModuleAPI.cmake
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-9.0/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-9.0/Modules/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/ITK-4.13/*.cmake

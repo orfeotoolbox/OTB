@@ -32,21 +32,29 @@ function(sanitize_system_paths input_file)
   foreach(line ${source_file_content})
     set(filtered_line "${line}")
     if(line MATCHES "${SEARCH_REGEX}")
+      # extract the third parenthesis expression of SEARCH_REGEX in $line
+      # and put result in extract_str
       string(REGEX REPLACE "${SEARCH_REGEX}" "\\3" extract_str "${line}" )
+      # remove duplicate ";"
       string(REGEX REPLACE ";;" ";" extract_str "${extract_str}")
       set(_to_be_removed)
       set(_to_be_added)
       foreach(path ${extract_str})
         if(IS_ABSOLUTE ${path})
+          # message(FATAL_ERROR "${path} of file ${input_file} is ABSOLUTE thus will be removed")
           list(APPEND _to_be_removed "${path}")
           if(NOT IS_DIRECTORY ${path})
-            if(path MATCHES "^.*/lib[^\\.]+${SHARED_EXT}.*")
-              string(REGEX REPLACE "^.*/lib([^\\.]+)${SHARED_EXT}.*" "\\1" _lib_name "${path}")
-              list(APPEND _to_be_added "${_lib_name}")
+            # check if path is lib<smthing>.so and add lib name to _to_be_added
+            if(path MATCHES "^.*/lib([^\\.]+)${SHARED_EXT}.*")
+              # get first parenthesis expression matched
+              # see https://cmake.org/cmake/help/latest/command/if.html#matches
+              list(APPEND _to_be_added "${CMAKE_MATCH_1}")
             endif()
           endif()
         endif()
       endforeach()
+      # remove path if needed, add the lib names without "so" extention
+      # and remove duplicates
       if(_to_be_removed)
         list(REMOVE_ITEM extract_str ${_to_be_removed})
       endif()
@@ -56,6 +64,8 @@ function(sanitize_system_paths input_file)
       if(extract_str)
         list(REMOVE_DUPLICATES extract_str)
       endif()
+      # replace the third group after removing and adding data
+      # 2nd group of ${SEARCH_REGEX} is embedded inside the first one
       string(REGEX REPLACE "${SEARCH_REGEX}" "\\1${extract_str}\\4" filtered_line "${line}" )
     endif()
     list(APPEND filtered_content "${filtered_line}")

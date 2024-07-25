@@ -42,6 +42,12 @@ if os.name == 'posix':
   del dl
   del orig_dlopen_flags
 else:
+  import os
+  #with python > 3.8 the CI has to know where to look for the DLLs...
+  os.add_dll_directory("C:\\build\\otb\\xdk\\bin")
+  os.add_dll_directory("C:\\build\\otb\\xdk\\lib")
+  os.add_dll_directory("C:\\build\\otb\\build\\bin")
+  os.add_dll_directory("C:\\build\\otb\\build\\lib")
   import otbApplication as otb
 
 t = __import__(sys.argv[1])

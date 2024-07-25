@@ -81,7 +81,10 @@ release = '@OTB_VERSION_STRING@'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['@RST_BUILD_DIR@', 'templates/*.rst']
+
+# exclude Installation_Linux.rst as it declare a label. As this file is include
+# by another, rst warns about duplicate label
+exclude_patterns = ['@RST_BUILD_DIR@', 'templates/*.rst','Installation_Linux.rst']
 #exclude_patterns = ['_build']
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -175,7 +178,7 @@ html_static_path = ['_static']
 #html_split_index = False
 
 html_context = {
-    'display_gitlab': True,
+    'display_gitlab': False,
     'gitlab_host': "gitlab.orfeo-toolbox.org",
     'gitlab_user': 'orfeotoolbox',
     'gitlab_repo': 'OTB',
@@ -185,7 +188,7 @@ html_context = {
 }
 
 # If true, links to the reST sources are added to the pages.
-html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = True

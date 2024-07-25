@@ -125,7 +125,6 @@ fast-build:
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
-    - python3 CI/check_twin_pipelines.py
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-20.04-fast
     - ccache -s
@@ -207,9 +206,16 @@ redhat-build:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=ON
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=OFF
+    # change package names to RedHat
+    - |
+      # use "find" to select only packages that matters
+      rh_packages=$(find build_packages -type f -name "OTB*Linux*.tar.gz")
+      for pkg in $rh_packages
+      do
+        new_name=$(sed "s/-Linux/-Linux_RedHat/g" <<< "$pkg")
+        mv $pkg $new_name
+      done
     - mv build_packages/OTB-*.tar.gz . || true
-    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RedHat-Dependencies.tar.gz
-    - mv OTB-9.0.0-Linux.tar.gz OTB-9.0.0-Linux_RedHat.tar.gz
   needs:
     - job: redhat-prepare
       artifacts: true
@@ -237,7 +243,7 @@ windows-10-prepare:
   script:
     - call ./CI/dev_env.bat x64 xdk 10
     - buildcache.exe -s
-    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
 
 windows-10-build:
@@ -247,7 +253,7 @@ windows-10-build:
   script:
     - call ./CI/dev_env.bat x64 otb 10
     - buildcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
     - call ./CI/copy_boost_dlls.bat
     - ctest -V -S CI/superbuild_packaging.cmake -DPACKAGE_BY_MODULE:BOOL=OFF

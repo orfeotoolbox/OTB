@@ -24,6 +24,8 @@ otb_fetch_module(OTBTemporalGapFilling
   by an interpolation using the valid dates of the series.
 A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling
+
+Declares application ImageTimeSeriesGapFilling
 "
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling.git
   GIT_TAG master

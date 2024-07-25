@@ -151,6 +151,8 @@ the applications of your module will be installed in the same folder as OTB appl
 
 the applications will be installed in ``/theModuleInstallFolder/lib`` and the binaries will be available in ``/theModuleInstallFolder/bin`` 
 
+In case you have an OTB install with OTB components separated from Core, you will need to specify the ``-DCMAKE_PREFIX_PATH="/your_first_module_path:/your_other_module_path"`` cmake variable (see :ref:`mod_install`)
+
 **Usage**
 
 * For an *inside OTB build*, verify that you have the OTB environment variables set, and call your application :

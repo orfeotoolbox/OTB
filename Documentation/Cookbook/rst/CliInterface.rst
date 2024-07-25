@@ -54,7 +54,7 @@ It is also possible to set this path with the environment variable
 variable is checked by default when no ``[MODULEPATH]`` argument is
 given. When using multiple paths in ``OTB_APPLICATION_PATH``, one must
 ensure that the standard path separator of the target system is used, which
-is ``:`` on Unix and ``;`` on Windows.
+is ``:`` on Unix and ``;`` on Windows. This can be the case if you have a modular installation with modules in different folders than Core module (see :ref:`mod_install`)
 
 An error in the application name (i.e. in parameter ``module_name``)
 will make the ``otbApplicationLauncherCommandLine`` list the name of
