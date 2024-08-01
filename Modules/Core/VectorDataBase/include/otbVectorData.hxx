@@ -30,7 +30,6 @@ namespace otb
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 VectorData<TPrecision, VDimension, TValuePrecision>::VectorData()
 {
-  m_DataTree               = std::make_unique<DataTreeType>();
   m_root = DataNodeType::New();
   m_root->SetNodeId("Root");
   boost::add_vertex(m_root, m_DataTree);
@@ -102,37 +101,35 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::SetOrigin(const float 
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-bool VectorData<TPrecision, VDimension, TValuePrecision>::Clear()
+void VectorData<TPrecision, VDimension, TValuePrecision>::Clear()
 {
-  boost::remove_vertex(m_root);
-  return true;
+  m_DataTree.clear();
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 int VectorData<TPrecision, VDimension, TValuePrecision>::Size() const
 {
-  return 0; //TODO boost::num_vertices(m_DataTree);
+  return boost::num_vertices(m_DataTree);
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void VectorData<TPrecision, VDimension, TValuePrecision>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << std::endl;
+  os << "\n";
 
-  boost::graph_traits<DataTreeType>::adjacency_iterator it(m_DataTree);
+  typename boost::graph_traits<DataTreeType>::vertex_iterator it,it_end;
+  boost::tie(it, it_end) = vertices(m_DataTree);
 
-  while (!it.end())
+  for (;it!=it_end;it++)
   {
-    boost::graph_traits<DataTreeType>::adjacency_iterator itParent = it;
-    bool                                    goesOn   = true;
-    while (itParent.HasParent() && goesOn)
-    {
-      os << indent;
-      goesOn = itParent.GoToParent();
+    typename boost::graph_traits<DataTreeType>::adjacency_iterator ai, a_end; 
+    boost::tie(ai, a_end) = boost::adjacent_vertices(*it, m_DataTree);
+    os << *it << " --> ";
+    for (; ai != a_end; ai++) { 
+        os << *ai << "\t";
     }
-    os << "+" << it.Get()->GetNodeTypeAsString() << std::endl;
-    ++it;
+    os << "\n";
   }
 }
 
@@ -145,22 +142,13 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::Graft(const itk::DataO
   if (data)
   {
     // Attempt to cast data to an Image
-    const Self* vdData;
-
-    try
-    {
-      vdData = dynamic_cast<const Self*>(data);
-    }
-    catch (...)
-    {
-      return;
-    }
+    const Self* vdData = dynamic_cast<const Self*>(data);
 
     if (vdData)
     {
       // Copy all the needed data : DataTree, spacing, origin and
       // Projection Ref
-      m_DataTree = const_cast<DataTreeType*>(vdData->GetDataTree());
+      //m_DataTree = const_cast<DataTreeType*>(vdData->GetDataTree());
       this->SetSpacing(vdData->GetSpacing());
       this->SetOrigin(vdData->GetOrigin());
       this->SetProjectionRef(vdData->GetProjectionRef());

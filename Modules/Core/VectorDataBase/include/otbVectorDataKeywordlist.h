@@ -160,6 +160,8 @@ public:
   /** Deep copy operator*/
   void operator=(const Self&);
 
+  bool operator==(const Self&);
+
 protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

@@ -257,16 +257,11 @@ void LabelImageToVectorDataFilter<TInputImage, TPrecision>::GenerateData(void)
   VectorDataPointerType data = dynamic_cast<VectorDataType*>(this->GetOutput());
   data->SetProjectionRef(this->GetInput()->GetProjectionRef());
 
-  DataTreePointerType tree = data->GetDataTree();
-  DataNodePointerType root = tree->GetRoot()->Get();
-  tree->Add(document, root);
-
-  // This is not good but we do not have the choice if we want to
-  // get a hook on the internal structure
-  InternalTreeNodeType* documentPtr = const_cast<InternalTreeNodeType*>(tree->GetNode(document));
+  DataNodePointerType root = data->GetRoot();
+  data->Add(document, root);
 
   OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
-  OGRConversion->ConvertOGRLayerToDataTreeNode(&outputLayer.ogr(), documentPtr);
+  OGRConversion->ConvertOGRLayerToDataTreeNode(data,root,&outputLayer.ogr(), document);
 
   // Clear memory
   GDALClose(dataset);

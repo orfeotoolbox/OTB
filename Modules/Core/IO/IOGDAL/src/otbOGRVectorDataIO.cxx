@@ -99,8 +99,7 @@ void OGRVectorDataIO::Read(itk::DataObject* datag)
   otbMsgDevMacro(<< "Number of layers: " << m_DataSource->GetLayerCount());
 
   // Retrieving root node
-  DataTreePointerType tree = data->GetDataTree();
-  DataNodePointerType root = tree->GetRoot()->Get();
+  DataNodePointerType root = data->GetRoot();
 
   OGRSpatialReference* oSRS = nullptr;
   // We take the assumption that the spatial reference is common to all layers
@@ -158,16 +157,16 @@ void OGRVectorDataIO::Read(itk::DataObject* datag)
     //     }
 
     /** Adding the layer to the data tree */
-    tree->Add(document, root);
+    data->Add(document, root);
 
     /// This is not good but we do not have the choice if we want to
     /// get a hook on the internal structure
-    InternalTreeNodeType* documentPtr = const_cast<InternalTreeNodeType*>(tree->GetNode(document));
+    //InternalTreeNodeType documentPtr = data->GetNode(document);
 
     /** IO class helper to convert ogr layer*/
 
     OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
-    OGRConversion->ConvertOGRLayerToDataTreeNode(layer, documentPtr);
+    OGRConversion->ConvertOGRLayerToDataTreeNode(layer, document ,data);
 
   } // end For each layer
 
@@ -268,12 +267,11 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char** /** unused */)
   }
 
   // Retrieving root node
-  DataTreeConstPointerType tree = data->GetDataTree();
-  if (tree->GetRoot() == nullptr)
+  if (data->GetRoot() == nullptr)
   {
     itkExceptionMacro(<< "Data tree is empty: Root == NULL");
   }
-  DataNodePointerType root = tree->GetRoot()->Get();
+  DataNodePointerType root = data->GetRoot();
 
   unsigned int layerKept;
   OGRLayer*    ogrCurrentLayer = nullptr;
@@ -281,12 +279,9 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char** /** unused */)
   OGRGeometryCollection* ogrCollection = nullptr;
   // OGRGeometry * ogrCurrentGeometry = NULL;
 
-  // Get the input tree root
-  InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(tree->GetRoot());
-
   // Refactoring SHPIO Manuel
   OGRIOHelper::Pointer IOConversion = OGRIOHelper::New();
-  layerKept                         = IOConversion->ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+  layerKept                         = IOConversion->ProcessNodeWrite(data,root, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
   otbMsgDevMacro(<< "layerKept " << layerKept);
   (void)layerKept; // keep compiler happy

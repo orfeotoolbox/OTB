@@ -55,64 +55,64 @@ namespace otb
  *
  * \ingroup OTBVectorDataBase
  */
+
 template <class TPrecision = double, unsigned int VDimension = 2, class TValuePrecision = double>
 class VectorData : public itk::DataObject
 {
 public:
-  /** Standard class typedefs */
-  typedef VectorData                    Self;
-  typedef itk::DataObject               Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  /** Standard class usings */
+  using Self = VectorData;
+  using Superclass = itk::DataObject;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(VectorData, DataObject);
   itkStaticConstMacro(Dimension, unsigned int, VDimension);
 
-  /** Template parameters typedef */
-  typedef TPrecision      PrecisionType;
-  typedef TValuePrecision ValuePrecisionType;
+  /** Template parameters using */
+  using PrecisionType = TPrecision;
+  using ValuePrecisionType = TValuePrecision;
   // define VDimension Dimension;
-  typedef otb::DataNode<TPrecision, VDimension, TValuePrecision> DataNodeType;
-  typedef typename DataNodeType::Pointer          DataNodePointerType;
-  typedef boost::adjacency_list< boost::vecS, boost::vecS, boost::directedS, boost::property< boost::vertex_name_t, std::string > > DataTreeType;
-  typedef boost::graph_traits< DataTreeType >::vertex_descriptor vertex_t;
-  typedef std::unique_ptr<DataTreeType> DataTreePointerType;
-
-  typedef typename DataNodeType::PointType   PointType;
-  typedef typename DataNodeType::LineType    LineType;
-  typedef typename DataNodeType::PolygonType PolygonType;
-
-  typedef itk::Vector<double, 2> SpacingType;
-  typedef itk::Point<double, 2>  OriginType;
-
-  virtual void SetProjectionRef(const std::string& projectionRef);
-  virtual std::string GetProjectionRef() const;
+  using DataNodeType = otb::DataNode<TPrecision, VDimension, TValuePrecision>;
+  using DataNodePointerType = typename DataNodeType::Pointer;
+  using PointType = typename DataNodeType::PointType;
+  using LineType = typename DataNodeType::LineType;
+  using PolygonType = typename DataNodeType::PolygonType;
+  using SpacingType = itk::Vector<double, 2>;
+  using OriginType = itk::Point<double, 2>;
+  using DataTreeType = boost::adjacency_list< boost::vecS, boost::vecS, boost::directedS, DataNodePointerType >;
+  using TreeNodeType = typename boost::graph_traits< DataTreeType >::vertex_descriptor;
+  using TreeEdgeType = typename boost::graph_traits< DataTreeType >::edge_descriptor;
+  using ChildrenListType = std::list<DataNodePointerType>;
+  
+   void SetProjectionRef(const std::string& projectionRef);
+   std::string GetProjectionRef() const;
 
   /** Set the origin of the vector data to put it in the corresponding
    * image coordinates
     * \sa GetOrigin() */
   itkSetMacro(Origin, OriginType);
-  virtual void SetOrigin(const double origin[2]);
-  virtual void SetOrigin(const float origin[2]);
+   void SetOrigin(const double origin[2]);
+   void SetOrigin(const float origin[2]);
 
   itkGetConstReferenceMacro(Origin, OriginType);
 
   /** Set the spacing of the vector data to put it in the corresponding
    * image coordinates
    * \sa GetSignedSpacing() */
-  virtual void SetSpacing(const SpacingType& spacing);
-  virtual void SetSpacing(const double spacing[2]);
-  virtual void SetSpacing(const float spacing[2]);
+   void SetSpacing(const SpacingType& spacing);
+   void SetSpacing(const double spacing[2]);
+   void SetSpacing(const float spacing[2]);
 
   itkGetConstReferenceMacro(Spacing, SpacingType);
 
   /** Clear the vector data  */
-  virtual bool Clear();
+   void Clear();
 
   /** Return the number of element in the tree */
-  virtual int Size() const;
+   int Size() const;
 
   void TransformPointToPhysicalPoint(const PointType& point, PointType& physicalPoint) const
   {
@@ -129,10 +129,39 @@ public:
    * VectorDataSource::GraftOutput(). */
   void Graft(const itk::DataObject* data) override;
 
-  const std::unique_ptr<DataTreeType> GetDataTree()
+  DataNodePointerType GetRoot() const
   {
-    return m_DataTree;
-  }
+    return m_root;
+  };
+
+  void Add(DataNodePointerType nodeToAdd,DataNodePointerType rootForNode)
+  {
+    // Add the vertex then create an edge between these vertex
+    TreeNodeType nodevertex = boost::add_vertex(nodeToAdd,m_DataTree);
+    // find the corresponding root vertex in the tree
+    TreeNodeType rootvertex = ConvertToTreeNodeType(rootForNode);
+    // add an edge between the node and its root
+    boost::add_edge(nodevertex,rootvertex,m_DataTree);
+  };
+
+  std::list<DataNodePointerType> GetChildrenList(DataNodePointerType parentNode) const
+  {
+    std::list<DataNodePointerType> childrenslist;
+    typename boost::graph_traits<DataTreeType>::vertex_iterator it,it_end;
+    boost::tie(it, it_end) = boost::vertices(m_DataTree);
+    for (;it!=it_end;it++)
+    {
+      if(m_DataTree[*it] == parentNode)
+      {
+        typename boost::graph_traits<DataTreeType>::adjacency_iterator ai, a_end; 
+        boost::tie(ai, a_end) = boost::adjacent_vertices(*it, m_DataTree);
+        for (; ai != a_end; ai++) { 
+            childrenslist.push_back(m_DataTree[*ai]);
+        }
+      }
+    }
+    return childrenslist;
+  };
 
 protected:
   /** Constructor */
@@ -144,12 +173,27 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
+  TreeNodeType ConvertToTreeNodeType(DataNodePointerType datanode)
+  {
+    typename boost::graph_traits<DataTreeType>::vertex_iterator it,it_end;
+    boost::tie(it, it_end) = boost::vertices(m_DataTree);
+    for (;it!=it_end;it++)
+    {
+      if(m_DataTree[*it] == datanode)
+      {
+        return *it;
+      }
+    }
+    //Default case : return the vertex descriptor to the root of the graph
+    return *boost::vertices(m_DataTree).first;
+  };
+
 private:
   VectorData(const Self&) = delete;
   void operator=(const Self&) = delete;
 
   /** Data tree */
-  DataTreePointerType m_DataTree;
+  DataTreeType m_DataTree;
   DataNodePointerType m_root;
   SpacingType m_Spacing;
   OriginType  m_Origin;
