@@ -94,7 +94,7 @@ CoordinateToName::ThreadFunction(void *arg)
 #if ITK_VERSION_MAJOR < 5
   struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (arg);
 #else
-  struct itk::MultiThreaderBase::ThreadInfoStruct * pInfo = (itk::MultiThreaderBase::ThreadInfoStruct *) (arg);
+  struct itk::MultiThreaderBase::WorkUnitInfo * pInfo = (itk::MultiThreaderBase::WorkUnitInfo *) (arg);
 #endif
   CoordinateToName::Pointer  lThis = (CoordinateToName*) (pInfo->UserData);
   lThis->DoEvaluate();

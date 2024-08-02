@@ -260,7 +260,7 @@ Application::Pointer ApplicationRegistry::CreateApplicationFaster(const std::str
 #endif
 
   std::string                 otbAppPath = GetApplicationPath();
-  std::vector<itksys::String> pathList;
+  std::vector<std::string> pathList;
   if (!otbAppPath.empty())
   {
     pathList = itksys::SystemTools::SplitString(otbAppPath, pathSeparator, false);

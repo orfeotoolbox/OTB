@@ -30,7 +30,7 @@
 #include "itkImageSource.h"
 #endif
 #include "otbImageIOBase.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkImageRegion.h"
 #include "OTBImageIOExport.h"
 

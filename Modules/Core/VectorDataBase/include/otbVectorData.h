@@ -129,6 +129,12 @@ public:
    * VectorDataSource::GraftOutput(). */
   void Graft(const itk::DataObject* data) override;
 
+  void SetRoot(DataNodePointerType rootNode)
+  {
+    m_root = rootNode;
+    boost::add_vertex(m_root,m_DataTree);
+  }
+
   DataNodePointerType GetRoot() const
   {
     return m_root;

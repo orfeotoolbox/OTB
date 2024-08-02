@@ -77,20 +77,17 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::Generate
   InputVectorDataPointer  inputPtr  = this->GetInput();
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
-  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
-  OutputDataTreePointerType                                  tree = outputPtr->GetDataTree();
-
   // Get the input tree root
-  InputInternalTreeNodeType* inputRoot = const_cast<InputInternalTreeNodeType*>(inputPtr->GetDataTree()->GetRoot());
+  InputInternalTreeNodeType* inputRoot = const_cast<InputInternalTreeNodeType*>(inputPtr->GetRoot());
 
   // Create the output tree root
   typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
   OutputDataNodePointerType                                  newDataNode = OutputDataNodeType::New();
-  newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
-  newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
+  newDataNode->SetNodeType(inputRoot->GetNodeType());
+  newDataNode->SetNodeId(inputRoot->GetNodeId());
   typename OutputInternalTreeNodeType::Pointer outputRoot = OutputInternalTreeNodeType::New();
   outputRoot->Set(newDataNode);
-  tree->SetRoot(outputRoot);
+  inputPtr->SetRoot(outputRoot);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();

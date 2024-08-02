@@ -276,7 +276,7 @@ const bool& StreamingImageVirtualWriter<TInputImage>::GetAbortGenerateData() con
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
 #endif
   bool ret = Superclass::GetAbortGenerateData();
-  m_Lock.Unlock();
+  m_Lock.unlock();
   if (ret)
     return otb::Utils::TrueConstant;
   return otb::Utils::FalseConstant;

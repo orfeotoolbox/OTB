@@ -350,25 +350,6 @@ void VectorDataKeywordlist::operator=(const Self& p)
   }
 }
 
-bool VectorDataKeywordlist::operator==(const Self& p)
-{
-  unsigned int equalfields = 0;
-  if(GetNumberOfFields()==p.GetNumberOfFields())
-  {
-    for(unsigned int i = 0; i < m_FieldList.size(); ++i)
-    {
-      if(HasField((p.m_FieldList[i].first)->GetNameRef()))
-      {
-        equalfields++;
-      }
-    }
-  }
-  if (equalfields == GetNumberOfFields())
-  {
-    return true;
-  }
-  return false;
-}
 
 void VectorDataKeywordlist::Print(std::ostream& os, itk::Indent indent) const
 {

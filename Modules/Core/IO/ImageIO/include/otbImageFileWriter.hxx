@@ -819,7 +819,7 @@ const bool& ImageFileWriter<TInputImage>::GetAbortGenerateData() const
 #endif
   // protected read here
   bool ret = Superclass::GetAbortGenerateData();
-  m_Lock.Unlock();
+  m_Lock.unlock();
   if (ret)
     return otb::Utils::TrueConstant;
   return otb::Utils::FalseConstant;
