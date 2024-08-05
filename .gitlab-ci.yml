@@ -121,12 +121,12 @@ fast-build:
     - merge_requests
     - branches
   stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:24.04
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-20.04-fast
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-24.04-fast
     - ccache -s
 
 legal-check:
