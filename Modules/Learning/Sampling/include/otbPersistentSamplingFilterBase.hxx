@@ -167,7 +167,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::GenerateData(void)
   // Get the output pointer
   // const InputImageType *outputPtr = this->GetOutput();
 
-  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->VectorThreaderCallback, &str);
 
   // multithread the execution
@@ -187,7 +187,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::AllocateOutputs(void
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
   ogr::Layer       inLayer = vectors->GetLayer(m_LayerIndex);
 
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
 
   // Prepare temporary input
   this->m_InMemoryInputs.clear();
@@ -285,7 +285,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::FillOneOutput(unsign
     itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
   }
 
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
   for (unsigned int thread = 0; thread < numberOfThreads; thread++)
   {
     ogr::Layer inLayer = this->m_InMemoryOutputs[thread][outIdx]->GetLayerChecked(0);
@@ -652,7 +652,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::DispatchInputVectors
 
   inLayer.SetSpatialFilter(&tmpPolygon);
 
-  unsigned int            numberOfThreads = this->GetNumberOfThreads();
+  unsigned int            numberOfThreads = this->GetNumberOfWorkUnits();
   std::vector<ogr::Layer> tmpLayers;
   tmpLayers.reserve(numberOfThreads);
   for (unsigned int i = 0; i < numberOfThreads; i++)

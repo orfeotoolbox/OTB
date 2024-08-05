@@ -89,7 +89,7 @@ void VectorDataExtractROI<TVectorData>::GenerateData(void)
   typename VectorDataType::DataTreePointerType tree = outputPtr->GetDataTree();
 
   // Get the input tree root
-  InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(inputPtr->GetDataTree()->GetRoot());
+  InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(inputPtr->GetRoot());
 
   // Create the output tree root
   DataNodePointerType newDataNode = DataNodeType::New();

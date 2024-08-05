@@ -210,7 +210,7 @@ void PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLa
   m_MinRadiometricValue.clear();
   m_MaxRadiometricValue.clear();
   m_LabelPopulation.clear();
-  m_AccumulatorMaps.resize(this->GetNumberOfThreads());
+  m_AccumulatorMaps.resize(this->GetNumberOfWorkUnits());
 }
 
 template <class TInputVectorImage, class TLabelImage>

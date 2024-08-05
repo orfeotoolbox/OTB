@@ -308,7 +308,7 @@ std::vector<std::string> ApplicationRegistry::GetAvailableApplications(bool useF
 #endif
 
   std::string                 otbAppPath = GetApplicationPath();
-  std::vector<itksys::String> pathList;
+  std::vector<std::string> pathList;
   if (!otbAppPath.empty())
   {
     pathList = itksys::SystemTools::SplitString(otbAppPath, pathSeparator, false);

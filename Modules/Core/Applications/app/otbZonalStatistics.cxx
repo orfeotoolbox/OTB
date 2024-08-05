@@ -324,7 +324,7 @@ public:
     otbAppLogINFO("Writing output vector data");
     LabelValueType internalFID     = -1;
     m_NewVectorData                = VectorDataType::New();
-    DataNodeType::Pointer root     = m_NewVectorData->GetDataTree()->GetRoot()->Get();
+    DataNodeType::Pointer root     = m_NewVectorData->GetRoot()->Get();
     DataNodeType::Pointer document = DataNodeType::New();
     document->SetNodeType(otb::DOCUMENT);
     m_NewVectorData->GetDataTree()->Add(document, root);

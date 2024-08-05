@@ -100,7 +100,7 @@ void DifferenceImageFilter<TInputImage, TOutputImage>::Reset()
 {
   this->UpdateOutputInformation();
 
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   itk::NumericTraits<RealType>::SetLength(m_MeanDifference, this->GetInput(0)->GetNumberOfComponentsPerPixel());
   itk::NumericTraits<AccumulateType>::SetLength(m_TotalDifference, this->GetInput(0)->GetNumberOfComponentsPerPixel());
@@ -264,7 +264,7 @@ template <class TInputImage, class TOutputImage>
 void DifferenceImageFilter<TInputImage, TOutputImage>::Synthetize()
 {
   // Set statistics about difference image.
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
   for (int i = 0; i < numberOfThreads; ++i)
   {
     m_TotalDifference += m_ThreadDifferenceSum[i];

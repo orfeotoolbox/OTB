@@ -23,7 +23,6 @@
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbVectorData.h"
-#include "itkPreOrderTreeIterator.h"
 
 namespace otb
 {
@@ -67,8 +66,8 @@ public:
   typedef typename DataNodeType::PolygonType::VertexType VertexType;
   typedef typename DataNodeType::LineType                LineType;
   typedef typename VectorDataType::DataTreeType          DataTreeType;
-  typedef typename DataTreeType::TreeNodeType            TreeNodeType;
-  typedef typename TreeNodeType::ChildrenListType        ChildrenListType;
+  typedef typename VectorDataType::TreeNodeType            TreeNodeType;
+  typedef typename VectorDataType::ChildrenListType        ChildrenListType;
 
   typedef typename std::vector<PointType> PointVectorType;
 
@@ -89,7 +88,7 @@ protected:
   void GenerateData(void) override;
 
   /** Recursive method to visit efficiently the vectordata*/
-  void ProcessNode(TreeNodeType* source, DataNodeType* outputDocument);
+  void ProcessNode(DataNodeType* source, DataNodeType* outputDocument);
 
 private:
   ConcatenateVectorDataFilter(const Self&) = delete;

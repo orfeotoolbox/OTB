@@ -149,7 +149,7 @@ void ComputeHistoFilter<TInputImage, TOutputImage>::GenerateData()
   // Get the output pointer
   const OutputImageType*              outputPtr(this->GetOutput());
   const itk::ImageRegionSplitterBase* splitter(this->GetImageRegionSplitter());
-  m_ValidThreads = splitter->GetNumberOfSplits(outputPtr->GetRequestedRegion(), this->GetNumberOfThreads());
+  m_ValidThreads = splitter->GetNumberOfSplits(outputPtr->GetRequestedRegion(), this->GetNumberOfWorkUnits());
 
   this->BeforeThreadedGenerateData();
 

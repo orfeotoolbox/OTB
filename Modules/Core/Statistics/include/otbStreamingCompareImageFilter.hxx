@@ -197,7 +197,7 @@ void PersistentCompareImageFilter<TInputImage>::Synthetize()
   unsigned long diffCount;
   RealType      squareOfDifferences, absoluteValueOfDifferences;
 
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   PixelType minimumRef, maximumRef;
   RealType  mse;
@@ -248,7 +248,7 @@ void PersistentCompareImageFilter<TInputImage>::Synthetize()
 template <class TInputImage>
 void PersistentCompareImageFilter<TInputImage>::Reset()
 {
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   // Resize the thread temporaries
   m_Count.SetSize(numberOfThreads);

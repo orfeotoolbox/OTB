@@ -123,7 +123,7 @@ void PersistentMinMaxVectorImageFilter<TInputImage>::Reset()
   TInputImage* inputPtr = const_cast<TInputImage*>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
-  unsigned int numberOfThreads   = this->GetNumberOfThreads();
+  unsigned int numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
   // Variable Initialization
@@ -149,7 +149,7 @@ void PersistentMinMaxVectorImageFilter<TInputImage>::Synthetize()
 {
   int i;
 
-  int          numberOfThreads   = this->GetNumberOfThreads();
+  int          numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
 
   PixelType minimumVector;

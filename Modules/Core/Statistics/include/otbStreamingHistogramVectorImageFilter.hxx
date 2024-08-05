@@ -113,7 +113,7 @@ void PersistentHistogramVectorImageFilter<TInputImage>::Reset()
   TInputImage* inputPtr = const_cast<TInputImage*>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
-  unsigned int numberOfThreads   = this->GetNumberOfThreads();
+  unsigned int numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
   // TODO which is the good value ? (false in MVD2)
@@ -187,7 +187,7 @@ void PersistentHistogramVectorImageFilter<TInputImage>::Synthetize()
 {
   HistogramListType* outputHisto = this->GetHistogramListOutput();
 
-  int          numberOfThreads   = this->GetNumberOfThreads();
+  int          numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
 
   // copy histograms to output

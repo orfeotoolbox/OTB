@@ -82,15 +82,12 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
   // this->GetOutput()->SetMetaDataDictionary(this->GetInput(0)->GetMetaDataDictionary());
 
   // Prepare the output
-  // typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetDataTree()->GetRoot()->Get();
+  // typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetRoot()->Get();
 
 
-  typename DataTreeType::Pointer outputTree = this->GetOutput()->GetDataTree();
-  typename TreeNodeType::Pointer inputRoot  = const_cast<TreeNodeType*>(this->GetInput(0)->GetDataTree()->GetRoot());
+  this->GetOutput()->SetRoot(this->GetInput(0)->GetRoot());
 
-  outputTree->SetRoot(inputRoot);
-
-  typename DataNodeType::Pointer outputDocument = this->GetOutput()->GetDataTree()->GetRoot()->GetChild(0)->Get();
+  typename DataNodeType::Pointer outputDocument = this->GetOutput()->GetChildrenList(this->GetInput(0)->GetRoot())[0];
 
   // Adding the layer to the data tree
   //   this->GetOutput()->GetDataTree()->Add(m_Document, outputRoot);
@@ -100,15 +97,13 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
   for (unsigned int idx = 1; idx < this->GetNumberOfInputs(); ++idx)
   {
     // Add the current vectordata
-    TreeNodeType* currentInputRoot = const_cast<TreeNodeType*>(this->GetInput(idx)->GetDataTree()->GetRoot());
-
-    ProcessNode(currentInputRoot, outputDocument);
+    ProcessNode(this->GetInput(idx)->GetRoot(), outputDocument);
   }
 }
 
 
 template <class TVectorData>
-void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(TreeNodeType* source, DataNodeType* outputDocument)
+void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(DataNodeType* source, DataNodeType* outputDocument)
 {
   if (source == nullptr)
     return;
@@ -143,17 +138,17 @@ void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(TreeNodeType* source,
     }
     case FEATURE_POINT:
     {
-      this->GetOutput()->GetDataTree()->Add(dataNode, outputDocument);
+      this->GetOutput()->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_LINE:
     {
-      this->GetOutput()->GetDataTree()->Add(dataNode, outputDocument);
+      this->GetOutput()->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_POLYGON:
     {
-      this->GetOutput()->GetDataTree()->Add(dataNode, outputDocument);
+      this->GetOutput()->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_MULTIPOINT:

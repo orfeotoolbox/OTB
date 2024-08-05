@@ -81,7 +81,7 @@ int otbLabelObjectMapVectorizer(int argc, char* argv[])
   document->SetNodeType(otb::DOCUMENT);
   folder1->SetNodeType(otb::FOLDER);
 
-  DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
+  DataNodeType::Pointer root = data->GetRoot()->Get();
 
   data->GetDataTree()->Add(document, root);
   data->GetDataTree()->Add(folder1, document);

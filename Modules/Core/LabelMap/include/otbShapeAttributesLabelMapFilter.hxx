@@ -1141,7 +1141,7 @@ void ShapeAttributesLabelMapFilter<TImage, TLabelImage>::BeforeThreadedGenerateD
     typename LCI2IType::Pointer lci2i = LCI2IType::New();
     lci2i->SetInput(this->GetInput());
     // respect the number of threads of the filter
-    lci2i->SetNumberOfThreads(this->GetNumberOfThreads());
+    lci2i->SetNumberOfThreads(this->GetNumberOfWorkUnits());
     lci2i->Update();
     this->GetFunctor().SetLabelImage(lci2i->GetOutput());
   }

@@ -86,6 +86,7 @@ public:
   using TreeNodeType = typename boost::graph_traits< DataTreeType >::vertex_descriptor;
   using TreeEdgeType = typename boost::graph_traits< DataTreeType >::edge_descriptor;
   using ChildrenListType = std::list<DataNodePointerType>;
+  using VertexIterator = typename boost::graph_traits<DataTreeType>::vertex_iterator;
   
    void SetProjectionRef(const std::string& projectionRef);
    std::string GetProjectionRef() const;
@@ -168,6 +169,19 @@ public:
     }
     return childrenslist;
   };
+
+  std::pair<VertexIterator,VertexIterator> GetIteratorPair()
+  {
+    VertexIterator it,it_end;
+    boost::tie(it, it_end) = boost::vertices(m_DataTree);
+
+    return std::make_pair(it,it_end);
+  }
+
+  DataNodePointerType Get(VertexIterator dataIt)
+  {
+    return m_DataTree[*dataIt];
+  }
 
 protected:
   /** Constructor */

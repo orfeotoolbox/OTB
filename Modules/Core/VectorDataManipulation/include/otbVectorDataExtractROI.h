@@ -24,7 +24,6 @@
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbRemoteSensingRegion.h"
 #include "itkMacro.h"
-#include "itkPreOrderTreeIterator.h"
 
 namespace otb
 {
@@ -89,9 +88,9 @@ public:
 
   typedef itk::Point<typename VertexType::CoordRepType, IndexType::IndexDimension> ProjPointType;
 
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> InputTreeIteratorType;
-  typedef typename VectorDataType::DataTreeType::TreeNodeType              InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType                  ChildrenListType;
+  //typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> InputTreeIteratorType;
+  typedef typename VectorDataType::TreeNodeType              InternalTreeNodeType;
+  typedef typename VectorDataType::ChildrenListType          ChildrenListType;
 
   /** Method to Set/Get the Region of interest*/
   void SetRegion(const RegionType& region)

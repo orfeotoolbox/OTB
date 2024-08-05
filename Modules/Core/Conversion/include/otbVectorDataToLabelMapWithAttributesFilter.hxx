@@ -236,7 +236,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>::GenerateD
     {
 
       InputVectorDataConstPointer input     = this->GetInput(idx);
-      InternalTreeNodeType*       inputRoot = const_cast<InternalTreeNodeType*>(input->GetDataTree()->GetRoot());
+      InternalTreeNodeType*       inputRoot = const_cast<InternalTreeNodeType*>(input->GetRoot());
       // Use our own value for the background
       output->SetBackgroundValue(m_BackgroundValue);
       // Set the value of the first label

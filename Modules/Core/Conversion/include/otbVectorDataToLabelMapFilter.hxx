@@ -199,7 +199,7 @@ void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::GenerateData()
     {
 
       InputVectorDataConstPointer input     = this->GetInput(idx);
-      InternalTreeNodeType*       inputRoot = const_cast<InternalTreeNodeType*>(input->GetDataTree()->GetRoot());
+      InternalTreeNodeType*       inputRoot = const_cast<InternalTreeNodeType*>(input->GetRoot());
       // Use our own value for the background
       output->SetBackgroundValue(itk::NumericTraits<OutputLabelMapPixelType>::max());
       // Set the value of the first label

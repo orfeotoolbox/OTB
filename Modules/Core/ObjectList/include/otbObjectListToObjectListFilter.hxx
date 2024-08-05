@@ -86,10 +86,10 @@ void ObjectListToObjectListFilter<TInputList, TOutputList>::GenerateData(void)
 
   // Initializing object per thread
   OutputListPointer defaultList;
-  this->m_ObjectListPerThread = OutputListForThreadType(this->GetNumberOfThreads(), defaultList);
+  this->m_ObjectListPerThread = OutputListForThreadType(this->GetNumberOfWorkUnits(), defaultList);
 
   // Setting up multithreader
-  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
 
   // multithread the execution

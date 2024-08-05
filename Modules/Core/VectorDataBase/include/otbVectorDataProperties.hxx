@@ -75,7 +75,7 @@ void VectorDataProperties<TVectorData>::ComputeBoundingRegion()
   m_BoundingRegion.SetSize(size);
 
   /** Compute the bounding region*/
-  InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(m_VectorDataObject->GetDataTree()->GetRoot());
+  InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(m_VectorDataObject->GetRoot());
   ProcessNode(inputRoot);
 }
 

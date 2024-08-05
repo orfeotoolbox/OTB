@@ -105,7 +105,7 @@ void VectorDataToRandomLineGenerator<TVectorData>::GenerateData()
   this->GetOutput()->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
 
   // Retrieving root node
-  typename DataNodeType::Pointer root = this->GetOutput()->GetDataTree()->GetRoot()->Get();
+  typename DataNodeType::Pointer root = this->GetOutput()->GetRoot()->Get();
   // Create the document node
   typename DataNodeType::Pointer document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);

@@ -290,24 +290,16 @@ void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::GenerateDa
   // Instantiate the transform
   this->InstantiateTransform();
 
-  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
-  OutputDataTreePointerType                                  tree = outputPtr->GetDataTree();
-
-  // Get the input tree root
-  InputInternalTreeNodeType* inputRoot = const_cast<InputInternalTreeNodeType*>(inputPtr->GetDataTree()->GetRoot());
-
   // Create the output tree root
   typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
-  OutputDataNodePointerType                                  newDataNode = OutputDataNodeType::New();
-  newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
-  newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
-  typename OutputInternalTreeNodeType::Pointer outputRoot = OutputInternalTreeNodeType::New();
-  outputRoot->Set(newDataNode);
-  tree->SetRoot(outputRoot);
+  OutputDataNodePointerType                                  outputRoot = OutputDataNodeType::New();
+  outputRoot->SetNodeType(inputPtr->GetRoot()->GetNodeType());
+  outputRoot->SetNodeId(inputPtr->GetRoot()->GetNodeId());
+  this->GetOutput()->SetRoot(outputRoot);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  this->ProcessNode(inputRoot, outputRoot);
+  this->ProcessNode(inputPtr,inputPtr->GetRoot(), outputPtr->GetRoot());
   chrono.Stop();
   otbMsgDevMacro(<< "VectoDataProjectionFilter: features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }

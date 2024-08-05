@@ -234,7 +234,7 @@ void SFSTexturesImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateDa
     itkExceptionMacro(<< "Spatial Threshold (" << this->GetSpatialThreshold() << ") is lower than Ration Max Consideration Number ("
                       << this->GetRatioMaxConsiderationNumber() << ") what is not allowed.");
   }
-  for (unsigned int i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (unsigned int i = 0; i < this->GetNumberOfWorkUnits(); ++i)
   {
     m_FunctorList.push_back(m_Functor);
   }

@@ -485,7 +485,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
     unsigned int                regionsNumber = 0;
     if (requestedSize[0] * requestedSize[1] != 0)
     {
-      regionsNumber = m_MapSplitterList->GetNthElement(k)->GetNumberOfSplits(requestedRegion, this->GetNumberOfThreads());
+      regionsNumber = m_MapSplitterList->GetNthElement(k)->GetNumberOfSplits(requestedRegion, this->GetNumberOfWorkUnits());
     }
     m_NumberOfSplit[k] = regionsNumber;
     otbMsgDevMacro("map " << k << " will be split into " << regionsNumber << " regions");

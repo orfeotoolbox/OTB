@@ -71,7 +71,7 @@ int otbVectorDataFileWriter(int itkNotUsed(argc), char* argv[])
   l->AddVertex(p3);
   line->SetLine(l);
 
-  DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
+  DataNodeType::Pointer root = data->GetRoot()->Get();
 
   data->GetDataTree()->Add(document, root);
   data->GetDataTree()->Add(folder1, document);

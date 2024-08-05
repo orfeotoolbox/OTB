@@ -166,7 +166,7 @@ void PersistentStatisticsMosaicFilter<TInputImage, TOutputImage, TInternalValueT
   Superclass::GenerateOutputInformation();
 
   // Prepare threads result
-  const unsigned int numberOfThreads = this->GetNumberOfThreads();
+  const unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
   const unsigned int nBands          = this->GetNumberOfBands();
   const unsigned int nbImages        = this->GetNumberOfInputImages();
 

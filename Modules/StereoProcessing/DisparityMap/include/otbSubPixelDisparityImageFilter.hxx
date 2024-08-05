@@ -503,7 +503,7 @@ void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityIma
   outHDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumHorizontalDisparity) / static_cast<DisparityPixelType>(this->m_Step));
   outVDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumVerticalDisparity) / static_cast<DisparityPixelType>(this->m_Step));
 
-  m_WrongExtrema.resize(this->GetNumberOfThreads());
+  m_WrongExtrema.resize(this->GetNumberOfWorkUnits());
 }
 
 template <class TInputImage, class TOutputMetricImage, class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>

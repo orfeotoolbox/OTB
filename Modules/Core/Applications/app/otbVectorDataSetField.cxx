@@ -84,13 +84,12 @@ private:
   {
     m_InputData = GetParameterVectorData("in");
 
-    typedef VectorDataType::DataTreeType            DataTreeType;
-    typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
-    TreeIteratorType                                it(m_InputData->GetDataTree());
+    std::pair<VectorDataType::VertexIterator,VectorDataType::VertexIterator> itPair = m_InputData->GetIteratorPair();
+    auto currentit = itPair.first;
 
-    for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    for (; currentit != itPair.second; ++currentit)
     {
-      it.Get()->SetFieldAsString(GetParameterAsString("fn"), GetParameterAsString("fv"));
+      m_InputData->Get(currentit)->SetFieldAsString(GetParameterAsString("fn"), GetParameterAsString("fv"));
     }
 
     SetParameterOutputVectorData("out", m_InputData);

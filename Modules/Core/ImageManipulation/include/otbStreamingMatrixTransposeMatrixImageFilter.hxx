@@ -149,7 +149,7 @@ void PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>::Rese
 
   m_NumberOfComponents1        = inputPtr1->GetNumberOfComponentsPerPixel();
   m_NumberOfComponents2        = inputPtr2->GetNumberOfComponentsPerPixel();
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
 
   if (m_UsePadFirstInput == true)
   {
@@ -173,7 +173,7 @@ void PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>::Rese
 template <class TInputImage, class TInputImage2>
 void PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>::Synthetize()
 {
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
   MatrixType   resultMatrix;
   resultMatrix.SetSize(m_NumberOfComponents1, m_NumberOfComponents2);
   resultMatrix.Fill(itk::NumericTraits<RealType>::Zero);

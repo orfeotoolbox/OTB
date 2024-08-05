@@ -72,8 +72,8 @@ PersistentStatisticsImageFilter<TInputImage>
   this->GetSumOutput()->Set(itk::NumericTraits<RealType>::Zero);
 
   // Initiate the infinite ignored pixel counters
-  m_IgnoredInfinitePixelCount = std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
-  m_IgnoredUserPixelCount     = std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
+  m_IgnoredInfinitePixelCount = std::vector<unsigned int>(this->GetNumberOfWorkUnits(), 0);
+  m_IgnoredUserPixelCount     = std::vector<unsigned int>(this->GetNumberOfWorkUnits(), 0);
 
   this->Reset();
 }
@@ -208,7 +208,7 @@ void PersistentStatisticsImageFilter<TInputImage>::Synthetize()
   long     count;
   RealType sumOfSquares;
 
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   PixelType minimum;
   PixelType maximum;
@@ -268,7 +268,7 @@ void PersistentStatisticsImageFilter<TInputImage>::Synthetize()
 template <class TInputImage>
 void PersistentStatisticsImageFilter<TInputImage>::Reset()
 {
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   // Resize the thread temporaries
   m_Count.SetSize(numberOfThreads);
@@ -289,7 +289,7 @@ void PersistentStatisticsImageFilter<TInputImage>::Reset()
 
   if (m_IgnoreUserDefinedValue)
   {
-    m_IgnoredUserPixelCount = std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
+    m_IgnoredUserPixelCount = std::vector<unsigned int>(this->GetNumberOfWorkUnits(), 0);
   }
 }
 

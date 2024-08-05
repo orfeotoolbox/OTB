@@ -49,7 +49,7 @@ void UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TF
 {
   Superclass::BeforeThreadedGenerateData();
 
-  for (itk::ThreadIdType i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (itk::ThreadIdType i = 0; i < this->GetNumberOfWorkUnits(); ++i)
   {
     m_FunctorList.push_back(m_Functor);
   }

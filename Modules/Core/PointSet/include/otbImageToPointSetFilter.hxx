@@ -166,13 +166,13 @@ void ImageToPointSetFilter<TInputImage, TOutputPointSet>::GenerateData(void)
 
     // Initializing object per thread
     typename PointsContainerType::Pointer defaultPointsContainer = PointsContainerType::New();
-    this->m_PointsContainerPerThread                             = OutputPointsContainerForThreadType(this->GetNumberOfThreads(), defaultPointsContainer);
+    this->m_PointsContainerPerThread                             = OutputPointsContainerForThreadType(this->GetNumberOfWorkUnits(), defaultPointsContainer);
 
     typename PointDataContainerType::Pointer defaultPointDataContainer = PointDataContainerType::New();
-    this->m_PointDataContainerPerThread = OutputPointDataContainerForThreadType(this->GetNumberOfThreads(), defaultPointDataContainer);
+    this->m_PointDataContainerPerThread = OutputPointDataContainerForThreadType(this->GetNumberOfWorkUnits(), defaultPointDataContainer);
 
     // Setting up multithreader
-    this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+    this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfWorkUnits());
     this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
 
     // multithread the execution

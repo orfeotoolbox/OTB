@@ -77,11 +77,11 @@ template <class TInputImage, class TOutputImage>
 void LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
 {
   // init the temp images - one per thread
-  m_TemporaryImages.resize(this->GetNumberOfThreads());
+  m_TemporaryImages.resize(this->GetNumberOfWorkUnits());
   // Clear previous adjacency map
-  m_TemporaryAdjacencyMaps.resize(this->GetNumberOfThreads());
+  m_TemporaryAdjacencyMaps.resize(this->GetNumberOfWorkUnits());
 
-  for (unsigned int i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (unsigned int i = 0; i < this->GetNumberOfWorkUnits(); ++i)
   {
     if (i == 0)
     {
@@ -306,7 +306,7 @@ void LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>::AfterTh
 
   // merge the lines from the temporary images in the output image
   // don't use the first image - that's the output image
-  for (unsigned int i = 1; i < this->GetNumberOfThreads(); ++i)
+  for (unsigned int i = 1; i < this->GetNumberOfWorkUnits(); ++i)
   {
     typedef typename OutputImageType::LabelObjectVectorType LabelObjectVectorType;
     const LabelObjectVectorType&                            labelObjectContainer = m_TemporaryImages[i]->GetLabelObjects();
@@ -347,7 +347,7 @@ void LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>::AfterTh
   AdjacencyMapType adjMap = m_TemporaryAdjacencyMaps[0];
 
   // For each remaining thread
-  for (itk::ThreadIdType threadId = 1; threadId < this->GetNumberOfThreads(); ++threadId)
+  for (itk::ThreadIdType threadId = 1; threadId < this->GetNumberOfWorkUnits(); ++threadId)
   {
     // For each label in the thread adjacency map
     for (typename AdjacencyMapType::const_iterator mit = m_TemporaryAdjacencyMaps[threadId].begin(); mit != m_TemporaryAdjacencyMaps[threadId].end(); ++mit)

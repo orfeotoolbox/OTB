@@ -146,7 +146,7 @@ void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::BeforeThreadedGen
 {
 
   typename std::vector<FunctorPointer>::iterator itFunctor;
-  unsigned int                                   nbThreads = this->GetNumberOfThreads();
+  unsigned int                                   nbThreads = this->GetNumberOfWorkUnits();
   unsigned int                                   thread_index;
   std::ostringstream                             varName;
 
