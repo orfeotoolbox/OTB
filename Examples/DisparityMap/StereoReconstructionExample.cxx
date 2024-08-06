@@ -49,11 +49,7 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkUnaryFunctorImageFilter.h"
 
-#if ITK_VERSION_MAJOR < 5
-#include "itkVectorCastImageFilter.h"
-#else
 #include "otbCastImageFilter.h"
-#endif
 
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
@@ -99,11 +95,7 @@ int main(int argc, char* argv[])
   using DisplacementType      = itk::Vector<double, 2>;
   using DisplacementFieldType = otb::Image<DisplacementType>;
 
-#if ITK_VERSION_MAJOR < 5
-  using DisplacementFieldCastFilterType = itk::VectorCastImageFilter<FloatVectorImageType, DisplacementFieldType>;
-#else
   using DisplacementFieldCastFilterType = otb::CastImageFilter<FloatVectorImageType, DisplacementFieldType>;
-#endif
 
   using WarpFilterType = otb::StreamingWarpImageFilter<FloatImageType, FloatImageType, DisplacementFieldType>;
 

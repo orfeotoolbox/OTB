@@ -29,7 +29,7 @@
 #include "otbConcatenateVectorImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbImageToVectorImageCastFilter.h"
-#include "itkVectorCastImageFilter.h"
+#include "itkCastImageFilter.h"
 
 
 namespace otb
@@ -56,7 +56,7 @@ public:
   typedef itk::Vector<double, 2> DisplacementType;
   typedef otb::Image<DisplacementType> DisplacementFieldType;
 
-  typedef itk::VectorCastImageFilter<FloatVectorImageType, DisplacementFieldType> DisplacementFieldCastFilterType;
+  typedef itk::CastImageFilter<FloatVectorImageType, DisplacementFieldType> DisplacementFieldCastFilterType;
 
 
   typedef otb::StreamingWarpImageFilter<FloatVectorImageType, FloatVectorImageType, DisplacementFieldType> WarpFilterType;

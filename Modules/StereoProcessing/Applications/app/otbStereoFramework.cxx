@@ -37,7 +37,7 @@
 #include "otbImageToNoDataMaskFilter.h"
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkVectorCastImageFilter.h"
+#include "itkCastImageFilter.h"
 #include "itkInverseDisplacementFieldImageFilter.h"
 
 #include "itkRescaleIntensityImageFilter.h"
@@ -90,7 +90,7 @@ public:
   typedef itk::Vector<float, 2> DisplacementType;
   typedef otb::Image<DisplacementType> DisplacementFieldType;
 
-  typedef itk::VectorCastImageFilter<FloatVectorImageType, DisplacementFieldType> DisplacementFieldCastFilterType;
+  typedef itk::CastImageFilter<FloatVectorImageType, DisplacementFieldType> DisplacementFieldCastFilterType;
 
   typedef itk::InverseDisplacementFieldImageFilter<DisplacementFieldType, DisplacementFieldType> InverseDisplacementFieldFilterType;
 
