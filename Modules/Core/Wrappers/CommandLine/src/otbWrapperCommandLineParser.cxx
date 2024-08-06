@@ -149,7 +149,7 @@ CommandLineParser::ParseResultType CommandLineParser::GetPaths(std::vector<std::
 
   if (tempModPath.size() > 0)
   {
-    std::vector<itksys::String> pathAttribut = itksys::SystemTools::SplitString(tempModPath, ' ', false);
+    std::vector<std::string> pathAttribut = itksys::SystemTools::SplitString(tempModPath, ' ', false);
 
 
     // Remove " " string element
@@ -352,7 +352,7 @@ std::vector<std::string> CommandLineParser::GetAttribut(const std::string& key, 
   // Only if the key has values associated
   if (tempModKey.size() > 0)
   {
-    std::vector<itksys::String> spaceSplit = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()), ' ', false);
+    std::vector<std::string> spaceSplit = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()), ' ', false);
 
     // Remove " " string element
     for (unsigned int i = 0; i < spaceSplit.size(); i++)

@@ -189,7 +189,7 @@ private:
   VectorDataToLabelMapFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  void ProcessNode(InternalTreeNodeType* source);
+  void ProcessNode(InputVectorDataType* inputVdata,DataNodePointerType source);
 
   /** Current label value incremented after the vectorization of a layer*/
   LabelType m_lab;

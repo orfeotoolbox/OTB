@@ -67,6 +67,8 @@ public:
 
   /** Image type information*/
   typedef TVectorData                               VectorDataType;
+  typedef typename VectorDataType::ConstPointer     VectorDataConstPointerType;
+  typedef typename VectorDataType::Pointer          VectorDataPointerType;
   typedef typename VectorDataType::DataNodeType     DataNodeType;
   typedef typename DataNodeType::Pointer            DataNodePointerType;
   typedef typename VectorDataType::DataTreeType     DataTreeType;
@@ -130,7 +132,7 @@ protected:
   /** Method to check if the line Bounding Box ha ve a non-null intersection with the ROI*/
   virtual bool IsLineIntersectionNotNull(LinePointerType line);
 
-  virtual void ProcessNode(InternalTreeNodeType* source, InternalTreeNodeType* destination);
+  virtual void ProcessNode(VectorDataConstPointerType inputVdata, DataNodePointerType source, VectorDataPointerType outputVdata, DataNodePointerType destination);
   using Superclass::ProcessNode;
 
 private:

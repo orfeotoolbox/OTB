@@ -79,7 +79,7 @@ public:
   /** VectorData typedefs*/
   typedef TVectorData                           VectorDataType;
   typedef typename VectorDataType::DataTreeType DataTreeType;
-  typedef typename DataTreeType::TreeNodeType   InternalTreeNodeType;
+  typedef typename VectorDataType::TreeNodeType   InternalTreeNodeType;
   typedef typename DataTreeType::Pointer        DataTreePointerType;
   typedef typename DataTreeType::ConstPointer   DataTreeConstPointerType;
 

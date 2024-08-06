@@ -156,7 +156,7 @@ public:
   /* Set number of threads for Deformation field generator*/
   void SetDisplacementFilterNumberOfThreads(unsigned int nbThread)
   {
-    m_DisplacementFilter->SetNumberOfThreads(nbThread);
+    m_DisplacementFilter->SetNumberOfWorkUnits(nbThread);
   }
 
   /** Override itk::ProcessObject method to let the internal filter do the propagation */

@@ -85,41 +85,30 @@ void VectorDataExtractROI<TVectorData>::GenerateData(void)
   otbMsgDevMacro(<< "ROI: " << this->m_ROI);
   otbMsgDevMacro(<< "GeoROI: " << this->m_GeoROI);
 
-  // Retrieve the output tree
-  typename VectorDataType::DataTreePointerType tree = outputPtr->GetDataTree();
-
-  // Get the input tree root
-  InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(inputPtr->GetRoot());
-
   // Create the output tree root
-  DataNodePointerType newDataNode = DataNodeType::New();
-  newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
-  newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
-
-  typename InternalTreeNodeType::Pointer outputRoot = InternalTreeNodeType::New();
-  outputRoot->Set(newDataNode);
-  tree->SetRoot(outputRoot);
+  DataNodePointerType outputRoot = DataNodeType::New();
+  outputRoot->SetNodeType(inputPtr->GetRoot()->GetNodeType());
+  outputRoot->SetNodeId(inputPtr->GetRoot()->GetNodeId());
+  outputPtr->SetRoot(outputRoot);
 
   m_Kept = 0;
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  ProcessNode(inputRoot, outputRoot);
+  ProcessNode(inputPtr,inputPtr->GetRoot(),outputPtr,outputRoot);
   chrono.Stop();
   otbMsgDevMacro(<< "VectorDataExtractROI: " << m_Kept << " features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 } /*End GenerateData()*/
 
 template <class TVectorData>
-void VectorDataExtractROI<TVectorData>::ProcessNode(InternalTreeNodeType* source, InternalTreeNodeType* destination)
+void VectorDataExtractROI<TVectorData>::ProcessNode(VectorDataConstPointerType inputVdata, DataNodePointerType source, VectorDataPointerType outputVdata, DataNodePointerType destination)
 {
   // Get the children list from the input node
-  ChildrenListType children = source->GetChildrenList();
+  ChildrenListType children = inputVdata->GetChildrenList(source);
   // For each child
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
   {
-    typename InternalTreeNodeType::Pointer newContainer;
-
-    DataNodePointerType dataNode    = (*it)->Get();
+    DataNodePointerType dataNode    = (*it);
     DataNodePointerType newDataNode = DataNodeType::New();
     newDataNode->SetNodeType(dataNode->GetNodeType());
     newDataNode->SetNodeId(dataNode->GetNodeId());
@@ -129,29 +118,23 @@ void VectorDataExtractROI<TVectorData>::ProcessNode(InternalTreeNodeType* source
     {
     case ROOT:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
       ++m_Kept;
       break;
     }
     case DOCUMENT:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      outputVdata->Add(newDataNode,destination);
       ++m_Kept;
-      ProcessNode((*it), newContainer);
+      ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
       break;
     }
     case FOLDER:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      outputVdata->Add(newDataNode,destination);
       ++m_Kept;
-      ProcessNode((*it), newContainer);
+      ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
       break;
     }
     case FEATURE_POINT:
@@ -159,9 +142,7 @@ void VectorDataExtractROI<TVectorData>::ProcessNode(InternalTreeNodeType* source
       if (m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
       {
         newDataNode->SetPoint(dataNode->GetPoint());
-        newContainer = InternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
+        outputVdata->Add(newDataNode,destination);
         ++m_Kept;
       }
       break;
@@ -171,9 +152,7 @@ void VectorDataExtractROI<TVectorData>::ProcessNode(InternalTreeNodeType* source
       if (this->IsLineIntersectionNotNull(dataNode->GetLine()))
       {
         newDataNode->SetLine(dataNode->GetLine());
-        newContainer = InternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
+        outputVdata->Add(newDataNode,destination);
         ++m_Kept;
       }
       break;
@@ -184,47 +163,37 @@ void VectorDataExtractROI<TVectorData>::ProcessNode(InternalTreeNodeType* source
       {
         newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
         newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
-        newContainer = InternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
+        outputVdata->Add(newDataNode,destination);
         ++m_Kept;
       }
       break;
     }
     case FEATURE_MULTIPOINT:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      outputVdata->Add(newDataNode,destination);
       ++m_Kept;
-      ProcessNode((*it), newContainer);
+      ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
       break;
     }
     case FEATURE_MULTILINE:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      outputVdata->Add(newDataNode,destination);
       ++m_Kept;
-      ProcessNode((*it), newContainer);
+      ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
       break;
     }
     case FEATURE_MULTIPOLYGON:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      outputVdata->Add(newDataNode,destination);
       ++m_Kept;
-      ProcessNode((*it), newContainer);
+      ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
       break;
     }
     case FEATURE_COLLECTION:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      outputVdata->Add(newDataNode,destination);
       ++m_Kept;
-      ProcessNode((*it), newContainer);
+      ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
       break;
     }
     }

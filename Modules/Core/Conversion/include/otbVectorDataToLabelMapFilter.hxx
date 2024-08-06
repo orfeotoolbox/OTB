@@ -199,7 +199,6 @@ void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::GenerateData()
     {
 
       InputVectorDataConstPointer input     = this->GetInput(idx);
-      InternalTreeNodeType*       inputRoot = const_cast<InternalTreeNodeType*>(input->GetRoot());
       // Use our own value for the background
       output->SetBackgroundValue(itk::NumericTraits<OutputLabelMapPixelType>::max());
       // Set the value of the first label
@@ -208,17 +207,17 @@ void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::GenerateData()
 
       // The projection information
       output->SetMetaDataDictionary(input->GetMetaDataDictionary());
-      ProcessNode(inputRoot);
+      ProcessNode(input,input->GetRoot());
     }
   }
 }
 
 template <class TVectorData, class TLabelMap>
-void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::ProcessNode(InternalTreeNodeType* source)
+void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::ProcessNode(InputVectorDataType inputVd,DataNodePointerType source)
 {
 
   // Get the children list from the input node
-  ChildrenListType children = source->GetChildrenList();
+  ChildrenListType children = inputVd->GetChildrenList(source);
 
   // For each child
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
@@ -230,17 +229,17 @@ void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::ProcessNode(InternalTre
     {
     case otb::ROOT:
     {
-      ProcessNode((*it));
+      ProcessNode(inputVd,(*it));
       break;
     }
     case otb::DOCUMENT:
     {
-      ProcessNode((*it));
+      ProcessNode(inputVd,(*it));
       break;
     }
     case otb::FOLDER:
     {
-      ProcessNode((*it));
+      ProcessNode(inputVd,(*it));
       break;
     }
     case FEATURE_POINT:

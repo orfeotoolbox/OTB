@@ -101,7 +101,7 @@ protected:
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void ProcessNode(InternalTreeNodeType* source);
+  void ProcessNode(VectorDataType* inputVdata,DataNodePointerType source);
   bool IsBoundingRegionNull();
 
 private:

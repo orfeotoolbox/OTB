@@ -86,11 +86,11 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::Generate
   newDataNode->SetNodeType(inputRoot->GetNodeType());
   newDataNode->SetNodeId(inputRoot->GetNodeId());
   OutputDataNodePointerType outputRoot = OutputDataNodeType::New();
-  inputPtr->SetRoot(outputRoot);
+  outputPtr->SetRoot(outputRoot);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  this->ProcessNode(inputPtr,inputRoot, outputRoot);
+  this->ProcessNode(inputPtr,inputRoot,outputPtr,outputRoot);
   chrono.Stop();
   otbMsgDevMacro(<< "VectoDataProjectionFilter: features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }
@@ -98,6 +98,7 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::Generate
 template <class TInputVectorData, class TOutputVectorData>
 void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::ProcessNode(InputVectorDataPointer inputVdata,
                                                                                     InputDataNodePointerType source,
+                                                                                    OutputVectorDataPointer outputVdata,
                                                                                     OutputDataNodePointerType destination) const
 {
   // Get the children list from the input node
@@ -118,63 +119,63 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::ProcessN
     {
     case ROOT:
     {
-      inputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it), newDataNode);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case DOCUMENT:
     {
-      inputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it), newDataNode);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FOLDER:
     {
-      inputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it), newDataNode);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FEATURE_POINT:
     {
       newDataNode->SetPoint(this->ProcessPoint(source->GetPoint()));
-      inputVdata->Add(newDataNode,destination);
+      outputVdata->Add(newDataNode,destination);
       break;
     }
     case FEATURE_LINE:
     {
       newDataNode->SetLine(this->ProcessLine(source->GetLine()));
-      inputVdata->Add(newDataNode,destination);
+      outputVdata->Add(newDataNode,destination);
       break;
     }
     case FEATURE_POLYGON:
     {
       newDataNode->SetPolygonExteriorRing(this->ProcessPolygon(source->GetPolygonExteriorRing()));
       newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList(source->GetPolygonInteriorRings()));
-      inputVdata->Add(newDataNode,destination);
+      outputVdata->Add(newDataNode,destination);
       break;
     }
     case FEATURE_MULTIPOINT:
     {
-      inputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it), newDataNode);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FEATURE_MULTILINE:
     {
-      inputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it), newDataNode);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FEATURE_MULTIPOLYGON:
     {
-      inputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it), newDataNode);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FEATURE_COLLECTION:
     {
-      inputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it), newDataNode);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     }

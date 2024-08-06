@@ -121,7 +121,7 @@ protected:
   void GenerateData(void) override;
 
   /** Go through the vector data tree and process the nodes */
-  virtual void ProcessNode(InputVectorDataPointer inputVdata,InputDataNodePointerType source, OutputDataNodePointerType destination) const;
+  virtual void ProcessNode(InputVectorDataPointer inputVdata,InputDataNodePointerType source, OutputVectorDataPointer outputVdata, OutputDataNodePointerType destination) const;
 
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

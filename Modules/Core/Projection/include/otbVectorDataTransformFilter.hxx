@@ -154,7 +154,7 @@ void VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::GenerateDat
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  this->ProcessNode(inputPtr->GetRoot(), outputPtr->GetRoot());
+  this->ProcessNode(inputPtr,inputPtr->GetRoot(),outputPtr,outputPtr->GetRoot());
   chrono.Stop();
   otbMsgDevMacro(<< "VectorDataTransformFilter: features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }

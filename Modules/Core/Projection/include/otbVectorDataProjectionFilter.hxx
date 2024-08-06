@@ -295,11 +295,11 @@ void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::GenerateDa
   OutputDataNodePointerType                                  outputRoot = OutputDataNodeType::New();
   outputRoot->SetNodeType(inputPtr->GetRoot()->GetNodeType());
   outputRoot->SetNodeId(inputPtr->GetRoot()->GetNodeId());
-  this->GetOutput()->SetRoot(outputRoot);
+  outputPtr->SetRoot(outputRoot);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  this->ProcessNode(inputPtr,inputPtr->GetRoot(), outputPtr->GetRoot());
+  this->ProcessNode(inputPtr,inputPtr->GetRoot(),outputPtr,outputPtr->GetRoot());
   chrono.Stop();
   otbMsgDevMacro(<< "VectoDataProjectionFilter: features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }

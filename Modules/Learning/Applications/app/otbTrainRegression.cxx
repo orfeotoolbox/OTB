@@ -227,7 +227,7 @@ private:
       // Avoid commented lines or too short ones
       if (!line.empty() && line[0] != '#')
       {
-        std::vector<itksys::String> words = itksys::SystemTools::SplitString(line, sep);
+        std::vector<std::string> words = itksys::SystemTools::SplitString(line, sep);
         if (nbCols == 0)
         {
           // detect separator and feature size

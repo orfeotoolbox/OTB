@@ -87,7 +87,7 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
 
   this->GetOutput()->SetRoot(this->GetInput(0)->GetRoot());
 
-  typename DataNodeType::Pointer outputDocument = this->GetOutput()->GetChildrenList(this->GetInput(0)->GetRoot())[0];
+  typename DataNodeType::Pointer outputDocument = this->GetOutput()->GetChildrenList(this->GetInput(0)->GetRoot()).front();
 
   // Adding the layer to the data tree
   //   this->GetOutput()->GetDataTree()->Add(m_Document, outputRoot);
@@ -97,78 +97,78 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
   for (unsigned int idx = 1; idx < this->GetNumberOfInputs(); ++idx)
   {
     // Add the current vectordata
-    ProcessNode(this->GetInput(idx)->GetRoot(), outputDocument);
+    ProcessNode(this->GetInput(idx),this->GetInput(idx)->GetRoot(),this->GetOutput(), outputDocument);
   }
 }
 
 
 template <class TVectorData>
-void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(DataNodeType* source, DataNodeType* outputDocument)
+void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(const VectorDataType* inputVd,DataNodeType* source, VectorDataType* outputVd,DataNodeType* outputDocument)
 {
   if (source == nullptr)
     return;
 
 
   // Get the children list from the input node
-  ChildrenListType children = source->GetChildrenList();
+  ChildrenListType children = inputVd->GetChildrenList(source);
 
   // For each child
   typename ChildrenListType::iterator it;
   for (it = children.begin(); it != children.end(); ++it)
   {
     // get the data node
-    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType dataNode = (*it);
 
     switch (dataNode->GetNodeType())
     {
     case ROOT:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,(*it),outputVd,outputDocument);
       break;
     }
     case DOCUMENT:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,(*it),outputVd,outputDocument);
       break;
     }
     case FOLDER:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,(*it),outputVd,outputDocument);
       break;
     }
     case FEATURE_POINT:
     {
-      this->GetOutput()->Add(dataNode, outputDocument);
+      outputVd->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_LINE:
     {
-      this->GetOutput()->Add(dataNode, outputDocument);
+      outputVd->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_POLYGON:
     {
-      this->GetOutput()->Add(dataNode, outputDocument);
+      outputVd->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_MULTIPOINT:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,(*it),outputVd,outputDocument);
       break;
     }
     case FEATURE_MULTILINE:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,(*it),outputVd,outputDocument);
       break;
     }
     case FEATURE_MULTIPOLYGON:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,(*it),outputVd,outputDocument);
       break;
     }
     case FEATURE_COLLECTION:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,(*it),outputVd,outputDocument);
       break;
     }
     }

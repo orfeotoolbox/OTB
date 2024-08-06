@@ -88,7 +88,7 @@ protected:
   void GenerateData(void) override;
 
   /** Recursive method to visit efficiently the vectordata*/
-  void ProcessNode(DataNodeType* source, DataNodeType* outputDocument);
+  void ProcessNode(const VectorDataType* inputVd, DataNodeType* source, VectorDataType* outputVd, DataNodeType* outputDocument);
 
 private:
   ConcatenateVectorDataFilter(const Self&) = delete;
