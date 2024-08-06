@@ -58,7 +58,7 @@ public:
   /** Some typedefs. */
   typedef TInputVectorData                        InputVectorDataType;
   typedef TOutputVectorData                       OutputVectorDataType;
-  typedef typename TInputVectorData::Pointer      InputVectorDataPointer;
+  typedef typename TInputVectorData::ConstPointer      InputVectorDataPointer;
   typedef typename TOutputVectorData::Pointer     OutputVectorDataPointer;
 
   typedef typename InputVectorDataType::DataNodeType        InputDataNodeType;
