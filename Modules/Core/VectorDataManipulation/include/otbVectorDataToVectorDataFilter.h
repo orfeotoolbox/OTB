@@ -58,13 +58,13 @@ public:
   /** Some typedefs. */
   typedef TInputVectorData                        InputVectorDataType;
   typedef TOutputVectorData                       OutputVectorDataType;
-  typedef typename TInputVectorData::Pointer InputVectorDataPointer;
+  typedef typename TInputVectorData::Pointer      InputVectorDataPointer;
   typedef typename TOutputVectorData::Pointer     OutputVectorDataPointer;
 
-  typedef typename InputVectorDataType::DataNodeType                InputDataNodeType;
+  typedef typename InputVectorDataType::DataNodeType        InputDataNodeType;
   typedef typename itk::SmartPointer<InputDataNodeType>     InputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataNodeType               OutputDataNodeType;
-  typedef typename itk::SmartPointer<OutputDataNodeType>      OutputDataNodePointerType;
+  typedef typename OutputVectorDataType::DataNodeType       OutputDataNodeType;
+  typedef typename itk::SmartPointer<OutputDataNodeType>    OutputDataNodePointerType;
   typedef typename InputVectorDataType::TreeNodeType  InputInternalTreeNodeType;
   typedef typename OutputVectorDataType::TreeNodeType OutputInternalTreeNodeType;
 

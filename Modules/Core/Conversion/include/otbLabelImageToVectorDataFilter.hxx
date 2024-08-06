@@ -256,12 +256,10 @@ void LabelImageToVectorDataFilter<TInputImage, TPrecision>::GenerateData(void)
   // Adding the layer to the data tree
   VectorDataPointerType data = dynamic_cast<VectorDataType*>(this->GetOutput());
   data->SetProjectionRef(this->GetInput()->GetProjectionRef());
-
-  DataNodePointerType root = data->GetRoot();
-  data->Add(document, root);
+  data->Add(document, data->GetRoot());
 
   OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
-  OGRConversion->ConvertOGRLayerToDataTreeNode(data,root,&outputLayer.ogr(), document);
+  OGRConversion->ConvertOGRLayerToDataTreeNode(data,&outputLayer.ogr(), document);
 
   // Clear memory
   GDALClose(dataset);

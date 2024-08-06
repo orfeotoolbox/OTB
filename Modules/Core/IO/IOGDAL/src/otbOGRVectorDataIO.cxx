@@ -166,7 +166,7 @@ void OGRVectorDataIO::Read(itk::DataObject* datag)
     /** IO class helper to convert ogr layer*/
 
     OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
-    OGRConversion->ConvertOGRLayerToDataTreeNode(layer, document ,data);
+    OGRConversion->ConvertOGRLayerToDataTreeNode(data, layer, document);
 
   } // end For each layer
 

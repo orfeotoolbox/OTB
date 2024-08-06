@@ -71,7 +71,7 @@ public:
   itkTypeMacro(OGRIOHelper, itk::Object);
 
   /** Conversion tools */
-  void ConvertOGRLayerToDataTreeNode(OGRLayer* layer, DataNodePointerType document, VectorDataPointerType dataTree) const;
+  void ConvertOGRLayerToDataTreeNode(VectorDataPointerType vecDataTree,OGRLayer* layer, DataNodePointerType document) const;
 
 
   unsigned int ProcessNodeWrite(VectorDataConstPointerType vdata, DataNodePointerType source, GDALDataset* m_DataSource, OGRGeometryCollection* ogrCollection, OGRLayer* ogrCurrentLayer,
