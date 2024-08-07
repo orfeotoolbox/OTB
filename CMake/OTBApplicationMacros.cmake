@@ -19,102 +19,123 @@
 #
 
 macro(otb_create_application)
-   # parse all arguments ARGN which can be one or multi values args in
-   # vars with name prefixed by "APPLICATION_"
-   cmake_parse_arguments(APPLICATION  "" "NAME;BUILD_PATH;INSTALL_PATH" "SOURCES;INCLUDE_DIRS;LINK_LIBRARIES" ${ARGN} )
+  # parse all arguments ARGN which can be one or multi values args in
+  # vars with name prefixed by "APPLICATION_"
+  cmake_parse_arguments(APPLICATION  "" "NAME;BUILD_PATH;INSTALL_PATH" "SOURCES;INCLUDE_DIRS;LINK_LIBRARIES" ${ARGN} )
 
-   set( APPLICATION_TARGET_NAME otbapp_${APPLICATION_NAME} )
+  set( APPLICATION_TARGET_NAME otbapp_${APPLICATION_NAME} )
 
-   # Build the library as a MODULE (shared lib even if OTB is built statically)
-   include_directories(${APPLICATION_INCLUDE_DIRS})
-   add_library(${APPLICATION_TARGET_NAME} MODULE ${APPLICATION_SOURCES})
-   target_link_libraries(${APPLICATION_TARGET_NAME} ${APPLICATION_LINK_LIBRARIES})
-   if(otb-module)
-     otb_module_target_label(${APPLICATION_TARGET_NAME})
-   endif()
+  # Build the library as a MODULE (shared lib even if OTB is built statically)
+  include_directories(${APPLICATION_INCLUDE_DIRS})
+  add_library(${APPLICATION_TARGET_NAME} MODULE ${APPLICATION_SOURCES})
+  target_link_libraries(${APPLICATION_TARGET_NAME} ${APPLICATION_LINK_LIBRARIES})
+  if(otb-module)
+    otb_module_target_label(${APPLICATION_TARGET_NAME})
+  endif()
 
-   # Setup build output location
-   # Do not output in the standard lib folder where all shared libs goes.
-   # This is to avoid the application factory to look into each and every shared lib
-   # for itkLoad symbol
-   if(otb-module)
-     set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
-   endif()
+  # Setup build output location
+  # Do not output in the standard lib folder where all shared libs goes.
+  # This is to avoid the application factory to look into each and every shared lib
+  # for itkLoad symbol
+  if(otb-module)
+    set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
+  endif()
 
-   # Remove the usual 'lib' prefix to make it clear it is a plugin
-   # and not a shared library to link against
-   set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY PREFIX "")
+  set(__export_name "${${otb-module}-targets}")
 
-   # When called from the OTB build system, use OTB_INSTALL_APP_DIR
-   if (NOT APPLICATION_INSTALL_PATH AND OTB_INSTALL_APP_DIR)
-     set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR})
-   endif()
+  if (OTB_MODULE_${otb-module}_COMPONENT)
+    set(__export_name "${OTB_MODULE_${otb-module}_COMPONENT}Targets")
+  endif()
 
-   if (APPLICATION_INSTALL_PATH)
-     if(otb-module)
-       # use the EXPORT keyword create CMake commands relative to this target
-       # in the appropriate target file
-       install(TARGETS ${APPLICATION_TARGET_NAME}
-               EXPORT ${${otb-module}-targets}
-               LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-               COMPONENT ${${otb-module}_COMPONENT})
-     else()
-       install(TARGETS ${APPLICATION_TARGET_NAME}
-               LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-               COMPONENT Dependencies)
-     endif()
-   else()
-     install(TARGETS ${APPLICATION_TARGET_NAME}
-             LIBRARY DESTINATION lib
-             COMPONENT Dependencies)
-   endif()
+  if (CMAKE_DEBUG)
+    message(STATUS "[CMAKE_DEBUG] __export_name == ${__export_name}")
+  endif()
+  # Remove the usual 'lib' prefix to make it clear it is a plugin
+  # and not a shared library to link against
+  set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY PREFIX "")
 
-   # What is the path to the applications
-   # a MODULE target is always treated as LIBRARY
-   get_target_property(APPLICATION_BINARY_PATH ${APPLICATION_TARGET_NAME} LIBRARY_OUTPUT_DIRECTORY)
+  # When called from the OTB build system, use OTB_INSTALL_APP_DIR
+  if (NOT APPLICATION_INSTALL_PATH AND OTB_INSTALL_APP_DIR)
+    set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR})
+  endif()
 
-   if (NOT APPLICATION_BINARY_PATH)
-     set(APPLICATION_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR})
-   endif()
+  if (APPLICATION_INSTALL_PATH)
+    if(otb-module)
+      # use the EXPORT keyword create CMake commands relative to this target
+      # in the appropriate target file
+      if (OTB_MODULE_${otb-module}_COMPONENT)
+      install(TARGETS ${APPLICATION_TARGET_NAME}
+              EXPORT ${__export_name}
+              LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
+              COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT})
+      else()
+        install(TARGETS ${APPLICATION_TARGET_NAME}
+                EXPORT ${__export_name}
+                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH})
+      endif()
+    else()
+      install(TARGETS ${APPLICATION_TARGET_NAME}
+              LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
+              COMPONENT Dependencies)
+    endif()
+  else()
+    install(TARGETS ${APPLICATION_TARGET_NAME}
+            LIBRARY DESTINATION lib
+            COMPONENT Dependencies)
+  endif()
 
-   if(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-     set(_script_output_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-   else()
-     set(_script_output_dir ${CMAKE_BINARY_DIR}/bin)
-   endif()
-   if(OTB_INSTALL_RUNTIME_DIR)
-     set(_script_install_dir ${OTB_INSTALL_RUNTIME_DIR})
-   else()
-     set(_script_install_dir bin)
-   endif()
-   set(INTERMEDIATE_DIR ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY})
-   set(SCRIPT_EXT "")
-   if(WIN32)
-     set(SCRIPT_EXT ".bat")
-   endif()
+  # What is the path to the applications
+  # a MODULE target is always treated as LIBRARY
+  get_target_property(APPLICATION_BINARY_PATH ${APPLICATION_TARGET_NAME} LIBRARY_OUTPUT_DIRECTORY)
 
-   # ----- Create and install launcher scripts ------
-   foreach(type CLI)
-     string(TOLOWER "${type}" type_lower)
-     set(SCRIPT_NAME otb${type_lower}_${APPLICATION_NAME}${SCRIPT_EXT})
-     otb_write_app_launcher(
-       NAME ${APPLICATION_NAME}
-       OUTPUT ${INTERMEDIATE_DIR}/${SCRIPT_NAME}
-       TYPE ${type})
-     # Copy it next to the application shared lib, and give executable rights
-     file(COPY ${INTERMEDIATE_DIR}/${SCRIPT_NAME}
-          DESTINATION ${_script_output_dir}
-          FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-     # Install a version of this script if we are inside the OTB build
-     install(PROGRAMS ${_script_output_dir}/${SCRIPT_NAME}
-             DESTINATION ${_script_install_dir}
-             COMPONENT ${${otb-module}_COMPONENT})
-   endforeach()
+  if (NOT APPLICATION_BINARY_PATH)
+    set(APPLICATION_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR})
+  endif()
 
-   list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
-   list(REMOVE_DUPLICATES OTB_APPLICATIONS_NAME_LIST)
-   set(OTB_APPLICATIONS_NAME_LIST ${OTB_APPLICATIONS_NAME_LIST}
-       CACHE STRING "List of all applications" FORCE)
+  if(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set(_script_output_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+  else()
+    set(_script_output_dir ${CMAKE_BINARY_DIR}/bin)
+  endif()
+
+  if(OTB_INSTALL_RUNTIME_DIR)
+    set(_script_install_dir ${OTB_INSTALL_RUNTIME_DIR})
+  else()
+    set(_script_install_dir bin)
+  endif()
+
+  set(INTERMEDIATE_DIR ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY})
+  set(SCRIPT_EXT "")
+  if(WIN32)
+    set(SCRIPT_EXT ".bat")
+  endif()
+
+  # ----- Create and install launcher scripts ------
+  foreach(type CLI)
+    string(TOLOWER "${type}" type_lower)
+    set(SCRIPT_NAME otb${type_lower}_${APPLICATION_NAME}${SCRIPT_EXT})
+    otb_write_app_launcher(NAME ${APPLICATION_NAME}
+                           OUTPUT ${INTERMEDIATE_DIR}/${SCRIPT_NAME}
+                           TYPE ${type})
+    # Copy it next to the application shared lib, and give executable rights
+    file(COPY ${INTERMEDIATE_DIR}/${SCRIPT_NAME}
+         DESTINATION ${_script_output_dir}
+         FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+    # Install a version of this script if we are inside the OTB build
+    if (OTB_MODULE_${otb-module}_COMPONENT)
+      install(PROGRAMS ${_script_output_dir}/${SCRIPT_NAME}
+              DESTINATION ${_script_install_dir}
+              COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT})
+    else()
+      install(PROGRAMS ${_script_output_dir}/${SCRIPT_NAME}
+              DESTINATION ${_script_install_dir})
+    endif()
+  endforeach()
+
+  list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
+  list(REMOVE_DUPLICATES OTB_APPLICATIONS_NAME_LIST)
+  set(OTB_APPLICATIONS_NAME_LIST ${OTB_APPLICATIONS_NAME_LIST}
+      CACHE STRING "List of all applications" FORCE)
 endmacro()
 
 macro(otb_test_application)

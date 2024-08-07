@@ -120,36 +120,15 @@ set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 
 get_package_name(${OTB_SOURCE_DIR} ${PROJECT_NAME} OTB_VERSION_STRING2)
 
+include(OTBConstants)
+
 #-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
-if(NOT OTB_INSTALL_RUNTIME_DIR)
-  set(OTB_INSTALL_RUNTIME_DIR bin)
-endif()
-if(NOT OTB_INSTALL_LIBRARY_DIR)
-  set(OTB_INSTALL_LIBRARY_DIR lib)
-endif()
-if(NOT OTB_INSTALL_ARCHIVE_DIR)
-  set(OTB_INSTALL_ARCHIVE_DIR lib)
-endif()
-if(NOT OTB_INSTALL_INCLUDE_DIR)
-  set(OTB_INSTALL_INCLUDE_DIR include/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
-endif()
-if(NOT OTB_INSTALL_APP_DIR)
-  set(OTB_INSTALL_APP_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/applications")
-endif()
+# init all OTB_INSTALL const var
+get_install_const()
 if(NOT OTB_INSTALL_PYTHON_DIR)
   set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python")
-endif()
-if(NOT OTB_INSTALL_DATA_DIR)
-  set(OTB_INSTALL_DATA_DIR "share/otb")
-endif()
-
-if(NOT OTB_INSTALL_DOC_DIR)
-  set(OTB_INSTALL_DOC_DIR "share/doc/otb")
-endif()
-if(NOT OTB_INSTALL_PACKAGE_DIR)
-  set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 endif()
 
 #convert path to native for reconfiguring otbcli.bat.in
@@ -295,7 +274,8 @@ set(TEMP           ${OTB_BINARY_DIR}/Testing/Temporary)
 set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
-include(TestConstants)
+# init all EPSILON_X vars used for unit test
+get_test_const()
 # Location of OTB Example Data.
 set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 
@@ -366,12 +346,15 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/OTBApplicationMacros.cmake
               CMake/OTBModuleAPI.cmake
               CMake/OTBStandaloneModuleMacros.cmake
-              CMake/TestConstants.cmake
+              CMake/OTBConstants.cmake
               CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
               CMake/GenerateExportHeaderCustom.cmake
               CMake/exportheader.cmake.in
               CMake/NamespaceHandler.cmake
+              # both CMake files used for P0 modules
+              CMake/OTBModuleInfo.cmake.in
+              CMake/GenericGroupConfig.cmake.in
         DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
         COMPONENT Core)
 
