@@ -51,11 +51,11 @@ void VectorDataToRightAngleVectorDataFilter<TVectorData>::GenerateData()
   typename DataNodeType::Pointer document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
   // Adding the layer to the data tree
-  this->GetOutput(0)->GetDataTree()->Add(document, root);
+  this->GetOutput(0)->Add(document, root);
   // Create the folder node
   typename DataNodeType::Pointer folder = DataNodeType::New();
   folder->SetNodeType(otb::FOLDER);
-  this->GetOutput(0)->GetDataTree()->Add(folder, document);
+  this->GetOutput(0)->Add(folder, document);
   this->GetOutput(0)->SetProjectionRef(vData->GetProjectionRef());
 
   // Itterate on the vector data
@@ -100,7 +100,7 @@ void VectorDataToRightAngleVectorDataFilter<TVectorData>::GenerateData()
           CurrentGeometry->SetNodeId("FEATURE_POINT");
           CurrentGeometry->SetNodeType(otb::FEATURE_POINT);
           CurrentGeometry->SetPoint(RightAngleCoordinate);
-          this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, folder);
+          this->GetOutput(0)->Add(CurrentGeometry, folder);
         }
       }
 

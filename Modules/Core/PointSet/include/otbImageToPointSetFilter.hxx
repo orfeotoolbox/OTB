@@ -253,15 +253,9 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   unsigned int      total, threadCount;
   itk::ThreadIdType threadId;
 
-#if ITK_VERSION_MAJOR < 5
-  threadId = ((itk::MultiThreader::WorkUnitInfo *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreader::WorkUnitInfo *) (arg))->NumberOfThreads;
-  str = (ThreadStruct *) (((itk::MultiThreader::WorkUnitInfo *) (arg))->UserData);
-#else
-  threadId = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->NumberOfThreads;
+  threadId = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->WorkUnitID;
+  threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->NumberOfWorkUnits;
   str = (ThreadStruct *) (((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->UserData);
-#endif
 
   // execute the actual method with appropriate output region
   // first find out how many pieces extent can be split into.

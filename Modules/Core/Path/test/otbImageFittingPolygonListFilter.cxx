@@ -105,8 +105,8 @@ int otbImageFittingPolygonListFilter(int itkNotUsed(argc), char* argv[])
 
   DataNodeType::Pointer root = data->GetRoot()->Get();
 
-  data->GetDataTree()->Add(document, root);
-  data->GetDataTree()->Add(folder, document);
+  data->Add(document, root);
+  data->Add(folder, document);
 
   typedef PolygonListType::ConstIterator ListIteratorType;
   ListIteratorType                       listIt = fittingPolygon->GetOutput()->Begin();
@@ -116,7 +116,7 @@ int otbImageFittingPolygonListFilter(int itkNotUsed(argc), char* argv[])
     polygon->SetNodeType(otb::FEATURE_POLYGON);
     polygon->SetNodeId("FEATURE_POLYGON");
     polygon->SetPolygonExteriorRing(listIt.Get());
-    data->GetDataTree()->Add(polygon, folder);
+    data->Add(polygon, folder);
     ++listIt;
   }
 

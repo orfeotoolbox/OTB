@@ -83,8 +83,8 @@ int otbLabelObjectMapVectorizer(int argc, char* argv[])
 
   DataNodeType::Pointer root = data->GetRoot()->Get();
 
-  data->GetDataTree()->Add(document, root);
-  data->GetDataTree()->Add(folder1, document);
+  data->Add(document, root);
+  data->Add(folder1, document);
   data->SetProjectionRef(lreader->GetOutput()->GetProjectionRef());
 
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
@@ -101,7 +101,7 @@ int otbLabelObjectMapVectorizer(int argc, char* argv[])
     DataNodeType::Pointer node = DataNodeType::New();
     node->SetNodeType(otb::FEATURE_POLYGON);
     node->SetPolygonExteriorRing(correct_polygon);
-    data->GetDataTree()->Add(node, folder1);
+    data->Add(node, folder1);
   }
   // Else extract all labels
   else
@@ -123,7 +123,7 @@ int otbLabelObjectMapVectorizer(int argc, char* argv[])
         DataNodeType::Pointer node = DataNodeType::New();
         node->SetNodeType(otb::FEATURE_POLYGON);
         node->SetPolygonExteriorRing(correct_polygon);
-        data->GetDataTree()->Add(node, folder1);
+        data->Add(node, folder1);
       }
     }
   }

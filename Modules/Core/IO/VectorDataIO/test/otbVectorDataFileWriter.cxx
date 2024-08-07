@@ -73,11 +73,11 @@ int otbVectorDataFileWriter(int itkNotUsed(argc), char* argv[])
 
   DataNodeType::Pointer root = data->GetRoot()->Get();
 
-  data->GetDataTree()->Add(document, root);
-  data->GetDataTree()->Add(folder1, document);
-  data->GetDataTree()->Add(folder2, document);
-  data->GetDataTree()->Add(folder3, document);
-  data->GetDataTree()->Add(line, folder2);
+  data->Add(document, root);
+  data->Add(folder1, document);
+  data->Add(folder2, document);
+  data->Add(folder3, document);
+  data->Add(line, folder2);
 
   writer->SetFileName(argv[1]);
   writer->SetInput(data);

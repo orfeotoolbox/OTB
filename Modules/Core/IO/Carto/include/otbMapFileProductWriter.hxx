@@ -162,8 +162,8 @@ void MapFileProductWriter<TInputImage>::InitializeVectorData()
   document->SetNodeId("DOCUMENT");
   m_Folder->SetNodeId("FOLDER");
 
-  m_VectorDataIndexTile->GetDataTree()->Add(document, root);
-  m_VectorDataIndexTile->GetDataTree()->Add(m_Folder, document);
+  m_VectorDataIndexTile->Add(document, root);
+  m_VectorDataIndexTile->Add(m_Folder, document);
 }
 
 /**
@@ -449,7 +449,7 @@ void MapFileProductWriter<TInputImage>::AddBBoxToIndexTile(OutputPointType lower
   m_Polygon->SetFieldAsString("LOCATION", oss.str());
 
   // Add the to vectordata
-  m_VectorDataIndexTile->GetDataTree()->Add(m_Polygon, m_Folder);
+  m_VectorDataIndexTile->Add(m_Polygon, m_Folder);
 }
 
 /**

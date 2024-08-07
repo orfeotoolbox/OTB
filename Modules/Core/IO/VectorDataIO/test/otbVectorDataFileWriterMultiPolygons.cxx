@@ -90,12 +90,12 @@ int otbVectorDataFileWriterMultiPolygons(int itkNotUsed(argc), char* argv[])
 
   DataNodeType::Pointer root = data->GetRoot()->Get();
 
-  data->GetDataTree()->Add(document, root);
-  data->GetDataTree()->Add(folder, document);
-  data->GetDataTree()->Add(polygon5, folder);
-  data->GetDataTree()->Add(polygon1, polygon5);
-  data->GetDataTree()->Add(polygon2, polygon5);
-  data->GetDataTree()->Add(polygon3, polygon5);
+  data->Add(document, root);
+  data->Add(folder, document);
+  data->Add(polygon5, folder);
+  data->Add(polygon1, polygon5);
+  data->Add(polygon2, polygon5);
+  data->Add(polygon3, polygon5);
 
   writer->SetFileName(argv[1]);
   writer->SetInput(data);

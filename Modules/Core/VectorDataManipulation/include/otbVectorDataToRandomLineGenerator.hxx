@@ -110,7 +110,7 @@ void VectorDataToRandomLineGenerator<TVectorData>::GenerateData()
   typename DataNodeType::Pointer document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
   // Adding the layer to the data tree
-  this->GetOutput(0)->GetDataTree()->Add(document, root);
+  this->GetOutput(0)->Add(document, root);
 
   // Iterates through the polygon features and generates random Lines inside the polygon
   typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType*>(this->GetInput());
@@ -137,7 +137,7 @@ void VectorDataToRandomLineGenerator<TVectorData>::GenerateData()
           vertex[1] = (*it)[1];
           currentGeometry->GetLine()->AddVertex(vertex);
         }
-        this->GetOutput(0)->GetDataTree()->Add(currentGeometry, document);
+        this->GetOutput(0)->Add(currentGeometry, document);
       }
     }
     ++itVector;

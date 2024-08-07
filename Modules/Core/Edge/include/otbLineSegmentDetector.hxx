@@ -301,12 +301,12 @@ int LineSegmentDetector<TInputImage, TPrecision>::ComputeRectangles()
   typename DataNodeType::Pointer document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
   // Adding the layer to the data tree
-  this->GetOutput(0)->GetDataTree()->Add(document, root);
+  this->GetOutput(0)->Add(document, root);
   // Create the folder node
   typename DataNodeType::Pointer folder = DataNodeType::New();
   folder->SetNodeType(otb::FOLDER);
   // Adding the layer to the data tree
-  this->GetOutput(0)->GetDataTree()->Add(folder, document);
+  this->GetOutput(0)->Add(folder, document);
   this->GetOutput(0)->SetProjectionRef(this->GetInput()->GetProjectionRef());
 
   SpacingType spacing = this->GetInput()->GetSignedSpacing();
@@ -329,7 +329,7 @@ int LineSegmentDetector<TInputImage, TPrecision>::ComputeRectangles()
     CurrentGeometry->SetNodeType(otb::FEATURE_LINE);
     typename LineType::Pointer line = LineType::New();
     CurrentGeometry->SetLine(line);
-    this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, folder);
+    this->GetOutput(0)->Add(CurrentGeometry, folder);
     CurrentGeometry->GetLine()->AddVertex(start);
     CurrentGeometry->GetLine()->AddVertex(end);
 

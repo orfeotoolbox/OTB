@@ -81,8 +81,8 @@ void LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>::Generat
   document->SetNodeType(DOCUMENT);
   folder1->SetNodeType(FOLDER);
   DataNodePointerType root = output->GetRoot()->Get();
-  output->GetDataTree()->Add(document, root);
-  output->GetDataTree()->Add(folder1, document);
+  output->Add(document, root);
+  output->Add(folder1, document);
 
   // Lets begin by declaring the iterator for the objects in the image.
   ConstIteratorType it = ConstIteratorType(input);
@@ -116,7 +116,7 @@ void LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>::Generat
     }
 
     /**Add the polygon to the VectorData*/
-    output->GetDataTree()->Add(node, folder1);
+    output->Add(node, folder1);
     ++it;
   }
 }

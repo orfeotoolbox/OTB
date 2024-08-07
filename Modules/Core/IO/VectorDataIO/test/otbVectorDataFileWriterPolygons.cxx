@@ -78,13 +78,13 @@ int otbVectorDataFileWriterPolygons(int itkNotUsed(argc), char* argv[])
 
   DataNodeType::Pointer root = data->GetRoot()->Get();
 
-  data->GetDataTree()->Add(document, root);
-  data->GetDataTree()->Add(folder, document);
-  data->GetDataTree()->Add(polygon1, folder);
-  data->GetDataTree()->Add(polygon2, folder);
-  data->GetDataTree()->Add(polygon3, folder);
-  data->GetDataTree()->Add(polygon4, folder);
-  data->GetDataTree()->Add(polygon5, folder);
+  data->Add(document, root);
+  data->Add(folder, document);
+  data->Add(polygon1, folder);
+  data->Add(polygon2, folder);
+  data->Add(polygon3, folder);
+  data->Add(polygon4, folder);
+  data->Add(polygon5, folder);
 
   writer->SetFileName(argv[1]);
   writer->SetInput(data);

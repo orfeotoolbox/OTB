@@ -112,10 +112,10 @@ int main(int itkNotUsed(argc), char* argv[])
 
   DataNodeType::Pointer root = data->GetRoot()->Get();
 
-  data->GetDataTree()->Add(document, root);
-  data->GetDataTree()->Add(folder, document);
-  data->GetDataTree()->Add(polygon1, folder);
-  data->GetDataTree()->Add(polygon2, folder);
+  data->Add(document, root);
+  data->Add(folder, document);
+  data->Add(polygon1, folder);
+  data->Add(polygon2, folder);
 
   data->Update();
 
