@@ -167,7 +167,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::GenerateData(void)
   // Get the output pointer
   // const InputImageType *outputPtr = this->GetOutput();
 
-  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfWorkUnits());
+  this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->VectorThreaderCallback, &str);
 
   // multithread the execution
@@ -793,13 +793,13 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::VectorThreaderCallback(void *arg)
 {
 #if ITK_VERSION_MAJOR < 5
-  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
-  int threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
-  int threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreader::WorkUnitInfo *)(arg))->UserData);
+  int threadId = ((itk::MultiThreader::WorkUnitInfo *)(arg))->ThreadID;
+  int threadCount = ((itk::MultiThreader::WorkUnitInfo *)(arg))->NumberOfThreads;
 #else
-  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreaderBase::ThreadInfoStruct *)(arg))->UserData);
-  int threadId = ((itk::MultiThreaderBase::ThreadInfoStruct *)(arg))->ThreadID;
-  int threadCount = ((itk::MultiThreaderBase::ThreadInfoStruct *)(arg))->NumberOfThreads;
+  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->UserData);
+  int threadId = ((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->ThreadID;
+  int threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->NumberOfThreads;
 #endif
 
   ogr::Layer layer = str->Filter->GetInMemoryInput(threadId);

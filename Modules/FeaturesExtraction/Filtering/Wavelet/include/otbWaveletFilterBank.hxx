@@ -586,7 +586,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 
   // TODO: For now, we force the number threads to 1 because there is a bug with multithreading in INVERSE transform
   // Resulting in discontinuities in the reconstructed images
-  this->SetNumberOfThreads(1);
+  this->SetNumberOfWorkUnits(1);
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
@@ -1100,7 +1100,7 @@ void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INV
       typename FilterType::Pointer overSampledLowPass = FilterType::New();
       overSampledLowPass->SetInput(cropedLowPass);
       overSampledLowPass->SetSubsampleFactor(delta);
-      overSampledLowPass->SetNumberOfThreads(1);
+      overSampledLowPass->SetNumberOfWorkUnits(1);
       overSampledLowPass->Update();
 
       InputImagePointerType cropedHighPass = InputImageType::New();
@@ -1118,7 +1118,7 @@ void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INV
       typename FilterType::Pointer overSampledHighPass = FilterType::New();
       overSampledHighPass->SetInput(cropedHighPass);
       overSampledHighPass->SetSubsampleFactor(delta);
-      overSampledHighPass->SetNumberOfThreads(1);
+      overSampledHighPass->SetNumberOfWorkUnits(1);
       overSampledHighPass->Update();
 
       InnerProductType innerProduct;

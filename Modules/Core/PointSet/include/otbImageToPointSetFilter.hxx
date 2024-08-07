@@ -172,7 +172,7 @@ void ImageToPointSetFilter<TInputImage, TOutputPointSet>::GenerateData(void)
     this->m_PointDataContainerPerThread = OutputPointDataContainerForThreadType(this->GetNumberOfWorkUnits(), defaultPointDataContainer);
 
     // Setting up multithreader
-    this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfWorkUnits());
+    this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
     this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
 
     // multithread the execution
@@ -254,13 +254,13 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   itk::ThreadIdType threadId;
 
 #if ITK_VERSION_MAJOR < 5
-  threadId = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->NumberOfThreads;
-  str = (ThreadStruct *) (((itk::MultiThreader::ThreadInfoStruct *) (arg))->UserData);
+  threadId = ((itk::MultiThreader::WorkUnitInfo *) (arg))->ThreadID;
+  threadCount = ((itk::MultiThreader::WorkUnitInfo *) (arg))->NumberOfThreads;
+  str = (ThreadStruct *) (((itk::MultiThreader::WorkUnitInfo *) (arg))->UserData);
 #else
-  threadId = ((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->NumberOfThreads;
-  str = (ThreadStruct *) (((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->UserData);
+  threadId = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->ThreadID;
+  threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->NumberOfThreads;
+  str = (ThreadStruct *) (((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->UserData);
 #endif
 
   // execute the actual method with appropriate output region

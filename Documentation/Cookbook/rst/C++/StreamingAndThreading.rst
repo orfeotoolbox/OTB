@@ -37,7 +37,7 @@ Even if you use a non streamed writer, each filter which has a
 to one thread and you will notice two calls to the function.
 
 If you have some particular requirement and want to use only one thread,
-you can call the ``SetNumberOfThreads()`` method on each of your filter.
+you can call the ``SetNumberOfWorkUnits()`` method on each of your filter.
 
 When you are writing your own filter, you have to follow some rules to
 make your filter streamable and threadable. Some details are provided in

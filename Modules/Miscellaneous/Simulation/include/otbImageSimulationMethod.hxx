@@ -147,7 +147,7 @@ void ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, 
   m_LabelMapToSimulatedImageFilter->SetInput(m_Spatialisation->GetOutput());
   m_LabelMapToSimulatedImageFilter->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
   m_LabelMapToSimulatedImageFilter->SetSatRSRFilename(m_SatRSRFilename);
-  m_LabelMapToSimulatedImageFilter->SetNumberOfThreads(1);
+  m_LabelMapToSimulatedImageFilter->SetNumberOfWorkUnits(1);
   m_LabelMapToSimulatedImageFilter->SetPathRoot(m_PathRoot);
   m_LabelMapToSimulatedImageFilter->SetMean(m_Mean);
   m_LabelMapToSimulatedImageFilter->SetVariance(m_Variance);
@@ -201,7 +201,7 @@ void ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, 
 //    m_LabelMapToSimulatedImageFilter->SetInput(m_Spatialisation->GetOutput());
 //    m_LabelMapToSimulatedImageFilter->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
 //    m_LabelMapToSimulatedImageFilter->SetSatRSRFilename(m_SatRSRFilename);
-//    m_LabelMapToSimulatedImageFilter->SetNumberOfThreads(1);
+//    m_LabelMapToSimulatedImageFilter->SetNumberOfWorkUnits(1);
 //    m_LabelMapToSimulatedImageFilter->SetPathRoot(m_PathRoot);
 //    m_LabelMapToSimulatedImageFilter->SetMean(m_Mean);
 //    m_LabelMapToSimulatedImageFilter->SetVariance(m_Variance);

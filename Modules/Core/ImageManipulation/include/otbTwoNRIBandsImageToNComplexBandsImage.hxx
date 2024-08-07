@@ -40,7 +40,7 @@ template <class TInputImage, class TOutputImage>
 TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>::TwoNRIBandsImageToNComplexBandsImage()
 {
   OTB_DISABLE_DYNAMIC_MT;
-	//this->SetNumberOfThreads(1);
+	//this->SetNumberOfWorkUnits(1);
 }
 
 /**

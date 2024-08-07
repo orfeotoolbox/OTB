@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "itkImageRegion.h"
-#include "itkPreOrderTreeIterator.h"
 
 #include "itkDataObjectDecorator.h"
 #include "itkSimpleDataObjectDecorator.h"

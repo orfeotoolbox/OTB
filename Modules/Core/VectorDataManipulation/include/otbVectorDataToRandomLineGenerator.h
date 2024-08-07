@@ -23,7 +23,6 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
-#include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include <string>
 

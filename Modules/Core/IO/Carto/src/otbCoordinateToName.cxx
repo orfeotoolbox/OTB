@@ -92,7 +92,7 @@ ITK_THREAD_RETURN_TYPE
 CoordinateToName::ThreadFunction(void *arg)
 {
 #if ITK_VERSION_MAJOR < 5
-  struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (arg);
+  struct itk::MultiThreader::WorkUnitInfo * pInfo = (itk::MultiThreader::WorkUnitInfo *) (arg);
 #else
   struct itk::MultiThreaderBase::WorkUnitInfo * pInfo = (itk::MultiThreaderBase::WorkUnitInfo *) (arg);
 #endif

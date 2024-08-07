@@ -78,7 +78,7 @@ void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::
   {
 #ifdef _OPENMP
     // OpenMP will take care of threading
-    this->SetNumberOfThreads(1);
+    this->SetNumberOfWorkUnits(1);
 #endif
   }
 }

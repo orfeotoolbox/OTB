@@ -36,7 +36,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 OneRIBandImageToOneComplexBandImage<TInputImage, TOutputImage>::OneRIBandImageToOneComplexBandImage()
 {
-  // this->SetNumberOfThreads(1);
+  // this->SetNumberOfWorkUnits(1);
 }
 
 /**

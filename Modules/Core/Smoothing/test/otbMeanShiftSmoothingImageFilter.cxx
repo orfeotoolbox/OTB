@@ -76,7 +76,7 @@ int otbMeanShiftSmoothingImageFilter(int argc, char* argv[])
   filter->SetMaxIterationNumber(maxiterationnumber);
   filter->SetInput(reader->GetOutput());
   filter->SetModeSearch(usemodesearch);
-  // filter->SetNumberOfThreads(1);
+  // filter->SetNumberOfWorkUnits(1);
   SpatialWriterType::Pointer   writer1 = SpatialWriterType::New();
   WriterType::Pointer          writer2 = WriterType::New();
   IterationWriterType::Pointer writer4 = IterationWriterType::New();

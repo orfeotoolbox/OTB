@@ -38,7 +38,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 NRIBandImagesToOneNComplexBandsImage<TInputImage, TOutputImage>::NRIBandImagesToOneNComplexBandsImage()
 {
-  // this->SetNumberOfThreads(1);
+  // this->SetNumberOfWorkUnits(1);
 }
 
 /**

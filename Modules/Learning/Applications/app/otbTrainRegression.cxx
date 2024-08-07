@@ -24,7 +24,6 @@
 #include "otbListSampleGenerator.h"
 
 #include "otbImageToEnvelopeVectorDataFilter.h"
-#include "itkPreOrderTreeIterator.h"
 
 // Statistic XML Reader
 #include "otbStatisticsXMLFileReader.h"

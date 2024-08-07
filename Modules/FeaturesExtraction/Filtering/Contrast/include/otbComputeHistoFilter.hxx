@@ -153,7 +153,7 @@ void ComputeHistoFilter<TInputImage, TOutputImage>::GenerateData()
 
   this->BeforeThreadedGenerateData();
 
-  this->GetMultiThreader()->SetNumberOfThreads(m_ValidThreads);
+  this->GetMultiThreader()->SetNumberOfWorkUnits(m_ValidThreads);
   this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
   // multithread the execution
   this->GetMultiThreader()->SingleMethodExecute();

@@ -47,7 +47,6 @@
 #include "otbSystem.h"
 #include "itksys/SystemTools.hxx"
 #include "otbDataNode.h"
-#include "itkPreOrderTreeIterator.h"
 #include "otbMetaDataKey.h"
 #include "otbStopwatch.h"
 

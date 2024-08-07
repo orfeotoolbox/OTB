@@ -23,7 +23,6 @@
 
 
 #include "otbVectorDataToVectorDataFilter.h"
-#include "itkPreOrderTreeIterator.h"
 #include "otbMath.h"
 
 namespace otb

@@ -58,7 +58,7 @@ int otbMeanShiftSmoothingImageFilterThreading(int argc, char* argv[])
   filterSingle->SetRangeBandwidth(rangeBandwidth);
   filterSingle->SetInput(reader->GetOutput());
   filterSingle->SetModeSearch(useModeSearch);
-  filterSingle->SetNumberOfThreads(1);
+  filterSingle->SetNumberOfWorkUnits(1);
 
   filterMulti->SetSpatialBandwidth(spatialBandwidth);
   filterMulti->SetRangeBandwidth(rangeBandwidth);

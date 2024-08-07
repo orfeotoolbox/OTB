@@ -89,7 +89,7 @@ void ObjectListToObjectListFilter<TInputList, TOutputList>::GenerateData(void)
   this->m_ObjectListPerThread = OutputListForThreadType(this->GetNumberOfWorkUnits(), defaultList);
 
   // Setting up multithreader
-  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfWorkUnits());
+  this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
 
   // multithread the execution
@@ -136,13 +136,13 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
   unsigned int      requestedElements;
 
 #if ITK_VERSION_MAJOR < 5
-  threadId = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->NumberOfThreads;
-  str = (ThreadStruct *) (((itk::MultiThreader::ThreadInfoStruct *) (arg))->UserData);
+  threadId = ((itk::MultiThreader::WorkUnitInfo *) (arg))->ThreadID;
+  threadCount = ((itk::MultiThreader::WorkUnitInfo *) (arg))->NumberOfThreads;
+  str = (ThreadStruct *) (((itk::MultiThreader::WorkUnitInfo *) (arg))->UserData);
 #else
-  threadId = ((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->NumberOfThreads;
-  str = (ThreadStruct *) (((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->UserData);
+  threadId = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->ThreadID;
+  threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->NumberOfThreads;
+  str = (ThreadStruct *) (((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->UserData);
 #endif
 
   requestedElements = str->Filter->GetInput()->Size();

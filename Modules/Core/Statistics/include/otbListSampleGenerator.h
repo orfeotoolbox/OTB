@@ -24,7 +24,6 @@
 
 #include "itkProcessObject.h"
 #include "itkListSample.h"
-#include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include <string>
 

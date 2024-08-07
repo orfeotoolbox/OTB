@@ -50,7 +50,6 @@
 //  which model the individual objects that we get from the vector
 //  data structure.
 
-#include "itkPreOrderTreeIterator.h"
 #include "otbObjectList.h"
 #include "otbPolygon.h"
 

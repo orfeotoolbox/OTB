@@ -47,7 +47,7 @@ int otbRadiometricMomentsImageFilter(int itkNotUsed(argc), char* argv[])
 
   filter->SetInput(reader->GetOutput());
   filter->SetRadius(atoi(argv[3]));
-  filter->SetNumberOfThreads(1);
+  filter->SetNumberOfWorkUnits(1);
 
   writer->SetFileName(argv[2]);
   writer->SetInput(filter->GetOutput());
