@@ -315,7 +315,7 @@ void ListSampleGenerator<TImage, TVectorData>::GenerateClassStatistics()
   auto currentIt = itVectorPair.first;
   for (; currentIt != itVectorPair.second; ++currentIt)
   {
-    DataNodeType* datanode = vectorData->Get(currentIt);
+    typename DataNodeType::Pointer datanode = vectorData->Get(currentIt);
     if (datanode->IsPolygonFeature())
     {
       double area = GetPolygonAreaInPixelsUnits(datanode, image);

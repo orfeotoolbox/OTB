@@ -136,7 +136,7 @@ void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Gener
   {
     // Case where nbbands1 == nbbands2
 
-    VnlMatrixType invs22 = vnl_matrix_inverse<RealType>(s22);
+    VnlMatrixType invs22 = vnl_matrix_inverse<RealType>(s22).as_matrix();
 
     // Build the generalized eigensystem
     VnlMatrixType s12s22is21 = s12 * invs22 * s21;

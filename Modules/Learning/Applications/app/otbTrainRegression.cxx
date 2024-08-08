@@ -85,7 +85,6 @@ public:
 
   typedef otb::ImageToEnvelopeVectorDataFilter<SampleImageType, VectorDataType> EnvelopeFilterType;
 
-  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
 
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
 

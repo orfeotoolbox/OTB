@@ -178,7 +178,7 @@ public:
     return std::make_pair(it,it_end);
   }
 
-  DataNodePointerType Get(VertexIterator dataIt)
+  DataNodePointerType Get(VertexIterator dataIt) const
   {
     return m_DataTree[*dataIt];
   }

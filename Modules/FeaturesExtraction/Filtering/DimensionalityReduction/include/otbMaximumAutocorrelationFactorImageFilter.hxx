@@ -144,7 +144,7 @@ void MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::Generat
   }
 
   vnl_generalized_eigensystem ges(sigmad, sigma);
-  VnlMatrixType               d = ges.D;
+  VnlMatrixType               d = ges.D.as_matrix();
   m_V                           = ges.V;
 
   m_AutoCorrelation = VnlVectorType(nbComp, 1.);

@@ -147,7 +147,7 @@ private:
 
       if (itksys::SystemTools::FileExists(geomfile))
       {
-        bool res = itksys::SystemTools::RemoveFile(geomfile);
+        itksys::Status res = itksys::SystemTools::RemoveFile(geomfile);
         if (!res)
         {
           otbAppLogINFO(<< "Unable to remove file  " << geomfile);
@@ -155,8 +155,8 @@ private:
       }
       if (itksys::SystemTools::FileExists(tile))
       {
-        bool res = itksys::SystemTools::RemoveFile(tile);
-        if (!res)
+        itksys::Status res = itksys::SystemTools::RemoveFile(tile);
+        if (res.GetKind() != itksys::Status::Kind::Success)
         {
           otbAppLogINFO(<< "Unable to remove file  " << tile);
         }

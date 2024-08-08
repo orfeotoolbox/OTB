@@ -80,7 +80,7 @@ void LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>::Generat
 
   document->SetNodeType(DOCUMENT);
   folder1->SetNodeType(FOLDER);
-  DataNodePointerType root = output->GetRoot()->Get();
+  DataNodePointerType root = output->GetRoot();
   output->Add(document, root);
   output->Add(folder1, document);
 
