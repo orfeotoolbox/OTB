@@ -483,7 +483,7 @@ void KMLVectorDataIO::Read(itk::DataObject* datag)
 
   // Retrieving root node
   m_Tree                       = data->GetDataTree();
-  DataNodePointerType rootNode = m_Tree->GetRoot()->Get();
+  DataNodePointerType rootNode = m_Tree->GetRoot();
 
   DataNodePointerType document = DataNodeType::New();
   document->SetNodeType(DOCUMENT);
@@ -550,21 +550,11 @@ void KMLVectorDataIO::Write(const itk::DataObject* datag, char** itkNotUsed(paps
 
   kmldom::KmlPtr kml = factory->CreateKml();
 
-  // Retrieving root node
-  DataTreeConstPointerType tree = data->GetDataTree();
-  DataNodePointerType      root = tree->GetRoot()->Get();
-
-  typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
-
-  TreeIteratorType it(tree);
-  it.GoToBegin();
-
   kmldom::DocumentPtr      currentDocument      = nullptr;
   kmldom::FolderPtr        currentFolder        = nullptr;
   kmldom::MultiGeometryPtr currentMultiGeometry = nullptr;
 
-  InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(tree->GetRoot());
-  ProcessNodeWrite(inputRoot, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
+  ProcessNodeWrite(data->GetRoot(), factory, kml, currentDocument, currentFolder, currentMultiGeometry);
 
   // Serialize to XML
   std::string xml = kmldom::SerializePretty(kml);

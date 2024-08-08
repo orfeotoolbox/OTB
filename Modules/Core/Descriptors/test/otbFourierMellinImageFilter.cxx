@@ -29,6 +29,7 @@
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
+#include <itkFFTWGlobalConfiguration.h>
 
 int otbFourierMellinImageFilter(int itkNotUsed(argc), char* argv[])
 {
@@ -86,8 +87,13 @@ int otbFourierMellinImageFilter(int itkNotUsed(argc), char* argv[])
   imaginaryWriter->SetInput(imaginaryRescaler->GetOutput());
   imaginaryWriter->Update();
 // Hugly hack for cleaning fftw threads
-#if defined(ITK_USE_FFTWF) || defined(ITK_USE_FFTWD)
-  fftw_cleanup_threads();
+#if defined(ITK_USE_FFTWF)
+    fftwf_cleanup_threads();
+    fftwf_cleanup();
+#endif
+#if defined(ITK_USE_FFTWD)
+    fftw_cleanup_threads();
+    fftw_cleanup();
 #endif
   return EXIT_SUCCESS;
 }

@@ -32,7 +32,6 @@ int otbVectorDataFileReader(int itkNotUsed(argc), char* argv[])
 
   typedef otb::DataNode<double, 2, double> DataNodeType;
   typedef DataNodeType::Pointer                   DataNodePointerType;
-  typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
 
   itk::Indent indent;
 
@@ -40,26 +39,10 @@ int otbVectorDataFileReader(int itkNotUsed(argc), char* argv[])
   reader->Update();
 
   VectorDataType::Pointer data     = reader->GetOutput();
-  DataTreeType::Pointer   dataTree = DataTreeType::New();
-  dataTree                         = data->GetDataTree();
 
   std::ofstream fout(argv[2]);
 
-  itk::PreOrderTreeIterator<DataTreeType> it(dataTree);
-  it.GoToBegin();
-
-  while (!it.IsAtEnd())
-  {
-    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
-    bool                                    goesOn   = true;
-    while (itParent.HasParent() && goesOn)
-    {
-      fout << indent;
-      goesOn = itParent.GoToParent();
-    }
-    fout << "+" << it.Get()->GetNodeTypeAsString() << std::endl;
-    ++it;
-  }
+  data->Print(fout,indent);
   /*added PrintSelf*/
 
   fout.close();

@@ -31,35 +31,6 @@
 namespace otb
 {
 
-/*template <class TVectorData>
-void printVectorData(TVectorData * vectorData, string msg = "")
-{
-  typedef TVectorData VectorDataType;
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
-
-  TreeIteratorType itVector(vectorData->GetDataTree());
-  itVector.GoToBegin();
-
-  if (!msg.empty())
-  {
-    std::cout<< msg << std::endl;
-  }
-
-  while (!itVector.IsAtEnd())
-    {
-    if (itVector.Get()->IsPolygonFeature())
-      {
-      std::cout << itVector.Get()->GetNodeTypeAsString() << std::endl;
-      for (unsigned int itPoints = 0; itPoints < itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->Size(); itPoints++)
-        {
-        std::cout << "vertex[" << itPoints << "]: " << itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->GetElement(itPoints) <<std::endl;
-        }
-      std::cout << "Polygon bounding region:\n" << itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion() <<  std::endl;
-      }
-    ++itVector;
-    }
-}*/
-
 template <class TImage, class TVectorData>
 ListSampleGenerator<TImage, TVectorData>::ListSampleGenerator()
   : m_MaxTrainingSize(-1),

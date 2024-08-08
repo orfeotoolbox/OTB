@@ -59,7 +59,6 @@ public:
   using VectorDataPointerType = VectorDataType::Pointer;
   using VectorDataConstPointerType = VectorDataType::ConstPointer;
   using DataTreeType = VectorDataType::DataTreeType;
-  using InternalTreeNodeType = VectorDataType::TreeNodeType;
 
   using DataNodeType = VectorDataType::DataNodeType;
   using DataNodePointerType = DataNodeType::Pointer;

@@ -76,7 +76,7 @@ int otbVectorDataFileWriterPolygons(int itkNotUsed(argc), char* argv[])
   polygon4 = polygon1;
   polygon5 = polygon1;
 
-  DataNodeType::Pointer root = data->GetRoot()->Get();
+  DataNodeType::Pointer root = data->GetRoot();
 
   data->Add(document, root);
   data->Add(folder, document);

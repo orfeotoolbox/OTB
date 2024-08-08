@@ -213,7 +213,7 @@ void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::GenerateData()
 }
 
 template <class TVectorData, class TLabelMap>
-void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::ProcessNode(InputVectorDataType inputVd,DataNodePointerType source)
+void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::ProcessNode(InputVectorDataConstPointer inputVd,DataNodePointerType source)
 {
 
   // Get the children list from the input node
@@ -223,23 +223,23 @@ void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::ProcessNode(InputVector
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
   {
     // Copy input DataNode info
-    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType dataNode = (*it);
     otbGenericMsgDebugMacro(<< "Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
     switch (dataNode->GetNodeType())
     {
     case otb::ROOT:
     {
-      ProcessNode(inputVd,(*it));
+      ProcessNode(inputVd,dataNode);
       break;
     }
     case otb::DOCUMENT:
     {
-      ProcessNode(inputVd,(*it));
+      ProcessNode(inputVd,dataNode);
       break;
     }
     case otb::FOLDER:
     {
-      ProcessNode(inputVd,(*it));
+      ProcessNode(inputVd,dataNode);
       break;
     }
     case FEATURE_POINT:

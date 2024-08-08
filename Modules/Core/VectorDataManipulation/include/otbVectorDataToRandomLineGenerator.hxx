@@ -105,7 +105,7 @@ void VectorDataToRandomLineGenerator<TVectorData>::GenerateData()
   this->GetOutput()->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
 
   // Retrieving root node
-  typename DataNodeType::Pointer root = this->GetOutput()->GetRoot()->Get();
+  typename DataNodeType::Pointer root = this->GetOutput()->GetRoot();
   // Create the document node
   typename DataNodeType::Pointer document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
@@ -115,11 +115,11 @@ void VectorDataToRandomLineGenerator<TVectorData>::GenerateData()
   // Iterates through the polygon features and generates random Lines inside the polygon
   typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType*>(this->GetInput());
 
-  TreeIteratorType itVector(vectorData->GetDataTree());
-  itVector.GoToBegin();
-  while (!itVector.IsAtEnd())
+  auto itVectorPair = vectorData->GetIteratorPair();
+  auto currentIt = itVectorPair.first;
+  while (currentIt != itVectorPair.second)
   {
-    if (itVector.Get()->IsPolygonFeature())
+    if (vectorData->Get(currentIt)->IsPolygonFeature())
     {
 
       for (unsigned int i = 0; i < this->GetNumberOfOutputLine(); ++i)
@@ -129,7 +129,7 @@ void VectorDataToRandomLineGenerator<TVectorData>::GenerateData()
         currentGeometry->SetNodeType(otb::FEATURE_LINE);
         typename LineType::Pointer line = LineType::New();
         currentGeometry->SetLine(line);
-        PointVectorType vPoints = RandomPointsGenerator(itVector.Get());
+        PointVectorType vPoints = RandomPointsGenerator(vectorData->Get(currentIt));
         for (typename PointVectorType::const_iterator it = vPoints.begin(); it != vPoints.end(); ++it)
         {
           VertexType vertex;
@@ -140,7 +140,7 @@ void VectorDataToRandomLineGenerator<TVectorData>::GenerateData()
         this->GetOutput(0)->Add(currentGeometry, document);
       }
     }
-    ++itVector;
+    ++currentIt;
   }
 }
 

@@ -65,7 +65,6 @@ public:
   /** Data using */
   using VectorDataType = VectorData<double, 2>;
   using DataTreeType = VectorDataType::DataTreeType;
-  using InternalTreeNodeType = VectorDataType::DataNodePointerType;
   using ChildrenListType = VectorDataType::ChildrenListType;
   using DataNodeType = VectorDataType::DataNodeType;
   using DataNodePointerType = DataNodeType::Pointer;

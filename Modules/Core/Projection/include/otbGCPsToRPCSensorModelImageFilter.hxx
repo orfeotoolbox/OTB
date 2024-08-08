@@ -223,8 +223,6 @@ void GCPsToRPCSensorModelImageFilter<TImage>::ComputeErrors()
 
   rsTransform->InstantiateTransform();
 
-  Continuous3DIndexType idOut3D, idTrans3D;
-
   double sum = 0.;
   m_MeanError = 0.;
 
@@ -236,11 +234,6 @@ void GCPsToRPCSensorModelImageFilter<TImage>::ComputeErrors()
     // GCP value
     const auto & sensorPoint = m_GCPsContainer[i].first;
     const auto & groundPoint = m_GCPsContainer[i].second;
-
-    // Compute Transform
-    Point3DType groundPointTemp, sensorPointTemp;
-    sensorPointTemp[0] = sensorPoint[0];
-    sensorPointTemp[1] = sensorPoint[1];
 
     auto outPoint = rsTransform->TransformPoint(sensorPoint);
 

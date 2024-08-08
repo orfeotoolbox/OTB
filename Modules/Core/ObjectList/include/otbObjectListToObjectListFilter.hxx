@@ -135,15 +135,9 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
   unsigned int      total, start, stop;
   unsigned int      requestedElements;
 
-#if ITK_VERSION_MAJOR < 5
-  threadId = ((itk::MultiThreader::WorkUnitInfo *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreader::WorkUnitInfo *) (arg))->NumberOfThreads;
-  str = (ThreadStruct *) (((itk::MultiThreader::WorkUnitInfo *) (arg))->UserData);
-#else
-  threadId = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->NumberOfThreads;
+  threadId = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->WorkUnitID;
+  threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->NumberOfWorkUnits;
   str = (ThreadStruct *) (((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->UserData);
-#endif
 
   requestedElements = str->Filter->GetInput()->Size();
   total             = str->Filter->SplitRequestedRegion(threadId, threadCount, requestedElements, start, stop);

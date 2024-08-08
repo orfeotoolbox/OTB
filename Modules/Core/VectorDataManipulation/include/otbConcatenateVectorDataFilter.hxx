@@ -82,7 +82,7 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
   // this->GetOutput()->SetMetaDataDictionary(this->GetInput(0)->GetMetaDataDictionary());
 
   // Prepare the output
-  // typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetRoot()->Get();
+  // typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetRoot();
 
 
   this->GetOutput()->SetRoot(this->GetInput(0)->GetRoot());

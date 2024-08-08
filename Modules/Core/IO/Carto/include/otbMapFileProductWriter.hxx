@@ -152,7 +152,7 @@ void MapFileProductWriter<TInputImage>::InitializeVectorData()
   // Initialize the vectordata to build the indexTile
   m_VectorDataIndexTile = VectorDataType::New();
   m_VectorDataIndexTile->SetProjectionRef(otb::SpatialReference::FromEPSG(m_SRID).ToWkt());
-  DataNodeType::Pointer root     = m_VectorDataIndexTile->GetRoot()->Get();
+  DataNodeType::Pointer root     = m_VectorDataIndexTile->GetRoot();
   DataNodeType::Pointer document = DataNodeType::New();
   m_Folder                       = DataNodeType::New();
 

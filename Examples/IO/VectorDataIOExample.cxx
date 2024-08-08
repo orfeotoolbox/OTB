@@ -81,7 +81,6 @@ int main(int argc, char* argv[])
   //  be accessed using an \doxygen{itk}{PreOrderTreeIterator}.
 
   using DataTreeType     = VectorDataType::DataTreeType;
-  using TreeIteratorType = itk::PreOrderTreeIterator<DataTreeType>;
   //  In this example we will only read polygon objects from the input
   //  file before writing them to the output file. We define the type
   //  for the polygon object as well as an iterator to the vertices. The
@@ -93,18 +92,18 @@ int main(int argc, char* argv[])
   PolygonListType::Pointer polygonList = PolygonListType::New();
   //  We get the data tree and instantiate an iterator to walk through it.
 
-  TreeIteratorType it(reader->GetOutput()->GetDataTree());
+  auto itPair = reader->GetOutput()->GetIteratorPair();
 
-  it.GoToBegin();
+  auto it = itPair.first;
   //  We check that the current object is a polygon using the
   //  \code{IsPolygonFeature()} method and get its exterior ring in
   //  order to store it into the list.
 
-  while (!it.IsAtEnd())
+  while (it != itPair.second)
   {
-    if (it.Get()->IsPolygonFeature())
+    if (reader->GetOutput()->Get(it)->IsPolygonFeature())
     {
-      polygonList->PushBack(it.Get()->GetPolygonExteriorRing());
+      polygonList->PushBack(reader->GetOutput()->Get(it)->GetPolygonExteriorRing());
     }
     ++it;
   }
@@ -131,12 +130,9 @@ int main(int argc, char* argv[])
   multiPolygon->SetNodeType(otb::FEATURE_MULTIPOLYGON);
   //  We assign these objects to the data tree stored by the vector data object.
 
-  DataTreeType::Pointer tree = outVectorData->GetDataTree();
-  DataNodeType::Pointer root = tree->GetRoot()->Get();
-
-  tree->Add(document, root);
-  tree->Add(folder, document);
-  tree->Add(multiPolygon, folder);
+  outVectorData->Add(document, outVectorData->GetRoot());
+  outVectorData->Add(folder, document);
+  outVectorData->Add(multiPolygon, folder);
   //  We can now iterate through the polygon list and fill the vector
   //  data structure.
 
@@ -144,7 +140,7 @@ int main(int argc, char* argv[])
   {
     DataNodeType::Pointer newPolygon = DataNodeType::New();
     newPolygon->SetPolygonExteriorRing(pit.Get());
-    tree->Add(newPolygon, multiPolygon);
+    outVectorData->Add(newPolygon, multiPolygon);
   }
   //  And finally we write the vector data to a file using a generic
   //  \doxygen{otb}{VectorDataFileWriter}.

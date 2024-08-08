@@ -159,10 +159,6 @@ void OGRVectorDataIO::Read(itk::DataObject* datag)
     /** Adding the layer to the data tree */
     data->Add(document, root);
 
-    /// This is not good but we do not have the choice if we want to
-    /// get a hook on the internal structure
-    //InternalTreeNodeType documentPtr = data->GetNode(document);
-
     /** IO class helper to convert ogr layer*/
 
     OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();

@@ -70,8 +70,6 @@ public:
   typedef typename LineType::VertexType         VertexType;
   typedef typename LineType::VertexListType     VertexListType;
 
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
-
   /** Set/Get the thresholds*/
   itkGetMacro(DistanceThreshold, double);
   itkSetMacro(DistanceThreshold, double);

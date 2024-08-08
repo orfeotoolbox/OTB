@@ -69,8 +69,6 @@ public:
   typedef typename DataNodeType::LineType::VertexType    VertexType;
   typedef typename std::vector<PointType>                PointVectorType;
 
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
-
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
 
   /** Connects the VectorData from which the extend will be extracted. */

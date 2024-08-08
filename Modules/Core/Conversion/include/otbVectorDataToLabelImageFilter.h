@@ -79,7 +79,6 @@ public:
   /** VectorData typedefs*/
   typedef TVectorData                           VectorDataType;
   typedef typename VectorDataType::DataTreeType DataTreeType;
-  typedef typename VectorDataType::TreeNodeType   InternalTreeNodeType;
 
   typedef itk::ImageBase<OutputImageType::ImageDimension> ImageBaseType;
 

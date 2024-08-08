@@ -54,8 +54,6 @@ int otbImageFittingPolygonListFilter(int itkNotUsed(argc), char* argv[])
 
   // Read the original polygon list (kml file)
   typedef otb::VectorData<>                         VectorDataType;
-  typedef VectorDataType::DataTreeType              DataTreeType;
-  typedef itk::PreOrderTreeIterator<DataTreeType>   TreeIteratorType;
   typedef VectorDataType::DataNodeType              DataNodeType;
   typedef DataNodeType::Pointer                     DataNodePointerType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
@@ -68,12 +66,12 @@ int otbImageFittingPolygonListFilter(int itkNotUsed(argc), char* argv[])
   typedef otb::ObjectList<PolygonType> PolygonListType;
   PolygonListType::Pointer             polygonList = PolygonListType::New();
 
-  TreeIteratorType it(readerVector->GetOutput()->GetDataTree());
-  it.GoToBegin();
+  auto itPair = readerVector->GetOutput()->GetIteratorPair();
+  auto it = itPair.first;
 
-  while (!it.IsAtEnd())
+  while (it != itPair.second)
   {
-    DataNodePointerType dataNode = it.Get();
+    DataNodePointerType dataNode = readerVector->GetOutput()->Get(it);
     if (dataNode->IsPolygonFeature())
     {
       polygonList->PushBack(dataNode->GetPolygonExteriorRing());
@@ -103,7 +101,7 @@ int otbImageFittingPolygonListFilter(int itkNotUsed(argc), char* argv[])
   document->SetNodeId("DOCUMENT");
   folder->SetNodeId("FOLDER");
 
-  DataNodeType::Pointer root = data->GetRoot()->Get();
+  DataNodeType::Pointer root = data->GetRoot();
 
   data->Add(document, root);
   data->Add(folder, document);

@@ -46,7 +46,7 @@ void VectorDataToRightAngleVectorDataFilter<TVectorData>::GenerateData()
   this->GetOutput(0)->SetMetaDataDictionary(vData->GetMetaDataDictionary());
 
   // Retrieving root node
-  typename DataNodeType::Pointer root = this->GetOutput(0)->GetRoot()->Get();
+  typename DataNodeType::Pointer root = this->GetOutput(0)->GetRoot();
   // Create the document node
   typename DataNodeType::Pointer document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
@@ -59,38 +59,38 @@ void VectorDataToRightAngleVectorDataFilter<TVectorData>::GenerateData()
   this->GetOutput(0)->SetProjectionRef(vData->GetProjectionRef());
 
   // Itterate on the vector data
-  TreeIteratorType itVectorRef(vData->GetDataTree()); // Reference
-  itVectorRef.GoToBegin();
+  auto itPair = vData->GetIteratorPair(); // Reference
+  auto itVectorRef = itPair.first;
 
-  while (!itVectorRef.IsAtEnd())
+  while (itVectorRef != itPair.second)
   {
-    if (!itVectorRef.Get()->IsLineFeature())
+    if (!vData->Get(itVectorRef)->IsLineFeature())
     {
       ++itVectorRef;
       continue; // do not process if it's not a line
     }
-    TreeIteratorType itVectorCur = itVectorRef; // Current
+    auto itVectorCur = itVectorRef; // Current
 
-    while (!itVectorCur.IsAtEnd())
+    while (itVectorCur != itPair.second)
     {
-      if (!itVectorCur.Get()->IsLineFeature())
+      if (!vData->Get(itVectorCur)->IsLineFeature())
       {
         ++itVectorCur;
         continue; // do not process if it's not a line
       }
       // Compute the angle formed by the two segments
-      double Angle = this->ComputeAngleFormedBySegments(itVectorRef.Get()->GetLine(), itVectorCur.Get()->GetLine());
+      double Angle = this->ComputeAngleFormedBySegments(vData->Get(itVectorRef)->GetLine(), vData->Get(itVectorCur)->GetLine());
 
       // Check if the angle is a right one
       if (std::abs(Angle - CONST_PI_2) <= m_AngleThreshold)
       {
         // Right angle coordinate
         PointType RightAngleCoordinate;
-        RightAngleCoordinate = this->ComputeRightAngleCoordinate(itVectorRef.Get()->GetLine(), itVectorCur.Get()->GetLine());
+        RightAngleCoordinate = this->ComputeRightAngleCoordinate(vData->Get(itVectorRef)->GetLine(), vData->Get(itVectorCur)->GetLine());
 
         // Compute the distance between the two segments and the right angle formed by this segments
-        double dist1_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, itVectorRef.Get()->GetLine());
-        double dist2_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, itVectorCur.Get()->GetLine());
+        double dist1_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, vData->Get(itVectorRef)->GetLine());
+        double dist2_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, vData->Get(itVectorCur)->GetLine());
 
         double threshold_2 = m_DistanceThreshold * m_DistanceThreshold;
         if (dist1_2 < threshold_2 && dist2_2 < threshold_2)

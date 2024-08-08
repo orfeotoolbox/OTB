@@ -27,6 +27,7 @@
 #include "itkProgressReporter.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkNeighborhoodAlgorithm.h"
+#include "otbMacro.h"
 
 namespace otb
 {

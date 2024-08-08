@@ -74,8 +74,7 @@ public:
   typedef typename OutputLabelMapType::Pointer      OutputLabelMapPointer;
   typedef typename OutputLabelMapType::ConstPointer OutputLabelMapConstPointer;
 
-  typedef typename InputVectorDataType::DataTreeType::TreeNodeType InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType          ChildrenListType;
+  typedef typename InputVectorDataType::ChildrenListType          ChildrenListType;
   typedef typename InputVectorDataType::DataNodeType               DataNodeType;
   typedef typename DataNodeType::Pointer                           DataNodePointerType;
   typedef typename DataNodeType::PolygonType                       PolygonType;
@@ -189,7 +188,7 @@ private:
   VectorDataToLabelMapFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  void ProcessNode(InputVectorDataType* inputVdata,DataNodePointerType source);
+  void ProcessNode(InputVectorDataConstPointer inputVdata,DataNodePointerType source);
 
   /** Current label value incremented after the vectorization of a layer*/
   LabelType m_lab;

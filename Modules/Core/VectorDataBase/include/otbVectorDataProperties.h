@@ -54,9 +54,7 @@ public:
   typedef typename VectorDataType::DataNodeType DataNodeType;
   typedef typename DataNodeType::Pointer        DataNodePointerType;
   typedef typename DataNodeType::PolygonType    PolygonType;
-
-  typedef typename VectorDataType::DataTreeType::TreeNodeType InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType     ChildrenListType;
+  typedef typename VectorDataType::ChildrenListType     ChildrenListType;
 
   typedef typename PolygonType::RegionType RegionType;
   typedef typename RegionType::Pointer     RegionPointerType;
