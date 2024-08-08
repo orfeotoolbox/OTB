@@ -328,12 +328,13 @@ private:
 
       VectorDataType::Pointer envelope = envelopeFilter->GetOutput();
 
-      TreeIteratorType itVector(envelope->GetDataTree());
-      for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
+      auto itVectorPair = envelope->GetIteratorPair();
+      auto currentIt = itVectorPair.first;
+      for (; currentIt != itVectorPair.second; ++currentIt)
       {
-        if (itVector.Get()->IsPolygonFeature())
+        if (envelope->Get(currentIt)->IsPolygonFeature())
         {
-          itVector.Get()->SetFieldAsInt(std::string("class"), 1);
+          envelope->Get(currentIt)->SetFieldAsInt(std::string("class"), 1);
         }
       }
 

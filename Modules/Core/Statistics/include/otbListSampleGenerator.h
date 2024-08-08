@@ -173,7 +173,6 @@ private:
   typedef typename DataNodeType::PolygonPointerType                        PolygonPointerType;
   typedef typename DataNodeType::PolygonListType                           PolygonListType;
   typedef typename DataNodeType::PolygonListPointerType                    PolygonListPointerType;
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
 
   void ComputeClassSelectionProbability();
 

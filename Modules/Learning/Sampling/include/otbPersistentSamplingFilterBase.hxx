@@ -792,15 +792,9 @@ itk::ITK_THREAD_RETURN_TYPE
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::VectorThreaderCallback(void *arg)
 {
-#if ITK_VERSION_MAJOR < 5
-  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreader::WorkUnitInfo *)(arg))->UserData);
-  int threadId = ((itk::MultiThreader::WorkUnitInfo *)(arg))->ThreadID;
-  int threadCount = ((itk::MultiThreader::WorkUnitInfo *)(arg))->NumberOfThreads;
-#else
   VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->UserData);
-  int threadId = ((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->ThreadID;
-  int threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->NumberOfThreads;
-#endif
+  int threadId = ((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->WorkUnitID;
+  int threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->NumberOfWorkUnits;
 
   ogr::Layer layer = str->Filter->GetInMemoryInput(threadId);
 

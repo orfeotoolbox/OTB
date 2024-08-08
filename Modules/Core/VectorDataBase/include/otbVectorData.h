@@ -170,7 +170,7 @@ public:
     return childrenslist;
   };
 
-  std::pair<VertexIterator,VertexIterator> GetIteratorPair()
+  std::pair<VertexIterator,VertexIterator> GetIteratorPair() const
   {
     VertexIterator it,it_end;
     boost::tie(it, it_end) = boost::vertices(m_DataTree);

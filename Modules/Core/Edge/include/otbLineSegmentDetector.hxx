@@ -296,7 +296,7 @@ int LineSegmentDetector<TInputImage, TPrecision>::ComputeRectangles()
   // Output
   this->GetOutput(0)->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
   // Retrieving root node
-  typename DataNodeType::Pointer root = this->GetOutput(0)->GetRoot()->Get();
+  typename DataNodeType::Pointer root = this->GetOutput(0)->GetRoot();
   // Create the document node
   typename DataNodeType::Pointer document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
