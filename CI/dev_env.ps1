@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -74,9 +74,11 @@ $Global:HOMEPATH="\Users\otbbot"
 #)
 echo "Home dir: $HOMEDRIVE$HOMEPATH"
 
+# Get the folder of current script
+$SCRIPT_DIR=Split-Path $MyInvocation.MyCommand.Path -Parent
+
 # Setup Python
-$env:PATH="C:\tools\Python310-$ARCH;$env:PATH"
-$env:PATH="C:\tools\Python310-$ARCH\Scripts;$env:PATH"
+. "$SCRIPT_DIR\setup_python.ps1" $ARCH
 
 # Setup GL dlls
 $env:PATH="$env:PATH;C:\tools\GL\$ARCH\bin"
@@ -88,8 +90,6 @@ $env:PATH="$env:PATH;C:\tools\GL\$ARCH\bin"
 # see official M$ answer saying they wont do the job:
 # https://developercommunity.visualstudio.com/t/Provide-a-PowerShell-version-of-vcvarsal/10238319
 
-# Get the folder of current script
-$SCRIPT_DIR=Split-Path $MyInvocation.MyCommand.Path -Parent
 
 . "$SCRIPT_DIR\Invoke-CmdScript.ps1"
 

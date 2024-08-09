@@ -229,6 +229,8 @@ redhat-build:
     - git checkout -f -q $CI_COMMIT_SHA
   # Obviously Windows does not use same executable name as linux...
   after_script:
+    # need to setup path to be able to use python
+    - . "CI\setup_python.ps1" x64
     - python -u CI/cdash_handler.py
 
 # - Win10
