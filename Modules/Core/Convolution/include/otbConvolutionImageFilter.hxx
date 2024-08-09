@@ -37,7 +37,6 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
 ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>::ConvolutionImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   m_Radius.Fill(1);
   m_Filter.SetSize(3 * 3);
   m_Filter.Fill(1);
@@ -93,15 +92,13 @@ void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilt
 }
 
 template <class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
-void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
   // Allocate output
   typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInput();
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   InputRealType sum = itk::NumericTraits<InputRealType>::Zero;
 
@@ -139,7 +136,6 @@ void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilt
 
       ++inputIt;
       ++outputIt;
-      progress.CompletedPixel();
     }
   }
   else
@@ -157,7 +153,6 @@ void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilt
 
       ++inputIt;
       ++outputIt;
-      progress.CompletedPixel();
     }
   }
 }

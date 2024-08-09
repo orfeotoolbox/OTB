@@ -77,7 +77,7 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, OutputImageType::ImageDimension);
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 protected:
   ExtractROI();

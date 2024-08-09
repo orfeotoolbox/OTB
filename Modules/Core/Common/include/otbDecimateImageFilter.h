@@ -93,7 +93,7 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** Allows multithreading */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  virtual void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

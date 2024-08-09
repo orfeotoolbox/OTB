@@ -181,7 +181,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void BeforeThreadedGenerateData() override;
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
   void GenerateOutputInformation() override;
 
   PointType               m_OutputOrigin{0.0};

@@ -103,7 +103,7 @@ protected:
     this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetFunctor().GetOutputSize());
   }
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
   FunctorType      & GetFunctor()       noexcept { return m_Functor; }
   FunctorType const& GetFunctor() const noexcept { return m_Functor; }

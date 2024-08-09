@@ -130,8 +130,8 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirectio
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType>
-void LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
 
   typename InputImageType::ConstPointer input = this->GetInput();
@@ -156,8 +156,6 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirectio
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_FaceList);
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   typename TInputImage::IndexType                bitIndex;
   typename InterpolatorType::ContinuousIndexType Index;
@@ -366,9 +364,7 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirectio
       ++it;
       ++itdir;
       // interiorFace = false;
-      progress.CompletedPixel();
 
-      // ROMAIN
       for (unsigned int i = 0; i < NB_DIR; ++i)
       {
         delete[] PixelValues[i];

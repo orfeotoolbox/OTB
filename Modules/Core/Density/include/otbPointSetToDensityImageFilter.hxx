@@ -33,7 +33,6 @@ namespace otb
 template <class TInputPointSet, class TOutputImage, class TDensityFunction>
 PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>::PointSetToDensityImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   m_Radius = 1;
 }
 
@@ -51,14 +50,11 @@ void PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction
  * ThreadedGenerateData
  --------------------------------------------------------*/
 template <class TInputPointSet, class TOutputImage, class TDensityFunction>
-void PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                        itk::ThreadIdType threadId)
+void PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   //  sleep(threadId);
   //  std::cerr << threadId << " -> " << outputRegionForThread.GetIndex() << std::endl;
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   typename OutputImageType::Pointer outPtr = this->GetOutput();
 
@@ -79,7 +75,6 @@ void PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction
 
     itOut.Set(densityComputeFunction->Evaluate(pCenter));
     ++itOut;
-    progress.CompletedPixel();
   }
 }
 

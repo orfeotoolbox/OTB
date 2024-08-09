@@ -37,7 +37,6 @@ namespace otb
 template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction>
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::BinaryFunctorNeighborhoodVectorImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(2);
   this->InPlaceOff();
   m_Radius = 3;
@@ -91,8 +90,8 @@ void BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOut
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction>
-void BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
 
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage1> nbc1;
@@ -130,9 +129,6 @@ void BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOut
   TypeFace2                                                                               bC2;
   faceList2 = bC2(inputPtr2, outputRegionForThread, r2);
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   // Process each of the boundary faces.
   // Center first and then left, right, up, down borders
   for (fit1 = faceList1.begin(), fit2 = faceList2.begin(); fit1 != faceList1.end() && fit2 != faceList2.end(); ++fit1, ++fit2)
@@ -156,7 +152,6 @@ void BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOut
       ++neighInputIt2;
       ++outputIt;
 
-      progress.CompletedPixel();
     }
   }
 }

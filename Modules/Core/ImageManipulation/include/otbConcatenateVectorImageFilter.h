@@ -98,7 +98,7 @@ protected:
   void GenerateOutputInformation() override;
   void BeforeThreadedGenerateData() override;
   /** Main computation method. */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

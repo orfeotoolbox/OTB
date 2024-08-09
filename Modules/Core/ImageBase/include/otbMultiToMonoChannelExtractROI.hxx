@@ -70,17 +70,13 @@ void MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::GenerateOu
 }
 
 template <class TInputPixelType, class TOutputPixelType>
-void MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                           itk::ThreadIdType threadId)
+void MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   itkDebugMacro(<< "Actually executing");
 
   // Get the input and output pointers
   typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define the portion of the input to walk for this thread
   InputImageRegionType inputRegionForThread;
@@ -104,7 +100,6 @@ void MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::ThreadedGe
     outIt.Set(pixelOutput);
     ++outIt;
     ++inIt;
-    progress.CompletedPixel();
   }
 }
 

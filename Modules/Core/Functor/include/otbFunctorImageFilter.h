@@ -406,7 +406,7 @@ private:
   friend auto NewFunctorFilter<TFunction, TNameMap>(TFunction f, itk::Size<2> radius);
 
   /** Overload of ThreadedGenerateData  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
   /**
    * Pad the input requested region by radius

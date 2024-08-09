@@ -270,8 +270,7 @@ void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>:
 }
 
 template <typename TInputImage, typename TOutputImage, typename TInterpolatorPrecision>
-void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                      itk::ThreadIdType threadId)
+void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // Get the output pointers
   OutputImageType* outputPtr = this->GetOutput();
@@ -309,8 +308,6 @@ void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>:
 
   itk::ImageScanlineIterator<OutputImageType> outIt(outputPtr, regionToCompute);
 
-  // Support for progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, regionToCompute.GetSize()[1]);
 
   // Temporary variables for loop
   PointType                outPoint;
@@ -348,9 +345,6 @@ void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>:
       // Update input position
       inCIndex[0] += delta;
     }
-
-    // Report progress
-    progress.CompletedPixel();
 
     // Move to next line
     outIt.NextLine();

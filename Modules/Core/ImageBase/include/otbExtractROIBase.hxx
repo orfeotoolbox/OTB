@@ -37,7 +37,6 @@ template <class TInputImage, class TOutputImage>
 ExtractROIBase<TInputImage, TOutputImage>::ExtractROIBase()
   : itk::ImageToImageFilter<TInputImage, TOutputImage>(), m_StartX(0), m_StartY(0), m_SizeX(0), m_SizeY(0)
 {
-  OTB_DISABLE_DYNAMIC_MT;
 }
 
 /**

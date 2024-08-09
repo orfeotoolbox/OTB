@@ -41,7 +41,6 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::TouziEdgeDetectorImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   m_Radius.Fill(1);
 }
 
@@ -116,8 +115,7 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirecti
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
-void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                          itk::ThreadIdType threadId)
+void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -137,8 +135,6 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirecti
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_Radius);
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   typename TInputImage::IndexType bitIndex;
 
@@ -293,7 +289,6 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirecti
       ++bit;
       ++it;
       ++it_dir;
-      progress.CompletedPixel();
     }
   }
 }

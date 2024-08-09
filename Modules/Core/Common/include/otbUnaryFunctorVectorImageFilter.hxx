@@ -53,8 +53,7 @@ void UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>::Genera
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                               itk::ThreadIdType threadId)
+void UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
@@ -65,8 +64,6 @@ void UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>::Thread
   itk::ImageRegionIterator<OutputImageType> outputIt(this->GetOutput(), outputRegionForThread);
   outputIt.GoToBegin();
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   while (!outputIt.IsAtEnd() && !inputIt.IsAtEnd())
   {
@@ -75,7 +72,6 @@ void UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>::Thread
     ++inputIt;
     ++outputIt;
 
-    progress.CompletedPixel();
   }
 }
 

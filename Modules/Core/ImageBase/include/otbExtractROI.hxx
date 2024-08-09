@@ -34,7 +34,6 @@ namespace otb
 template <class TInputPixel, class TOutputPixel>
 ExtractROI<TInputPixel, TOutputPixel>::ExtractROI() //: ExtractROIBase< itk::Image<TInputPixel, VImageDimension> , itk::Image<TOutputPixel, VImageDimension> >()
 {
-  OTB_DISABLE_DYNAMIC_MT;
 }
 
 /**
@@ -63,16 +62,13 @@ void ExtractROI<TInputPixel, TOutputPixel>::GenerateOutputInformation()
 }
 
 template <class TInputPixel, class TOutputPixel>
-void ExtractROI<TInputPixel, TOutputPixel>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ExtractROI<TInputPixel, TOutputPixel>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   itkDebugMacro(<< "Actually executing");
 
   // Get the input and output pointers
   typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define the portion of the input to walk for this thread
   InputImageRegionType inputRegionForThread;
@@ -92,7 +88,6 @@ void ExtractROI<TInputPixel, TOutputPixel>::ThreadedGenerateData(const OutputIma
     outIt.Set(inIt.Get());
     ++outIt;
     ++inIt;
-    progress.CompletedPixel();
   }
 }
 

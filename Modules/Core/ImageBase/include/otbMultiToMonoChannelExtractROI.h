@@ -110,7 +110,7 @@ protected:
   /** ExtractImageFilter can be implemented as a multithreaded filter.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   MultiToMonoChannelExtractROI(const Self&) = delete;

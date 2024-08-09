@@ -31,6 +31,7 @@ namespace otb
 template <class TInputLabelImage>
 PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage>::PersistentLabelImageSmallRegionMergingFilter() : m_Size(1)
 {
+  this->DynamicMultiThreadingOff();
 }
 
 template <class TInputLabelImage>
@@ -77,7 +78,7 @@ template <class TInputLabelImage>
 void PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage>::Reset()
 {
   m_NeighboursMapsTmp.clear();
-  m_NeighboursMapsTmp.resize(this->GetNumberOfWorkUnits());
+  m_NeighboursMapsTmp.resize(this->GetNumberOfThreads());
 }
 
 template <class TInputLabelImage>
@@ -86,7 +87,7 @@ void PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage>::Synthetize(
   NeighboursMapType neighboursMap;
 
   // Merge the neighbours maps from all threads
-  for (unsigned int threadId = 0; threadId < this->GetNumberOfWorkUnits(); threadId++)
+  for (unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
   {
     for (auto const& neighbours : m_NeighboursMapsTmp[threadId])
     {

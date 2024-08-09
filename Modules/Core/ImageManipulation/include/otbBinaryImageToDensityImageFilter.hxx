@@ -35,7 +35,6 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TCountFunction>
 BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>::BinaryImageToDensityImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   m_NeighborhoodRadius.Fill(1);
   m_CountFunction = CountFunctionType::New();
 }
@@ -103,8 +102,7 @@ void BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>:
 
 /** Main computation method */
 template <class TInputImage, class TOutputImage, class TCountFunction>
-void BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>::ThreadedGenerateData(const InputImageRegionType& outputRegionForThread,
-                                                                                                      itk::ThreadIdType threadId)
+void BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>::DynamicThreadedGenerateData(const InputImageRegionType& outputRegionForThread)
 {
   InputImagePointerType  inputPtr  = const_cast<InputImageType*>(this->GetInput());
   OutputImagePointerType outputPtr = this->GetOutput();
@@ -121,8 +119,6 @@ void BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>:
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fit;
 
   itk::ImageRegionIterator<OutputImageType> itOut(outputPtr, outputRegionForThread);
-
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   typename InputImageType::IndexType index;
 
@@ -145,7 +141,6 @@ void BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>:
 
       ++itOut;
       ++it;
-      progress.CompletedPixel(); // potential exception thrown here
     }
   }
 }
