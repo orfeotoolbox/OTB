@@ -106,8 +106,9 @@ if ( $PROJECT -eq "otb" ) {
 }
 $env:PATH="C:\tools\buildcache\bin;$env:PATH"
 
-$Global:IMAGE_NAME="windows-$SHORT_TARGET-$ARCH-vc$VCVER"
-echo "Generated IMAGE_NAME: $IMAGE_NAME"
+# define image name as env variable as it is used in prepare_superbuild.cmake
+$env:IMAGE_NAME="windows-$SHORT_TARGET-$ARCH-vc$VCVER"
+echo "Generated IMAGE_NAME: $env:IMAGE_NAME"
 
 # setup path to perl, but add it last ... (there is a libstdc++.dll in that folder...)
 $env:PATH="$env:PATH;C:\tools\perl\perl\bin"
