@@ -23,11 +23,6 @@
 
 #include "itkVersion.h"
 
-#if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
-#include "itksys/FundamentalType.h"
-#else
-#endif
-
 #include <string>
 #include <boost/cstdint.hpp>
 #include "itkLoggerBase.h"
@@ -48,12 +43,7 @@ namespace otb
 class OTBCommon_EXPORT ConfigurationManager
 {
 public:
-#if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
-  typedef ::itksysFundamentalType_UInt64 RAMValueType;
-#else
   typedef uint64_t RAMValueType;
-#endif
-
   /**
    * DEMDirectory is a directory were DEM tiles are stored.
    *

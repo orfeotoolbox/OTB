@@ -270,11 +270,7 @@ void StreamingImageVirtualWriter<TInputImage>::GenerateData(void)
 template <class TInputImage>
 const bool& StreamingImageVirtualWriter<TInputImage>::GetAbortGenerateData() const
 {
-#if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleFastMutexLock> mutexHolder(m_Lock);
-#else
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
-#endif
   bool ret = Superclass::GetAbortGenerateData();
   m_Lock.unlock();
   if (ret)
@@ -285,11 +281,7 @@ const bool& StreamingImageVirtualWriter<TInputImage>::GetAbortGenerateData() con
 template <class TInputImage>
 void StreamingImageVirtualWriter<TInputImage>::SetAbortGenerateData(bool val)
 {
-#if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleFastMutexLock> mutexHolder(m_Lock);
-#else
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
-#endif
   Superclass::SetAbortGenerateData(val);
 }
 

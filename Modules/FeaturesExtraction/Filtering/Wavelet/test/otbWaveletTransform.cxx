@@ -42,11 +42,7 @@ int otbWaveletTransform_generic(int argc, char* argv[])
   if (argc == 7)
   {
     unsigned int  NbOfThreads = atoi(argv[6]);
-#if ITK_VERSION_MAJOR < 5
-    itk::MultiThreader::SetGlobalDefaultNumberOfThreads(NbOfThreads);
-#else
     itk::MultiThreaderBase::SetGlobalDefaultNumberOfThreads(NbOfThreads);
-#endif
   }
 
 

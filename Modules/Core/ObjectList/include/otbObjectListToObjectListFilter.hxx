@@ -122,11 +122,7 @@ void ObjectListToObjectListFilter<TInputList, TOutputList>::ThreadedGenerateData
 }
 
 template <class TInputList, class TOutputList>
-#if ITK_VERSION_MAJOR >= 5
 itk::ITK_THREAD_RETURN_TYPE
-#else
-ITK_THREAD_RETURN_TYPE
-#endif
 ObjectListToObjectListFilter<TInputList, TOutputList>
 ::ThreaderCallback(void *arg)
 {
@@ -159,11 +155,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
   //   few threads idle.
   //   }
 
-#if ITK_VERSION_MAJOR >= 5
   return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
-#else
-  return ITK_THREAD_RETURN_VALUE;
-#endif
 }
 
 /**

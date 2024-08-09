@@ -24,13 +24,7 @@
 #include "itksys/SystemTools.hxx"
 #include "itkDynamicLoader.h"
 #include "itkDirectory.h"
-
-#if ITK_VERSION_MAJOR < 5
-#include "itkMutexLock.h"
-#include "itkMutexLockHolder.h"
-#else
 #include <mutex>
-#endif
 
 #include <iterator>
 
@@ -55,11 +49,7 @@ public:
     if (app && handle)
     {
       // mutex lock to ensure thread safety
-      #if ITK_VERSION_MAJOR < 5
-      itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
-      #else
       std::lock_guard<std::mutex> mutexHolder(m_Mutex);
-      #endif
       pair.first = app;
       pair.second = handle;
       m_Container.push_back(pair);
@@ -74,11 +64,7 @@ public:
     if (app)
     {
       // mutex lock to ensure thread safety
-      #if ITK_VERSION_MAJOR < 5
-      itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
-      #else
       std::lock_guard<std::mutex> mutexHolder(m_Mutex);
-      #endif
       AppHandleContainerType::iterator it = m_Container.begin();
       while (it != m_Container.end())
       {
@@ -94,11 +80,7 @@ public:
   /** Release the library handles from applications already deleted */
   void ReleaseUnusedHandle()
     {
-    #if ITK_VERSION_MAJOR < 5
-    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
-    #else
     std::lock_guard<std::mutex> mutexHolder(m_Mutex);
-    #endif
     AppHandleContainerType::iterator it;
     for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
       {
@@ -129,11 +111,8 @@ public:
 private:
   AppHandleContainerType m_Container;
   
-  #if ITK_VERSION_MAJOR < 5
-  itk::SimpleMutexLock m_Mutex;
-  #else
   std::mutex m_Mutex;
-  #endif
+
 };
 // static finalizer to close opened libraries
 static ApplicationPrivateRegistry m_ApplicationPrivateRegistryGlobal;

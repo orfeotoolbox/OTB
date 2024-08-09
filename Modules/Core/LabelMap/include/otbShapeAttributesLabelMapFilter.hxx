@@ -35,10 +35,7 @@
 
 #include "otbMacro.h"
 #include <deque>
-
-#if ITK_VERSION_MAJOR >= 5
-#include "vcl_legacy_aliases.h" // ITK v5 compatibility
-#endif
+#include "vcl_legacy_aliases.h"
 
 namespace otb {
 

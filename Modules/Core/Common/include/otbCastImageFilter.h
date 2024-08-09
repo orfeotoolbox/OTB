@@ -18,7 +18,6 @@
 #ifndef otbCastImageFilter_h
 #define otbCastImageFilter_h
 
-#if ITK_VERSION_MAJOR >= 5
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkProgressReporter.h"
 
@@ -112,4 +111,3 @@ protected:
 #include "otbCastImageFilter.hxx"
 #endif
 
-#endif // ITK_VERSION_MAJOR

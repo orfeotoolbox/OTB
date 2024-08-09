@@ -84,25 +84,13 @@ bool CoordinateToName::Evaluate()
 }
 
 
-#if ITK_VERSION_MAJOR >= 5
 itk::ITK_THREAD_RETURN_TYPE
-#else
-ITK_THREAD_RETURN_TYPE
-#endif
 CoordinateToName::ThreadFunction(void *arg)
 {
-#if ITK_VERSION_MAJOR < 5
-  struct itk::MultiThreader::WorkUnitInfo * pInfo = (itk::MultiThreader::WorkUnitInfo *) (arg);
-#else
   struct itk::MultiThreaderBase::WorkUnitInfo * pInfo = (itk::MultiThreaderBase::WorkUnitInfo *) (arg);
-#endif
   CoordinateToName::Pointer  lThis = (CoordinateToName*) (pInfo->UserData);
   lThis->DoEvaluate();
-#if ITK_VERSION_MAJOR >= 5
   return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
-#else
-  return ITK_THREAD_RETURN_VALUE;
-#endif
 }
 
 void CoordinateToName::DoEvaluate()

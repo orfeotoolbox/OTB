@@ -22,13 +22,8 @@
 #define otbImageToPointSetFilter_hxx
 
 #include "otbImageToPointSetFilter.h"
-//#include "itkMultiThreader.h" //itk5 - itk4 compat
-
-#if ITK_VERSION_MAJOR < 5
-#include "itkMultiThreader.h"
-#else
 #include "itkMultiThreaderBase.h"
-#endif
+
 namespace otb
 {
 
@@ -241,11 +236,7 @@ void ImageToPointSetFilter<TInputImage, TOutputPointSet>::ThreadedGenerateData(c
 }
 
 template <class TInputImage, class TOutputPointSet>
-#if ITK_VERSION_MAJOR >= 5
 itk::ITK_THREAD_RETURN_TYPE
-#else
-ITK_THREAD_RETURN_TYPE
-#endif
 ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThreaderCallback(void *arg)
 {
@@ -273,11 +264,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   //   few threads idle.
   //   }
 
-#if ITK_VERSION_MAJOR >= 5
   return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
-#else
-  return ITK_THREAD_RETURN_VALUE;
-#endif
 }
 
 template <class TInputImage, class TOutputPointSet>

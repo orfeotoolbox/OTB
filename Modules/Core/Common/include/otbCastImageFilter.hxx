@@ -18,8 +18,6 @@
 #ifndef itkCastImageFilter_hxx
 #define itkCastImageFilter_hxx
 
-#if ITK_VERSION_MAJOR >= 5
-
 #include "otbCastImageFilter.h"
 #include "itkProgressReporter.h"
 #include "itkImageAlgorithm.h"
@@ -174,5 +172,3 @@ CastImageFilter< TInputImage, TOutputImage >
 } // end namespace otb
 
 #endif
-
-#endif // ITK_VERSION_MAJOR

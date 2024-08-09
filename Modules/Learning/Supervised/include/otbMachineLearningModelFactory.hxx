@@ -43,11 +43,7 @@
 #include "otbSharkKMeansMachineLearningModelFactory.h"
 #endif
 
-#if ITK_VERSION_MAJOR < 5
-#include "itkMutexLockHolder.h"
-#else
 #include <mutex>
-#endif
 
 namespace otb
 {
@@ -94,11 +90,7 @@ MachineLearningModelFactory<TInputValue, TOutputValue>::CreateMachineLearningMod
 template <class TInputValue, class TOutputValue>
 void MachineLearningModelFactory<TInputValue, TOutputValue>::RegisterBuiltInFactories()
 {
-#if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
-#else
   std::lock_guard<std::mutex> lockHolder(mutex);
-#endif
   
 #ifdef OTB_USE_LIBSVM
   RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue, TOutputValue>::New());
@@ -133,11 +125,7 @@ void MachineLearningModelFactory<TInputValue, TOutputValue>::RegisterFactory(itk
 template <class TInputValue, class TOutputValue>
 void MachineLearningModelFactory<TInputValue, TOutputValue>::CleanFactories()
 {
-#if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
-#else
   std::lock_guard<std::mutex> lockHolder(mutex);
-#endif
 
   std::list<itk::ObjectFactoryBase*>           factories = itk::ObjectFactoryBase::GetRegisteredFactories();
   std::list<itk::ObjectFactoryBase*>::iterator itFac;

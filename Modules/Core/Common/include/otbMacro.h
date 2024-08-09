@@ -83,11 +83,7 @@ namespace otb
  * itk::ERROR: ShiftScaleImageFilter(0xabad1deaff): Subclass should override this method!!! 
  * If old behavior is desired invoke this->DynamicMultiThreadingOff(); before Update() is called. The best place is in class constructor.
  */
-#if ITK_VERSION_MAJOR < 5
-#define OTB_DISABLE_DYNAMIC_MT
-#else
 #define OTB_DISABLE_DYNAMIC_MT this->DynamicMultiThreadingOff();
-#endif
 
 /*
 //ITK_THREAD_RETURN_TYPE and ITK_THREAD_RETURN_VALUE bas been changed in ITK5 (master)

@@ -26,13 +26,7 @@
 #include "itkImageRegionSplitter.h"
 #include "itkIndex.h"
 #include "itkSize.h"
-
-#if ITK_VERSION_MAJOR < 5
-#include "itkFastMutexLock.h"
-#include "itkMutexLockHolder.h"
-#else
 #include <mutex>
-#endif
 
 namespace otb
 {
@@ -179,11 +173,7 @@ private:
   mutable bool m_IsUpToDate;
 
   // Lock to ensure thread-safety
-#if ITK_VERSION_MAJOR < 5
-  itk::SimpleFastMutexLock m_Lock;
-#else
   std::mutex m_Lock;
-#endif
 };
 
 } // end namespace otb

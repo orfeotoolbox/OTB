@@ -23,11 +23,7 @@
 #include "otbMacro.h"
 #include "otbLogger.h"
 
-#if ITK_VERSION_MAJOR < 5
-#include "itkMultiThreader.h"
-#else
 #include "itkMultiThreaderBase.h"
-#endif
 
 #include "itksys/SystemTools.hxx"
 
@@ -114,11 +110,7 @@ int ConfigurationManager::InitOpenMPThreads()
 {
   int ret = 1;
 #ifdef _OPENMP
-#if ITK_VERSION_MAJOR < 5
-  ret = itk::MultiThreader::GetGlobalDefaultNumberOfThreads();
-#else
   ret = itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads();
-#endif //ITK_VERSION_MAJOR
   omp_set_num_threads(ret);
 #endif //_OPENMP
   return ret;

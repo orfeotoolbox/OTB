@@ -812,11 +812,7 @@ const char* ImageFileWriter<TInputImage>::GetFileName() const
 template <class TInputImage>
 const bool& ImageFileWriter<TInputImage>::GetAbortGenerateData() const
 {
-#if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleFastMutexLock> mutexHolder(m_Lock);
-#else
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
-#endif
   // protected read here
   bool ret = Superclass::GetAbortGenerateData();
   m_Lock.unlock();
@@ -828,11 +824,7 @@ const bool& ImageFileWriter<TInputImage>::GetAbortGenerateData() const
 template <class TInputImage>
 void ImageFileWriter<TInputImage>::SetAbortGenerateData(bool val)
 {
-#if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleFastMutexLock> mutexHolder(m_Lock);
-#else
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
-#endif
   Superclass::SetAbortGenerateData(val);
 }
 

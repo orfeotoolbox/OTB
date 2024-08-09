@@ -22,12 +22,7 @@
 #define otbCoordinateToName_h
 
 #include "itkPoint.h"
-
-#if ITK_VERSION_MAJOR < 5
-#include "itkMultiThreader.h"
-#else
 #include "itkPlatformMultiThreader.h"
-#endif
 
 #include "itkConfigure.h"
 #include "otbCurlHelperInterface.h"
@@ -71,11 +66,7 @@ public:
   itkSetMacro(Lon, double);
   itkSetMacro(Lat, double);
 
-  #if ITK_VERSION_MAJOR > 4
   using PlatformMultiThreader = itk::PlatformMultiThreader;
-  #else
-  using PlatformMultiThreader = itk::MultiThreader;
-  #endif
 
   /**
    * Set the lon/lat only if they are far enough from the current point to
@@ -141,11 +132,7 @@ protected:
 
   virtual void DoEvaluate();
 
-#if ITK_VERSION_MAJOR >= 5
   static itk::ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
-#else
-  static ITK_THREAD_RETURN_TYPE ThreadFunction( void * );
-#endif
 
 private:
   CoordinateToName(const Self&) = delete;

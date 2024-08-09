@@ -28,12 +28,7 @@
 #include "otbMacro.h"
 #include "otbStopwatch.h"
 #include "itkProgressReporter.h"
-
-#if ITK_VERSION_MAJOR < 5
-#include "itkMultiThreader.h"
-#else
 #include "itkMultiThreaderBase.h"
-#endif
 
 namespace otb
 {
@@ -784,11 +779,7 @@ PersistentSamplingFilterBase<TInputImage, TMaskImage>::GetAdditionalFields()
 }
 
 template<class TInputImage, class TMaskImage>
-#if ITK_VERSION_MAJOR < 5
-ITK_THREAD_RETURN_TYPE
-#else
 itk::ITK_THREAD_RETURN_TYPE
-#endif
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::VectorThreaderCallback(void *arg)
 {
@@ -803,11 +794,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     str->Filter->ThreadedGenerateVectorData(layer,threadId);
     }
     
-#if ITK_VERSION_MAJOR >= 5
   return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
-#else
-  return ITK_THREAD_RETURN_VALUE;
-#endif
 }
 
 template <class TInputImage, class TMaskImage>

@@ -25,11 +25,7 @@
 #include <iostream>
 #include "gdal.h"
 
-#if ITK_VERSION_MAJOR < 5
-#include "itkMultiThreader.h"
-#else
 #include "itkMultiThreaderBase.h"
-#endif
 
 #include <type_traits>
 #include <cassert>
