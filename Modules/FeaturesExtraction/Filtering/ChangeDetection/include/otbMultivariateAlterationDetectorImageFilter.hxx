@@ -37,6 +37,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Multivaria
 {
   this->SetNumberOfRequiredInputs(2);
   m_CovarianceEstimator = CovarianceEstimatorType::New();
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>

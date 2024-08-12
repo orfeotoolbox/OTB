@@ -32,6 +32,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>::ImageOfVectorsToMonoChannelExtractROI() : m_Channel(1)
 {
+    this->DynamicMultiThreadingOn();
 }
 
 /**

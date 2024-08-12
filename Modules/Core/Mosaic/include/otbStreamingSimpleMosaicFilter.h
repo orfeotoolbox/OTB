@@ -77,6 +77,7 @@ public:
 protected:
   StreamingSimpleMosaicFilter()
   {
+    this->DynamicMultiThreadingOn();
   }
 
   virtual ~StreamingSimpleMosaicFilter()

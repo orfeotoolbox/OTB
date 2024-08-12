@@ -23,7 +23,7 @@
 
 #include "otbBinaryFunctorNeighborhoodJoinHistogramImageFilter.h"
 #include "otbJoinHistogramMI.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+#include "otbMacro.h" //for 
 
 namespace otb
 {
@@ -82,7 +82,7 @@ public:
 protected:
   JoinHistogramMIImageFilter() 
   {
-    OTB_DISABLE_DYNAMIC_MT;
+    
   }
   ~JoinHistogramMIImageFilter() override {}
 

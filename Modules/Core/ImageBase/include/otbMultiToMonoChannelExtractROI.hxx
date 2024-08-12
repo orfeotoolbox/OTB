@@ -33,6 +33,7 @@ template <class TInputPixelType, class TOutputPixelType>
 MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::MultiToMonoChannelExtractROI()
   : ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2>>(), m_Channel(1)
 {
+  this->DynamicMultiThreadingOn();
 }
 
 /**

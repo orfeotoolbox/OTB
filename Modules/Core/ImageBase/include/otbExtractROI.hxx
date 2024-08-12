@@ -34,6 +34,7 @@ namespace otb
 template <class TInputPixel, class TOutputPixel>
 ExtractROI<TInputPixel, TOutputPixel>::ExtractROI() //: ExtractROIBase< itk::Image<TInputPixel, VImageDimension> , itk::Image<TOutputPixel, VImageDimension> >()
 {
+  this->DynamicMultiThreadingOn();
 }
 
 /**

@@ -21,7 +21,7 @@
 #ifndef otbUnaryFunctorNeighborhoodWithOffsetImageFilter_hxx
 #define otbUnaryFunctorNeighborhoodWithOffsetImageFilter_hxx
 
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+#include "otbMacro.h" //for 
 #include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
@@ -37,7 +37,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>::UnaryFunctorNeighborhoodWithOffsetImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
+  
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
   m_Offset.Fill(1);

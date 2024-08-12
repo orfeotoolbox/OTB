@@ -32,6 +32,7 @@ namespace otb
 template <class TDEMImage>
 DEMToImageGenerator<TDEMImage>::DEMToImageGenerator()
 {
+  this->DynamicMultiThreadingOn();
   m_OutputSpacing[0]    = 0.0001;
   m_OutputSpacing[1]    = -0.0001;
   m_OutputSize[0]       = 1;

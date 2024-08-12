@@ -42,7 +42,7 @@ PersistentStatisticsImageFilter<TInputImage>
    m_IgnoreInfiniteValues(true),
    m_IgnoreUserDefinedValue(false)
 {
-  OTB_DISABLE_DYNAMIC_MT;
+  
   // first output is a copy of the image, DataObject created by
   // superclass
   //

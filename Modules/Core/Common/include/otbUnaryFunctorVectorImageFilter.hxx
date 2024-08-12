@@ -34,6 +34,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>::UnaryFunctorVectorImageFilter()
 {
+  this->DynamicMultiThreadingOn();
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
 }

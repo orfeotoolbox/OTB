@@ -35,6 +35,7 @@ AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>
 {
   // this->SetNumberOfRequiredInputs(NumberOfInputImages);
   this->SetNumberOfRequiredOutputs(1);
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage, class TAngleArray, class TPrecision>

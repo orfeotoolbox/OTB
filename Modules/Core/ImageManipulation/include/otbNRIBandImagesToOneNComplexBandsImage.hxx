@@ -39,6 +39,7 @@ template <class TInputImage, class TOutputImage>
 NRIBandImagesToOneNComplexBandsImage<TInputImage, TOutputImage>::NRIBandImagesToOneNComplexBandsImage()
 {
   // this->SetNumberOfWorkUnits(1);
+  this->DynamicMultiThreadingOn();
 }
 
 /**

@@ -31,7 +31,7 @@ UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
 ::UnaryFunctorImageFilter()
 {
   //TODO: Verify
-  this->DynamicMultiThreadingOff();
+  this->DynamicMultiThreadingOn();
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
 }

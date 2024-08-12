@@ -36,6 +36,7 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>::Un
 {
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
+  this->DynamicMultiThreadingOn();
 }
 
 /**

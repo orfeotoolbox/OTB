@@ -34,7 +34,7 @@ namespace otb
 template <class TInputImage, class TInputImage2>
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>::PersistentMatrixTransposeMatrixImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
+  
   this->SetNumberOfRequiredInputs(2);
 
   // first output is a copy of the image, DataObject created by

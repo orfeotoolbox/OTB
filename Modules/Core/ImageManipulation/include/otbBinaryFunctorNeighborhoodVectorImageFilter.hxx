@@ -22,7 +22,7 @@
 #define otbBinaryFunctorNeighborhoodVectorImageFilter_hxx
 
 #include "otbMath.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+#include "otbMacro.h" //for 
 #include "otbBinaryFunctorNeighborhoodVectorImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"

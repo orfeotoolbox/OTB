@@ -37,6 +37,7 @@ PersistentVectorImageToMatrixFilter<TInputImage>::PersistentVectorImageToMatrixF
   //
   // allocate the data objects for the outputs which are
   // just decorators around vector/matric types
+  this->DynamicMultiThreadingOn();
   this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
 }
 

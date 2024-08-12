@@ -26,7 +26,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkObjectFactory.h"
 #include "itkExtractImageFilterRegionCopier.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -39,6 +38,7 @@ MultiChannelExtractROI<TInputPixelType, TOutputPixelType>::MultiChannelExtractRO
   : ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2>>(), m_FirstChannel(0), m_LastChannel(0), m_ChannelsKind(0)
 {
   ClearChannels();
+  this->DynamicMultiThreadingOn();
 }
 
 /**

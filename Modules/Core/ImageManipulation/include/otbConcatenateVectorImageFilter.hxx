@@ -22,7 +22,7 @@
 #define otbConcatenateVectorImageFilter_hxx
 
 #include "otbConcatenateVectorImageFilter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+#include "otbMacro.h" //for 
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
@@ -35,6 +35,7 @@ template <class TInputImage1, class TInputImage2, class TOutputImage>
 ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::ConcatenateVectorImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
+  this->DynamicMultiThreadingOn();
 }
 /**
  * Destructor.

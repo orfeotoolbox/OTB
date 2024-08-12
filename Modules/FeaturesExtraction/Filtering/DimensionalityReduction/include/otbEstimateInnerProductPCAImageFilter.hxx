@@ -36,6 +36,7 @@ template <class TInputImage, class TOutputImage>
 EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::EstimateInnerProductPCAImageFilter()
   : m_NumberOfPrincipalComponentsRequired(1), m_CenterData(true)
 {
+  this->DynamicMultiThreadingOn();
 }
 
 /**

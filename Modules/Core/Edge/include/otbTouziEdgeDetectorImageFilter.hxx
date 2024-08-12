@@ -42,6 +42,7 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::TouziEdgeDetectorImageFilter()
 {
   m_Radius.Fill(1);
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>

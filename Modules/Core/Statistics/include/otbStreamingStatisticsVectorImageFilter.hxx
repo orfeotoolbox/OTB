@@ -42,7 +42,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::Persist
     m_IgnoreUserDefinedValue(false),
     m_UserIgnoredValue(itk::NumericTraits<InternalPixelType>::Zero)
 {
-  OTB_DISABLE_DYNAMIC_MT;
+  
   // first output is a copy of the image, DataObject created by
   // superclass
 

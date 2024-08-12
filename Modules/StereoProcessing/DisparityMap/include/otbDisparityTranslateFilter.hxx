@@ -34,6 +34,7 @@ template <class TDisparityImage, class TGridImage, class TSensorImage, class TMa
 DisparityTranslateFilter<TDisparityImage, TGridImage, TSensorImage, TMaskImage>::DisparityTranslateFilter()
   : m_NoDataValue(-32768)
 {
+  this->DynamicMultiThreadingOn();
   // Set the number of inputs (1 moving image by default -> 3 inputs)
   this->SetNumberOfRequiredInputs(6);
   this->SetNumberOfRequiredInputs(1);

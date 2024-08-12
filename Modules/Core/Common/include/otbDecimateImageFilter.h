@@ -76,6 +76,7 @@ protected:
   DecimateImageFilter()
   {
     m_DecimationFactor = 1;
+    this->DynamicMultiThreadingOn();
   }
   virtual ~DecimateImageFilter()
   {

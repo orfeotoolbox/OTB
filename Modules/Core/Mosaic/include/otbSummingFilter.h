@@ -80,6 +80,7 @@ public:
 protected:
   SummingFilter()
   {
+    this->DynamicMultiThreadingOn();
   }
 
   virtual ~SummingFilter()

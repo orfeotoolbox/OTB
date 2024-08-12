@@ -21,7 +21,7 @@
 #ifndef otbMatrixImageFilter_hxx
 #define otbMatrixImageFilter_hxx
 
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+#include "otbMacro.h" //for 
 #include "otbMatrixImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
@@ -35,7 +35,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TMatrix>
 MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::MatrixImageFilter() : m_MatrixByVector(false)
 {
-  OTB_DISABLE_DYNAMIC_MT;
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage, class TMatrix>

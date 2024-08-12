@@ -41,6 +41,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::MaximumAutoc
   m_CovarianceEstimator = CovarianceEstimatorType::New();
   m_CovarianceEstimatorH = CovarianceEstimatorType::New();
   m_CovarianceEstimatorV = CovarianceEstimatorType::New();
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>

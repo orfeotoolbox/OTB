@@ -42,6 +42,7 @@ GammaMAPImageFilter<TInputImage, TOutputImage>::GammaMAPImageFilter()
 {
   m_Radius.Fill(1);
   SetNbLooks(1.0);
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>

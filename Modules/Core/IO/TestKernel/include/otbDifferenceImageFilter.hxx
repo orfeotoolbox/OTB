@@ -36,7 +36,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 DifferenceImageFilter<TInputImage, TOutputImage>::DifferenceImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
+  
   // We require two inputs to execute.
   this->SetNumberOfRequiredInputs(2);
 

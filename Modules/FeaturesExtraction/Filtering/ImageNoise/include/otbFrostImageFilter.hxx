@@ -41,6 +41,7 @@ FrostImageFilter<TInputImage, TOutputImage>::FrostImageFilter()
 {
   m_Radius.Fill(1);
   m_Deramp = 2;
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>

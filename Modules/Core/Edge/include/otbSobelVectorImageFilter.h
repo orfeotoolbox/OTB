@@ -93,7 +93,7 @@ public:
 protected:
   SobelVectorImageFilter()
   {
-    OTB_DISABLE_DYNAMIC_MT;
+    
     typename Superclass::RadiusType radius = {{1, 1}};
     this->SetRadius(radius);
   }

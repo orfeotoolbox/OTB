@@ -29,6 +29,7 @@ namespace otb
 template <class TImage>
 TileImageFilter<TImage>::TileImageFilter()
 {
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TImage>

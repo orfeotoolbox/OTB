@@ -35,7 +35,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>::SpectralAngleDistanceImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
+  this->DynamicMultiThreadingOn();
   m_ReferencePixel = 0;
 }
 

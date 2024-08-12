@@ -37,6 +37,7 @@ template <class TInputImage, class TOutputImage>
 VarianceImageFilter<TInputImage, TOutputImage>::VarianceImageFilter()
 {
   m_Radius.Fill(1);
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>

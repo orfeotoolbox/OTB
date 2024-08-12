@@ -34,6 +34,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::VectorImageToIntensityImageFilter()
 {
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>

@@ -40,6 +40,7 @@ ApplyGainFilter<TInputImage, TLut, TOutputImage>::ApplyGainFilter()
   m_NoDataFlag           = false;
   m_ThumbSizeFromSpacing = true;
   m_Step                 = -1;
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TLut, class TOutputImage>

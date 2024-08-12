@@ -24,7 +24,7 @@
 
 #include <vector>
 #include <algorithm>
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+#include "otbMacro.h" //for 
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"

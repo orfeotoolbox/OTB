@@ -42,7 +42,9 @@ ClampImageFilter<TInputImage, TOutputImage>::ClampImageFilter()
   :
   m_Lower(std::numeric_limits<OutputPixelValueType>::lowest()),
   m_Upper(std::numeric_limits<OutputPixelValueType>::max())
-{}
+{
+  this->DynamicMultiThreadingOn();  
+}
 
 template <class TInputImage, class TOutputImage>
 void ClampImageFilter<TInputImage, TOutputImage>::SetThresholds(OutputPixelValueType lowerVal, OutputPixelValueType upperVal)

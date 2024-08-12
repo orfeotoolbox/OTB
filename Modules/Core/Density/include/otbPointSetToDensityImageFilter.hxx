@@ -23,8 +23,7 @@
 
 #include "otbPointSetToDensityImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkProgressReporter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+
 namespace otb
 {
 /**---------------------------------------------------------
@@ -34,6 +33,7 @@ template <class TInputPointSet, class TOutputImage, class TDensityFunction>
 PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>::PointSetToDensityImageFilter()
 {
   m_Radius = 1;
+  this->DynamicMultiThreadingOn();
 }
 
 /*-------------------------------------------------------

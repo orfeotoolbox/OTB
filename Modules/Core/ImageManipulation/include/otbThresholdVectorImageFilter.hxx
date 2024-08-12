@@ -22,7 +22,7 @@
 #ifndef otbThresholdVectorImageFilter_hxx
 #define otbThresholdVectorImageFilter_hxx
 
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+#include "otbMacro.h" //for 
 #include "otbThresholdVectorImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
@@ -41,7 +41,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdVectorImageFilte
   m_OutsideValue(itk::NumericTraits<OutputImageInternalPixelType>::Zero),
   m_Lower(itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin()),
   m_Upper(itk::NumericTraits<InputImageInternalPixelType>::max())
-{}
+{this->DynamicMultiThreadingOn();}
 
 
 /**

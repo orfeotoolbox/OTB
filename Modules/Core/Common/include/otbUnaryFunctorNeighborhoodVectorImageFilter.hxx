@@ -22,7 +22,6 @@
 #define otbUnaryFunctorNeighborhoodVectorImageFilter_hxx
 
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
@@ -36,6 +35,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunction>::UnaryFunctorNeighborhoodVectorImageFilter()
 {
+  this->DynamicMultiThreadingOn();
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
   for (unsigned int i = 0; i < InputImageDimension; ++i)

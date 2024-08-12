@@ -41,7 +41,9 @@ ClampVectorImageFilter<TInputImage, TOutputImage>::ClampVectorImageFilter()
   m_Upper(itk::NumericTraits<OutputImageInternalPixelType>::max()),
   m_DLower(static_cast<double>(m_Lower)),
   m_DUpper(static_cast<double>(m_Upper))
-{}
+{
+    this->DynamicMultiThreadingOn();
+}
 
 
 /**

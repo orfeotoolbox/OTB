@@ -40,6 +40,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>::
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
   m_ArchitectureType = PolarimetricData::New();
+  this->DynamicMultiThreadingOn();
 }
 
 /**

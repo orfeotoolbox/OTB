@@ -38,6 +38,7 @@ ComputeGainLutFilter<TInputImage, TOutputImage>::ComputeGainLutFilter()
   m_Min     = std::numeric_limits<double>::quiet_NaN();
   m_Max     = std::numeric_limits<double>::quiet_NaN();
   m_Step    = -1;
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>

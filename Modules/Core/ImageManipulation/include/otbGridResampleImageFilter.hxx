@@ -57,6 +57,7 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>::Grid
   m_OutputSpacing.Fill(1.);
   m_OutputStartIndex.Fill(0);
   m_OutputSize.Fill(0);
+  this->DynamicMultiThreadingOn();
 }
 
 

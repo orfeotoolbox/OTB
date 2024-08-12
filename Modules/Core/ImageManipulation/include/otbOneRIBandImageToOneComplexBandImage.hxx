@@ -37,6 +37,7 @@ template <class TInputImage, class TOutputImage>
 OneRIBandImageToOneComplexBandImage<TInputImage, TOutputImage>::OneRIBandImageToOneComplexBandImage()
 {
   // this->SetNumberOfWorkUnits(1);
+  this->DynamicMultiThreadingOn();
 }
 
 /**

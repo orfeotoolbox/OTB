@@ -34,6 +34,7 @@ template <class TInputImage, class TOutputImage>
 VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
 ::VectorImageTo3DScalarImageFilter()
 {
+  this->DynamicMultiThreadingOn();
 }
 /** Generate output information */
 template <class TInputImage, class TOutputImage>

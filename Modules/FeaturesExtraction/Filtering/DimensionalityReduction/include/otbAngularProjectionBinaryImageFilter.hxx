@@ -34,6 +34,7 @@ template <class TInputImage, class TOutputImage, class TPrecision>
 AngularProjectionBinaryImageFilter<TInputImage, TOutputImage, TPrecision>::AngularProjectionBinaryImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage, class TPrecision>

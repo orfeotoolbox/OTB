@@ -36,7 +36,7 @@ template <class TInputImage>
 PersistentMinMaxVectorImageFilter<TInputImage>::PersistentMinMaxVectorImageFilter()
   : m_NoDataFlag(false), m_NoDataValue(itk::NumericTraits<InternalPixelType>::Zero)
 {
-  OTB_DISABLE_DYNAMIC_MT;
+  
   // first output is a copy of the image, DataObject created by
   // superclass
   //

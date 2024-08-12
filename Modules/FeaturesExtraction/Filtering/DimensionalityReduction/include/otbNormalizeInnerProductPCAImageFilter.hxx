@@ -37,7 +37,7 @@ NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>::NormalizeInnerPr
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
   this->InPlaceOff();
-
+  this->DynamicMultiThreadingOn();
   m_UseUnbiasedEstimator = true;
 }
 

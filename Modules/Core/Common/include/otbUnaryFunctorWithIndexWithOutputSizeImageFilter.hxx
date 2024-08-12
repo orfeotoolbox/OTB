@@ -23,8 +23,6 @@
 
 #include "otbUnaryFunctorWithIndexWithOutputSizeImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkProgressReporter.h"
-#include "otbMacro.h" // for OTB_DISABLE_DYNAMIC_MT;
 
 namespace otb
 {

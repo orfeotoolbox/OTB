@@ -37,6 +37,7 @@ BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>::Bina
 {
   m_NeighborhoodRadius.Fill(1);
   m_CountFunction = CountFunctionType::New();
+  this->DynamicMultiThreadingOn();
 }
 
 /** Destructor */

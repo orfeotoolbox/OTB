@@ -38,6 +38,7 @@ RadiometricMomentsImageFilter<TInputImage, TOutputImage>::RadiometricMomentsImag
 {
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>
