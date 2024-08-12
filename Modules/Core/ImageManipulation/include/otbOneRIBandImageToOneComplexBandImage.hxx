@@ -53,12 +53,8 @@ void OneRIBandImageToOneComplexBandImage<TInputImage, TOutputImage>::BeforeThrea
  * ThreadedGenerateData
  */
 template <class TInputImage, class TOutputImage>
-void OneRIBandImageToOneComplexBandImage<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                          itk::ThreadIdType threadId)
+void OneRIBandImageToOneComplexBandImage<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInput();
@@ -78,7 +74,6 @@ void OneRIBandImageToOneComplexBandImage<TInputImage, TOutputImage>::ThreadedGen
 
     ++it;
     ++itIn;
-    progress.CompletedPixel();
   }
 }
 

@@ -111,7 +111,7 @@ protected:
 
   void BeforeThreadedGenerateData() override;
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
   void VerifyInputInformation() override{};
 
 private:

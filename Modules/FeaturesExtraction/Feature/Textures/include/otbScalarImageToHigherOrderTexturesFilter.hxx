@@ -34,7 +34,6 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>::ScalarImageTo
   : m_Radius(), m_NumberOfBinsPerAxis(8), m_InputImageMinimum(0), m_InputImageMaximum(255), m_FastCalculations(false), m_SubsampleFactor(), m_SubsampleOffset()
 {
   // There are 10 outputs corresponding to the 8 textures indices
-  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredOutputs(10);
 
   // Create the 10 outputs
@@ -237,8 +236,7 @@ void ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>::Generate
 }
 
 template <class TInputImage, class TOutputImage>
-void ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                                                                                             itk::ThreadIdType threadId)
+void ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputRegionType& outputRegionForThread)
 {
   // Retrieve the input and output pointers
   const InputImageType* inputPtr = this->GetInput();
@@ -260,9 +258,6 @@ void ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>::Threaded
   double maxDistance = topLeftPoint.EuclideanDistanceTo(bottomRightPoint);
 
   InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
-
-  // Set-up progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Iterate on outputs to compute textures
   while (!outputImagesIterators[0].IsAtEnd())
@@ -320,8 +315,6 @@ void ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>::Threaded
       // Increment iterators
       ++outputImagesIterators[i];
     }
-    // Update progress
-    progress.CompletedPixel();
   }
 }
 

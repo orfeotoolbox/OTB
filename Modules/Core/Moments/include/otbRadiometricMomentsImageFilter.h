@@ -93,7 +93,7 @@ protected:
   ~RadiometricMomentsImageFilter() override
   {
   }
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
   void GenerateInputRequestedRegion(void) override;
   void GenerateOutputInformation(void) override;
 

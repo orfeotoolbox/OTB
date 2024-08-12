@@ -27,7 +27,6 @@
 #include "itkProgressReporter.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "otbMacro.h"
 
 namespace otb
 {
@@ -37,7 +36,6 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 RadiometricMomentsImageFilter<TInputImage, TOutputImage>::RadiometricMomentsImageFilter()
 {
-    OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
 }
@@ -102,8 +100,7 @@ void RadiometricMomentsImageFilter<TInputImage, TOutputImage>::GenerateOutputInf
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage, class TOutputImage>
-void RadiometricMomentsImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                    itk::ThreadIdType threadId)
+void RadiometricMomentsImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
 
@@ -129,9 +126,6 @@ void RadiometricMomentsImageFilter<TInputImage, TOutputImage>::ThreadedGenerateD
 
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fit;
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit = faceList.begin(); fit != faceList.end(); ++fit)
@@ -148,7 +142,6 @@ void RadiometricMomentsImageFilter<TInputImage, TOutputImage>::ThreadedGenerateD
 
       ++neighInputIt;
       ++outputIt;
-      progress.CompletedPixel();
     }
   }
 }

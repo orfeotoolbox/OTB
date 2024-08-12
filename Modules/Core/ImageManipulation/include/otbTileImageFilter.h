@@ -85,7 +85,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
   /** Generate input requested region method */
   void GenerateInputRequestedRegion() override;

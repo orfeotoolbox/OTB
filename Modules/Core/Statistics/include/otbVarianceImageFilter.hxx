@@ -21,7 +21,6 @@
 #ifndef otbVarianceImageFilter_hxx
 #define otbVarianceImageFilter_hxx
 
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "otbVarianceImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -37,7 +36,6 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 VarianceImageFilter<TInputImage, TOutputImage>::VarianceImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   m_Radius.Fill(1);
 }
 
@@ -88,7 +86,7 @@ void VarianceImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegio
 }
 
 template <class TInputImage, class TOutputImage>
-void VarianceImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void VarianceImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -106,9 +104,6 @@ void VarianceImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const 
   faceList = bC(input, outputRegionForThread, m_Radius);
 
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   InputRealType sum;
   InputRealType sumOfSquares;
@@ -140,7 +135,6 @@ void VarianceImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const 
 
       ++bit;
       ++it;
-      progress.CompletedPixel();
     }
   }
 }

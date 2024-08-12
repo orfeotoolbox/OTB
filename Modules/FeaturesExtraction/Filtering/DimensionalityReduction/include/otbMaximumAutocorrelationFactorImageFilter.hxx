@@ -38,7 +38,6 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::MaximumAutocorrelationFactorImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   m_CovarianceEstimator = CovarianceEstimatorType::New();
   m_CovarianceEstimatorH = CovarianceEstimatorType::New();
   m_CovarianceEstimatorV = CovarianceEstimatorType::New();
@@ -180,8 +179,7 @@ void MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::Generat
 }
 
 template <class TInputImage, class TOutputImage>
-void MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                              itk::ThreadIdType threadId)
+void MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // Retrieve input images pointers
   const TInputImage* inputPtr  = this->GetInput();
@@ -199,9 +197,6 @@ void MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::Threade
 
   // Get the number of components for each image
   unsigned int outNbComp = outputPtr->GetNumberOfComponentsPerPixel();
-
-
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   while (!inIt.IsAtEnd() && !outIt.IsAtEnd())
   {
@@ -226,7 +221,6 @@ void MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::Threade
 
     ++inIt;
     ++outIt;
-    progress.CompletedPixel();
   }
 }
 }

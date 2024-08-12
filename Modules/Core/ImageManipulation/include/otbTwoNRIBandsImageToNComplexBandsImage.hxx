@@ -79,17 +79,12 @@ void TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>::BeforeThre
  * ThreadedGenerateData
  */
 template <class TInputImage, class TOutputImage>
-void TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                           itk::ThreadIdType threadId)
+void TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
 
   unsigned int nbCompo = this->GetInput()->GetNumberOfComponentsPerPixel();
 
   itk::VariableLengthVector<std::complex<typename InputPixelType::ValueType>> vlv(nbCompo / 2);
-
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   itk::ImageRegionConstIterator<TInputImage> inIt;
   inIt = itk::ImageRegionConstIterator<TInputImage>(this->GetInput(), outputRegionForThread);
@@ -118,7 +113,6 @@ void TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>::ThreadedGe
     ++inIt;
     ++outIt;
 
-    progress.CompletedPixel();
   }
 }
 

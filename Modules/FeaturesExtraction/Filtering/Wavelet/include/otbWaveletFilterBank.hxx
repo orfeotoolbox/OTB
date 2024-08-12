@@ -355,8 +355,6 @@ void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FOR
     throw itk::ExceptionObject(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
   }
 
-  itk::ProgressReporter reporter(this, threadId, outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfOutputs() * 2);
-
   const InputImageType* input = this->GetInput();
   InputImageRegionType  inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);

@@ -42,15 +42,8 @@ void SummingFilter<TInputImage, TOutputImage>::GenerateOutputInformation(void)
  * Processing.
  */
 template <class TInputImage, class TOutputImage>
-void SummingFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void SummingFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-
-  // Debug info
-  itkDebugMacro(<< "Actually executing thread " << threadId << " in region " << outputRegionForThread);
-
-  // Support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   // Iterate through the thread region
   OutputIteratorType outputIt(this->GetOutput(), outputRegionForThread);
 
@@ -83,9 +76,6 @@ void SummingFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const Output
       ++inputIt[i];
     }
     outputIt.Set(pix);
-
-    // Update process
-    progress.CompletedPixel();
   }
 }
 }

@@ -97,14 +97,9 @@ void ApplyGainFilter<TInputImage, TLut, TOutputImage>::BeforeThreadedGenerateDat
 }
 
 template <class TInputImage, class TLut, class TOutputImage>
-void ApplyGainFilter<TInputImage, TLut, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                            itk::ThreadIdType itkNotUsed(threadId))
+void ApplyGainFilter<TInputImage, TLut, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   assert(m_Step > 0);
-  // TODO error
-  // support progress methods/callbacks
-  // itk::ProgressReporter progress(this , threadId ,
-  //               outputRegionForThread.GetNumberOfPixels() );
 
   typename InputImageType::ConstPointer input(GetInputImage());
   typename LutType::ConstPointer        lut(GetInputLut());

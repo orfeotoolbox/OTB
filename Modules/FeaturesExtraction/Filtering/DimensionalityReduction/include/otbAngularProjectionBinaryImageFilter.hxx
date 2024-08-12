@@ -93,10 +93,8 @@ void AngularProjectionBinaryImageFilter<TInputImage, TOutputImage, TPrecision>::
 }
 
 template <class TInputImage, class TOutputImage, class TPrecision>
-void AngularProjectionBinaryImageFilter<TInputImage, TOutputImage, TPrecision>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                     itk::ThreadIdType threadId)
+void AngularProjectionBinaryImageFilter<TInputImage, TOutputImage, TPrecision>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-  itk::ProgressReporter reporter(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
@@ -124,8 +122,6 @@ void AngularProjectionBinaryImageFilter<TInputImage, TOutputImage, TPrecision>::
 
     ++iter1;
     ++iter2;
-
-    reporter.CompletedPixel();
   }
 }
 

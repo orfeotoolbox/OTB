@@ -20,7 +20,6 @@
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageScanlineIterator.h"
-#include "itkProgressReporter.h"
 
 namespace itk
 {
@@ -156,8 +155,7 @@ UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
 template< class TInputImage, class TOutputImage, class TFunction  >
 void
 UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
-::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                       ThreadIdType threadId)
+::DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread)
 {
   const TInputImage *inputPtr = this->GetInput();
   TOutputImage *outputPtr = this->GetOutput(0);
@@ -176,10 +174,6 @@ UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  const size_t numberOfLinesToProcess = outputRegionForThread.GetNumberOfPixels() / outputRegionForThread.GetSize(0);
-  ProgressReporter progress( this, threadId, numberOfLinesToProcess );
-
-
   while ( !inputIt.IsAtEnd() )
     {
     while ( !inputIt.IsAtEndOfLine() )
@@ -190,7 +184,6 @@ UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
       }
     inputIt.NextLine();
     outputIt.NextLine();
-    progress.CompletedPixel();  // potential exception thrown here
     }
 }
 } // end namespace itk

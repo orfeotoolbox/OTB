@@ -29,8 +29,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
-#include "itkProgressReporter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+
 namespace otb
 {
 
@@ -40,7 +39,6 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 KuanImageFilter<TInputImage, TOutputImage>::KuanImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   m_Radius.Fill(1);
   SetNbLooks(1.0);
 }
@@ -94,7 +92,7 @@ void KuanImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 }
 
 template <class TInputImage, class TOutputImage>
-void KuanImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void KuanImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -111,9 +109,6 @@ void KuanImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const Outp
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_Radius);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   //  InputRealType pixel;
   InputRealType sum;
@@ -186,7 +181,6 @@ void KuanImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const Outp
       ++bit;
       ++it;
 
-      progress.CompletedPixel();
     }
   }
 }

@@ -22,7 +22,7 @@
 #define otbComputeHistoFilter_hxx
 
 #include "otbComputeHistoFilter.h"
-
+#include "otbMacro.h"
 #include <limits>
 
 namespace otb
@@ -31,6 +31,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ComputeHistoFilter<TInputImage, TOutputImage>::ComputeHistoFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0, this->MakeOutput(0));
   this->SetNthOutput(1, this->MakeOutput(1));
@@ -183,10 +184,6 @@ template <class TInputImage, class TOutputImage>
 void ComputeHistoFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   assert(m_Step > 0);
-  // TODO throw error
-
-  // itk::ProgressReporter progress(this , threadId ,
-  //               outputRegionForThread.GetNumberOfPixels() );
   typename InputImageType::ConstPointer input(this->GetInput());
   typename OutputImageType::Pointer     output(this->GetHistoOutput());
 

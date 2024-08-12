@@ -55,11 +55,8 @@ const TInputImage* AngularProjectionImageFilter<TInputImage, TOutputImage, TAngl
 }
 
 template <class TInputImage, class TOutputImage, class TAngleArray, class TPrecision>
-void AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                            itk::ThreadIdType threadId)
+void AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-  itk::ProgressReporter reporter(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
@@ -87,8 +84,6 @@ void AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPreci
       if (it[i].IsAtEnd())
         iteratorsAtEnd = true;
     }
-
-    reporter.CompletedPixel();
   }
 }
 

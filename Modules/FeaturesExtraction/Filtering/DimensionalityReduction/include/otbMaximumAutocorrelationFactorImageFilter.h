@@ -136,7 +136,7 @@ protected:
   {
   }
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
   void GenerateOutputInformation() override;
 

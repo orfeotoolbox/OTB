@@ -82,7 +82,7 @@ protected:
   virtual void GenerateInputRequestedRegion() override;
 
   // Actual processing
-  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  virtual void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
   void ThreadedGenerateDataWithAllSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
   void ThreadedGenerateDataWithOnlyValidSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);

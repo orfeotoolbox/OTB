@@ -111,7 +111,7 @@ void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdOutside(con
  *
  */
 template <class TInputImage, class TOutputImage>
-void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ThresholdVectorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   itkDebugMacro(<< "Actually executing");
 
@@ -126,9 +126,6 @@ void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData
 
   InputIterator  inIt(inputPtr, outputRegionForThread);
   OutputIterator outIt(outputPtr, outputRegionForThread);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // walk the regions, threshold each pixel
   while (!outIt.IsAtEnd() && !inIt.IsAtEnd())
@@ -157,7 +154,6 @@ void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData
 
     ++inIt;
     ++outIt;
-    progress.CompletedPixel();
   }
 }
 

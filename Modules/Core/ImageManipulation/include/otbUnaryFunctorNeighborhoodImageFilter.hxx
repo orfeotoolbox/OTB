@@ -27,7 +27,7 @@
 #include "itkProgressReporter.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
+
 namespace otb
 {
 /**
@@ -36,7 +36,6 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>::UnaryFunctorNeighborhoodImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
 }
@@ -91,8 +90,7 @@ void UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>::
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                     itk::ThreadIdType threadId)
+void UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
 
@@ -118,9 +116,6 @@ void UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>::
 
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fit;
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit = faceList.begin(); fit != faceList.end(); ++fit)
@@ -138,7 +133,6 @@ void UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>::
 
       ++neighInputIt;
       ++outputIt;
-      progress.CompletedPixel();
     }
   }
 }

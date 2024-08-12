@@ -35,7 +35,6 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::MultivariateAlterationDetectorImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(2);
   m_CovarianceEstimator = CovarianceEstimatorType::New();
 }
@@ -262,8 +261,7 @@ void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Gener
 }
 
 template <class TInputImage, class TOutputImage>
-void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                itk::ThreadIdType threadId)
+void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // Retrieve input images pointers
   const TInputImage* input1Ptr = this->GetInput1();
@@ -287,8 +285,6 @@ void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Threa
   unsigned int nbComp2   = input2Ptr->GetNumberOfComponentsPerPixel();
   unsigned int outNbComp = outputPtr->GetNumberOfComponentsPerPixel();
 
-
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   while (!inIt1.IsAtEnd() && !inIt2.IsAtEnd() && !outIt.IsAtEnd())
   {
@@ -350,7 +346,6 @@ void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Threa
     ++inIt1;
     ++inIt2;
     ++outIt;
-    progress.CompletedPixel();
   }
 }
 }

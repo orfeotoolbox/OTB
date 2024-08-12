@@ -49,8 +49,7 @@ void SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>::BeforeThreaded
 }
 
 template <class TInputImage, class TOutputImage>
-void SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                       itk::ThreadIdType threadId)
+void SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
 
   if (m_ReferencePixel.Size() == 0)
@@ -78,7 +77,6 @@ void SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>::ThreadedGenera
   // Define the iterators
   itk::ImageRegionConstIterator<InputImageType> inputIt(inputPtr, inputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>     outputIt(outputPtr, outputRegionForThread);
-  itk::ProgressReporter                         progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
@@ -115,7 +113,6 @@ void SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>::ThreadedGenera
     outputIt.Set(static_cast<OutputPixelType>(dist));
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
   }
 }
 /**

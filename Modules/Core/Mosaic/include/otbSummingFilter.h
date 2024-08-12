@@ -98,7 +98,7 @@ protected:
    *     ImageToImageFilter::GenerateData()  */
 
   /** Overridden methods */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  virtual void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
 
   virtual void GenerateOutputInformation(void);
 

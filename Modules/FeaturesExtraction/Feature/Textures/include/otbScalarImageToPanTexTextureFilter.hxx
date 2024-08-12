@@ -27,7 +27,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 #include "itkNumericTraits.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 
 namespace otb
 {
@@ -35,7 +34,6 @@ template <class TInputImage, class TOutputImage>
 ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ScalarImageToPanTexTextureFilter()
   : m_Radius(), m_NumberOfBinsPerAxis(8), m_InputImageMinimum(0), m_InputImageMaximum(255)
 {
-  OTB_DISABLE_DYNAMIC_MT;
   // There are 1 output corresponding to the Pan Tex texture indice
   this->SetNumberOfRequiredOutputs(1);
 
@@ -88,8 +86,7 @@ void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::GenerateInputR
 }
 
 template <class TInputImage, class TOutputImage>
-void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                                                                                       itk::ThreadIdType threadId)
+void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputRegionType& outputRegionForThread)
 {
   // Retrieve the input and output pointers
   InputImagePointerType  inputPtr  = const_cast<InputImageType*>(this->GetInput());
@@ -97,10 +94,6 @@ void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ThreadedGenera
 
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr, outputRegionForThread);
   outputIt.GoToBegin();
-
-  // Set-up progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   // Iterate on outputs to compute textures
   while (!outputIt.IsAtEnd())
   {
@@ -184,7 +177,6 @@ void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ThreadedGenera
 
     outputIt.Set(out);
     ++outputIt;
-    progress.CompletedPixel();
   }
 }
 

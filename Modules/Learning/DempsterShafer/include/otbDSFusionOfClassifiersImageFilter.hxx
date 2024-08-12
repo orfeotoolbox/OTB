@@ -27,7 +27,6 @@
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 
 #include "otbNoDataHelper.h"
 
@@ -39,7 +38,6 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TMaskImage>
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::DSFusionOfClassifiersImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
 
@@ -464,16 +462,12 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::Optimiz
 
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-void DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                   itk::ThreadIdType threadId)
+void DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr = this->GetInputMask();
   OutputImagePointerType     outputPtr    = this->GetOutput();
-
-  // Progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
@@ -513,7 +507,6 @@ void DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::Th
       // else, outIt is set to the m_LabelForNoDataPixels value
       outIt.Set(m_LabelForNoDataPixels);
     }
-    progress.CompletedPixel();
   }
 }
 /**

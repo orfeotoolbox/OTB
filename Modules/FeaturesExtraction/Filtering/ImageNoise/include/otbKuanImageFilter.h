@@ -98,7 +98,7 @@ protected:
   /** KuanImageFilter can be multithreaded.
    */
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   KuanImageFilter(const Self&) = delete;

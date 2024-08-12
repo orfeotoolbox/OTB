@@ -157,7 +157,7 @@ void TileImageFilter<TImage>::GenerateInputRequestedRegion()
 }
 
 template <class TImage>
-void TileImageFilter<TImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
+void TileImageFilter<TImage>::DynamicThreadedGenerateData(const RegionType& outputRegionForThread)
 {
   // Retrieve output image pointer
   ImageType* outputPtr = this->GetOutput();

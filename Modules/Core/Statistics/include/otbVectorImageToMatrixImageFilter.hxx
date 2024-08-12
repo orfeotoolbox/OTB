@@ -25,8 +25,6 @@
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include "itkProgressReporter.h"
-#include "otbMacro.h"
 
 namespace otb
 {
@@ -34,7 +32,6 @@ namespace otb
 template <class TInputImage>
 PersistentVectorImageToMatrixFilter<TInputImage>::PersistentVectorImageToMatrixFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   // first output is a copy of the image, DataObject created by
   // superclass
   //
@@ -114,17 +111,14 @@ void PersistentVectorImageToMatrixFilter<TInputImage>::Synthetize()
 }
 
 template <class TInputImage>
-void PersistentVectorImageToMatrixFilter<TInputImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void PersistentVectorImageToMatrixFilter<TInputImage>::DynamicThreadedGenerateData(const RegionType& outputRegionForThread)
 {
-  // Support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   // Grab the input
   InputImagePointer                                   inputPtr = const_cast<TInputImage*>(this->GetInput());
   const unsigned int                                  width    = this->GetInput()->GetLargestPossibleRegion().GetSize()[0];
   itk::ImageRegionConstIteratorWithIndex<TInputImage> it(inputPtr, outputRegionForThread);
 
-  for (it.GoToBegin(); !it.IsAtEnd(); ++it, progress.CompletedPixel())
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
   {
     const IndexType& idx = it.GetIndex();
 

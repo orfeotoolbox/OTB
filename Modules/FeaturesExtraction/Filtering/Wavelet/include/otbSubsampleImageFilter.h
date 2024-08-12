@@ -101,7 +101,6 @@ public:
 protected:
   SubsampleImageFilter ()
     {
-    OTB_DISABLE_DYNAMIC_MT;
     m_SubsampleFactor.Fill(1);
   }
   ~SubsampleImageFilter() override
@@ -126,7 +125,7 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Allows multithreading */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

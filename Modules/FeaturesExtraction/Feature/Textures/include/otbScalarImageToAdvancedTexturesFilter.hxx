@@ -42,7 +42,6 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>::ScalarImageToAdv
     m_SubsampleFactor(),
     m_SubsampleOffset()
 {
-  OTB_DISABLE_DYNAMIC_MT;
   // There are 10 outputs corresponding to the 9 textures indices
   this->SetNumberOfRequiredOutputs(10);
 
@@ -285,8 +284,7 @@ void ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>::BeforeThrea
 }
 
 template <class TInputImage, class TOutputImage>
-void ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                                                                                          itk::ThreadIdType threadId)
+void ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputRegionType& outputRegionForThread)
 {
   // Retrieve the input and output pointers
   InputImagePointerType  inputPtr              = const_cast<InputImageType*>(this->GetInput());
@@ -330,9 +328,6 @@ void ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>::ThreadedGen
   const long unsigned int twiceHistSize = 2 * m_NumberOfBinsPerAxis;
 
   InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
-
-  // Set-up progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Iterate on outputs to compute textures
   while (!varianceIt.IsAtEnd() && !meanIt.IsAtEnd() && !dissimilarityIt.IsAtEnd() && !sumAverageIt.IsAtEnd() && !sumVarianceIt.IsAtEnd() &&
@@ -518,9 +513,6 @@ void ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>::ThreadedGen
     differenceVarianceIt.Set(m_DifferenceVariance);
     ic1It.Set(m_IC1);
     ic2It.Set(m_IC2);
-
-    // Update progress
-    progress.CompletedPixel();
 
     // Increment iterators
     ++varianceIt;

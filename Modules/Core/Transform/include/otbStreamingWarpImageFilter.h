@@ -111,7 +111,7 @@ protected:
   /**
    * Re-implement the method ThreadedGenerateData to mask area outside the deformation grid
    */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   StreamingWarpImageFilter(const Self&) = delete;

@@ -96,7 +96,7 @@ protected:
   {
   }
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadID) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
   virtual OutputImagePixelType InternalGenerateData(const ImageRegionConstIteratorVectorType&) const;
 
 private:
