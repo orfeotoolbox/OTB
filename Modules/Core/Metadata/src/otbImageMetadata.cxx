@@ -947,7 +947,6 @@ bool HasSameRPCModel(const ImageMetadataBase& a, const ImageMetadataBase& b)
   return true;
 }
 
-// TODO SPOT5
 
 bool HasSameSARModel(const ImageMetadataBase& a, const ImageMetadataBase& b)
 {

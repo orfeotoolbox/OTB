@@ -55,126 +55,53 @@ using ContinuousIndexType = PolygonType::ContinuousIndexType;
 
 int otbSpot5TransformTest(int itkNotUsed(argc), char* argv[])
 {
-  bool success = true;
-  Point2DType imagePoint;
-  Point3DType geo3dPoint;
 
-  // Inputs
-  std::string Spot5File(argv[1]);
+  // TODO enable large input after otb 10
 
-  Point2DType imPt; 
-  otb::Ephemeris imRay;
+  // bool success = true;
+  // Point2DType imagePoint;
+  // Point3DType geo3dPoint;
+  // // Inputs
+  // std::string Spot5File(argv[1]);
 
-  /// DEBUG POLYGON
-  ContinuousIndexType ul, ur, lr, ll, test;
-  bool res, res2;
+  // using ImageType = otb::Image<double, 2>;
+  // using ImageFileReaderType = otb::ImageFileReader<ImageType>;
+  // auto reader = ImageFileReaderType::New();
+  // reader->SetFileName(Spot5File);
+  // reader->UpdateOutputInformation();
+  // auto imd = reader->GetOutput()->GetImageMetadata();
 
+  // otb::Spot5SensorModel SensorModel(imd);
 
+  // // Setting the transforms
+  // auto ForwardTransform = ForwardTransformType::New();
+  // ForwardTransform->SetMetadata(imd);
 
+  // if (!ForwardTransform->IsValidSensorModel())
+  // {
+  //   std::cout << "Model not set!" << std::endl;
+  //   return EXIT_FAILURE;
+  // }
 
-  using ImageType = otb::Image<double, 2>;
-  using ImageFileReaderType = otb::ImageFileReader<ImageType>;
-  auto reader = ImageFileReaderType::New();
-  reader->SetFileName(Spot5File);
-  reader->UpdateOutputInformation();
-  auto imd = reader->GetOutput()->GetImageMetadata();
-
-  otb::Spot5SensorModel SensorModel(imd);
-  //SensorModel.ImagingRay(imPt, imRay);
-
-  // Setting the transforms
-  auto ForwardTransform = ForwardTransformType::New();
-  ForwardTransform->SetMetadata(imd);
-
-  if (!ForwardTransform->IsValidSensorModel())
-  {
-    std::cout << "Model not set!" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  auto InverseTransform = InverseTransformType::New();
-  InverseTransform->SetMetadata(imd);
-  if (!InverseTransform->IsValidSensorModel())
-  {
-    std::cout << "Model not set!" << std::endl;
-    return EXIT_FAILURE;
-  }
+  // auto InverseTransform = InverseTransformType::New();
+  // InverseTransform->SetMetadata(imd);
+  // if (!InverseTransform->IsValidSensorModel())
+  // {
+  //   std::cout << "Model not set!" << std::endl;
+  //   return EXIT_FAILURE;
+  // }
 
 
-  imagePoint[0] = 5999;
-  imagePoint[1] = 5999;
-  // 1000 5000
+  // imagePoint[0] = 5999;
+  // imagePoint[1] = 5999;
+
+  // std::cout << "Testing geopoint: " << imagePoint << "\n\n";
+  // auto geoPoint = ForwardTransform->TransformPoint(imagePoint);
+  // std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
 
 
-  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
-  auto geoPoint = ForwardTransform->TransformPoint(imagePoint);
-  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
+  // auto newImagePoint = InverseTransform->TransformPoint(geoPoint);
 
-  // geoPoint[0] = -122.332683260625586285641475115;
-  // geoPoint[1] = 38.6647750923265505207382375374;
-  // geoPoint[2] = 0;
-
-
-  // geoPoint[0] = -122.376769101238778603146784008;
-  // geoPoint[1] = 38.215802365236257287506305147;
-  // geoPoint[2] = 0;
-
-  auto newImagePoint = InverseTransform->TransformPoint(geoPoint);
-
-  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
-
-  
-  imagePoint[0] = 5999;
-  imagePoint[1] = 1000;
-  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
-  geoPoint = ForwardTransform->TransformPoint(imagePoint);
-  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
-  newImagePoint = InverseTransform->TransformPoint(geoPoint);
-  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
-
-  imagePoint[0] = 5999;
-  imagePoint[1] = 2000;
-  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
-  geoPoint = ForwardTransform->TransformPoint(imagePoint);
-  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
-  newImagePoint = InverseTransform->TransformPoint(geoPoint);
-  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
-
-  imagePoint[0] = 5999;
-  imagePoint[1] = 3000;
-  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
-  geoPoint = ForwardTransform->TransformPoint(imagePoint);
-  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
-  newImagePoint = InverseTransform->TransformPoint(geoPoint);
-  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
-
-  imagePoint[0] = 5999;
-  imagePoint[1] = 5000;
-  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
-  geoPoint = ForwardTransform->TransformPoint(imagePoint);
-  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
-  newImagePoint = InverseTransform->TransformPoint(geoPoint);
-  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
-
-
-  imagePoint[0] = 5999;
-  imagePoint[1] = 5999;
-  std::cout << "Testing geopoint: " << imagePoint << "\n\n";
-  geoPoint = ForwardTransform->TransformPoint(imagePoint);
-  std::cout << "Testing ForwardSensorModel: " << imagePoint << " -> " << geoPoint << "\n";
-  newImagePoint = InverseTransform->TransformPoint(geoPoint);
-  std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
+  // std::cout << "Testing InverseSensorModel: " << geoPoint << " -> " << newImagePoint << "\n";
 
 }
-
-
-    // /* SPOT5 TEST */
-    // typedef otb::Spot5ForwardTransform<double, 2, 2> ForwardSensorModelType;
-    // ForwardSensorModelType::Pointer         forwardSensorModel = ForwardSensorModelType::New();
-    // forwardSensorModel->SetMetadata(imd);
-    // if (forwardSensorModel->IsValidSensorModel() == false)
-    // {
-    //   std::cerr << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!" << std::endl;
-    //   //return EXIT_FAILURE;
-    // }
-    // /* FIN TEST SPOT5*/
