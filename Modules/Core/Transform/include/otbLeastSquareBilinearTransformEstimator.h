@@ -31,10 +31,9 @@ namespace otb
 {
 
 /** \class LeastSquareBilinearTransformEstimator
- * \brief This class provide the Bilinear transform LSQR estimation
+ * \brief This class provide the 2D Bilinear transform LSQR estimation
  *
- * TODO 
- *
+ * z(x,y) = a + b*x + c*y + d*x*y
  *
  * \ingroup OTBTransform
  */

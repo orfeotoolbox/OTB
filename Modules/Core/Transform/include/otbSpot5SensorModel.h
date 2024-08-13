@@ -38,7 +38,22 @@ namespace otb
 
 class Spot5SensorModel
 {
+
+  /**
+   * @brief SPOT5 sensor class, based on OSSIM Spot5SensorModel with ITK/GDAL implementation
+   */
+
 public:
+
+
+  using Point2DType = itk::Point<double, 2>;
+  using Point3DType = itk::Point<double, 3>;
+  using MatrixType = itk::Matrix<double, 3, 3>;
+  using Vector3DType = itk::Vector<double, 3>;
+  using PolygonType = otb::Polygon<>;
+  using ContinuousIndexType = PolygonType::ContinuousIndexType;
+  using TimeType = MetaData::TimePoint;
+  using DurationType = MetaData::Duration;
 
   Spot5SensorModel(const std::string & productType, const Spot5Param & Spot5Param);
 
@@ -48,63 +63,134 @@ public:
   Spot5SensorModel(const Spot5SensorModel&) = delete; // non construction-copyable
   Spot5SensorModel& operator=(const Spot5SensorModel&) = delete; // non copyable
 
-  using Point2DType = itk::Point<double, 2>;
-  using Point3DType = itk::Point<double, 3>;
-  using MatrixType = itk::Matrix<double, 3, 3>;
-  using Vector3DType = itk::Vector<double, 3>;
-  using PolygonType = otb::Polygon<>;
-  using ContinuousIndexType = PolygonType::ContinuousIndexType;
 
-
-  using TimeType = MetaData::TimePoint;
-  using DurationType = MetaData::Duration;
-
-  /** Transform world point (lat,lon,hgt) to input image point
-  (col,row) */
+  /**
+   * @brief Transform world point (lat,lon,hgt) to image point (col,row).
+   * 
+   * @param[in] inGeoPoint     ground point in WGS84 (lat, lon, hgt) coordinates
+   * @param[out] outLineSample image point (col,row) coordinates
+   */
   void WorldToLineSample(const Point3DType& inGeoPoint,
                          Point2DType& outLineSample) const;
 
-
+  /**
+   * @brief Transform image point (col, row) with a height to world point (lat,lon,hgt).
+   * 
+   * @param[in] imPt                 image point (col, row)
+   * @param[in] heightAboveEllipsoid height 
+   * @param[out] worldPt             world point (lat,lon,hgt)
+   */
   void LineSampleHeightToWorld(const Point2DType& imPt,
                                double heightAboveEllipsoid,
                                Point3DType& worldPt) const;
 
+  /**
+   * @brief Transform image point (col, row) to world point (lat,lon,hgt).
+   * 
+   * @param[in] imPt     image point (col, row)
+   * @param[out] worldPt world point (lat,lon,hgt)
+   */
+  void LineSampleToWorld(const Point2DType& imPt, Point3DType& worldPt) const;
 
-  void LineSampleToWorld(const Point2DType& imPt,
-                         Point3DType& worldPt) const;
+  /**
+    * @brief Compute a ray from sensor position and image point.
+    * 
+    * @param[in] imPt  image point (col row)
+    * @param[out] epPt ephemeris point (3D space point with position and velocity)
+    */
+  void ImagingRay(const Point2DType& imPt, Ephemeris&   epPt) const;
 
-  /*
-   * Given an image point, returns a ray originating at some arbitrarily high
-   * point (ideally at the sensor position) and pointing towards the target.
-  */
-  void ImagingRay(const Point2DType& imPt,
-                          Ephemeris&   epPt) const;
+  /**
+   * @brief Compute the nearest intersection (world point) between the ray and the ellipsoid.
+   * 
+   * @param[in] imRay     ephemeris point (3D space point with position and velocity)
+   * @param[in] offset    double offset
+   * @param[out] worldPt  world point (lat,lon,hgt)
+   */
+  void NearestIntersection(const Ephemeris& imRay, const double& offset, Point3DType& worldPt) const;
 
-  bool NearestIntersection(const Ephemeris& imRay, const double& offset, Point3DType& worldPt) const;
-                        
-  void IntersectRay(const Ephemeris& imRay, Point3DType& worldPt, double defaultElevation = 0.0) const;
+  /**
+   * @brief Compute world point intersected by image ray.
+   * 
+   * @param[in] imRay     ephemeris point (3D space point with position and velocity)
+   * @param[out] worldPt  world point (lat,lon,hgt)
+   */
+  void IntersectRay(const Ephemeris& imRay, Point3DType& worldPt) const;
 
-
+  /**
+   * @brief Compute the bilinear interpolation from a 3D point vector with a double time vector.
+   * 
+   * @param[in] time time to interpolate
+   * @param[in] V    3D point vector
+   * @param[in] T    Index time double vector
+   * @param[out] li  3D point interpolated
+   */
   void GetBilinearInterpolation(const double& time,
                           const std::vector<Point3DType>& V,
                           const std::vector<double>& T,
                           Point3DType& li) const;
+
+  /**
+  * @brief Compute the lagrange interpolation from a 3D point vector with a double time vector.
+  * 
+  * @param[in] time time to interpolate
+  * @param[in] V    3D point vector
+  * @param[in] T    Index time double vector
+  * @param[out] li  3D point interpolated
+  */
   void GetLagrangeInterpolation(const double& time,
                           const std::vector<Point3DType>& V,
                           const std::vector<double>& T,
                           Point3DType& li) const;                        
 
+  /**
+   * @brief Get the 3D position of the sensor at time (interpolation of position samples vector from metadata).
+   * 
+   * @param[in] time  input time
+   * @param[out] ecef 3D position
+   */
   void GetPositionEcf(const double& time, Point3DType& ecef) const;
+
+  /**
+   * @brief Get the 3D velocity of the sensor at time (interpolation of velocity samples vector from metadata).
+   * 
+   * @param[in]  time input time
+   * @param[out] ecef 3D position
+   */
   void GetVelocityEcf(const double& time, Point3DType& ecef) const;
+
+  /**
+   * @brief Get look angles on X and Y axis of the sensor at line (interpolation of angles samples vector from metadata).
+   * 
+   * @param[in] line  input line
+   * @param[out] psiX X angle
+   * @param[out] psiY Y angle
+  */
   void GetPixelLookAngleXY(unsigned int line, double& psiX, double& psiY) const;
+
+  /**
+   * @brief Get the Attitude of the sensor at time (interpolation of attitude samples vector from metadata).
+   * 
+   * @param[in] time input time
+   * @param[out] at   3D attitude
+   */
   void GetAttitude(const double& time, Point3DType& at) const;
+
+  /**
+   * @brief Compute SatToOrb matrix with an input time.
+   * 
+   * @param[out] result 3X3 matrix computed
+   * @param[in] t       input time
+   */
   void ComputeSatToOrbRotation(MatrixType& result, double t) const;
 
                         
-   /** Update a ImageMetadata object with the stored Spot5Param and GCPs, possibly modified from the 
-    * original metadata by the Spot5SensorModel
-    * \param imd The ImageMetadata to be updated
-     */ 
+  /** 
+  * @brief Update a ImageMetadata object with the stored Spot5Param and GCPs, possibly modified from the 
+  * original metadata by the Spot5SensorModel
+  * 
+  * @param[in] imd ImageMetadata to be updated
+  */
    void UpdateImageMetadata(ImageMetadata & imd);
 
 
@@ -114,15 +200,50 @@ private:
 
   void InitBilinearTransform();
 
-  /** Coordinate transformation from ECEF to geographic */
+  /** */
+
+  /**
+   * @brief Coordinate transformation from ECEF to geographic 
+   * 
+   * @param ecefPoint              3D position ephemeris coordinates
+   * @return itk::Point<double, 3> 3D position wgs84
+   */
   itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint) const;
 
-  /** Coordinate transformation from geographic to ECEF */
+
+  /**
+   * @brief Coordinate transformation from geographic to ECEF
+   * 
+   * @param worldPoint              3D position wgs84
+   * @return itk::Point<double, 3>  3D position ephemeris coordinates
+   */
   itk::Point<double, 3> WorldToEcef(const itk::Point<double, 3> & worldPoint) const;
 
+  /**
+   * @brief Convert 2Dpoint to 2DContinuousIndex
+   *  
+   * @param point                2Dpoint
+   * @return ContinuousIndexType ContinuousIndex
+   */
   ContinuousIndexType Point2DToIndex(const itk::Point<double, 2> point) const;
+
+  /**
+   * @brief Convert 3Dpoint to 2DContinuousIndex
+   * 
+   * @param point                3Dpoint
+   * @return ContinuousIndexType ContinuousIndex
+   */
   ContinuousIndexType Point3DToIndex(const itk::Point<double, 3> point) const;
 
+
+  /**
+   * @brief Check if point is inside image 
+   * 
+   * @param point   2D point
+   * @param epsilon offset value
+   * @return true   is inside
+   * @return false  not inside
+   */
   virtual bool insideImage(const itk::Point<double, 2> point, double epsilon) const
   {
       return (point[0] >= -epsilon) &&
