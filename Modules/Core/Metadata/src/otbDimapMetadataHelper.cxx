@@ -21,7 +21,6 @@
 #include "otbDimapMetadataHelper.h"
 #include "itkPoint.h"
 #include "itkPointSet.h"
-// #include "otbSpot5Metadata.h"
 
 namespace otb
 {

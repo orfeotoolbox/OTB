@@ -156,8 +156,6 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
     LineSampleHeightToWorld(ip_du, height, gp_du);
     LineSampleHeightToWorld(ip_dv, height, gp_dv);
 
-    // TODO test si nan
-
     dlat_du = gp_du[1] - gp[1]; //e
     dlon_du = gp_du[0] - gp[0]; //g
     dlat_dv = gp_dv[1] - gp[1]; //f
@@ -284,8 +282,7 @@ void Spot5SensorModel::GetLagrangeInterpolation(
   if ((time <  T[lagrange_half_filter]) ||
       (time >= T[T.size()-lagrange_half_filter] ))
   {
-    // Mettre erreur
-    return;
+    otbGenericExceptionMacro(itk::ExceptionObject, <<"Invalid vector pass to LagrangeInterpolation");
   }
 
   //***
@@ -405,7 +402,7 @@ void Spot5SensorModel::GetAttitude(const double& time, Point3DType& at)  const
   GetBilinearInterpolation(time, m_Spot5Param.AttitudesSamples, m_Spot5Param.AttitudesSamplesTimes, at);
 }
 
-bool Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double& offset, Point3DType& worldPt) const
+void Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double& offset, Point3DType& worldPt) const
 {
   // WGS 84 parameters conversion
   double wgsA = 6378137.000;
@@ -459,11 +456,9 @@ bool Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double&
 
   worldPt  = imRay.position + imRay.velocity * t; 
 
-  return true; 
-
 }
 
-void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt, double defaultElevation) const 
+void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt) const 
 {
 
   static const double CONVERGENCE_THRESHOLD = 0.001; // meters

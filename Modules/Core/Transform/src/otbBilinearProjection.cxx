@@ -167,10 +167,6 @@ bool BilinearProjection::worldPointsHaveNan()
 void BilinearProjection::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-//   os << indent << "Bilinear Projection LineFit Matrix : " << m_LineFit->GetMatrix() << std::endl;
-//   os << indent << "Bilinear Projection LineFit AffineTransform : " << m_LineFit->GetAffineTransform() << std::endl;
-//   os << indent << "Bilinear Projection WorldFit Matrix : " << m_WorldFit->GetMatrix() << std::endl;
-//   os << indent << "Bilinear Projection WorldFit AffineTransform : " << m_WorldFit->GetAffineTransform() << std::endl;
 }
                         
 }
