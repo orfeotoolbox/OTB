@@ -28,4 +28,5 @@ https://gitlab.orfeo-toolbox.org/jinglada/otb-bv
   "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/otb-bv.git
   GIT_TAG 0e56e487aebc4a493e25223960560e9ef0ca27ec
+  GIT_SUBMODULES ON
 )
