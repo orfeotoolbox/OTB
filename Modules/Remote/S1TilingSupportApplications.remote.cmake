@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -29,4 +29,5 @@ https://gitlab.orfeo-toolbox.org/s1-tiling/s1tilingsupportapplications
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/s1-tiling/s1tilingsupportapplications
   # Commit on master branch
   GIT_TAG 2.0.0
+  GIT_SUBMODULES ON
 )

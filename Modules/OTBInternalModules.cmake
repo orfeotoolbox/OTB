@@ -19,7 +19,7 @@
 #
 
 # create list for module name, desc, repo url and tag
-# Index of lists must be coherent!
+# INDEX OF LISTS MUST BE COHERENT!!!
 # When a new internal module is added, the four lists; otb_internal_modules, 
 # otb_internal_modules_repos, otb_internal_modules_git_tag,
 # otb_internal_modules_desc
@@ -31,6 +31,9 @@ list(APPEND otb_internal_modules_repos
 
 list(APPEND otb_internal_modules_git_tag
     "88dd67667f5e42d04a9ed44526ed6be854c9bc8f")
+
+list(APPEND otb_internal_modules_get_submodules
+     "OFF")
 
 list(APPEND otb_internal_modules_desc
 "This module deals with image simulation algorithm. Using
@@ -47,19 +50,22 @@ list(LENGTH otb_internal_modules nb_internal_modules)
 while(${i} LESS ${nb_internal_modules})
     list(GET otb_internal_modules "${i}" __otb_module_name)
     # download only enabled modules
-    if ("${OTBGroup_${__otb_module_name}}")
+    if (OTBGroup_${__otb_module_name})
         # Following variable is mandatory for otb_fetch compat
         set(Module_${__otb_module_name} ON)
+        set(__location "${OTB_SOURCE_DIR}/Modules/${__otb_module_name}")
         list(GET otb_internal_modules_repos "${i}" __otb_module_repo)
         list(GET otb_internal_modules_git_tag "${i}" __otb_module_tag)
         list(GET otb_internal_modules_desc "${i}" __otb_module_desc)
+        list(GET otb_internal_modules_get_submodules "${i}" __get_submodules)
 
-        message(STATUS "Downloading internal module ${module_name}")
+        message(STATUS "Downloading internal module ${__otb_module_name} at ${__location} with submodules at ${__get_submodules}")
         otb_fetch_module("${__otb_module_name}"
                          "${__otb_module_desc}"
-                         "${OTB_SOURCE_DIR}/Modules/Remote/${__otb_module_name}"
+                         ${__location}
                          GIT_REPOSITORY "${__otb_module_repo}"
                          GIT_TAG "${__otb_module_tag}"
+                         GIT_SUBMODULES "${__get_submodules}"
         )
     endif() # ${OTBGroup_${module_name}}
     math(EXPR i "${i}+1")
