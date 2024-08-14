@@ -50,7 +50,7 @@ list(LENGTH otb_internal_modules nb_internal_modules)
 while(${i} LESS ${nb_internal_modules})
     list(GET otb_internal_modules "${i}" __otb_module_name)
     # download only enabled modules
-    if (OTBGroup_${__otb_module_name})
+    if (OTBGroup_${__otb_module_name} OR OTB_BUILD_${__otb_module_name})
         # Following variable is mandatory for otb_fetch compat
         set(Module_${__otb_module_name} ON)
         set(__location "${OTB_SOURCE_DIR}/Modules/${__otb_module_name}")
