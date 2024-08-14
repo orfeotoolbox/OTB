@@ -134,7 +134,7 @@ protected:
   void SetChannelsWorkWithLimits();
 
   /** ExtractImageFilter can be implemented as a  multithreaded filter.
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   * \sa ImageToImageFilter::DynamicThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 

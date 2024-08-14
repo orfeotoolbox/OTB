@@ -152,7 +152,7 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.

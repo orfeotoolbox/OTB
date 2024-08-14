@@ -35,7 +35,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::MaskMuParserFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   m_UnderflowCount = 0;
   m_OverflowCount  = 0;
   m_ThreadUnderflow.SetSize(1);

@@ -35,7 +35,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>::LabelImageToLabelMapWithAdjacencyFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   m_BackgroundValue = itk::NumericTraits<OutputImagePixelType>::NonpositiveMin();
 }
 

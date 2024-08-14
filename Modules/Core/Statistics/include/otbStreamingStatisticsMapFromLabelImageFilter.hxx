@@ -42,7 +42,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   //
   // allocate the data objects for the outputs which are
   // just decorators around pixel types
-  
+  this->DynamicMultiThreadingOff();
   typename PixelValueMapObjectType::Pointer output
       = static_cast<PixelValueMapObjectType*>(this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, output.GetPointer());

@@ -34,7 +34,6 @@ template< class TOutputImage, class TTransformPrecisionType >
 TransformToDisplacementFieldSource< TOutputImage, TTransformPrecisionType >
 ::TransformToDisplacementFieldSource()
 {
-  //TODO: Verify
   this->DynamicMultiThreadingOff(); 
   this->m_OutputSpacing.Fill(1.0);
   this->m_OutputOrigin.Fill(0.0);

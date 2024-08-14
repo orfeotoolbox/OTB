@@ -110,7 +110,7 @@ protected:
    *          \f$ Cv = 1 / \sqrt(L) \f$ with L the number of look.
    *          \f$ Cr = \sqrt(Var(I)) / E[I] where Var(I) = E[I^2] - E[I]^2 \f$
    *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   * \sa ImageToImageFilter::DynamicThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 

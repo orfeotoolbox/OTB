@@ -34,7 +34,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, TFunction>::FunctionWithNeighborhoodToImageFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   this->InPlaceOff();
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);

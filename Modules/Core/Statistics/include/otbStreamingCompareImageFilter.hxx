@@ -34,7 +34,7 @@ template <class TInputImage>
 PersistentCompareImageFilter<TInputImage>::PersistentCompareImageFilter()
   : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1), m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1), m_DiffCount(1), m_PhysicalSpaceCheck(true)
 {
-  
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredInputs( 2 );
   // first output is a copy of the image, DataObject created by
   // superclass

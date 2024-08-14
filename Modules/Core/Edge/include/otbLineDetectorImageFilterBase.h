@@ -141,7 +141,7 @@ protected:
    * ThreadedGenerateData() method. ThreadedGenerateData can only write the portion
    * of the image specified by the parameter outputRegionForThread
    *
-   * \sa ImageToImageFilter::ThreadedGenerateData()
+   * \sa ImageToImageFilter::DynamicThreadedGenerateData()
    * \sa    ImageToImageFilter::GenerateData()
   */
   void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;

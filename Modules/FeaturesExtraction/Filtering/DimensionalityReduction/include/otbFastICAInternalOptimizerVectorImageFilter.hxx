@@ -35,7 +35,7 @@ template <class TInputImage, class TOutputImage>
 FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::FastICAInternalOptimizerVectorImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
-
+  this->DynamicMultiThreadingOff();
   m_CurrentBandForLoop = 0;
   m_Beta               = 0.;
   m_Den                = 0.;

@@ -32,7 +32,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TMaskImage>
 ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::ImageDimensionalityReductionFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
 

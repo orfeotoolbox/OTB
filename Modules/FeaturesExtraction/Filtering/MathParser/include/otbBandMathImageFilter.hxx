@@ -39,7 +39,7 @@ namespace otb
 template <class TImage>
 BandMathImageFilter<TImage>::BandMathImageFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   // This number will be incremented each time an image
   // is added over the one minimumrequired
   this->SetNumberOfRequiredInputs(1);

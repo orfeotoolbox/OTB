@@ -31,6 +31,7 @@ namespace otb
 template <class TDisparityImage, class TInputImage, class TOutputDEMImage, class TEpipolarGridImage, class TMaskImage>
 DisparityMapToDEMFilter<TDisparityImage, TInputImage, TOutputDEMImage, TEpipolarGridImage, TMaskImage>::DisparityMapToDEMFilter()
 {
+  this->DynamicMultiThreadingOff();
   // Set the number of inputs
   this->SetNumberOfRequiredInputs(7);
   this->SetNumberOfRequiredInputs(1);

@@ -39,7 +39,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>::WaveletFilterBank()
 {
-  
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredInputs(1);
 
@@ -346,6 +346,8 @@ void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FOR
                                                                                                             itk::ThreadIdType threadId)
 {
   unsigned int dir = InputImageDimension - 1;
+
+  itk::ProgressReporter reporter(this, threadId, outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfInputs());
 
   if ((1 << dir) >= static_cast<int>(this->GetNumberOfOutputs()))
   {

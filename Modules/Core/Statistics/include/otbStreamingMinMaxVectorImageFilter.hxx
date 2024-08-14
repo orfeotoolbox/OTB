@@ -42,7 +42,7 @@ PersistentMinMaxVectorImageFilter<TInputImage>::PersistentMinMaxVectorImageFilte
   //
   // allocate the data objects for the outputs which are
   // just decorators around pixel types
-
+  this->DynamicMultiThreadingOff();
   for (int i = 1; i < 3; ++i)
   {
     typename PixelObjectType::Pointer output = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());

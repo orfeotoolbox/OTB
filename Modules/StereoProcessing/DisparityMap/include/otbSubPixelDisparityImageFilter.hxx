@@ -28,6 +28,7 @@ namespace otb
 template <class TInputImage, class TOutputMetricImage, class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityImage, TMaskImage, TBlockMatchingFunctor>::SubPixelDisparityImageFilter()
 {
+  this->DynamicMultiThreadingOff();
   // Set the number of required inputs
   this->SetNumberOfRequiredInputs(3);
 

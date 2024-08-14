@@ -37,7 +37,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>::UnaryFunctorNeighborhoodWithOffsetImageFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
   m_Offset.Fill(1);

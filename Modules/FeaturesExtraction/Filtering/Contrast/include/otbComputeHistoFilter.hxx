@@ -31,7 +31,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ComputeHistoFilter<TInputImage, TOutputImage>::ComputeHistoFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0, this->MakeOutput(0));
   this->SetNthOutput(1, this->MakeOutput(1));

@@ -220,7 +220,7 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Multi-thread version GenerateData. */
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
   void AfterThreadedGenerateData() override;
 

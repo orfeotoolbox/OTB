@@ -33,7 +33,7 @@ namespace otb
 template <class T3DImage, class TMaskImage, class TOutputDEMImage>
 Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Multi3DMapToDEMFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   // Set the number of inputs (1 image one optional mask)
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);

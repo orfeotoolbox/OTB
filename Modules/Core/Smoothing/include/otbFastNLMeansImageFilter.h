@@ -104,7 +104,7 @@ protected:
   /** Destructor */
   ~NLMeansFilter() override = default;
 
-  void ThreadedGenerateData(const OutRegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId)) override;
+  void DynamicThreadedGenerateData(const OutRegionType& outputRegionForThread) override;
 
   void GenerateInputRequestedRegion() override;
 

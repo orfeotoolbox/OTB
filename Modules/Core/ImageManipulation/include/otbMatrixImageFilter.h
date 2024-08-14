@@ -123,7 +123,7 @@ protected:
    * through the parent class calling the ThreadedGenerateData() method.
    * ThreadedGenerateData() can only write the area of the image specified by the parameter "outputRegionForThread"
    *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   * \sa ImageToImageFilter::DynamicThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 

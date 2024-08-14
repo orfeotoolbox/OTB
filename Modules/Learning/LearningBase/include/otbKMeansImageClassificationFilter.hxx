@@ -34,7 +34,6 @@ namespace otb
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
 KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, TMaskImage>::KMeansImageClassificationFilter()
 {
-  
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();
@@ -77,8 +76,8 @@ void KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimens
 }
 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
-void KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, TMaskImage>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
+void KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, TMaskImage>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr = this->GetInputMask();

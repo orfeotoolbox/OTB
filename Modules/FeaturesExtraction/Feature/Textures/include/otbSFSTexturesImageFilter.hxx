@@ -34,7 +34,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 SFSTexturesImageFilter<TInputImage, TOutputImage>::SFSTexturesImageFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(6);

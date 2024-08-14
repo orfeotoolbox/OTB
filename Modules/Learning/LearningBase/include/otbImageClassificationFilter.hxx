@@ -34,6 +34,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TMaskImage>
 ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>::ImageClassificationFilter()
 {
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();

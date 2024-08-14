@@ -47,7 +47,7 @@ BandMathXImageFilter<TImage>::BandMathXImageFilter()
   // This number will be incremented each time an image
   // is added over the one minimumrequired
   this->SetNumberOfRequiredInputs(1);
-
+  this->DynamicMultiThreadingOff();
   m_UnderflowCount = 0;
   m_OverflowCount  = 0;
   m_ThreadUnderflow.SetSize(1);

@@ -35,7 +35,7 @@ namespace otb
 template <class TInputImage>
 PersistentInnerProductVectorImageFilter<TInputImage>::PersistentInnerProductVectorImageFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   // first output is a copy of the image, DataObject created by
   // superclass
   //

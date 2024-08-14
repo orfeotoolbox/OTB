@@ -42,7 +42,7 @@ PersistentStatisticsImageFilter<TInputImage>
    m_IgnoreInfiniteValues(true),
    m_IgnoreUserDefinedValue(false)
 {
-  
+  this->DynamicMultiThreadingOff();
   // first output is a copy of the image, DataObject created by
   // superclass
   //

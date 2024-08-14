@@ -36,7 +36,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 DifferenceImageFilter<TInputImage, TOutputImage>::DifferenceImageFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   // We require two inputs to execute.
   this->SetNumberOfRequiredInputs(2);
 

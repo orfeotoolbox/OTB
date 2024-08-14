@@ -34,7 +34,7 @@ namespace otb
 template <class TInputImage>
 PersistentMinMaxImageFilter<TInputImage>::PersistentMinMaxImageFilter()
 {
-  
+  this->DynamicMultiThreadingOff();
   // TODO : SetNumberOfRequiredOutputs
 
   // first output is a copy of the image, DataObject created by

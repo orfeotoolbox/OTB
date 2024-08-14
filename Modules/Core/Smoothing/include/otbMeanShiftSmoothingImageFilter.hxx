@@ -53,7 +53,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       , m_BucketOptimization(false)
 #endif
 {
-  
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredOutputs(4);
   this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, OutputSpatialImageType::New());

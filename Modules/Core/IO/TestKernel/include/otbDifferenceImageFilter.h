@@ -105,7 +105,7 @@ protected:
    * the portion of the output image specified by the parameter
    * "outputRegionForThread"
    *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   * \sa ImageToImageFilter::DynamicThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& threadRegion, itk::ThreadIdType threadId) override;
 
