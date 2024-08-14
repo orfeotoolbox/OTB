@@ -30,4 +30,5 @@ https://gitlab.orfeo-toolbox.org/jinglada/phenotb
   "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/phenotb.git
   GIT_TAG 72ba22feac301ae00869b5604c2eef17d6a3fae5
+  GIT_SUBMODULES ON
   )
