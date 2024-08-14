@@ -34,7 +34,6 @@ namespace otb
 template <class TInputList, class TOutputList, class TFunction>
 UnaryFunctorObjectListFilter<TInputList, TOutputList, TFunction>::UnaryFunctorObjectListFilter()
 {
-  this->DynamicMultiThreadingOff();
 }
 
 template <class TInputList, class TOutputList, class TFunction>
