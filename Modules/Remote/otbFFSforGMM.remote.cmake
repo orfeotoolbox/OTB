@@ -28,4 +28,5 @@ https://github.com/Laadr/otbFFSforGMM
   "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
   GIT_REPOSITORY https://github.com/Laadr/otbFFSforGMM.git
   GIT_TAG d9c31cf51b59a4a10e4daa2858a85cd12561c696
+  GIT_SUBMODULES ON
   )

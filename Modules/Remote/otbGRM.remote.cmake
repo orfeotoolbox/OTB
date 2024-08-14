@@ -35,4 +35,5 @@ http://tully.ups-tlse.fr/lassallep/grm
   "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
   GIT_REPOSITORY https://github.com/orfeotoolbox/GRM
   GIT_TAG 459943a6fde517cc0dd601dfaca3400e3f1788de
+  GIT_SUBMODULES ON
 )
