@@ -34,7 +34,6 @@ template <class TInputImage, class TOutputPointSet>
 ImageToPointSetFilter<TInputImage, TOutputPointSet>::ImageToPointSetFilter()
 {
   this->ProcessObjectType::SetNumberOfRequiredInputs(1);
-  this->DynamicMultiThreadingOff();
 
   OutputPointSetPointer output = dynamic_cast<OutputPointSetType*>(this->MakeOutput(0).GetPointer());
 

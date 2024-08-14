@@ -33,7 +33,6 @@ namespace otb
 template <class TInputList, class TOutputList>
 ObjectListToObjectListFilter<TInputList, TOutputList>::ObjectListToObjectListFilter()
 {
-  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredInputs(1);
 }
 

@@ -33,7 +33,6 @@ namespace otb
 template <class TInputList, class TOutputList, class TFunction>
 UnaryFunctorObjectListBooleanFilter<TInputList, TOutputList, TFunction>::UnaryFunctorObjectListBooleanFilter()
 {
-  this->DynamicMultiThreadingOff();
 }
 
 template <class TInputList, class TOutputList, class TFunction>
