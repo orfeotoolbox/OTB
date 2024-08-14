@@ -93,15 +93,6 @@ protected:
   /** Generate input requested region method */
   void GenerateOutputInformation() override;
 
-  /** Override VerifyInputInformation() since this filter's inputs do
-     * not need to occupy the same physical space.
-     *
-     * \sa ProcessObject::VerifyInputInformation
-     */
-  void VerifyInputInformation() override
-  {
-  }
-
 
 private:
   TileImageFilter(const Self&) = delete;
