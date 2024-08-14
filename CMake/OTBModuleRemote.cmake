@@ -21,7 +21,7 @@
 # Function to fetch remote modules.
 
 # Helper to perform the initial git clone and checkout.
-function(_git_clone git_executable git_repository git_tag module_dir)
+function(_git_clone git_executable git_repository git_tag module_dir with_submodules)
   set(retryCount 0)
   set(error_code 1)
   while(error_code AND (retryCount LESS 3))
@@ -48,22 +48,24 @@ function(_git_clone git_executable git_repository git_tag module_dir)
     message(FATAL_ERROR "Failed to checkout tag: '${git_tag}'")
   endif()
 
-  execute_process(
-    COMMAND "${git_executable}" submodule init
-    WORKING_DIRECTORY "${module_dir}"
-    RESULT_VARIABLE error_code
-    )
-  if(error_code)
-    message(FATAL_ERROR "Failed to init submodules in: '${module_dir}'")
-  endif()
+  if (with_submodules)
+    execute_process(
+      COMMAND "${git_executable}" submodule init
+      WORKING_DIRECTORY "${module_dir}"
+      RESULT_VARIABLE error_code
+      )
+    if(error_code)
+      message(FATAL_ERROR "Failed to init submodules in: '${module_dir}'")
+    endif()
 
-  execute_process(
-    COMMAND "${git_executable}" submodule update --recursive
-    WORKING_DIRECTORY "${module_dir}"
-    RESULT_VARIABLE error_code
-    )
-  if(error_code)
-    message(FATAL_ERROR "Failed to update submodules in: '${module_dir}'")
+    execute_process(
+      COMMAND "${git_executable}" submodule update --recursive
+      WORKING_DIRECTORY "${module_dir}"
+      RESULT_VARIABLE error_code
+      )
+    if(error_code)
+      message(FATAL_ERROR "Failed to update submodules in: '${module_dir}'")
+    endif()
   endif()
 endfunction()
 
@@ -122,15 +124,15 @@ endfunction()
 
 # Helper function to fetch a module stored in a Git repository.
 # Git fetches are only performed when required.
-function(_fetch_with_git git_executable git_repository git_tag module_dir)
+function(_fetch_with_git git_executable git_repository git_tag module_dir with_submodules)
   if("${git_tag}" STREQUAL "" OR "${git_repository}" STREQUAL "")
     message(FATAL_ERROR "Tag or repository for git checkout should not be empty.")
   endif()
 
   # If we don't have a clone yet.
   if(NOT EXISTS "${module_dir}")
-    _git_clone("${git_executable}" "${git_repository}" "${git_tag}" "${module_dir}")
-    message(STATUS " The remote module: ${git_repository} is cloned into the directory ${module_dir}")
+    _git_clone("${git_executable}" "${git_repository}" "${git_tag}" "${module_dir}" "${with_submodules}")
+    message(STATUS " The remote module: ${git_repository} is cloned into the directory ${module_dir} with submodule at ${with_submodules}")
   else() # We already have a clone, but we need to check that it has the right revision.
     _git_update("${git_executable}" "${git_repository}" "${git_tag}" "${module_dir}")
   endif()
@@ -158,9 +160,10 @@ function(otb_fetch_module _name _description _destination)
   endif()
 
   if(Module_${_name})
+    # check if download is not fordidden
     otb_download_attempt_check(Module_${_name})
     include(CMakeParseArguments)
-    cmake_parse_arguments(_fetch_options "" "GIT_REPOSITORY;GIT_TAG" "" ${ARGN})
+    cmake_parse_arguments(_fetch_options "" "GIT_REPOSITORY;GIT_TAG;GIT_SUBMODULES" "" ${ARGN})
     find_package(Git)
     if(NOT GIT_EXECUTABLE)
       message(FATAL_ERROR "error: could not find git for clone of ${_name}")
@@ -177,7 +180,7 @@ function(otb_fetch_module _name _description _destination)
     _fetch_with_git("${GIT_EXECUTABLE}"
       "${_fetch_options_GIT_REPOSITORY}"
       "${_fetch_options_GIT_TAG}"
-      ${_destination}
+      "${_destination}" "${_fetch_options_GIT_SUBMODULES}"
       )
   endif()
 endfunction()
