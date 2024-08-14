@@ -90,15 +90,6 @@ protected:
   /** Generate output information */
   void GenerateOutputInformation(void) override;
 
-  /** Override VerifyInputInformation() since this filter's inputs do
-   * not need to occupy the same physical space.
-   *
-   * \sa ProcessObject::VerifyInputInformation
-   */
-  void VerifyInputInformation() override
-  {
-  }
-
 private:
   ImportGeoInformationImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
