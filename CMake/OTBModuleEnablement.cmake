@@ -21,8 +21,6 @@
 # This script sorts out the module dependencies, provides user options for customizing
 # the list of modules to be built, and enables modules accordingly.
 
-# NOTE TLA: le git submodule doit être déjà initialisé avant d'arriver ici
-
 # Load the module DAG.
 set(OTB_MODULES_ALL)
 file(GLOB meta RELATIVE "${OTB_SOURCE_DIR}"
