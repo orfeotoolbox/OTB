@@ -21,6 +21,12 @@
 # Function to fetch remote modules.
 
 # Helper to perform the initial git clone and checkout.
+# Git clone requires git to be installed. The submodules of the repo can be
+# cloned too.
+# @param git_executable is the path to git exe
+# @param git_repository is the git origin repo address
+# @param git_tag is the tag to checkout on. Can be a commit id or branch
+# @param with_submodules whether or not submodules of this repo are cloned, of by default
 function(_git_clone git_executable git_repository git_tag module_dir with_submodules)
   set(retryCount 0)
   set(error_code 1)
@@ -124,6 +130,15 @@ endfunction()
 
 # Helper function to fetch a module stored in a Git repository.
 # Git fetches are only performed when required.
+# Helper to perform the initial git clone and checkout.
+# Clone or update a git repo. Note that if a repo is already cloned without
+# submodule you will have to remove it and use this function again with
+# "with_submodules" ON.
+# @param git_executable is the path to git exe
+# @param git_repository is the git origin repo address
+# @param git_tag is the tag to checkout on. Can be a commit id or branch
+# @param module_dir, the directory where module is or where it should be cloned
+# @param with_submodules whether or not submodules of this repo are cloned, of by default
 function(_fetch_with_git git_executable git_repository git_tag module_dir with_submodules)
   if("${git_tag}" STREQUAL "" OR "${git_repository}" STREQUAL "")
     message(FATAL_ERROR "Tag or repository for git checkout should not be empty.")
