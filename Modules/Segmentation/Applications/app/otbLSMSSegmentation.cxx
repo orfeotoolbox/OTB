@@ -147,19 +147,36 @@ private:
 
       if (itksys::SystemTools::FileExists(geomfile))
       {
-        itksys::Status res = itksys::SystemTools::RemoveFile(geomfile);
-        if (!res)
-        {
-          otbAppLogINFO(<< "Unable to remove file  " << geomfile);
-        }
+        //Compatibility : for ITK 5 < 5.3 the Status class was not provided
+        #if ITK_VERSION_MINOR > 2
+          itksys::Status res = itksys::SystemTools::RemoveFile(geomfile);
+          if (res.GetKind() != itksys::Status::Kind::Success)
+          {
+            otbAppLogINFO(<< "Unable to remove file  " << geomfile);
+          }
+        #else
+          bool res = itksys::SystemTools::RemoveFile(geomfile);
+          if (!res)
+          {
+            otbAppLogINFO(<< "Unable to remove file  " << geomfile);
+          }
+        #endif
       }
       if (itksys::SystemTools::FileExists(tile))
       {
-        itksys::Status res = itksys::SystemTools::RemoveFile(tile);
-        if (res.GetKind() != itksys::Status::Kind::Success)
-        {
-          otbAppLogINFO(<< "Unable to remove file  " << tile);
-        }
+        #if ITK_VERSION_MINOR > 2
+          itksys::Status res = itksys::SystemTools::RemoveFile(tile);
+          if (res.GetKind() != itksys::Status::Kind::Success)
+          {
+            otbAppLogINFO(<< "Unable to remove file  " << tile);
+          }
+        #else
+          bool res = itksys::SystemTools::RemoveFile(tile);
+          if (!res)
+          {
+            otbAppLogINFO(<< "Unable to remove file  " << tile);
+          }
+        #endif
       }
     }
   }

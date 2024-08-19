@@ -284,7 +284,7 @@ void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityIma
 }
 
 template <class TInputImage, class TOutputMetricImage, class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityImage, TMaskImage, TBlockMatchingFunctor>::VerifyInputInformation()
+void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityImage, TMaskImage, TBlockMatchingFunctor>::VerifyInputInformation() ITKv5_CONST
 {
   // Retrieve input pointers
   const TInputImage*     inLeftPtr      = this->GetLeftInput();

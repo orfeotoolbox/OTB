@@ -83,7 +83,7 @@ protected:
     Superclass::PrintSelf(os, indent);
   }
 
-  virtual void VerifyInputInformation(){};
+  virtual void VerifyInputInformation() ITKv5_CONST {};
 
 private:
   PersistentImageFilter(const Self&) = delete;

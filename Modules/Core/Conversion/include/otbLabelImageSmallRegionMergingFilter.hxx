@@ -78,7 +78,7 @@ template <class TInputLabelImage>
 void PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage>::Reset()
 {
   m_NeighboursMapsTmp.clear();
-  m_NeighboursMapsTmp.resize(this->GetNumberOfThreads());
+  m_NeighboursMapsTmp.resize(this->GetNumberOfWorkUnits());
 }
 
 template <class TInputLabelImage>
@@ -87,7 +87,7 @@ void PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage>::Synthetize(
   NeighboursMapType neighboursMap;
 
   // Merge the neighbours maps from all threads
-  for (unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
+  for (unsigned int threadId = 0; threadId < this->GetNumberOfWorkUnits(); threadId++)
   {
     for (auto const& neighbours : m_NeighboursMapsTmp[threadId])
     {

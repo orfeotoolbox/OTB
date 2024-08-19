@@ -140,8 +140,6 @@ protected:
 
   typename CoefficientImageType::ConstPointer m_Coefficients; // Spline coefficients
 
-  void VerifyInputInformation(){};
-
 private:
   BSplineInterpolateImageFunction(const Self&) = delete;
   /** Determines the weights for interpolation of the value x */
