@@ -148,48 +148,48 @@ legal-check:
 #------------------------- prepare & build jobs --------------------------------
 
 ## Ubuntu superbuild
-ubuntu-20-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
-
 ubuntu-22-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
-ubuntu-20-build:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+ubuntu-24-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-full
+
+ubuntu-22-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
   needs:
-    - job: ubuntu-20-prepare
+    - job: ubuntu-22-prepare
       artifacts: true
 
 # Ubuntu 22 build needed for gdal bindings with python 3.10. We package the compiled bindings for python 3.10, this package will be downloaded and extracted automatically when
 # a user lauches the otbenv profile after unpacking the official archive for the first time (which contains bindings for ubuntu 20 and python 3.8 initially)
-ubuntu-22-gdal-bindings:
+ubuntu-24-gdal-bindings:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   only:
     changes:
       - SuperBuild/CMake/External_gdal.cmake
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
-    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py310.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
  
 ## RedHat superbuild
@@ -236,7 +236,7 @@ windows-10-prepare:
   script:
     - call ./CI/dev_env.bat x64 xdk 10
     - buildcache.exe -s
-    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
 
 windows-10-build:
@@ -246,7 +246,7 @@ windows-10-build:
   script:
     - call ./CI/dev_env.bat x64 otb 10
     - buildcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
     - call ./CI/copy_boost_dlls.bat
     - ctest -V -S CI/superbuild_packaging.cmake -DPACKAGE_BY_MODULE:BOOL=OFF
@@ -275,7 +275,7 @@ ubuntu-qa-code-coverage:
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
   needs:
-    - job: ubuntu-20-prepare
+    - job: ubuntu-22-prepare
       artifacts: true
 
 ubuntu-qa-static-analysis:
@@ -299,7 +299,7 @@ ubuntu-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   needs:
-    - job: ubuntu-20-prepare
+    - job: ubuntu-22-prepare
       artifacts: true
 
 ubuntu-sonar-report:
@@ -347,7 +347,7 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-20-build
+    - job: ubuntu-22-build
       artifacts: true
     - job: windows-10-build
       artifacts: true
@@ -372,7 +372,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-20-prepare
+    - job: ubuntu-22-prepare
       artifacts: false
 
 
@@ -401,7 +401,7 @@ release-docker:
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   needs:
-      - job: ubuntu-20-build
+      - job: ubuntu-22-build
         artifacts: true
   script:
       # to authenticate in docker hub, kaniko needs a config file located at
