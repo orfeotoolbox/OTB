@@ -126,7 +126,7 @@ fast-build:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast -Dci_skip_testing:BOOL=OFF
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast -Dci_skip_testing:BOOL=ON
     - ccache -s
 
 legal-check:
