@@ -100,7 +100,10 @@ public:
   itkTypeMacro(WaveletFilterBank, ImageToImageFilter);
 
 protected:
-  WaveletFilterBank();
+  WaveletFilterBank()
+  {
+    this->DynamicMultiThreadingOff();
+  }
   virtual ~WaveletFilterBank();
 
 private:

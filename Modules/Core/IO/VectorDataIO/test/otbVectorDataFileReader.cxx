@@ -30,9 +30,6 @@ int otbVectorDataFileReader(int itkNotUsed(argc), char* argv[])
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer                 reader = VectorDataFileReaderType::New();
 
-  typedef otb::DataNode<double, 2, double> DataNodeType;
-  typedef DataNodeType::Pointer                   DataNodePointerType;
-
   itk::Indent indent;
 
   reader->SetFileName(argv[1]);

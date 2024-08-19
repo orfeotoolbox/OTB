@@ -578,7 +578,7 @@ void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FOR
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>::WaveletFilterBank()
 {
-  
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredInputs(1 << InputImageDimension);
 
   m_UpSampleFilterFactor = 0;
