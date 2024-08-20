@@ -38,8 +38,8 @@ set(JPEG_CONFIGURE_COMMAND "${SB_CMAKE_COMMAND}"
 
 ExternalProject_Add(JPEG
   PREFIX JPEG
-  URL "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/2.0.0/libjpeg-turbo-2.0.0.tar.gz"
-  URL_MD5 b12a3fcf1d078db38410f27718a91b83
+  URL "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.0.3/libjpeg-turbo-3.0.3.tar.gz"
+  URL_MD5 fdeae6d78ca577a37857f2d14e33adbe
   SOURCE_DIR ${JPEG_SB_SRC}
   BINARY_DIR ${JPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
