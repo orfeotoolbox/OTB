@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLeastSquareAffineTransformEstimator_h
-#define otbLeastSquareAffineTransformEstimator_h
+#ifndef otbLeastSquareBilinearTransformEstimator_h
+#define otbLeastSquareBilinearTransformEstimator_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -30,47 +30,19 @@
 namespace otb
 {
 
-/** \class LeastSquareAffineTransformEstimator
- * \brief This class provide the affine transform LSQR estimation
+/** \class LeastSquareBilinearTransformEstimator
+ * \brief This class provide the 2D Bilinear transform LSQR estimation
  *
- * This class uses the classical least square optimisation to estimate
- * an affine transform from a set of tie points.
- *
- * This implementation supports points of any dimension.
- *
- * Tie points can be added through the AddTiePoints() method.
- *
- * The ClearTiePoints() method allows removing all the tie points
- * that has been previously set.
- *
- * Once all the tie points have been fed into the estimator, the
- * Compute() method will perform the optimization.
- *
- * Matrix of the estimated affine transform can be retrieved using the
- * GetMatrix() method.
- *
- * Offset of the estimated affine transform can be retrieved using the
- * GetOffset() method.
- *
- * Alternatively, the GetAffineTransform() methods return a pointer to
- * a fully set-up forward affine transform (\sa AffineTransform).
- *
- * Estimation errors are available per dimension using the
- * GetRMSError() (root mean square location error) or
- * GetRelativeResidual() (relative residual error).
- *
- * NOTE: All computation are performed in double. Results are casted
- * back to TPoint::CoordRepType.
- *
+ * z(x,y) = a + b*x + c*y + d*x*y
  *
  * \ingroup OTBTransform
  */
 template <class TPoint>
-class ITK_EXPORT LeastSquareAffineTransformEstimator : public itk::Object
+class ITK_EXPORT LeastSquareBilinearTransformEstimator : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef LeastSquareAffineTransformEstimator Self;
+  typedef LeastSquareBilinearTransformEstimator Self;
   typedef itk::Object                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
@@ -79,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LeastSquareAffineTransformEstimator, Object);
+  itkTypeMacro(LeastSquareBilinearTransformEstimator, Object);
 
   /** Extract dimension from input and output image. */
   itkStaticConstMacro(PointDimension, unsigned int, TPoint::PointDimension);
@@ -88,28 +60,25 @@ public:
   typedef TPoint                           PointType;
   typedef typename PointType::CoordRepType PrecisionType;
   typedef itk::CovariantVector<PrecisionType, PointDimension> CovariantVectorType;
-  typedef std::pair<PointType, PointType>                     TiePointsType;
+  typedef std::pair<PointType, PrecisionType>                     TiePointsType;
   typedef std::vector<TiePointsType> TiePointsContainerType;
 
   /** Affine transform components typedefs */
-  typedef itk::Matrix<PrecisionType, PointDimension, PointDimension> MatrixType;
-  typedef itk::Vector<PrecisionType, PointDimension>          VectorType;
-  typedef itk::AffineTransform<PrecisionType, PointDimension> AffineTransformType;
-  typedef typename AffineTransformType::Pointer AffineTransformPointerType;
+  typedef itk::Matrix<PrecisionType, 4, 4> MatrixType;
+  typedef itk::Matrix<PrecisionType, 4, 1> MatrixVecType;
+  typedef itk::Matrix<PrecisionType, 1, 4> MatrixVecTransposeType;
+  typedef itk::Vector<PrecisionType, 4>    VectorType;
 
     /** Constructor */
-  LeastSquareAffineTransformEstimator();
+  LeastSquareBilinearTransformEstimator();
   /** Destructor */
-  ~LeastSquareAffineTransformEstimator() override;
+  ~LeastSquareBilinearTransformEstimator() override;
 
-  /** Get the affine transform matrix */
+  /** Get the bilinear transform matrix */
   itkGetConstReferenceMacro(Matrix, MatrixType);
 
-  /** Get the affine transform offset */
+  /** Get the bilinear transform offset */
   itkGetConstReferenceMacro(Offset, VectorType);
-
-  /** Get the estimated affine transform */
-  itkGetObjectMacro(AffineTransform, AffineTransformType);
 
   /** Get the RMS error */
   itkGetConstReferenceMacro(RMSError, CovariantVectorType);
@@ -125,7 +94,7 @@ public:
   void SetTiePointsContainer(const TiePointsContainerType& container);
 
   /** Add a pair of tie points */
-  void AddTiePoints(const PointType& src, const PointType& dst);
+  void AddTiePoints(const PointType& src, const PrecisionType& dst);
 
   /** Clear all tie points */
   void ClearTiePoints();
@@ -133,12 +102,21 @@ public:
   /** The Compute method does the affine least square estimation */
   void Compute();
 
+  /**
+  * interpolate LS-fit value at location (xx,yy) - returns z(xx,yy).
+  *
+  * @param xx "x" coordinate at which to interpolate.
+  * @param yy "y" coordinate at which to interpolate.
+  * 
+  */
+  void lsFitValue(const PointType& point, PrecisionType& dst) const;
+
 protected:
   /** The PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LeastSquareAffineTransformEstimator(const Self&) = delete;
+  LeastSquareBilinearTransformEstimator(const Self&) = delete;
   void operator=(const Self&) = delete;
 
   /** Container of GCPs */
@@ -156,15 +134,23 @@ private:
   /** Affine transform offset */
   VectorType m_Offset;
 
-  /** Affine transform */
-  AffineTransformPointerType m_AffineTransform;
+
+  // BILINEAR 
+  // Respectibely: constant, linear-X, linear-Y, cross-XY term
+  double bl_a, bl_b, bl_c, bl_d;
+
+  // Normal system coefficient matrix.
+  vnl_matrix_fixed<double, 4, 4>  Ata;
+  // Normal system RHS vector
+  vnl_matrix_fixed<double, 4, 1>  Atb;
+
 
 }; // end of class
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLeastSquareAffineTransformEstimator.hxx"
+#include "otbLeastSquareBilinearTransformEstimator.hxx"
 #endif
 
 #endif
