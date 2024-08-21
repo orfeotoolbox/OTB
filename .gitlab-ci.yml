@@ -46,12 +46,12 @@ workflow:
     - if: '$CI_COMMIT_BRANCH'
 
 stages:
-  # - precheck
+  - precheck
   - prepare
   - build
-  # - report
-  # - deploy
-  # - docker
+  - report
+  - deploy
+  - docker
 
 .general:
   retry:
