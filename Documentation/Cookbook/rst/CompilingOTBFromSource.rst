@@ -9,9 +9,9 @@ follow instructions from the :doc:`Installation` section.
 
 OTB is known to work on:
 
-* Visual Studio 2019 on Windows 10
+* Visual Studio 2019 on Windows 10 with python 3.10
 
-* GCC 5 or higher, Clang 3.4 or higher on GNU/Linux
+* GCC 8 or higher, Clang 10 or higher on GNU/Linux with python 3.8 or higher
 
 The C++14 standard is required since version 6.2.0.
 
