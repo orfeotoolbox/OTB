@@ -10,25 +10,23 @@ diff -burN ITK-5.0.0.orig/CMake/FindFFTW.cmake ITK-5.0.0/CMake/FindFFTW.cmake
    endif()
  
    if(FFTW_INCLUDE_PATH)
-@@ -176,8 +176,8 @@
-     )
+@@ -183,7 +189,7 @@
      if(ITK_USE_FFTWD)
-       mark_as_advanced(FFTWD_LIB)
--      find_library(FFTWD_LIB fftw3 ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib
+       mark_as_advanced(FFTWD_BASE_LIB FFTWD_THREADS_LIB FFTWD_LIBRARIES)
+-      find_library(FFTWD_BASE_LIB fftw3 ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib
 -      find_library(FFTWD_THREADS_LIB fftw3_threads ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib only if compiled with threads support
-+      find_library(FFTWD_LIB fftw3 ${FFTW_LIB_SEARCHPATH}  NO_DEFAULT_PATH) #Double Precision Lib
++      find_library(FFTWD_BASE_LIB fftw3 ${FFTW_LIB_SEARCHPATH}  NO_DEFAULT_PATH) #Double Precision Lib
 +      find_library(FFTWD_THREADS_LIB fftw3_threads ${FFTW_LIB_SEARCHPATH}  NO_DEFAULT_PATH) #Double Precision Lib only if compiled with threads support
  
-       if(FFTWD_LIB)
+       if(FFTWD_BASE_LIB)
          set(FFTWD_FOUND 1)
-@@ -192,8 +192,8 @@
- 
+@@ -203,7 +209,7 @@
      if(ITK_USE_FFTWF)
-       mark_as_advanced(FFTWF_LIB)
--      find_library(FFTWF_LIB fftw3f ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib
+       mark_as_advanced(FFTWF_BASE_LIB FFTWF_THREADS_LIB FFTWF_LIBRARIES)
+-      find_library(FFTWF_BASE_LIB fftw3f ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib
 -      find_library(FFTWF_THREADS_LIB fftw3f_threads ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib only if compiled with threads support
-+      find_library(FFTWF_LIB fftw3f ${FFTW_LIB_SEARCHPATH}  NO_DEFAULT_PATH) #Single Precision Lib
++      find_library(FFTWF_BASE_LIB fftw3f ${FFTW_LIB_SEARCHPATH}  NO_DEFAULT_PATH) #Single Precision Lib
 +      find_library(FFTWF_THREADS_LIB fftw3f_threads ${FFTW_LIB_SEARCHPATH}  NO_DEFAULT_PATH) #Single Precision Lib only if compiled with threads support
  
-       if(FFTWF_LIB)
+       if(FFTWF_BASE_LIB)
          set(FFTWF_FOUND 1)
