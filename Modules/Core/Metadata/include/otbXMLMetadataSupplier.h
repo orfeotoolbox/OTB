@@ -106,7 +106,7 @@ public:
   unsigned int GetNumberOf(std::string const& path) const override;
 
   /** If multiple keys have the same path, gives the position of the one with value value*/
-  unsigned int GetAttributId(std::string const& path, std::string const& value) const override;
+  unsigned int GetAttributeId(std::string const& path, std::string const& value) const override;
 
   /**
    * @brief Writes the content of the XML file into a string

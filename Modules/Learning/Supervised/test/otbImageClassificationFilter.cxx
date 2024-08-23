@@ -30,14 +30,14 @@ typedef double         PixelType;
 typedef unsigned short LabeledPixelType;
 
 typedef otb::VectorImage<PixelType, Dimension>                      ImageType;
-typedef otb::Image<LabeledPixelType, Dimension>                     LabeledImageType;
-typedef otb::ImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
+typedef otb::Image<LabeledPixelType, Dimension>                     LabelledImageType;
+typedef otb::ImageClassificationFilter<ImageType, LabelledImageType> ClassificationFilterType;
 typedef ClassificationFilterType::ModelType ModelType;
 typedef ClassificationFilterType::ValueType ValueType;
 typedef ClassificationFilterType::LabelType LabelType;
 typedef otb::MachineLearningModelFactory<ValueType, LabelType> MachineLearningModelFactoryType;
 typedef otb::ImageFileReader<ImageType>        ReaderType;
-typedef otb::ImageFileWriter<LabeledImageType> WriterType;
+typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
 
 int otbImageClassificationFilterLoadModel(int itkNotUsed(argc), char* argv[])

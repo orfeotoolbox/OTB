@@ -72,7 +72,7 @@ public:
   virtual unsigned int GetNumberOf(std::string const& path) const = 0;
 
   /** If multiple keys have the same path, gives the position of the one with value value*/
-  virtual unsigned int GetAttributId(std::string const& path, std::string const& value) const = 0;
+  virtual unsigned int GetAttributeId(std::string const& path, std::string const& value) const = 0;
 
   virtual ~MetadataSupplierInterface() = default;
 };

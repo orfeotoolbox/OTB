@@ -149,19 +149,19 @@ CommandLineParser::ParseResultType CommandLineParser::GetPaths(std::vector<std::
 
   if (tempModPath.size() > 0)
   {
-    std::vector<itksys::String> pathAttribut = itksys::SystemTools::SplitString(tempModPath, ' ', false);
+    std::vector<itksys::String> pathAttribute = itksys::SystemTools::SplitString(tempModPath, ' ', false);
 
 
     // Remove " " string element
-    for (unsigned int i = 0; i < pathAttribut.size(); i++)
+    for (unsigned int i = 0; i < pathAttribute.size(); i++)
     {
       // Suppress possible multi space at the beginning of the string
-      while (pathAttribut[i].size() > 1 && pathAttribut[i][0] == ' ')
+      while (pathAttribute[i].size() > 1 && pathAttribute[i][0] == ' ')
       {
-        pathAttribut[i].erase(0, 1);
+        pathAttribute[i].erase(0, 1);
       }
 
-      std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i]);
+      std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribute[i]);
 
       if (!itksys::SystemTools::FileIsDirectory(fullPath))
       {
@@ -250,10 +250,10 @@ CommandLineParser::ParseResultType CommandLineParser::GetModuleName(std::string&
   return OK;
 }
 
-std::vector<std::string> CommandLineParser::GetAttribut(const std::string& key, const std::vector<std::string>& exp)
+std::vector<std::string> CommandLineParser::GetAttribute(const std::string& key, const std::vector<std::string>& exp)
 {
   std::vector<std::string> res;
-  if (!this->IsAttributExists(key, exp))
+  if (!this->IsAttributeExists(key, exp))
     return res;
 
   bool                                     foundKey = false;
@@ -289,7 +289,7 @@ std::vector<std::string> CommandLineParser::GetAttribut(const std::string& key, 
   return res;
 }
 
-std::vector<std::string> CommandLineParser::GetAttribut(const std::string& key, const std::string& exp)
+std::vector<std::string> CommandLineParser::GetAttribute(const std::string& key, const std::string& exp)
 {
   std::vector<std::string> res;
 
@@ -378,10 +378,10 @@ std::vector<std::string> CommandLineParser::GetAttribut(const std::string& key, 
   return res;
 }
 
-std::string CommandLineParser::GetAttributAsString(const std::string& key, const std::vector<std::string>& exp)
+std::string CommandLineParser::GetAttributeAsString(const std::string& key, const std::vector<std::string>& exp)
 {
   std::string              res("");
-  std::vector<std::string> values = this->GetAttribut(key, exp);
+  std::vector<std::string> values = this->GetAttribute(key, exp);
 
   if (values.size() == 0)
   {
@@ -407,10 +407,10 @@ std::string CommandLineParser::GetAttributAsString(const std::string& key, const
   return res;
 }
 
-std::string CommandLineParser::GetAttributAsString(const std::string& key, const std::string& exp)
+std::string CommandLineParser::GetAttributeAsString(const std::string& key, const std::string& exp)
 {
   std::string              res("");
-  std::vector<std::string> values = this->GetAttribut(key, exp);
+  std::vector<std::string> values = this->GetAttribute(key, exp);
 
   if (values.size() == 0)
   {
@@ -437,7 +437,7 @@ std::string CommandLineParser::GetAttributAsString(const std::string& key, const
 }
 
 
-bool CommandLineParser::IsAttributExists(const std::string& key, const std::string& exp)
+bool CommandLineParser::IsAttributeExists(const std::string& key, const std::string& exp)
 {
   std::string keySpaced = key;
   std::string expSpaced = exp;
@@ -448,7 +448,7 @@ bool CommandLineParser::IsAttributExists(const std::string& key, const std::stri
   return (found != std::string::npos);
 }
 
-bool CommandLineParser::IsAttributExists(const std::string& key, const std::vector<std::string>& exp)
+bool CommandLineParser::IsAttributeExists(const std::string& key, const std::vector<std::string>& exp)
 {
   for (std::vector<std::string>::const_iterator it = exp.begin(); it != exp.end(); ++it)
   {

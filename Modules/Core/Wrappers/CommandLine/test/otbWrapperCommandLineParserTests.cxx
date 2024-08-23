@@ -75,7 +75,7 @@ int otbWrapperCommandLineParserTest1(int argc, char* argv[])
     cmdVector.push_back(std::string(argv[i]));
   }
 
-  std::vector<std::string> res = parser->GetAttribut(argv[1], cmdVector);
+  std::vector<std::string> res = parser->GetAttribute(argv[1], cmdVector);
 
   if (res.size() == 0)
   {
@@ -136,7 +136,7 @@ int otbWrapperCommandLineParserTest3(int argc, char* argv[])
     }
   }
 
-  if (parser->IsAttributExists(argv[1], cmdVector))
+  if (parser->IsAttributeExists(argv[1], cmdVector))
   {
     return EXIT_FAILURE;
   }
@@ -156,7 +156,7 @@ int otbWrapperCommandLineParserTest4(int argc, char* argv[])
     }
   }
 
-  if (parser->IsAttributExists(argv[1], cmdVector))
+  if (parser->IsAttributeExists(argv[1], cmdVector))
   {
     return EXIT_SUCCESS;
   }

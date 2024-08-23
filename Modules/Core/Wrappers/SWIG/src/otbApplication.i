@@ -307,7 +307,7 @@ public:
 
   std::string GetProgressDescription() const;
 
-  void FreeRessources();
+  void FreeResources();
 
   itkSetStringMacro(DocLongDescription);
   itkGetStringMacro(DocLongDescription);

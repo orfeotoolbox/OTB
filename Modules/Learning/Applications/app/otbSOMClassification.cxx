@@ -50,7 +50,7 @@ public:
   itkTypeMacro(SOMClassification, otb::Application);
 
   /** Filters typedef */
-  typedef UInt16ImageType LabeledImageType;
+  typedef UInt16ImageType LabelledImageType;
 
   typedef itk::VariableLengthVector<double>                    SampleType;
   typedef itk::Statistics::EuclideanDistanceMetric<SampleType> DistanceType;
@@ -63,10 +63,10 @@ public:
   typedef FloatVectorImageType::RegionType RegionType;
 
   typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
-  typedef itk::ImageRegionConstIterator<LabeledImageType>     LabeledIteratorType;
+  typedef itk::ImageRegionConstIterator<LabelledImageType>     LabeledIteratorType;
   typedef itk::ImageRegionConstIterator<SOMMapType>           SOMIteratorType;
 
-  typedef otb::SOMImageClassificationFilter<FloatVectorImageType, LabeledImageType, SOMMapType> ClassificationFilterType;
+  typedef otb::SOMImageClassificationFilter<FloatVectorImageType, LabelledImageType, SOMMapType> ClassificationFilterType;
 
 
 private:
@@ -188,7 +188,7 @@ private:
     itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
 
     FloatVectorImageType::Pointer input = GetParameterImage("in");
-    LabeledImageType::Pointer     mask;
+    LabelledImageType::Pointer     mask;
     m_UseMask = false;
     if (HasValue("vm"))
     {
@@ -389,7 +389,7 @@ private:
 
     AddProcess(m_Classifier, "Classification");
 
-    SetParameterOutputImage<LabeledImageType>("out", m_Classifier->GetOutput());
+    SetParameterOutputImage<LabelledImageType>("out", m_Classifier->GetOutput());
   }
 
   bool                              m_UseMask;

@@ -255,7 +255,7 @@ private:
     if (IsParameterEnabled("mask"))
     {
       otbAppLogINFO("Using input mask");
-      // Load mask image and cast into LabeledImageType
+      // Load mask image and cast into LabelledImageType
       auto inMask = GetParameterUInt8Image("mask");
       classificationFilter->SetInputMask(inMask);
     }

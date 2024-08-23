@@ -44,26 +44,26 @@ int main(int argc, char* argv[])
   typedef unsigned long LabelPixelType;
   typedef unsigned char PixelTypeOutput;
 
-  typedef otb::Image<LabelPixelType, 2>  LabeledImageType;
+  typedef otb::Image<LabelPixelType, 2>  LabelledImageType;
   typedef otb::Image<PixelTypeOutput, 2> OutputImageType;
-  typedef itk::ImageRegionIterator<LabeledImageType> IteratorType;
+  typedef itk::ImageRegionIterator<LabelledImageType> IteratorType;
   typedef otb::Polygon<double>                       PolygonType;
   typedef otb::ObjectList<PolygonType>               PolygonListType;
   typedef PolygonListType::Pointer                   PolygonListPointerType;
   typedef itk::ImageRegion<2>                        ImageRegionType;
 
-  typedef otb::PersistentVectorizationImageFilter<LabeledImageType, PolygonType> PersistentVectorizationFilterType;
+  typedef otb::PersistentVectorizationImageFilter<LabelledImageType, PolygonType> PersistentVectorizationFilterType;
 
-  typedef itk::ConnectedComponentImageFilter<LabeledImageType, LabeledImageType> ConnectedFilterType;
-  typedef itk::RescaleIntensityImageFilter<LabeledImageType, OutputImageType>    RescalerType;
+  typedef itk::ConnectedComponentImageFilter<LabelledImageType, LabelledImageType> ConnectedFilterType;
+  typedef itk::RescaleIntensityImageFilter<LabelledImageType, OutputImageType>    RescalerType;
   /*
     typedef itk::BinaryBallStructuringElement< LabelPixelType, 2 >        StructuringElementType;
-    typedef itk::BinaryErodeImageFilter<LabeledImageType, LabeledImageType, StructuringElementType>   ErodeFilterType;
-    typedef itk::BinaryDilateImageFilter<LabeledImageType, LabeledImageType, StructuringElementType>  DilateFilterType;
-    typedef itk::MedianImageFilter<LabeledImageType, LabeledImageType> MedianFilterType;
-    typedef otb::RemoveObjectPreprocessingImageFilter<LabeledImageType>           PreprocessingFilterType;
+    typedef itk::BinaryErodeImageFilter<LabelledImageType, LabelledImageType, StructuringElementType>   ErodeFilterType;
+    typedef itk::BinaryDilateImageFilter<LabelledImageType, LabelledImageType, StructuringElementType>  DilateFilterType;
+    typedef itk::MedianImageFilter<LabelledImageType, LabelledImageType> MedianFilterType;
+    typedef otb::RemoveObjectPreprocessingImageFilter<LabelledImageType>           PreprocessingFilterType;
   */
-  typedef otb::ImageFileReader<LabeledImageType> ReaderType;
+  typedef otb::ImageFileReader<LabelledImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
 
   //-----------------------------------------------------------------
@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
 
     //-----------------------------------------------------------------
     // allocate the memory for the output file
-    LabeledImageType::Pointer outputImage = LabeledImageType::New();
+    LabelledImageType::Pointer outputImage = LabelledImageType::New();
     outputImage->SetRegions(reader->GetOutput()->GetRequestedRegion());
     outputImage->CopyInformation(reader->GetOutput());
     outputImage->Allocate();

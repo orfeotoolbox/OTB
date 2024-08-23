@@ -38,8 +38,8 @@ int otbLabelMapToSimulatedImageFilterTest(int itkNotUsed(argc), char* argv[])
 
   typedef unsigned short LabelType;
   const unsigned int     Dimension = 2;
-  typedef otb::VectorImage<double, Dimension> LabeledImageType;
-  typedef otb::ImageFileWriter<LabeledImageType> WriterType;
+  typedef otb::VectorImage<double, Dimension> LabelledImageType;
+  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
   typedef otb::VectorData<double, Dimension> VectorDataType;
   typedef otb::AttributesMapLabelObject<LabelType, Dimension, std::string> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>            LabelMapType;
@@ -48,7 +48,7 @@ int otbLabelMapToSimulatedImageFilterTest(int itkNotUsed(argc), char* argv[])
 
   typedef otb::ProspectModel ProspectType;
   typedef otb::SailModel     SailType;
-  typedef otb::LabelMapToSimulatedImageFilter<LabelMapType, ProspectType, SailType, LabeledImageType> LabelMapToSimulatedImageFilterType;
+  typedef otb::LabelMapToSimulatedImageFilter<LabelMapType, ProspectType, SailType, LabelledImageType> LabelMapToSimulatedImageFilterType;
 
 
   /** Instantiation of pointer objects*/

@@ -51,8 +51,8 @@ int otbVectorDataToLabelMapFilter(int argc, char* argv[])
   // Labeled image type
   const unsigned int     Dimension = 2;
   typedef unsigned short LabelType;
-  typedef otb::Image<LabelType, Dimension> LabeledImageType;
-  typedef otb::ImageFileWriter<LabeledImageType> WriterType;
+  typedef otb::Image<LabelType, Dimension> LabelledImageType;
+  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
   // Label map typedef
   typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
@@ -62,7 +62,7 @@ int otbVectorDataToLabelMapFilter(int argc, char* argv[])
   typedef otb::VectorDataFileReader<VectorDataType> ReaderType;
   typedef otb::VectorDataToLabelMapFilter<VectorDataType, LabelMapType> VectorDataToLabelMapFilterType;
 
-  typedef itk::LabelMapToLabelImageFilter<LabelMapType, LabeledImageType> LabelMapToLabelImageFilterType;
+  typedef itk::LabelMapToLabelImageFilter<LabelMapType, LabelledImageType> LabelMapToLabelImageFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);

@@ -36,14 +36,14 @@ typedef double         DoublePixelType;
 typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
 typedef itk::LabelMap<LabelObjectType> LabelMapType;
 typedef otb::VectorImage<DoublePixelType, Dimension> VectorImageType;
-typedef otb::Image<unsigned int, 2>                  LabeledImageType;
+typedef otb::Image<unsigned int, 2>                  LabelledImageType;
 
 typedef LabelMapType::Iterator IteratorType;
 
 typedef otb::ImageFileReader<VectorImageType>  ReaderType;
-typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
+typedef otb::ImageFileReader<LabelledImageType> LabeledReaderType;
 
-typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>             LabelMapFilterType;
+typedef itk::LabelImageToLabelMapFilter<LabelledImageType, LabelMapType>             LabelMapFilterType;
 typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> BandsStatisticsFilterType;
 
 

@@ -223,7 +223,7 @@ private:
                      const bool isDirectEvalDirection);
 
   static void ProjGradOneStep(const MatrixType& X, const MatrixType& fixedMat, const MatrixType& gradVariMat, const double& sig, const double& betinit,
-                              const double& delt, const double& lambdS, const double& lambdD, MatrixType& variMat, double& alph,
+                              const double& delt, const double& lambdS, const double& lambdD, MatrixType& variMat, double& alpha,
                               const bool isDirectEvalDirection);
 
   static void SetNegativeCoefficientsToZero(MatrixType& M);
@@ -233,7 +233,7 @@ private:
   static double SumMatrixElements(const MatrixType& M);
 
   static bool ArmijoTest(const double& sig, const MatrixType variMat, const MatrixType& newVariMat, const double& evalf, const double& newEvalf,
-                         const MatrixType& gradVariMat, const double& alph);
+                         const MatrixType& gradVariMat, const double& alpha);
 
   // attributes
   MatrixType   m_Endmembers;
