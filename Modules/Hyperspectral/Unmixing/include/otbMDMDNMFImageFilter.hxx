@@ -195,16 +195,16 @@ void MDMDNMFImageFilter<TInputImage, TOutputImage>::EvalGradA(const MatrixType& 
 template <class TInputImage, class TOutputImage>
 void MDMDNMFImageFilter<TInputImage, TOutputImage>::ProjGradOneStep(const MatrixType& X, const MatrixType& fixedMat, const MatrixType& gradVariMat,
                                                                     const double& sig, const double& betinit, const double& m_Delt, const double& m_LambdS,
-                                                                    const double& m_LambdD, MatrixType& variMat, double& alph, const bool isDirectEvalDirection)
+                                                                    const double& m_LambdD, MatrixType& variMat, double& alpha, const bool isDirectEvalDirection)
 
 {
   double evalf, newEvalf, bet;
   evalf = Call(variMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection); // compute evalf
 
-  MatrixType newVariMat = variMat - alph * gradVariMat;
+  MatrixType newVariMat = variMat - alpha * gradVariMat;
   SetNegativeCoefficientsToZero(newVariMat);
   newEvalf = Call(newVariMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection); // compute newEvalf
-  bool bit = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
+  bool bit = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alpha);
 
   int count = 1;
   if (bit == true)
@@ -212,15 +212,15 @@ void MDMDNMFImageFilter<TInputImage, TOutputImage>::ProjGradOneStep(const Matrix
     while (bit == true)
     {
       bet        = pow(betinit, count);
-      alph       = alph / bet;
-      newVariMat = variMat - alph * gradVariMat;
+      alpha       = alpha / bet;
+      newVariMat = variMat - alpha * gradVariMat;
       SetNegativeCoefficientsToZero(newVariMat);
       newEvalf = Call(newVariMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection);
-      bit      = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
+      bit      = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alpha);
       ++count;
     }
-    alph       = alph * bet;
-    newVariMat = variMat - alph * gradVariMat;
+    alpha       = alpha * bet;
+    newVariMat = variMat - alpha * gradVariMat;
     SetNegativeCoefficientsToZero(newVariMat);
   }
   else
@@ -228,11 +228,11 @@ void MDMDNMFImageFilter<TInputImage, TOutputImage>::ProjGradOneStep(const Matrix
     while (bit == false)
     {
       bet        = pow(betinit, count);
-      alph       = alph * bet;
-      newVariMat = variMat - alph * gradVariMat;
+      alpha       = alpha * bet;
+      newVariMat = variMat - alpha * gradVariMat;
       SetNegativeCoefficientsToZero(newVariMat);
       newEvalf = Call(newVariMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection);
-      bit      = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
+      bit      = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alpha);
       ++count;
     }
   }
@@ -299,7 +299,7 @@ double MDMDNMFImageFilter<TInputImage, TOutputImage>::SumMatrixElements(const Ma
 
 template <class TInputImage, class TOutputImage>
 bool MDMDNMFImageFilter<TInputImage, TOutputImage>::ArmijoTest(const double& sig, const MatrixType variMat, const MatrixType& newVariMat, const double& evalf,
-                                                               const double& newEvalf, const MatrixType& gradVariMat, const double& alph)
+                                                               const double& newEvalf, const MatrixType& gradVariMat, const double& alpha)
 {
   bool bit;
 
@@ -309,7 +309,7 @@ bool MDMDNMFImageFilter<TInputImage, TOutputImage>::ArmijoTest(const double& sig
   const MatrixType prod    = TermByTermMatrixProduct(gradVariMat, newVariMat - variMat);
   double           sumProd = SumMatrixElements(prod);
 
-  if (newEvalf - evalf <= sig * alph * sumProd)
+  if (newEvalf - evalf <= sig * alpha * sumProd)
     bit = true;
   else
     bit = false;
@@ -364,8 +364,8 @@ void MDMDNMFImageFilter<TInputImage, TOutputImage>::GenerateData()
   // Tuning the projected gradient parameters
   double sig   = 0.05;
   double bet   = 0.99;
-  double alphA = 1.;
-  double alphS = 1.;
+  double alphaA = 1.;
+  double alphaS = 1.;
 
   MatrixType X = inputImage2Matrix->GetMatrix();
   // otbGenericMsgDebugMacro( << "X " << X  );
@@ -420,16 +420,16 @@ void MDMDNMFImageFilter<TInputImage, TOutputImage>::GenerateData()
       otbGenericMsgDebugMacro(<< "Criterion = " << Criterion(X, A, S, m_Delt, m_LambdS, m_LambdD));
       otbGenericMsgDebugMacro(<< "statGradS = " << gradS.fro_norm());
       otbGenericMsgDebugMacro(<< "gradS(0, 0) = " << gradS(0, 0));
-      otbGenericMsgDebugMacro(<< "alphS = " << alphS);
+      otbGenericMsgDebugMacro(<< "alphaS = " << alphaS);
       otbGenericMsgDebugMacro(<< "normS = " << S.fro_norm());
       otbGenericMsgDebugMacro(<< "S(0, 0) = " << S(0, 0));
     }
 
-    ProjGradOneStep(X, A, gradS, sig, bet, m_Delt, m_LambdS, m_LambdD, S, alphS, false);
+    ProjGradOneStep(X, A, gradS, sig, bet, m_Delt, m_LambdS, m_LambdD, S, alphaS, false);
 
     if (counter % divisorParam == 0)
     {
-      otbGenericMsgDebugMacro(<< "alphS = " << alphS);
+      otbGenericMsgDebugMacro(<< "alphaS = " << alphaS);
       otbGenericMsgDebugMacro(<< "normS = " << S.fro_norm());
       otbGenericMsgDebugMacro(<< "S(0, 0) = " << S(0, 0));
     }
@@ -447,15 +447,15 @@ void MDMDNMFImageFilter<TInputImage, TOutputImage>::GenerateData()
 
     if (counter % divisorParam == 0)
     {
-      otbGenericMsgDebugMacro(<< "alphA = " << alphA);
+      otbGenericMsgDebugMacro(<< "alphaA = " << alphaA);
       otbGenericMsgDebugMacro(<< "normA = " << A.fro_norm());
       otbGenericMsgDebugMacro(<< "A(0, 0) = " << A(0, 0));
     }
-    ProjGradOneStep(X, S, gradA, sig, bet, m_Delt, m_LambdS, m_LambdD, A, alphA, true);
+    ProjGradOneStep(X, S, gradA, sig, bet, m_Delt, m_LambdS, m_LambdD, A, alphaA, true);
 
     if (counter % divisorParam == 0)
     {
-      otbGenericMsgDebugMacro(<< "alphA = " << alphA);
+      otbGenericMsgDebugMacro(<< "alphaA = " << alphaA);
       otbGenericMsgDebugMacro(<< "normA = " << A.fro_norm());
       otbGenericMsgDebugMacro(<< "A(0, 0) = " << A(0, 0));
     }

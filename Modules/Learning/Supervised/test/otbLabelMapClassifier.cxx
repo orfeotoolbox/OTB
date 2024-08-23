@@ -42,14 +42,14 @@ typedef double         DoublePixelType;
 typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType, Dimension, double, LabelType> LabelObjectType;
 typedef itk::LabelMap<LabelObjectType> LabelMapType;
 typedef otb::VectorImage<DoublePixelType, Dimension> VectorImageType;
-typedef otb::Image<unsigned int, 2>                  LabeledImageType;
+typedef otb::Image<unsigned int, 2>                  LabelledImageType;
 
 typedef otb::ImageFileReader<VectorImageType>  ReaderType;
-typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
+typedef otb::ImageFileReader<LabelledImageType> LabeledReaderType;
 typedef otb::ImageFileWriter<VectorImageType>  WriterType;
-typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
+typedef otb::ImageFileWriter<LabelledImageType> LabeledWriterType;
 
-typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
+typedef itk::LabelImageToLabelMapFilter<LabelledImageType, LabelMapType> LabelMapFilterType;
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType> ShapeFilterType;
 typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> BandsStatisticsFilterType;
 
@@ -62,7 +62,7 @@ typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType, ListS
 typedef otb::LibSVMMachineLearningModel<double, LabelType> SVMType;
 
 typedef otb::LabelMapClassifier<LabelMapType> ClassifierType;
-typedef otb::LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType, LabeledImageType> ClassifImageGeneratorType;
+typedef otb::LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType, LabelledImageType> ClassifImageGeneratorType;
 
 
 LabelObjectType::Pointer makeTrainingSample(LabelMapType* labelMap, LabelType labelObjectId, LabelType classLabel)

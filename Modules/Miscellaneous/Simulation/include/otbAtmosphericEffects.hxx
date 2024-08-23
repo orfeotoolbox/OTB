@@ -45,7 +45,7 @@ AtmosphericEffects<TSpectralResponse , TRSR>
   //LMoad the filter function from the RSR
   for (unsigned int i=0; i<this->m_InputSatRSR->GetNbBands(); ++i)
   {
-    m_DataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, this->m_InputSatRSR->GetRSR()[i]->GetFilterFunctionValues (step));
+    m_DataAtmosphericCorrectionParameters->SetWavelengthSpectralBandWithIndex(i, this->m_InputSatRSR->GetRSR()[i]->GetFilterFunctionValues (step));
   }
 }
 */

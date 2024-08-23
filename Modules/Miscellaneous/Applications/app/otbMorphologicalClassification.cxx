@@ -56,11 +56,11 @@ public:
   typedef otb::Image<InputPixelType, 2> FloatImageType;
 
   typedef unsigned short LabeledPixelType;
-  typedef otb::Image<LabeledPixelType, 2> LabeledImageType;
+  typedef otb::Image<LabeledPixelType, 2> LabelledImageType;
 
   typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, InputPixelType> ExtractorFilterType;
 
-  typedef otb::ConvexOrConcaveClassificationFilter<FloatImageType, LabeledImageType> ClassificationFilterType;
+  typedef otb::ConvexOrConcaveClassificationFilter<FloatImageType, LabelledImageType> ClassificationFilterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, 2>  BallStructuringElementType;
   typedef itk::BinaryCrossStructuringElement<InputPixelType, 2> CrossStructuringElementType;

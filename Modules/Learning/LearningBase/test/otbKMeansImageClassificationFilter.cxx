@@ -35,11 +35,11 @@ int otbKMeansImageClassificationFilter(int itkNotUsed(argc), char* argv[])
   typedef unsigned short LabeledPixelType;
 
   typedef otb::VectorImage<PixelType, Dimension>                            ImageType;
-  typedef otb::Image<LabeledPixelType, Dimension>                           LabeledImageType;
-  typedef otb::KMeansImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
+  typedef otb::Image<LabeledPixelType, Dimension>                           LabelledImageType;
+  typedef otb::KMeansImageClassificationFilter<ImageType, LabelledImageType> ClassificationFilterType;
   typedef ClassificationFilterType::KMeansParametersType KMeansParametersType;
   typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::ImageFileWriter<LabeledImageType>         WriterType;
+  typedef otb::ImageFileWriter<LabelledImageType>         WriterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();

@@ -31,12 +31,12 @@ int otbImageToLabelMapWithAttributesFilter(int itkNotUsed(argc), char* argv[])
 
   // Convenient typedefs
   typedef otb::VectorImage<double, 2> ImageType;
-  typedef otb::Image<unsigned int, 2> LabeledImageType;
+  typedef otb::Image<unsigned int, 2> LabelledImageType;
   typedef otb::AttributesMapLabelObjectWithClassLabel<double, 2, double, double> LabelObjectType;
 
-  typedef otb::ImageToLabelMapWithAttributesFilter<ImageType, LabeledImageType, unsigned int, LabelObjectType> FilterType;
+  typedef otb::ImageToLabelMapWithAttributesFilter<ImageType, LabelledImageType, unsigned int, LabelObjectType> FilterType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
+  typedef otb::ImageFileReader<LabelledImageType> LabeledReaderType;
 
   // SmartPointer instantiation
   FilterType::Pointer        filter        = FilterType::New();
@@ -52,7 +52,7 @@ int otbImageToLabelMapWithAttributesFilter(int itkNotUsed(argc), char* argv[])
 
   // Filter
   filter->SetInput(reader->GetOutput());
-  filter->SetLabeledImage(labeledReader->GetOutput());
+  filter->SetLabelledImage(labeledReader->GetOutput());
   filter->Update();
 
 

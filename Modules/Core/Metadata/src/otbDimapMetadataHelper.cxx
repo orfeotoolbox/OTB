@@ -402,13 +402,13 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
 
   if (yaw_vector.empty()||pitch_vector.empty()||roll_vector.empty()||time_vector.empty())
   {
-    otbGenericExceptionMacro(itk::ExceptionObject, <<"Missing attitudes informations");
+    otbGenericExceptionMacro(itk::ExceptionObject, <<"Missing attitudes information");
   }
 
   /* Look Angles */
 
   // Use look angles from Green band
-  // /!\ Warning chech condition with SWIR band not clear in OSSIM!
+  // /!\ Warning check condition with SWIR band not clear in OSSIM!
   bool bandFound = false;
   int i = 1;
   std::string expr;

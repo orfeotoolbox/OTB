@@ -149,9 +149,9 @@ bool CommandLineLauncher::ExecuteAndWriteOutputNoCatch()
 
   // After execution, write parameters to the xml file if requested
   const char* attrib = "-outxml";
-  if (m_Parser->IsAttributExists(attrib, m_VExpression))
+  if (m_Parser->IsAttributeExists(attrib, m_VExpression))
   {
-    std::vector<std::string> outXMLValues = m_Parser->GetAttribut(attrib, m_VExpression);
+    std::vector<std::string> outXMLValues = m_Parser->GetAttribute(attrib, m_VExpression);
     m_Application->SaveParametersToXML(outXMLValues[0]);
   }
 
@@ -161,7 +161,7 @@ bool CommandLineLauncher::ExecuteAndWriteOutputNoCatch()
 bool CommandLineLauncher::ExecuteAndWriteOutput()
 {
   // If testenv is used, do not catch exceptions
-  if (m_Parser->IsAttributExists("-testenv", m_VExpression) == true)
+  if (m_Parser->IsAttributeExists("-testenv", m_VExpression) == true)
   {
     return ExecuteAndWriteOutputNoCatch();
   }
@@ -229,10 +229,10 @@ bool CommandLineLauncher::BeforeExecute()
   }
 
   // if help is asked...
-  if (m_Parser->IsAttributExists("-help", m_VExpression) == true)
+  if (m_Parser->IsAttributeExists("-help", m_VExpression) == true)
   {
     std::vector<std::string> val;
-    val = m_Parser->GetAttribut("-help", m_VExpression);
+    val = m_Parser->GetAttribute("-help", m_VExpression);
 
     if (val.empty())
     {
@@ -255,14 +255,14 @@ bool CommandLineLauncher::BeforeExecute()
   }
 
   // display OTB version
-  if (m_Parser->IsAttributExists("-version", m_VExpression) == true)
+  if (m_Parser->IsAttributeExists("-version", m_VExpression) == true)
   {
     std::cerr << "This is the " << m_Application->GetName() << " application, version " << OTB_VERSION_STRING << std::endl;
     return false;
   }
 
   // if we want to load test environment
-  if (m_Parser->IsAttributExists("-testenv", m_VExpression) == true)
+  if (m_Parser->IsAttributeExists("-testenv", m_VExpression) == true)
   {
     this->LoadTestEnv();
   }
@@ -371,16 +371,16 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
   // Read parameters from xml file if provided
   const char* attrib = "-inxml";
-  if (m_Parser->IsAttributExists(attrib, m_VExpression))
+  if (m_Parser->IsAttributeExists(attrib, m_VExpression))
   {
-    std::vector<std::string> inXMLValues = m_Parser->GetAttribut(attrib, m_VExpression);
+    std::vector<std::string> inXMLValues = m_Parser->GetAttribute(attrib, m_VExpression);
     m_Application->LoadParametersFromXML(inXMLValues[0]);
   }
 
   // Check for the progress report parameter
-  if (m_Parser->IsAttributExists("-progress", m_VExpression) == true)
+  if (m_Parser->IsAttributeExists("-progress", m_VExpression) == true)
   {
-    std::vector<std::string> val = m_Parser->GetAttribut("-progress", m_VExpression);
+    std::vector<std::string> val = m_Parser->GetAttribute("-progress", m_VExpression);
     if (val.size() == 1 && (val[0] == "1" || val[0] == "true"))
     {
       m_ReportProgress = true;
@@ -406,13 +406,13 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     ParameterType type = m_Application->GetParameterType(paramKey);
 
-    const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression));
+    const bool paramExists(m_Parser->IsAttributeExists(std::string("-").append(paramKey), m_VExpression));
 
     // if param is a Group, don't do anything, ParamGroup don't have values
     if (type != ParameterType_Group)
     {
       // Get the attribute relative to this key as vector
-      values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
+      values = m_Parser->GetAttribute(std::string("-").append(paramKey), m_VExpression);
 
       // If the param does not exists in the cli, don't try to set a
       // value on it, an exception will be thrown later in this function
@@ -930,9 +930,9 @@ void CommandLineLauncher::DisplayOutputParameters()
   }
 
 
-  if (m_Parser->IsAttributExists("-testenv", m_VExpression))
+  if (m_Parser->IsAttributeExists("-testenv", m_VExpression))
   {
-    std::vector<std::string> val = m_Parser->GetAttribut("-testenv", m_VExpression);
+    std::vector<std::string> val = m_Parser->GetAttribute("-testenv", m_VExpression);
     if (val.size() == 1)
     {
       std::ofstream ofs(val[0]);

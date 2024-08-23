@@ -32,15 +32,15 @@ typedef float          PixelType;
 typedef unsigned short LabeledPixelType;
 
 typedef otb::VectorImage<PixelType, Dimension>                      ImageType;
-typedef otb::Image<LabeledPixelType, Dimension>                     LabeledImageType;
-typedef otb::ImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
+typedef otb::Image<LabeledPixelType, Dimension>                     LabelledImageType;
+typedef otb::ImageClassificationFilter<ImageType, LabelledImageType> ClassificationFilterType;
 typedef ClassificationFilterType::ModelType ModelType;
 typedef ClassificationFilterType::ValueType ValueType;
 typedef ClassificationFilterType::LabelType LabelType;
 typedef otb::SharkRandomForestsMachineLearningModelFactory<ValueType, LabelType> MachineLearningModelFactoryType;
 typedef otb::ImageFileReader<ImageType>        ReaderType;
-typedef otb::ImageFileReader<LabeledImageType> MaskReaderType;
-typedef otb::ImageFileWriter<LabeledImageType> WriterType;
+typedef otb::ImageFileReader<LabelledImageType> MaskReaderType;
+typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
 typedef otb::SharkRandomForestsMachineLearningModel<PixelType, short unsigned int> MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       LocalInputValueType;
@@ -169,7 +169,7 @@ int otbSharkImageClassificationFilter(int argc, char* argv[])
 
   // Check that the chosen labels correspond to the max proba
 
-  itk::ImageRegionConstIterator<LabeledImageType>                         labIt(filter->GetOutput(), filter->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<LabelledImageType>                         labIt(filter->GetOutput(), filter->GetOutput()->GetLargestPossibleRegion());
   itk::ImageRegionConstIterator<ClassificationFilterType::ProbaImageType> probIt(filter->GetOutputProba(),
                                                                                  filter->GetOutputProba()->GetLargestPossibleRegion());
 

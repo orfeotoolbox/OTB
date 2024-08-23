@@ -44,16 +44,16 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int itkNotUsed(argc), 
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef otb::Image<LabeledPixelType, 2>        LabeledImageType;
+  typedef otb::Image<LabeledPixelType, 2>        LabelledImageType;
 
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
-  typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
+  typedef otb::ImageFileWriter<LabelledImageType> LabeledWriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType> OpeningProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType, InputImageType> DerivativeFilterType;
-  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType> MultiScaleCharacteristicsFilterType;
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabelledImageType> MultiScaleCharacteristicsFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();

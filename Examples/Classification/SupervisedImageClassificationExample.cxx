@@ -56,11 +56,11 @@ int main(int itkNotUsed(argc), char* argv[])
   // with any number of bands. We read the input image as a
   // \doxygen{otb}{VectorImage}. The labeled image will be a scalar image.
   using ImageType        = otb::VectorImage<PixelType, Dimension>;
-  using LabeledImageType = otb::Image<LabeledPixelType, Dimension>;
+  using LabelledImageType = otb::Image<LabeledPixelType, Dimension>;
 
   // We can now define the type for the classifier filter, which is
   // templated over its input and output image types.
-  using ClassificationFilterType = otb::ImageClassificationFilter<ImageType, LabeledImageType>;
+  using ClassificationFilterType = otb::ImageClassificationFilter<ImageType, LabelledImageType>;
   using ModelType                = ClassificationFilterType::ModelType;
 
   // Moreover, it is necessary to define a \doxygen{otb}{MachineLearningModelFactory}
@@ -72,7 +72,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // to classify can be very big, we will use a streamed writer which
   // will trigger the streaming ability of the classifier.
   using ReaderType = otb::ImageFileReader<ImageType>;
-  using WriterType = otb::ImageFileWriter<LabeledImageType>;
+  using WriterType = otb::ImageFileWriter<LabelledImageType>;
 
   // We instantiate the classifier and the reader objects and we set
   // the existing model obtained in a previous training step.

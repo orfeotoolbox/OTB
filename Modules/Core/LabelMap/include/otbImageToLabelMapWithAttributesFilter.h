@@ -62,22 +62,22 @@ public:
   itkNewMacro(Self);
 
   typedef TInputImage   InputImageType;
-  typedef TLabeledImage LabeledImageType;
+  typedef TLabeledImage LabelledImageType;
   typedef TLabelObject  LabelObjectType;
 
   typedef typename LabelObjectType::LabelType                LabelType;
   typedef LabelMapWithAdjacency<LabelObjectType>             LabelMapType;
   typedef typename LabelMapType::AdjacentLabelsContainerType AdjacentLabelsContainerType;
 
-  typedef LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
+  typedef LabelImageToLabelMapWithAdjacencyFilter<LabelledImageType, LabelMapType> LabelMapFilterType;
   typedef ShapeAttributesLabelMapFilter<LabelMapType> ShapeLabelMapFilterType;
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType> BandStatisticsLabelMapFilterType;
 
   using Superclass::SetInput;
   void SetInput(const InputImageType* image) override;
-  virtual void SetLabeledImage(const LabeledImageType* image);
+  virtual void SetLabelledImage(const LabelledImageType* image);
   const InputImageType*   GetInput(void);
-  const LabeledImageType* GetLabeledImage();
+  const LabelledImageType* GetLabelledImage();
   virtual LabelMapType*   GetOutput();
 
   void GenerateData() override;

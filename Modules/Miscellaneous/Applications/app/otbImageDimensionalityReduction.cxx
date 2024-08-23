@@ -250,7 +250,7 @@ private:
     if (IsParameterEnabled("mask"))
     {
       otbAppLogINFO("Using input mask");
-      // Load mask image and cast into LabeledImageType
+      // Load mask image and cast into LabelledImageType
       MaskImageType::Pointer inMask = GetParameterUInt8Image("mask");
 
       m_ClassificationFilter->SetInputMask(inMask);
