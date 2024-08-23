@@ -99,11 +99,8 @@ set(OTBITK_ITK_REQUIRED_MODULE_LIST
     ITKVoronoi
     ITKWatersheds)
 
-find_package(FFTW3 REQUIRED)
-find_package(FFTW3f REQUIRED)
 find_package(ITK COMPONENTS ${OTBITK_ITK_REQUIRED_MODULE_LIST})
 mark_as_advanced(ITK_DIR)
-mark_as_advanced(FFTW_DIR)
 
 # set ( ITK_NO_IO_FACTORY_REGISTER_MANAGER TRUE )
 # include (${ITK_USE_FILE})
