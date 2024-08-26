@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,12 +29,12 @@
 namespace otb
 {
 
-Spot5SensorModel::Spot5SensorModel(const std::string & productType,
-                                const Spot5Param & Spot5Param
-                                ):           
-                              m_Spot5Param(Spot5Param),
-                              m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
-                              m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
+Spot5SensorModel::Spot5SensorModel(const std::string& /*productType*/,
+                                   const Spot5Param& Spot5Param
+                                  ):
+                                  m_Spot5Param(Spot5Param),
+                                  m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
+                                  m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
 
 {
   InitBilinearTransform();
@@ -73,9 +73,6 @@ void Spot5SensorModel::InitBilinearTransform(){
     m_GroundRect->AddVertex(Point3DToIndex(urg));
     m_GroundRect->AddVertex(Point3DToIndex(lrg));
     m_GroundRect->AddVertex(Point3DToIndex(llg));
-
-    bool res = m_ImageRect->IsInside(Point2DToIndex(ul));
-    res = m_ImageRect->IsOnEdge(Point2DToIndex(ul));
 
     std::vector<Point2DType> impts {ul,ur,lr,ll};
     std::vector<Point3DType> wrldpts {ulg,urg,lrg,llg};
@@ -172,7 +169,7 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
     //
     inverse_norm = dlat_dv*dlon_du - dlat_du*dlon_dv; // fg-eh
 
-    if (! inverse_norm <= DBL_EPSILON)      
+    if (inverse_norm > DBL_EPSILON)
     {
       delta_u = (-dlon_dv*delta_lat + dlat_dv*delta_lon)/inverse_norm;
       delta_v = ( dlon_du*delta_lat - dlat_du*delta_lon)/inverse_norm;
@@ -184,10 +181,11 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
       delta_u = 0;
       delta_v = 0;
     }
-    done = ((fabs(delta_u) < PIXEL_THRESHOLD)&&
-            (fabs(delta_v) < PIXEL_THRESHOLD));
+    done = (std::abs(delta_u) < PIXEL_THRESHOLD)&&
+           (std::abs(delta_v) < PIXEL_THRESHOLD);
+    if (done) break;
     iters++;
-  } while ((!done) && (iters < MAX_NUM_ITERATIONS));
+  } while (iters < MAX_NUM_ITERATIONS);
 
   outLineSample = ip - m_Spot5Param.SubImageOffset;
 
@@ -243,20 +241,21 @@ void Spot5SensorModel::GetBilinearInterpolation(
       const std::vector<double>& T,
       Point3DType& li) const
 {
-  unsigned int samp0 = 0;
-  while ((samp0 < T.size()) && (T[samp0] < time)) ++samp0;
+  // get iterator to first element >= time
+  const auto first_sup_value = std::lower_bound(T.begin(), T.end(), time);
 
-  if(samp0==0)
+  if(first_sup_value == T.begin())
   {
     li = V[0];
   }
-  else if(samp0 == T.size())
+  else if(first_sup_value == T.end())
   {
     li = V[1];
   }
   else
   {
-    double t = (T[samp0-1]-time)/(T[samp0-1] - T[samp0]);
+    const int32_t samp0 = std::distance(T.begin(), first_sup_value);
+    double t = (T[samp0-1]-time)/(T[samp0-1] - (*first_sup_value));
 
     li = V[samp0-1] + (V[samp0]-V[samp0-1])*t;
   }
@@ -407,8 +406,6 @@ void Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double&
   // WGS 84 parameters conversion
   double wgsA = 6378137.000;
   double wgsB = 6356752.3142;
-  double flattening = (wgsA * wgsB) / wgsA;
-  double eccentricitySquared = 2*flattening - flattening * flattening;
 
   double wgsASquared = (wgsA + offset)*(wgsA + offset);
   double wgsBSquared = (wgsB + offset)*(wgsB + offset);
@@ -465,11 +462,9 @@ void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt
   static const int    MAX_NUM_ITERATIONS    = 50;
   
   double          h_ellips; // height above ellipsoid
-  bool            intersected;
   Point3DType     prev_intersect_pt (imRay.position);
   Point3DType     new_intersect_pt;
   double          distance;
-  bool            done = false;
   int             iteration_count = 0;
 
   worldPt = EcefToWorld(prev_intersect_pt);
@@ -491,13 +486,13 @@ void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt
     //
     distance = (new_intersect_pt - prev_intersect_pt).GetNorm();
     if (distance < CONVERGENCE_THRESHOLD)
-      done = true;
+      break;
     else
-          prev_intersect_pt = new_intersect_pt;
+      prev_intersect_pt = new_intersect_pt;
 
     iteration_count++;
 
-  } while ((!done) && (iteration_count < MAX_NUM_ITERATIONS));
+  } while (iteration_count < MAX_NUM_ITERATIONS /* && distance >= CONVERGENCE_THRESHOLD */);
 
   if (iteration_count == MAX_NUM_ITERATIONS)
   {
@@ -514,9 +509,6 @@ void Spot5SensorModel::ComputeSatToOrbRotation(MatrixType& result, double t) con
   Point3DType att;
   GetAttitude(t, att);
 
-  /* Apply the attitude adjustable parameters: */
-  double dt = m_Spot5Param.RefLineTime - t;
-  
   /* Compute trig functions to populate rotation matrices: ANGLES IN RADIANS */
   double cp = cos(att[0]);
   double sp = sin(att[0]);
