@@ -42,13 +42,6 @@ LeastSquareBilinearTransformEstimator<TPoint>::LeastSquareBilinearTransformEstim
 }
 
 template <class TPoint>
-LeastSquareBilinearTransformEstimator<TPoint>::~LeastSquareBilinearTransformEstimator()
-{
-  // Clear the tie points list
-  this->ClearTiePoints();
-}
-
-template <class TPoint>
 void LeastSquareBilinearTransformEstimator<TPoint>::ClearTiePoints()
 {
   // Clear the container
@@ -100,10 +93,7 @@ void LeastSquareBilinearTransformEstimator<TPoint>::lsFitValue(const PointType& 
 }
 
 template <class TPoint>
-void LeastSquareBilinearTransformEstimator<TPoint>::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-
-}
+void LeastSquareBilinearTransformEstimator<TPoint>::PrintSelf(std::ostream& /*os*/, itk::Indent /*indent*/) const {}
 
 } // end namespace otb
 

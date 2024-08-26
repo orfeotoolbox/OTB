@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -340,11 +340,12 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   using Point3DType = itk::Point<double, 3>;
   using Point2DType = itk::Point<double, 2>;
   
-  std::vector<double> yaw_vector, pitch_vector, roll_vector;
+  std::vector<double> yaw_vector;
+  std::vector<double> pitch_vector;
+  std::vector<double> roll_vector;
   std::vector<std::string> time_vector;
   std::string resRoi;
   bool hasValue;
-  double sampletime;
 
   /* RefLineTime and RefLineTime */
   // acquisitionDate convert to date since 2002 (spot5 launch)
@@ -395,7 +396,7 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
     point3d[1] = roll_vector[i];
     point3d[2] = yaw_vector[i];
     spot5Param.AttitudesSamples.push_back(std::move(point3d));
-    sampletime = GetTime(time_vector[i]);
+    double sampletime = GetTime(time_vector[i]);
     spot5Param.AttitudesSamplesTimes.push_back(sampletime);
   }
 
@@ -449,12 +450,11 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
     velocity[0] = vel_x[i];
     velocity[1] = vel_y[i];
     velocity[2] = vel_z[i];
-    sampletime = GetTime(time_vector[i]);
+    double sampletime = GetTime(time_vector[i]);
 
     spot5Param.EcefPosSamples.push_back(std::move(position));
     spot5Param.EcefVelSamples.push_back(std::move(velocity));
     spot5Param.EcefTimeSamples.push_back(sampletime);
-
   }
 
 }
