@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -93,9 +93,6 @@ struct OTBMetadata_EXPORT Spot5Param
   std::vector<Point3DType> EcefPosSamples;
   std::vector<Point3DType> EcefVelSamples;
   std::vector<double> EcefTimeSamples;
-
-
-
 };
 
 }

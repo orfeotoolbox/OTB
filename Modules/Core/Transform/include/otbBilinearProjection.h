@@ -97,9 +97,7 @@ protected:
                     const Point3DType& urg,
                     const Point3DType& lrg,
                     const Point3DType& llg);
-  virtual ~BilinearProjection();
-  /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  virtual ~BilinearProjection() = default;
 
 private:
   BilinearProjection(const Self&) = delete;

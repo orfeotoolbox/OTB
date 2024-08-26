@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -63,7 +63,7 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 void Spot5TransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Spot5 Model" << std::endl;
+  os << indent << "Spot5 Model\n";
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
