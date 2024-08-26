@@ -269,7 +269,7 @@ void PersistentCompareImageFilter<TInputImage>::Reset()
 }
 
 template <class TInputImage>
-void PersistentCompareImageFilter<TInputImage>::VerifyInputInformation() ITKv5_CONST
+void PersistentCompareImageFilter<TInputImage>::VerifyInputInformation() const
 {
   if (m_PhysicalSpaceCheck)
     Superclass::VerifyInputInformation();

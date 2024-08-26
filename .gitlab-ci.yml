@@ -270,10 +270,10 @@ ubuntu-qa-code-coverage:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   script:
     - ctest -V -S CI/main_qa.cmake
-            -DIMAGE_NAME:string=ubuntu-20.04-llvm-qa
+            -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
             -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
     - saxon-xslt -o build/ctest_report.xml
@@ -292,7 +292,7 @@ ubuntu-qa-static-analysis:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
@@ -311,7 +311,7 @@ ubuntu-sonar-report:
   extends: .common
   variables:
     GIT_DEPTH: ""
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   stage: report
   only:
     refs:
@@ -362,7 +362,7 @@ deploy:
 update-archive:
   tags:
     - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   stage: deploy
   extends: .general
   only:

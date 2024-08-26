@@ -246,7 +246,7 @@ protected:
     *
     * \sa ProcessObject::VerifyInputInformation
     */
-  void VerifyInputInformation() ITKv5_CONST override
+  void VerifyInputInformation() const override
   {
   }
 

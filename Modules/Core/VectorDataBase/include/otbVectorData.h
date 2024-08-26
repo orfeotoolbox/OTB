@@ -160,11 +160,13 @@ public:
     {
       if(m_DataTree[*it] == parentNode)
       {
-        typename boost::graph_traits<DataTreeType>::adjacency_iterator ai, a_end; 
-        boost::tie(ai, a_end) = boost::adjacent_vertices(*it, m_DataTree);
-        for (; ai != a_end; ai++) { 
-            childrenslist.push_back(m_DataTree[*ai]);
+        auto iterloop = it;
+        while(iterloop != it_end)
+        {
+           childrenslist.push_back(m_DataTree[*iterloop]);
+           iterloop++;
         }
+        break;
       }
     }
     return childrenslist;

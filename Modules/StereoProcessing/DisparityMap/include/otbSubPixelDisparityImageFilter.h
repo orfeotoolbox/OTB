@@ -210,7 +210,7 @@ protected:
    * This method needs to be re-implemented from ImageToImageFilter since
    * the initial images and disparity maps may not have the same size
    */
-  void VerifyInputInformation() ITKv5_CONST override;
+  void VerifyInputInformation() const override;
 
   /** Generate output information */
   void GenerateOutputInformation() override;

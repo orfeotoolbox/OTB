@@ -149,11 +149,11 @@ std::string Logger::BuildFormattedEntry(itk::LoggerBaseEnums::PriorityLevel leve
   // }
   if (strcmp(this->GetName(), "") == 0)
   {
-    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[(uint8_t)level] + ": " + content;
+    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[std::uint8_t(level)] + ": " + content;
   }
   else
   {
-    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[(uint8_t)level] + " " + this->GetName() + ": " + content;
+    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[std::uint8_t(level)] + " " + this->GetName() + ": " + content;
   }
 }
 
