@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,10 +46,11 @@ Spot5ForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transfo
   OutputPointType pOut;
   pOut[0] = static_cast<TScalarType>(worldPoint[0]);
   pOut[1] = static_cast<TScalarType>(worldPoint[1]);
+
   if (NOutputDimensions > 2)
     pOut[2] = static_cast<TScalarType>(worldPoint[2]);
+
   return pOut;
-  return nullptr;
 }
 
 /**
@@ -59,7 +60,7 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 void Spot5ForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Transformation direction: Forward" << std::endl;
+  os << indent << "Transformation direction: Forward\n";
 }
 
 }

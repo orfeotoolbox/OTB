@@ -72,7 +72,7 @@ public:
     /** Constructor */
   LeastSquareBilinearTransformEstimator();
   /** Destructor */
-  ~LeastSquareBilinearTransformEstimator() override;
+  ~LeastSquareBilinearTransformEstimator() = default;
 
   /** Get the bilinear transform matrix */
   itkGetConstReferenceMacro(Matrix, MatrixType);

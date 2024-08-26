@@ -59,8 +59,6 @@ BilinearProjection::BilinearProjection(const Point2DType& ul,
     computeLS();
 }
 
-BilinearProjection::~BilinearProjection(){}
-
 void BilinearProjection::worldToLineSample(const Point3DType& worldPoint,
                                   Point2DType&       lineSampPt) const
 {
@@ -121,7 +119,7 @@ void BilinearProjection::computeLS()
       otbGenericExceptionMacro(itk::ExceptionObject, <<"Difference between the number of linesample points and world points");
    }
    
-   for (auto i = 0; i < m_LineSamplePoints.size(); ++i)
+   for (uint64_t i = 0; i < m_LineSamplePoints.size(); ++i)
    {
       Point2DType currentWorldPoint;
       currentWorldPoint[0] = m_worldPoints[i][0];
@@ -141,7 +139,7 @@ void BilinearProjection::computeLS()
 
 bool BilinearProjection::imgPointsHaveNan()
 {
-   for(auto currentPoint : m_LineSamplePoints)
+   for(auto const& currentPoint : m_LineSamplePoints)
    {
       if (std::isnan(currentPoint[0]) || std::isnan(currentPoint[1]))
       {
@@ -154,7 +152,7 @@ bool BilinearProjection::imgPointsHaveNan()
 
 bool BilinearProjection::worldPointsHaveNan()
 {
-   for(auto currentPoint : m_worldPoints)
+   for(auto const& currentPoint : m_worldPoints)
    {
       if ( std::isnan(currentPoint[0]) || std::isnan(currentPoint[1]) || std::isnan(currentPoint[2]) )
       {
@@ -163,10 +161,4 @@ bool BilinearProjection::worldPointsHaveNan()
    }
    return false;
 }
-
-void BilinearProjection::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-}
-                        
 }
