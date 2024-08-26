@@ -90,6 +90,11 @@ protected:
   /** Generate output information */
   void GenerateOutputInformation(void) override;
 
+  void VerifyInputInformation() const override
+  {
+
+  }
+
 private:
   ImportGeoInformationImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;

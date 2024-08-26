@@ -113,7 +113,10 @@ protected:
 
   void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
   
-  void VerifyInputInformation(){};
+  void VerifyInputInformation() const override
+  {
+
+  }
 
 private:
   ApplyGainFilter(const Self&) = delete;
