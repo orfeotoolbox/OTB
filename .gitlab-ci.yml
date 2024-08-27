@@ -181,13 +181,15 @@ ubuntu-22-gdal-bindings:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   only:
-    changes:
-      - SuperBuild/CMake/External_gdal.cmake
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   script:
+    - pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
+    - OTB_VERSION_MAJOR=$(grep -e "set(OTB_VERSION_MAJOR.*" CMakeLists.txt | cut -f2 -d'"')
+    - OTB_VERSION_MINOR=$(grep -e "set(OTB_VERSION_MINOR.*" CMakeLists.txt | cut -f2 -d'"')
+    - OTB_SHORT_VERSION=$OTB_VERSION_MAJOR.$OTB_VERSION_MINOR
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
-    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py310.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf "OTB-${OTB_SHORT_VERSION}-GDAL-bindings-py${pyversion}.tar.gz" --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
   needs:
     - job: ubuntu-22-prepare
       artifacts: true
