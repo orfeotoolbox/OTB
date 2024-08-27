@@ -18,20 +18,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+# avoid magic number. Version filled by cmake
+OTB_SHORT_VERSION=@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@
+
 echo "***** First time launching OTB after installation, doing some post installation steps before use *****"
 # Apply necessary patches for a modular install because cmake generates these file at configure time, not at packaging time
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-9.0/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-9.0/Modules/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/ITK-4.13/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/ITK-4.13/Modules/*.cmake
+CMAKE_DIRS="$OTB_INSTALL_DIR/lib/cmake"
+sed -i "s/FATAL_ERROR/WARNING/g" "$CMAKE_DIRS/OTB-$OTB_SHORT_VERSION/OTBTargets.cmake"
+sed -i "s/FATAL_ERROR/WARNING/g" "$CMAKE_DIRS/OTB-$OTB_SHORT_VERSION/OTBModuleAPI.cmake"
+sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/OTB-"$OTB_SHORT_VERSION"/*.cmake
+sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/OTB-"$OTB_SHORT_VERSION"/Modules/*.cmake
+sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/ITK-4.13/*.cmake
+sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/ITK-4.13/Modules/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/gdal-config
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/curl-config
 sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
-# Check python version, if python 3.12 (ubuntu 24.04) download and extract the gdal bindings for python 3.12
+
+# Check python version, if python 3.10 (ubuntu 22 and debian 12) download and extract the gdal bindings for python 3.10
 pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
 if [ "$pyversion" = "312" ]; then
     echo "*** Python 3.12 detected, downloading gdal bindings compiled for python 3.12 ***"
-    PACKAGE_OTB_VERSION=`ls $OTB_INSTALL_DIR/lib/libOTBCommon.so.*.*.* | egrep -o "[0-9]+\.[0-9]+\.[0-9]$"`
+    PACKAGE_OTB_VERSION="$OTB_SHORT_VERSION.@OTB_VERSION_PATCH@"
     curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$PACKAGE_OTB_VERSION-GDAL-bindings-py312.tar.gz -o "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
     tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz -C "$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
     rm "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
