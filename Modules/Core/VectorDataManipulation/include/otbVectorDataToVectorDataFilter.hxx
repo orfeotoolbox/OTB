@@ -111,11 +111,11 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::ProcessN
   {
     // Copy input DataNode info
     OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
-    newDataNode->SetNodeType(source->GetNodeType());
-    newDataNode->SetNodeId(source->GetNodeId());
-    newDataNode->SetMetaDataDictionary(source->GetMetaDataDictionary());
+    newDataNode->SetNodeType((*it)->GetNodeType());
+    newDataNode->SetNodeId((*it)->GetNodeId());
+    newDataNode->SetMetaDataDictionary((*it)->GetMetaDataDictionary());
 
-    switch (source->GetNodeType())
+    switch ((*it)->GetNodeType())
     {
     case ROOT:
     {
@@ -137,20 +137,20 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::ProcessN
     }
     case FEATURE_POINT:
     {
-      newDataNode->SetPoint(this->ProcessPoint(source->GetPoint()));
+      newDataNode->SetPoint(this->ProcessPoint((*it)->GetPoint()));
       outputVdata->Add(newDataNode,destination);
       break;
     }
     case FEATURE_LINE:
     {
-      newDataNode->SetLine(this->ProcessLine(source->GetLine()));
+      newDataNode->SetLine(this->ProcessLine((*it)->GetLine()));
       outputVdata->Add(newDataNode,destination);
       break;
     }
     case FEATURE_POLYGON:
     {
-      newDataNode->SetPolygonExteriorRing(this->ProcessPolygon(source->GetPolygonExteriorRing()));
-      newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList(source->GetPolygonInteriorRings()));
+      newDataNode->SetPolygonExteriorRing(this->ProcessPolygon((*it)->GetPolygonExteriorRing()));
+      newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList((*it)->GetPolygonInteriorRings()));
       outputVdata->Add(newDataNode,destination);
       break;
     }

@@ -123,17 +123,17 @@ void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(const VectorDataType*
     {
     case ROOT:
     {
-      ProcessNode(inputVd,(*it),outputVd,outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case DOCUMENT:
     {
-      ProcessNode(inputVd,(*it),outputVd,outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FOLDER:
     {
-      ProcessNode(inputVd,(*it),outputVd,outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FEATURE_POINT:
@@ -153,22 +153,22 @@ void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(const VectorDataType*
     }
     case FEATURE_MULTIPOINT:
     {
-      ProcessNode(inputVd,(*it),outputVd,outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FEATURE_MULTILINE:
     {
-      ProcessNode(inputVd,(*it),outputVd,outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FEATURE_MULTIPOLYGON:
     {
-      ProcessNode(inputVd,(*it),outputVd,outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FEATURE_COLLECTION:
     {
-      ProcessNode(inputVd,(*it),outputVd,outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     }

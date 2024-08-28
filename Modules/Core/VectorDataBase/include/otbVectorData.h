@@ -85,7 +85,7 @@ public:
   using DataTreeType = boost::adjacency_list< boost::vecS, boost::vecS, boost::directedS, DataNodePointerType >;
   using TreeNodeType = typename boost::graph_traits< DataTreeType >::vertex_descriptor;
   using TreeEdgeType = typename boost::graph_traits< DataTreeType >::edge_descriptor;
-  using ChildrenListType = std::list<DataNodePointerType>;
+  using ChildrenListType = std::vector<DataNodePointerType>;
   using VertexIterator = typename boost::graph_traits<DataTreeType>::vertex_iterator;
   
    void SetProjectionRef(const std::string& projectionRef);
@@ -99,7 +99,7 @@ public:
    void SetOrigin(const float origin[2]);
 
   itkGetConstReferenceMacro(Origin, OriginType);
-
+ 
   /** Set the spacing of the vector data to put it in the corresponding
    * image coordinates
    * \sa GetSignedSpacing() */
@@ -148,23 +148,25 @@ public:
     // find the corresponding root vertex in the tree
     TreeNodeType rootvertex = ConvertToTreeNodeType(rootForNode);
     // add an edge between the node and its root
-    boost::add_edge(nodevertex,rootvertex,m_DataTree);
+    boost::add_edge(rootvertex,nodevertex,m_DataTree);
   };
 
-  std::list<DataNodePointerType> GetChildrenList(DataNodePointerType parentNode) const
+  std::vector<DataNodePointerType> GetChildrenList(DataNodePointerType parentNode) const
   {
-    std::list<DataNodePointerType> childrenslist;
-    typename boost::graph_traits<DataTreeType>::vertex_iterator it,it_end;
+    //typename boost::property_map<DataTreeType, boost::vertex_bundle_t>::type pmap = boost::get(boost::vertex_bundle, m_DataTree);
+    std::vector<DataNodePointerType> childrenslist;
+    VertexIterator it,it_end;
     boost::tie(it, it_end) = boost::vertices(m_DataTree);
+    
     for (;it!=it_end;it++)
     {
       if(m_DataTree[*it] == parentNode)
       {
-        auto iterloop = it;
-        while(iterloop != it_end)
+        typename boost::graph_traits<DataTreeType>::adjacency_iterator eit, eend;
+        std::tie(eit, eend) = boost::adjacent_vertices(*it, m_DataTree);
+        for(;eit != eend;eit++)
         {
-           childrenslist.push_back(m_DataTree[*iterloop]);
-           iterloop++;
+            childrenslist.push_back(m_DataTree[*eit]);
         }
         break;
       }

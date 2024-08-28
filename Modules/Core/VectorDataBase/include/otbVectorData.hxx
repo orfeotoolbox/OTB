@@ -120,14 +120,18 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::PrintSelf(std::ostream
 
   typename boost::graph_traits<DataTreeType>::vertex_iterator it,it_end;
   boost::tie(it, it_end) = vertices(m_DataTree);
-
+  uint8_t indentcounts = 0;
   for (;it!=it_end;it++)
   {
-    os << "+" << m_DataTree[*it]->GetNodeTypeAsString() << "\n" << indent;
+    for(auto i = 0; i<indentcounts;i++)
+    {
+      os << indent;
+    }
+    os << "+" << m_DataTree[*it]->GetNodeTypeAsString() << "\n";
     typename boost::graph_traits<DataTreeType>::adjacency_iterator ai, a_end; 
     boost::tie(ai, a_end) = boost::adjacent_vertices(*it, m_DataTree);
     for (; ai != a_end; ai++) {
-        os << indent;
+        indentcounts++;
     }
     //os << "\n";
   }

@@ -291,7 +291,7 @@ void OGRIOHelper::ConvertOGRLayerToDataTreeNode(VectorDataPointerType vecDataTre
         ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         itk::MetaDataDictionary& dict = dataNode->GetMetaDataDictionary();
         itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
-        vecDataTree->Add(dataNode,multi);;
+        vecDataTree->Add(dataNode,multi);
       }
       break;
     }
@@ -327,7 +327,7 @@ void OGRIOHelper::ConvertOGRLayerToDataTreeNode(VectorDataPointerType vecDataTre
         ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         itk::MetaDataDictionary& dict = dataNode->GetMetaDataDictionary();
         itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
-        vecDataTree->Add(dataNode,multi);;
+        vecDataTree->Add(dataNode,multi);
       }
       break;
     }
@@ -546,13 +546,13 @@ unsigned int OGRIOHelper::ProcessNodeWrite(VectorDataConstPointerType vdata, Dat
   unsigned int kept                  = 0;
   bool         fieldsAddedToOGRLayer = false;
   // Get the children list from the input node
-  std::list<DataNodePointerType>  children = vdata->GetChildrenList(source);
+  std::vector<DataNodePointerType>  children = vdata->GetChildrenList(source);
 
   // For each child
   for (auto it = children.begin(); it != children.end(); ++it)
   {
     DataNodePointerType dataNode = (*it);
-    // otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
+    otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
     ++kept;
 
     // Get the kwl
@@ -916,7 +916,7 @@ std::vector<OGRLayer*> OGRIOHelper::ConvertDataTreeNodeToOGRLayers(VectorDataCon
   // unsigned int kept = 0;
   bool fieldsAddedToOGRLayer = false;
   // Get the children list from the input node
-  std::list<DataNodePointerType>  children = vdata->GetChildrenList(source);
+  std::vector<DataNodePointerType>  children = vdata->GetChildrenList(source);
 
   // For each child
   for (auto it = children.begin(); it != children.end(); ++it)
