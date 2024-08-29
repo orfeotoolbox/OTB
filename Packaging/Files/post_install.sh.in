@@ -38,11 +38,12 @@ sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 # Check python version, if python 3.10 (ubuntu 22 and debian 12) download and extract the gdal bindings for python 3.10
 complete_pyversion=$(python3 -V | cut -f2 -d' ')
 pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
-if [[ $pyversion -ge "310" ]]; then
-    echo "*** Python $complete_pyversion detected, downloading gdal bindings compiled for python $complete_pyversion ***"
+short_pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1.\2/')"
+if [ $pyversion -ge 310 ]; then
+    echo "*** Python $complete_pyversion detected, downloading gdal bindings compiled for python $short_pyversion ***"
     curl "https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz" -o "$OTB_INSTALL_DIR"/tools/py$pyversion.tar.gz
     tar -xf "$OTB_INSTALL_DIR"/tools/py$pyversion.tar.gz -C "$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
     rm "$OTB_INSTALL_DIR"/tools/py$pyversion.tar.gz
-    echo "*** GDAL bindings for python $complete_pyversion successfully installed ***"
+    echo "*** GDAL bindings for python $short_pyversion successfully installed ***"
 fi
 echo "OK" > "$OTB_INSTALL_DIR"/tools/install_done.txt
