@@ -83,12 +83,14 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
 
   // Prepare the output
   // typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetRoot();
+  auto outputPtr = this->GetOutput();
+  auto inputPtr = this->GetInput(0);
 
+  //outputPtr->SetRoot(inputPtr->GetRoot());
 
-  this->GetOutput()->SetRoot(this->GetInput(0)->GetRoot());
-
-  typename DataNodeType::Pointer outputDocument = this->GetOutput()->GetChildrenList(this->GetInput(0)->GetRoot()).front();
-
+  otbMsgDevMacro("InputPtr Childrenlist size : " << inputPtr->GetChildrenList(inputPtr->GetRoot()).size());
+  typename DataNodeType::Pointer outputDocument = inputPtr->GetChildrenList(inputPtr->GetRoot()).at(0);
+  outputPtr->Add(outputDocument,outputPtr->GetRoot());
   // Adding the layer to the data tree
   //   this->GetOutput()->Add(m_Document, outputRoot);
   //   this->GetOutput()->Add(m_Folder, m_Document);
@@ -97,7 +99,7 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
   for (unsigned int idx = 1; idx < this->GetNumberOfInputs(); ++idx)
   {
     // Add the current vectordata
-    ProcessNode(this->GetInput(idx),this->GetInput(idx)->GetRoot(),this->GetOutput(), outputDocument);
+    ProcessNode(this->GetInput(idx),this->GetInput(idx)->GetRoot(),outputPtr, outputDocument);
   }
 }
 
@@ -123,7 +125,7 @@ void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(const VectorDataType*
     {
     case ROOT:
     {
-      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
+      //ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case DOCUMENT:

@@ -291,11 +291,11 @@ void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::GenerateDa
   this->InstantiateTransform();
 
   // Create the output tree root
-  typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
-  OutputDataNodePointerType                                  outputRoot = OutputDataNodeType::New();
-  outputRoot->SetNodeType(inputPtr->GetRoot()->GetNodeType());
-  outputRoot->SetNodeId(inputPtr->GetRoot()->GetNodeId());
-  outputPtr->SetRoot(outputRoot);
+  // typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
+  // OutputDataNodePointerType                                  outputRoot = OutputDataNodeType::New();
+  // outputRoot->SetNodeType(inputPtr->GetRoot()->GetNodeType());
+  // outputRoot->SetNodeId(inputPtr->GetRoot()->GetNodeId());
+  // outputPtr->SetRoot(outputRoot);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();

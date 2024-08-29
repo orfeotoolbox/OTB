@@ -266,7 +266,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>::ProcessNo
     {
     case otb::ROOT:
     {
-      ProcessNode(inputVdata,(*it));
+      //ProcessNode(inputVdata,(*it));
       break;
     }
     case otb::DOCUMENT:

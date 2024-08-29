@@ -200,8 +200,7 @@ void VectorDataFileReader<TOutputVectorData>::GenerateData()
   adapter->SetInput(input);
   adapter->GraftOutput(output);
   adapter->Update();
-  output = adapter->GetOutput();
-  this->GraftOutput(output);
+  this->GraftOutput(adapter->GetOutput());
 
   return;
 }

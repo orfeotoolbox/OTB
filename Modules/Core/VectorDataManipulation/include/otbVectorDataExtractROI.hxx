@@ -86,16 +86,16 @@ void VectorDataExtractROI<TVectorData>::GenerateData(void)
   otbMsgDevMacro(<< "GeoROI: " << this->m_GeoROI);
 
   // Create the output tree root
-  DataNodePointerType outputRoot = DataNodeType::New();
-  outputRoot->SetNodeType(inputPtr->GetRoot()->GetNodeType());
-  outputRoot->SetNodeId(inputPtr->GetRoot()->GetNodeId());
-  outputPtr->SetRoot(outputRoot);
+  // DataNodePointerType outputRoot = DataNodeType::New();
+  // outputRoot->SetNodeType(inputPtr->GetRoot()->GetNodeType());
+  // outputRoot->SetNodeId(inputPtr->GetRoot()->GetNodeId());
+  // outputPtr->SetRoot(outputRoot);
 
   m_Kept = 0;
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  ProcessNode(inputPtr,inputPtr->GetRoot(),outputPtr,outputRoot);
+  ProcessNode(inputPtr,inputPtr->GetRoot(),outputPtr,outputPtr->GetRoot());
   chrono.Stop();
   otbMsgDevMacro(<< "VectorDataExtractROI: " << m_Kept << " features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 } /*End GenerateData()*/
@@ -118,9 +118,9 @@ void VectorDataExtractROI<TVectorData>::ProcessNode(VectorDataConstPointerType i
     {
     case ROOT:
     {
-      outputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
-      ++m_Kept;
+      //outputVdata->Add(newDataNode,destination);
+      //ProcessNode(inputVdata,(*it), outputVdata, newDataNode);
+      //++m_Kept;
       break;
     }
     case DOCUMENT:

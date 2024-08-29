@@ -80,17 +80,16 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::Generate
   // Get the input tree root
   typename InputDataNodeType::Pointer inputRoot = inputPtr->GetRoot();
 
-  // Create the output tree root
-  typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
-  OutputDataNodePointerType  newDataNode = OutputDataNodeType::New();
-  newDataNode->SetNodeType(inputRoot->GetNodeType());
-  newDataNode->SetNodeId(inputRoot->GetNodeId());
-  OutputDataNodePointerType outputRoot = OutputDataNodeType::New();
-  outputPtr->SetRoot(outputRoot);
+  // // Create the output tree root
+  // typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
+  // OutputDataNodePointerType outputRoot = OutputDataNodeType::New();
+  // outputRoot->SetNodeType(inputRoot->GetNodeType());
+  // outputRoot->SetNodeId(inputRoot->GetNodeId());
+  // outputPtr->SetRoot(outputRoot);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  this->ProcessNode(inputPtr,inputRoot,outputPtr,outputRoot);
+  this->ProcessNode(inputPtr,inputRoot,outputPtr,outputPtr->GetRoot());
   chrono.Stop();
   otbMsgDevMacro(<< "VectoDataProjectionFilter: features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }
@@ -119,8 +118,8 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::ProcessN
     {
     case ROOT:
     {
-      outputVdata->Add(newDataNode,destination);
-      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
+      //outputVdata->Add(newDataNode,destination);
+      //ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case DOCUMENT:

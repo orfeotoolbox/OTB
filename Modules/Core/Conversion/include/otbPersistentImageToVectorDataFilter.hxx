@@ -56,9 +56,9 @@ void PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::Reset()
   typedef typename DataNodeType::Pointer              DataNodePointerType;
 
   this->GetOutputVectorData()->Clear();
-  DataNodePointerType root = DataNodeType::New();
-  root->SetNodeId("Root");
-  this->GetOutputVectorData()->SetRoot(root);
+  // DataNodePointerType root = DataNodeType::New();
+  // root->SetNodeId("Root");
+  // this->GetOutputVectorData()->SetRoot(root);
 
   DataNodePointerType folder = DataNodeType::New();
   folder->SetNodeType(otb::FOLDER);

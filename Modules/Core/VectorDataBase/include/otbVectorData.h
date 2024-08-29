@@ -25,6 +25,7 @@
 #include "otbDataNode.h"
 #include <boost/graph/graph_as_tree.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/copy.hpp>
 
 namespace otb
 {
@@ -107,6 +108,7 @@ public:
    void SetSpacing(const double spacing[2]);
    void SetSpacing(const float spacing[2]);
 
+
   itkGetConstReferenceMacro(Spacing, SpacingType);
 
   /** Clear the vector data  */
@@ -132,8 +134,7 @@ public:
 
   void SetRoot(DataNodePointerType rootNode)
   {
-    m_root = rootNode;
-    boost::add_vertex(m_root,m_DataTree);
+    ResetRoot(*rootNode);
   }
 
   DataNodePointerType GetRoot() const
@@ -212,9 +213,26 @@ protected:
     return *boost::vertices(m_DataTree).first;
   };
 
+  void Reset(const Self& inputVD)
+  {
+    boost::copy_graph(inputVD.m_DataTree,this->m_DataTree);
+    this->m_root = inputVD.m_root;
+    this->m_Spacing = inputVD.m_Spacing;
+    this->m_Origin = inputVD.m_Origin;
+  }
+
+  void ResetRoot(const DataNodeType& rootNode)
+  {
+    this->m_root->Reset(rootNode);
+  }
+  
 private:
   VectorData(const Self&) = delete;
-  void operator=(const Self&) = delete;
+
+  void CopyDataTree(const Self* inputVD)
+  {
+    boost::copy_graph(inputVD->m_DataTree,this->m_DataTree);
+  }
 
   /** Data tree */
   DataTreeType m_DataTree;

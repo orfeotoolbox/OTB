@@ -94,7 +94,7 @@ void VectorDataProperties<TVectorData>::ProcessNode(VectorDataType* inputVdata,D
     {
     case otb::ROOT:
     {
-      ProcessNode(inputVdata,(*it));
+      //ProcessNode(inputVdata,(*it));
       break;
     }
     case otb::DOCUMENT:

@@ -143,11 +143,11 @@ void VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::GenerateDat
 
   outputPtr->SetProjectionRef(inputPtr->GetProjectionRef());
 
-  // Create the output tree root
-  OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
-  newDataNode->SetNodeType(inputPtr->GetRoot()->GetNodeType());
-  newDataNode->SetNodeId(inputPtr->GetRoot()->GetNodeId());
-  outputPtr->SetRoot(newDataNode);
+  // // Create the output tree root
+  // OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
+  // newDataNode->SetNodeType(inputPtr->GetRoot()->GetNodeType());
+  // newDataNode->SetNodeId(inputPtr->GetRoot()->GetNodeId());
+  // outputPtr->SetRoot(newDataNode);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();

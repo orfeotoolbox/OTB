@@ -229,7 +229,7 @@ void VectorDataToLabelMapFilter<TVectorData, TLabelMap>::ProcessNode(InputVector
     {
     case otb::ROOT:
     {
-      ProcessNode(inputVd,dataNode);
+      //ProcessNode(inputVd,dataNode);
       break;
     }
     case otb::DOCUMENT:

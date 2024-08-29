@@ -31,6 +31,7 @@ template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 VectorData<TPrecision, VDimension, TValuePrecision>::VectorData()
 {
   m_root = DataNodeType::New();
+  m_root->SetNodeType(otb::ROOT);
   m_root->SetNodeId("Root");
   boost::add_vertex(m_root, m_DataTree);
   m_Origin.Fill(0);
@@ -104,6 +105,8 @@ template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void VectorData<TPrecision, VDimension, TValuePrecision>::Clear()
 {
   m_DataTree.clear();
+  //Always add a root node by default
+  boost::add_vertex(m_root,m_DataTree);
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
@@ -152,10 +155,12 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::Graft(const itk::DataO
     {
       // Copy all the needed data : DataTree, spacing, origin and
       // Projection Ref
-      //m_DataTree = const_cast<DataTreeType*>(vdData->GetDataTree());
+      this->m_DataTree.clear(); //Before copy make sure the datatree is EMPTY
+      this->CopyDataTree(vdData);
       this->SetSpacing(vdData->GetSpacing());
       this->SetOrigin(vdData->GetOrigin());
       this->SetProjectionRef(vdData->GetProjectionRef());
+      this->m_root = vdData->GetRoot();
     }
     else
     {
