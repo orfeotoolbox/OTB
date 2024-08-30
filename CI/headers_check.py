@@ -138,6 +138,7 @@ excludedfiles = set([
     './Modules/Visualization/Ice/README',
     './Modules/Core/Wrappers/SWIG/src/numpy.i',
     './Modules/Core/Wrappers/SWIG/src/python/__init__.py',
+    './Modules/Core/Common/include/otbCastImageFilter.h'
     './Packaging/Files/OTB Project.zip',
     './Packaging/Files/template.app/Contents/Info.plist',
     './Packaging/LICENSE',

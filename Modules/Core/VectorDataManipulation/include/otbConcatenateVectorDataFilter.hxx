@@ -86,8 +86,9 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
   auto outputPtr = this->GetOutput();
   auto inputPtr = this->GetInput(0);
 
-  typename DataNodeType::Pointer outputDocument = inputPtr->GetChildrenList(inputPtr->GetRoot()).at(0);
-  outputPtr->Add(outputDocument,outputPtr->GetRoot());
+  outputPtr->Graft(inputPtr);
+  typename DataNodeType::Pointer outputDocument = outputPtr->GetChildrenList(outputPtr->GetRoot()).at(0);
+  //outputPtr->Add(outputDocument,outputPtr->GetRoot());
   // Adding the layer to the data tree
   //   this->GetOutput()->Add(m_Document, outputRoot);
   //   this->GetOutput()->Add(m_Folder, m_Document);
