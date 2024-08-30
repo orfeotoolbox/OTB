@@ -131,7 +131,6 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
   double dlat_du, dlat_dv, dlon_du, dlon_dv;
   double delta_lat, delta_lon, delta_u, delta_v;
   double inverse_norm;
-  bool done = false;
 
   //***
   // Begin iterations:
@@ -158,19 +157,19 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
     dlat_dv = gp_dv[1] - gp[1]; //f
     dlon_dv = gp_dv[0] - gp[0]; //h
     
-    //
-    // Test for convergence:
-    //
-    delta_lat = inGeoPoint[1] - gp[1];
-    delta_lon = inGeoPoint[0] - gp[0];    
 
     //
     // Compute linearized estimate of image point given gp delta:
     //
     inverse_norm = dlat_dv*dlon_du - dlat_du*dlon_dv; // fg-eh
 
-    if (inverse_norm > DBL_EPSILON)
+    if (std::abs(inverse_norm) > DBL_EPSILON)
     {
+      //
+      // Test for convergence:
+      //
+      delta_lat = inGeoPoint[1] - gp[1];
+      delta_lon = inGeoPoint[0] - gp[0];
       delta_u = (-dlon_dv*delta_lat + dlat_dv*delta_lon)/inverse_norm;
       delta_v = ( dlon_du*delta_lat - dlat_du*delta_lon)/inverse_norm;
       ip[0] += delta_u;
@@ -181,11 +180,12 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
       delta_u = 0;
       delta_v = 0;
     }
-    done = (std::abs(delta_u) < PIXEL_THRESHOLD)&&
-           (std::abs(delta_v) < PIXEL_THRESHOLD);
-    if (done) break;
+    if ((std::abs(delta_u) < PIXEL_THRESHOLD) &&
+        (std::abs(delta_v) < PIXEL_THRESHOLD))
+      break;
     iters++;
-  } while (iters < MAX_NUM_ITERATIONS);
+  } while (iters < MAX_NUM_ITERATIONS); /* && ((std::abs(delta_u) < PIXEL_THRESHOLD)
+                                               && (std::abs(delta_v) < PIXEL_THRESHOLD)) */
 
   outLineSample = ip - m_Spot5Param.SubImageOffset;
 
@@ -255,9 +255,11 @@ void Spot5SensorModel::GetBilinearInterpolation(
   else
   {
     const int32_t samp0 = std::distance(T.begin(), first_sup_value);
-    double t = (T[samp0-1]-time)/(T[samp0-1] - (*first_sup_value));
+    double t = (*(first_sup_value-1)-time)/
+               (*(first_sup_value-1) - (*first_sup_value));
+    const auto it_v = V.begin() + samp0;
 
-    li = V[samp0-1] + (V[samp0]-V[samp0-1])*t;
+    li = *(it_v-1) + ((*it_v)-*(it_v-1))*t;
   }
 }
 
