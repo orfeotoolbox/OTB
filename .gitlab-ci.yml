@@ -181,8 +181,6 @@ ubuntu-24-gdal-bindings:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   only:
-    changes:
-      - SuperBuild/CMake/External_gdal.cmake
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   script:

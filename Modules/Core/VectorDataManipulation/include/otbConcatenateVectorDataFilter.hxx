@@ -86,9 +86,6 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
   auto outputPtr = this->GetOutput();
   auto inputPtr = this->GetInput(0);
 
-  //outputPtr->SetRoot(inputPtr->GetRoot());
-
-  otbMsgDevMacro("InputPtr Childrenlist size : " << inputPtr->GetChildrenList(inputPtr->GetRoot()).size());
   typename DataNodeType::Pointer outputDocument = inputPtr->GetChildrenList(inputPtr->GetRoot()).at(0);
   outputPtr->Add(outputDocument,outputPtr->GetRoot());
   // Adding the layer to the data tree

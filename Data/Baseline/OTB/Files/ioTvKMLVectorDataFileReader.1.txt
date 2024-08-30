@@ -1,6 +1,23 @@
+VectorData (0x6352a94019f0)
+  RTTI typeinfo:   otb::VectorData<double, 2u, double>
+  Reference Count: 2
+  Modified Time: 280
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (0x6352a9403880) 
+  Source output name: Primary
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 18
+  UpdateMTime: 281
+  RealTimeStamp: 0 seconds 
+
 +Root (Root)
-+Document (Paths)
-+Line () 2 points
+  +Document (Paths)
+    +Line () 2 points
   -> Metadata:    VectorData Keyword list:    - Size: 5
       Name (String): Tessellated
       description (String): If the <tessellate> tag has a value of 1, the line will contour to the underlying terrain
@@ -8,7 +25,7 @@
       extrude (Integer): 0
       visibility (Integer): 0
 
-+Line () 2 points
+    +Line () 2 points
   -> Metadata:    VectorData Keyword list:    - Size: 5
       Name (String): Untessellated
       description (String): If the <tessellate> tag has a value of 0, the line follow a simple straight-line path from point to point
@@ -16,7 +33,7 @@
       extrude (Integer): 0
       visibility (Integer): 0
 
-+Line () 11 points
+    +Line () 11 points
   -> Metadata:    VectorData Keyword list:    - Size: 6
       Name (String): Absolute
       description (String): Transparent purple line
@@ -25,7 +42,7 @@
       extrude (Integer): 0
       visibility (Integer): 0
 
-+Line () 11 points
+    +Line () 11 points
   -> Metadata:    VectorData Keyword list:    - Size: 6
       Name (String): Absolute Extruded
       description (String): Transparent green wall with yellow outlines
@@ -34,7 +51,7 @@
       extrude (Integer): 1
       visibility (Integer): 0
 
-+Line () 11 points
+    +Line () 11 points
   -> Metadata:    VectorData Keyword list:    - Size: 6
       Name (String): Relative
       description (String): Black line (10 pixels wide), height tracks terrain
@@ -43,7 +60,7 @@
       extrude (Integer): 0
       visibility (Integer): 0
 
-+Line () 11 points
+    +Line () 11 points
   -> Metadata:    VectorData Keyword list:    - Size: 6
       Name (String): Relative Extruded
       description (String): Opaque blue walls with red outline, height tracks terrain

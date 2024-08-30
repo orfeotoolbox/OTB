@@ -45,7 +45,6 @@ int otbVectorDataKeywordlist(int itkNotUsed(argc), char* argv[])
   auto itPair = data->GetIteratorPair();
   auto it = itPair.first;
 
-  data->Print(fout,indent);
   while (it != itPair.second)
   {
     if (data->Get(it)->GetMetaDataDictionary().HasKey(otb::MetaDataKey::VectorDataKeywordlistKey))

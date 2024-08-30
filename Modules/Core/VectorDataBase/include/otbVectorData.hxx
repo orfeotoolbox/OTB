@@ -135,8 +135,8 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::PrintSelf(std::ostream
     boost::tie(ai, a_end) = boost::adjacent_vertices(*it, m_DataTree);
     for (; ai != a_end; ai++) {
         indentcounts++;
+        break;
     }
-    //os << "\n";
   }
 }
 
