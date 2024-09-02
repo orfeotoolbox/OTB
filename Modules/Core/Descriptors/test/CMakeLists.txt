@@ -17,7 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 otb_module_test()
 
 set(OTBDescriptorsTests
@@ -35,6 +34,10 @@ endif()
 add_executable(otbDescriptorsTestDriver ${OTBDescriptorsTests})
 target_link_libraries(otbDescriptorsTestDriver ${OTBDescriptors-Test_LIBRARIES})
 otb_module_target_label(otbDescriptorsTestDriver)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  set_target_properties(otbDescriptorsTestDriver PROPERTIES LINK_FLAGS "-Wl,-no-as-needed")
+endif()
+
 
 # Tests Declaration
 
