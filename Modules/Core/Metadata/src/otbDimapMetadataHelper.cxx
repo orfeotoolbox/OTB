@@ -338,7 +338,6 @@ void DimapMetadataHelper::ParseDimapV2(const MetadataSupplierInterface & mds, co
 void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds, Spot5Param& spot5Param, const std::string & prefix){
 
   using Point3DType = itk::Point<double, 3>;
-  using Point2DType = itk::Point<double, 2>;
   
   std::vector<double> yaw_vector;
   std::vector<double> pitch_vector;
@@ -390,7 +389,7 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   ParseVector(mds, expr_attitude,"ROLL", roll_vector);     
   ParseVector(mds, expr_attitude,"TIME", time_vector);  
 
-  for (int i=0; i < yaw_vector.size(); i++){
+  for (size_t i=0; i < yaw_vector.size(); i++){
     Point3DType point3d;
     point3d[0] = pitch_vector[i];
     point3d[1] = roll_vector[i];
@@ -410,15 +409,15 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   // Use look angles from Green band
   // /!\ Warning check condition with SWIR band not clear in OSSIM!
   bool bandFound = false;
-  int i = 1;
   std::string expr;
 
   hasValue = false;
 
   if (m_Data.BandIDs.size()>1){
-    while (i < m_Data.BandIDs.size() && !bandFound ){
+    size_t i = 1;
+    while (i < m_Data.BandIDs.size() && !bandFound) {
       expr = prefix + "Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".BAND_INDEX";
-      mds.GetMetadataValue(expr, hasValue) == "2" ? bandFound=true:i++;
+      mds.GetMetadataValue(expr, hasValue) == "2" ? bandFound=true : i++;
     }
     expr = "Dimap_Document.Data_Strip.Sensor_Configuration.Instrument_Look_Angles_List.Instrument_Look_Angles_"+std::to_string(i)+".Look_Angles_List.Look_Angles";           
   }
@@ -441,7 +440,7 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
   ParseVector(mds, expr,"Velocity.Z", vel_z);
   ParseVector(mds, expr,"TIME", time_vector);
 
-  for (int i=0; i < pos_x.size(); i++){
+  for (size_t i = 0; i < pos_x.size(); i++) {
     Point3DType position;
     Point3DType velocity;
     position[0] = pos_x[i];

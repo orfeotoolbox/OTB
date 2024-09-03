@@ -31,13 +31,13 @@ BilinearProjection::BilinearProjection()
 }
 
 BilinearProjection::BilinearProjection(const Point2DType& ul,
-                           const Point2DType& ur,
-                           const Point2DType& lr,
-                           const Point2DType& ll,
-                           const Point3DType& ulg,
-                           const Point3DType& urg,
-                           const Point3DType& lrg,
-                           const Point3DType& llg)
+                                       const Point2DType& ur,
+                                       const Point2DType& lr,
+                                       const Point2DType& ll,
+                                       const Point3DType& ulg,
+                                       const Point3DType& urg,
+                                       const Point3DType& lrg,
+                                       const Point3DType& llg)
 {
    m_LatFit = LSQREstimatorType::New();
    m_LonFit = LSQREstimatorType::New();
@@ -56,12 +56,13 @@ BilinearProjection::BilinearProjection(const Point2DType& ul,
    m_worldPoints[2] = lrg;
    m_worldPoints[3] = llg;
 
-    computeLS();
+   computeLS();
 }
 
-void BilinearProjection::worldToLineSample(const Point3DType& worldPoint,
-                                  Point2DType&       lineSampPt) const
+itk::Point<double, 2> BilinearProjection::worldToLineSample(const Point3DType& worldPoint) const
 {
+   // convert Point3D to vector double to use
+   // LeastSquareBilinearTransformEstimator::lsFitValue
    itk::Vector<double,2>  worldptMatrix;
    worldptMatrix[0] = worldPoint[0];
    worldptMatrix[1] = worldPoint[1];
@@ -70,22 +71,21 @@ void BilinearProjection::worldToLineSample(const Point3DType& worldPoint,
 
    m_XFit->lsFitValue(worldptMatrix, x);
    m_YFit->lsFitValue(worldptMatrix, y);
+
+   Point2DType lineSampPt;
    lineSampPt[0] = x;
    lineSampPt[1] = y;
-
+   return lineSampPt;
 }
 
-void BilinearProjection::lineSampleToWorld(const Point2DType& lineSampPt,
-                                  Point3DType&       worldPt) const
+BilinearProjection::Point3DType BilinearProjection::lineSampleToWorld(Point2DType lineSampPt) const
 {
- lineSampleHeightToWorld(lineSampPt,
-                           0.0,
-                           worldPt);
+  return lineSampleHeightToWorld(lineSampPt, 0.0);
 }
 
-void BilinearProjection::lineSampleHeightToWorld(const Point2DType& lineSampPt,
-                                        const double&   heightAboveEllipsoid,
-                                        Point3DType&       worldPt) const
+BilinearProjection::Point3DType BilinearProjection::lineSampleHeightToWorld(
+                                                Point2DType lineSampPt,
+                                                const double& heightAboveEllipsoid) const
 {
    itk::Vector<double,2> lineSampMatrix;
    lineSampMatrix[0] = lineSampPt[0];
@@ -93,22 +93,33 @@ void BilinearProjection::lineSampleHeightToWorld(const Point2DType& lineSampPt,
    double lon, lat;
    m_LonFit->lsFitValue(lineSampMatrix, lon);
    m_LatFit->lsFitValue(lineSampMatrix, lat);
+
+   Point3DType worldPt;
    worldPt[0] = lon;
    worldPt[1] = lat;
    worldPt[2] = heightAboveEllipsoid;
+
+   return worldPt;
 }
 
-void BilinearProjection::setTiePoints(const std::vector<Point2DType>& lsPt, 
-                                    const std::vector<Point3DType>& geoPt)
+const std::vector<itk::Point<double, 2>>& BilinearProjection::getLineSamplePoints() const
 {
-    m_LineSamplePoints = lsPt;
-    m_worldPoints = geoPt;
+   return m_LineSamplePoints;
 }
 
-void BilinearProjection::getTiePoints(std::vector<Point2DType>& lsPt, std::vector<Point3DType>& geoPt) const
+void BilinearProjection::setLineSamplePoints(const std::vector<Point2DType>& lsPts)
 {
-    lsPt = m_LineSamplePoints;
-    geoPt = m_worldPoints;
+   m_LineSamplePoints = lsPts;
+}
+
+const std::vector<BilinearProjection::Point3DType>& BilinearProjection::getWorldPoints() const
+{
+   return m_worldPoints;
+}
+
+void BilinearProjection::setWorldPoints(const std::vector<Point3DType>& wPts)
+{
+   m_worldPoints = wPts;
 }
 
 void BilinearProjection::computeLS()
