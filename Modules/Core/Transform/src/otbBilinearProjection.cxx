@@ -85,7 +85,7 @@ BilinearProjection::Point3DType BilinearProjection::lineSampleToWorld(Point2DTyp
 
 BilinearProjection::Point3DType BilinearProjection::lineSampleHeightToWorld(
                                                 Point2DType lineSampPt,
-                                                const double& heightAboveEllipsoid) const
+                                                double heightAboveEllipsoid) const
 {
    itk::Vector<double,2> lineSampMatrix;
    lineSampMatrix[0] = lineSampPt[0];

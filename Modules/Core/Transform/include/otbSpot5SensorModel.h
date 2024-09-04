@@ -105,7 +105,7 @@ public:
    * @param[in] offset    double offset
    * @return  world point (lat,lon,hgt)
    */
-  Point3DType NearestIntersection(const Ephemeris& imRay, const double& offset) const;
+  Point3DType NearestIntersection(const Ephemeris& imRay, double offset) const;
 
   /**
    * @brief Compute world point intersected by image ray.
@@ -145,7 +145,7 @@ public:
    * @param[in] time  input time
    * @return 3D position
    */
-  Point3DType GetPositionEcf(const double& time) const;
+  Point3DType GetPositionEcf(double time) const;
 
   /**
    * @brief Get the 3D velocity of the sensor at time (interpolation of velocity samples vector from metadata).
@@ -153,7 +153,7 @@ public:
    * @param[in]  time input time
    * @return 3D position
    */
-  Point3DType GetVelocityEcf(const double& time) const;
+  Point3DType GetVelocityEcf(double time) const;
 
   /**
    * @brief Get look angles on X and Y axis of the sensor at line (interpolation of angles samples vector from metadata).
@@ -170,7 +170,7 @@ public:
    * @param[in] time input time
    * @return 3D attitude
    */
-  Point3DType GetAttitude(const double& time) const;
+  Point3DType GetAttitude(double time) const;
 
   /**
    * @brief Compute SatToOrb matrix with an input time.
