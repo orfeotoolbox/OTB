@@ -334,7 +334,7 @@ itk::Point<double, 3> Spot5SensorModel::GetLagrangeInterpolation(
 }
 
 
-itk::Point<double, 3> Spot5SensorModel::GetPositionEcf(const double& time)  const
+itk::Point<double, 3> Spot5SensorModel::GetPositionEcf(double time)  const
 {
   if((m_Spot5Param.EcefPosSamples.size() < 8)||
     (m_Spot5Param.EcefTimeSamples.size() < 8))
@@ -348,7 +348,7 @@ itk::Point<double, 3> Spot5SensorModel::GetPositionEcf(const double& time)  cons
 }
 
 
-itk::Point<double, 3> Spot5SensorModel::GetVelocityEcf(const double& time)  const
+itk::Point<double, 3> Spot5SensorModel::GetVelocityEcf(double time)  const
 {
   if((m_Spot5Param.EcefVelSamples.size() < 8)||
     (m_Spot5Param.EcefTimeSamples.size() < 8))
@@ -362,7 +362,7 @@ itk::Point<double, 3> Spot5SensorModel::GetVelocityEcf(const double& time)  cons
 }
 
 void Spot5SensorModel::GetPixelLookAngleXY(unsigned int line,
-                                          double& psiX, double& psiY) const
+                                           double& psiX, double& psiY) const
 {
   if (line >= m_Spot5Param.PixelLookAngleX.size())
   {
@@ -377,12 +377,12 @@ void Spot5SensorModel::GetPixelLookAngleXY(unsigned int line,
 
 }
 
-itk::Point<double, 3> Spot5SensorModel::GetAttitude(const double& time)  const
+itk::Point<double, 3> Spot5SensorModel::GetAttitude(double time)  const
 {
   return GetBilinearInterpolation(time, m_Spot5Param.AttitudesSamples, m_Spot5Param.AttitudesSamplesTimes);
 }
 
-itk::Point<double, 3> Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double& offset) const
+itk::Point<double, 3> Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, double offset) const
 {
   // WGS 84 parameters conversion
   double wgsA = 6378137.000;

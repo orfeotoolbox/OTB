@@ -71,7 +71,7 @@ public:
   * @return image point to world point at given height
   */
   Point3DType lineSampleHeightToWorld(Point2DType lineSampPt,
-                                      const double& heightAboveEllipsoid) const;
+                                      double heightAboveEllipsoid) const;
 
   const std::vector<Point2DType>& getLineSamplePoints() const;
 
