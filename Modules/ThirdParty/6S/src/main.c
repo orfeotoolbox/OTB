@@ -108,7 +108,7 @@ static doublereal c_b887 = 2.;
 static integer c__9 = 9;
 
 /*<       program ssssss >*/
-/* Main program */ MAIN__()
+/* Main program */int MAIN__()
 {
     /* Initialized data */
 
