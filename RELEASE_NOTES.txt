@@ -1,10 +1,12 @@
-OTB-v 9.1.0 - Changes since version 9.0.0 (August 27th, 2024)
+OTB-v 9.1.0 - Changes since version 9.0.0 (September 27th, 2024)
 -------------------------------------------------------------
 
 Features added:
+  * !1044: COMP: add otbenv powershell script by Tristan Laurent
   * !1015: Add Spot5 SWH support to otb9 by Thibaut ROMAIN
 
 Bugs fixed:
+  * !1043: COMP: fix -Wimplicit-int on OTB6S by Tristan Laurent
   * !1029: COMP: install libtiff and libjpeg in lib instead of lib64 in RedHat builds by Tristan Laurent
   * !1024: BUILD: correctly transfer cmake GDAL args to disable spatialite by Tristan Laurent
   * !1018: BUG: fix otbenv script for non-bash env on RH based OS by Tristan Laurent
@@ -17,6 +19,7 @@ Dependencies update:
   * !1021: ENH: update GDAL to 3.9.0 by Thibaut ROMAIN
 
 Documentation:
+  * !1041: DOC: Remove Mosaic from the list of remote modules by Rémi Cresson
   * !1039: DOC: update OS, compiler and python versions by Tristan Laurent
   * !1032: BUG: update dead link for BandMath and BandMathX by Thibaut ROMAIN
   * !1022: DOC: #2050 remove dead link to rst file on top of every cookbook pages by Tristan Laurent
@@ -31,10 +34,6 @@ CI:
   * !1019: BUG: fix filename too long when creating superbuild archive by Thibaut ROMAIN
   * !1010: Fix ci gdalbindings problem when pushing branch by Thibaut ROMAIN
 
-
-
-Refactoring:
-  * 
 
 OTB-v 9.0.0 - Changes since version 8.1.2 (February 28th, 2024)
 ---------------------------------------------------------------
