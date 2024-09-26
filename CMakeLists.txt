@@ -447,6 +447,7 @@ if(WIN32)
   set(my_file_ext ".bat")
   install( PROGRAMS
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bat
+    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.ps1
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bash
     DESTINATION .
     COMPONENT Core
