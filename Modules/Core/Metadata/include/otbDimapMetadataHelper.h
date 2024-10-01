@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +23,9 @@
 
 #include "OTBMetadataExport.h"
 #include "otbMetadataSupplierInterface.h"
+#include "otbSpot5Metadata.h"
+#include "otbDateTime.h"
+
 
 namespace otb
 {
@@ -104,6 +107,8 @@ public:
 
   /** Parse Dimap data from a Dimap v2 product */
   void ParseDimapV2(const MetadataSupplierInterface & mds, const std::string & prefix = "Dimap_Document.");
+
+  void ParseSpot5Model(const MetadataSupplierInterface & mds, Spot5Param& spot5Param, const std::string & prefix = "Dimap_Document.");
 
 protected:
 
@@ -220,6 +225,20 @@ private:
     ParseVector(mds, prefix, name, vector);
     return vector[0];
 
+  }
+
+  double GetTime(const std::string& timeStr){
+    // Time stamps are in the format: "yyyy-mm-ddThh:mm:ss.ssssss"
+    const auto d = MetaData::ReadFormattedDate(timeStr);
+    return d.GetSecond() + 60.0 * (
+             d.GetMinute() + 60.0 * ( // Total NB of minutes
+               d.GetHour() + 24.0 * ( // Total NB of hours
+                 d.GetDay() - 1.0 + 365.25 * ( // Total NB of days (-1 as day is not over)
+                   d.GetYear() - 2002.0
+                 )
+               )
+             )
+           );
   }
 
   DimapData m_Data;

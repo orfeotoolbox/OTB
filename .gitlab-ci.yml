@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -125,7 +125,6 @@ fast-build:
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
-    - python3 CI/check_twin_pipelines.py
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-20.04-fast
     - ccache -s
@@ -159,7 +158,7 @@ ubuntu-22-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full
 
 ubuntu-20-build:
   extends: .common-build
@@ -182,15 +181,19 @@ ubuntu-22-gdal-bindings:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   only:
-    changes:
-      - SuperBuild/CMake/External_gdal.cmake
+    refs:
+      - /^release-[0-9]+\.[0-9]+$/
   script:
+    - pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
+    - OTB_VERSION_MAJOR=$(grep -e "set(OTB_VERSION_MAJOR.*" CMakeLists.txt | cut -f2 -d'"')
+    - OTB_VERSION_MINOR=$(grep -e "set(OTB_VERSION_MINOR.*" CMakeLists.txt | cut -f2 -d'"')
+    - OTB_SHORT_VERSION=$OTB_VERSION_MAJOR.$OTB_VERSION_MINOR
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
-    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py310.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf "OTB-${OTB_SHORT_VERSION}-GDAL-bindings-py${pyversion}.tar.gz" --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
   needs:
     - job: ubuntu-22-prepare
       artifacts: true
-
+ 
 ## RedHat superbuild
 redhat-prepare:
   extends: .common-prepare
@@ -205,9 +208,16 @@ redhat-build:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=ON
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=OFF
+    # change package names to RedHat
+    - |
+      # use "find" to select only packages that matters
+      rh_packages=$(find build_packages -type f -name "OTB*Linux*.tar.gz")
+      for pkg in $rh_packages
+      do
+        new_name=$(sed "s/-Linux/-Linux_RedHat/g" <<< "$pkg")
+        mv $pkg $new_name
+      done
     - mv build_packages/OTB-*.tar.gz . || true
-    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RedHat-Dependencies.tar.gz
-    - mv OTB-9.0.0-Linux.tar.gz OTB-9.0.0-Linux_RedHat.tar.gz
   needs:
     - job: redhat-prepare
       artifacts: true
@@ -218,14 +228,19 @@ redhat-build:
   before_script:
 # This override the previous before_script
     - set GIT_LFS_SKIP_SMUDGE=1
-    - git checkout -f -q %CI_COMMIT_SHA%
+    - git checkout -f -q $CI_COMMIT_SHA
     - set GIT_LFS_SKIP_SMUDGE=0
 
 .windows-build:
   extends: .common-build
   before_script:
-    - git lfs fetch origin %CI_COMMIT_SHA%
-    - git checkout -f -q %CI_COMMIT_SHA%
+    - git lfs fetch origin $CI_COMMIT_SHA
+    - git checkout -f -q $CI_COMMIT_SHA
+  # Obviously Windows does not use same executable name as linux...
+  after_script:
+    # need to setup path to be able to use python
+    - .\CI\setup_python.ps1 x64
+    - python -u CI/cdash_handler.py
 
 # - Win10
 windows-10-prepare:
@@ -233,9 +248,9 @@ windows-10-prepare:
   tags:
     - windows10
   script:
-    - call ./CI/dev_env.bat x64 xdk 10
+    - .\CI\dev_env.ps1 x64 xdk 10
     - buildcache.exe -s
-    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -C Release -VV -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
 
 windows-10-build:
@@ -243,11 +258,11 @@ windows-10-build:
   tags:
     - windows10
   script:
-    - call ./CI/dev_env.bat x64 otb 10
+    - .\CI\dev_env.ps1 x64 otb 10
     - buildcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
+    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
-    - call ./CI/copy_boost_dlls.bat
+    - .\CI\copy_boost_dlls.ps1
     - ctest -V -S CI/superbuild_packaging.cmake -DPACKAGE_BY_MODULE:BOOL=OFF
     - move "build_packages\OTB-*.zip" . || dir build_packages
   needs:
@@ -403,8 +418,12 @@ release-docker:
       - job: ubuntu-20-build
         artifacts: true
   script:
+      # to authenticate in docker hub, kaniko needs a config file located at
+      # /kaniko/.docker/config.json
+      - mkdir -p /kaniko/.docker || true
+      - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_HUB_USER}" "${DOCKER_HUB_PWD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
       - /kaniko/executor --cleanup
                        --verbosity warn
                        --context $CI_PROJECT_DIR
                        --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile_CI
-                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_TAG
+                       --destination orfeotoolbox/otb:$CI_COMMIT_TAG

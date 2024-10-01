@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,4 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbSarTransformTest);
   REGISTER_TEST(otbRPCSolverTest);
   REGISTER_TEST(otbLeastSquareAffineTransformEstimator);
+  // REGISTER_TEST(otbSpot5TransformTest);
 }

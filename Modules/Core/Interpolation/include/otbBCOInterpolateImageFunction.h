@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,11 +22,7 @@
 #define otbBCOInterpolateImageFunction_h
 
 #include <boost/version.hpp>
-#if BOOST_VERSION >= 105800
 #include <boost/container/small_vector.hpp>
-#else
-#include "vnl/vnl_vector.h"
-#endif
 
 #include "itkInterpolateImageFunction.h"
 #include "otbMath.h"
@@ -95,14 +91,8 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef TCoordRep                                ContinuousIndexValueType;
 
-#if BOOST_VERSION >= 105800
-  // Faster path for small radii.
   /** Coefficients container type. */
   typedef boost::container::small_vector<double, 7> CoefContainerType;
-#else
-  /** Coefficients container type. */
-  typedef vnl_vector<double> CoefContainerType;
-#endif
 
   /** Set/Get the window radius */
   virtual void         SetRadius(unsigned int radius);

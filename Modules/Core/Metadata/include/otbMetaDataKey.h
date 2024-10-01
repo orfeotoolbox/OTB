@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -224,6 +224,7 @@ enum class MDGeom
   SensorGeometry, // -> boost::any
   GCP,            // -> GCPParam
   Adjustment,     // -> ?
+  Spot5Geometry, //Spot5Param
   END
 };
 

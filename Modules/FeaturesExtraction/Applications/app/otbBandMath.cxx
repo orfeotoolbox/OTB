@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -90,7 +90,7 @@ private:
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("[1] http://beltoforion.de/article.php?a=muparser");
+    SetDocSeeAlso("[1] https://beltoforion.de/en/muparser/index.php#idIntro");
     AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImageList, "il", "Input image list");

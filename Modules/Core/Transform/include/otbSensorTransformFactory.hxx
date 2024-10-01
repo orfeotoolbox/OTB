@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,6 +44,8 @@ SensorTransformFactory::CreateTransform(const ImageMetadata &imd, TransformDirec
   factories.push_back(TransformFactories::RPCInverseTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
   factories.push_back(TransformFactories::SARForwardTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
   factories.push_back(TransformFactories::SARInverseTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
+  factories.push_back(TransformFactories::Spot5ForwardTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
+  factories.push_back(TransformFactories::Spot5InverseTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
 
   typename otb::SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::Pointer transformPointer;
   for (auto& transformFactory : factories)

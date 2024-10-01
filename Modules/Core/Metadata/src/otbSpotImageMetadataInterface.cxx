@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,6 +28,8 @@
 #include "otbXMLMetadataSupplier.h"
 
 #include "otbDimapMetadataHelper.h"
+#include "otbSpot5Metadata.h"
+
 
 namespace otb
 {
@@ -319,8 +321,12 @@ void SpotImageMetadataInterface::Parse(ImageMetadata & imd)
     }
 
     XMLMetadataSupplier xmlMds(metadataFile);
+    Spot5Param spot5Param;
 
     helper.ParseDimapV1(xmlMds, "Dimap_Document.");
+    helper.ParseSpot5Model(xmlMds, spot5Param, "Dimap_Document.");
+
+    imd.Add(MDGeom::Spot5Geometry, spot5Param);
 
   }
   // geom metadata case

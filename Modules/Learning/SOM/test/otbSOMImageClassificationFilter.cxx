@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,12 +35,12 @@ int otbSOMImageClassificationFilter(int itkNotUsed(argc), char* argv[])
   typedef unsigned short LabeledPixelType;
 
   typedef otb::VectorImage<PixelType, Dimension>  ImageType;
-  typedef otb::Image<LabeledPixelType, Dimension> LabeledImageType;
+  typedef otb::Image<LabeledPixelType, Dimension> LabelledImageType;
   typedef otb::SOMMap<ImageType::PixelType> SOMMapType;
-  typedef otb::SOMImageClassificationFilter<ImageType, LabeledImageType, SOMMapType> ClassificationFilterType;
+  typedef otb::SOMImageClassificationFilter<ImageType, LabelledImageType, SOMMapType> ClassificationFilterType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
   typedef otb::ImageFileReader<SOMMapType>       SOMReaderType;
-  typedef otb::ImageFileWriter<LabeledImageType> WriterType;
+  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();

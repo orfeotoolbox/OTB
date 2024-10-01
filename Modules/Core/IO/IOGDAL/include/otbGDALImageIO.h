@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2018-2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
@@ -229,10 +229,10 @@ public:
   }
 
   /** If multiple keys have the same path, gives the position of the one with value value*/
-  unsigned int GetAttributId(std::string const&, std::string const&) const override
+  unsigned int GetAttributeId(std::string const&, std::string const&) const override
   {
     itkExceptionMacro(
-        "GetAttributId() not yet implemented in otbGDALImageIO");
+        "GetAttributeId() not yet implemented in otbGDALImageIO");
   }
 
 protected:

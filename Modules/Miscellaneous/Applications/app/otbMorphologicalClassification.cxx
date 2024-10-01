@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -56,11 +56,11 @@ public:
   typedef otb::Image<InputPixelType, 2> FloatImageType;
 
   typedef unsigned short LabeledPixelType;
-  typedef otb::Image<LabeledPixelType, 2> LabeledImageType;
+  typedef otb::Image<LabeledPixelType, 2> LabelledImageType;
 
   typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, InputPixelType> ExtractorFilterType;
 
-  typedef otb::ConvexOrConcaveClassificationFilter<FloatImageType, LabeledImageType> ClassificationFilterType;
+  typedef otb::ConvexOrConcaveClassificationFilter<FloatImageType, LabelledImageType> ClassificationFilterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, 2>  BallStructuringElementType;
   typedef itk::BinaryCrossStructuringElement<InputPixelType, 2> CrossStructuringElementType;

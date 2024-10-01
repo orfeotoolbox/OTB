@@ -2,7 +2,7 @@
 #
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -52,6 +52,7 @@ fileext = {
     '.sh.in': 'shell',
     '.bash': 'shell',
     '.profile': 'shell',
+    '.ps1': 'shell',
     '.py': 'shell',
     '.py.in': 'shell',
     '.cmake': 'shell',
@@ -113,6 +114,7 @@ excludedfiles = set([
     './NOTICE',
     './VERSION',
     './CI/ctest2junit.xsl',
+    './CI/Invoke-CmdScript.ps1',
     './CI/test/README',
     './CMake/CppcheckTargets.cmake',
     './CMake/FindKWStyle.cmake',

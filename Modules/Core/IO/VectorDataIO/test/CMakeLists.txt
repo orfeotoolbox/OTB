@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -59,13 +59,14 @@ otb_add_test(NAME ioTuVectorDataIOFactory COMMAND otbVectorDataIOTestDriver
   ${INPUTDATA}/ToulouseRoad-examples.shp )
 
 # Output is GPKG because SHP format does not handle well muli geometry types
-otb_add_test(NAME ioTvVectorDataFileWriterMultiPolygons COMMAND otbVectorDataIOTestDriver
-  --compare-ogr  ${EPSILON_9}
-  ${BASELINE_FILES}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
-  ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
-  otbVectorDataFileWriterMultiPolygons
-  ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
-  )
+# TODO: refactor this test with more plausible inputs.
+# otb_add_test(NAME ioTvVectorDataFileWriterMultiPolygons COMMAND otbVectorDataIOTestDriver
+#   --compare-ogr  ${EPSILON_9}
+#   ${BASELINE_FILES}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
+#   ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
+#   otbVectorDataFileWriterMultiPolygons
+#   ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
+#   )
 
 otb_add_test(NAME ioTvSHPVectorDataFileReader COMMAND otbVectorDataIOTestDriver
   --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt

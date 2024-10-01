@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,15 +32,15 @@ typedef float          PixelType;
 typedef unsigned short LabeledPixelType;
 
 typedef otb::VectorImage<PixelType, Dimension>                      ImageType;
-typedef otb::Image<LabeledPixelType, Dimension>                     LabeledImageType;
-typedef otb::ImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
+typedef otb::Image<LabeledPixelType, Dimension>                     LabelledImageType;
+typedef otb::ImageClassificationFilter<ImageType, LabelledImageType> ClassificationFilterType;
 typedef ClassificationFilterType::ModelType ModelType;
 typedef ClassificationFilterType::ValueType ValueType;
 typedef ClassificationFilterType::LabelType LabelType;
 typedef otb::SharkKMeansMachineLearningModelFactory<ValueType, LabelType> MachineLearningModelFactoryType;
 typedef otb::ImageFileReader<ImageType>        ReaderType;
-typedef otb::ImageFileReader<LabeledImageType> MaskReaderType;
-typedef otb::ImageFileWriter<LabeledImageType> WriterType;
+typedef otb::ImageFileReader<LabelledImageType> MaskReaderType;
+typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
 typedef otb::SharkKMeansMachineLearningModel<PixelType, short unsigned int> MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       LocalInputValueType;

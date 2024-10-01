@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -105,7 +105,7 @@ DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
 /** Create the required objects for logging. Logger.Instance() is reset in 
  * order to replace the itkStdStreamLogOutput by a PythonLogOutput */
 %pythoncode {
-  _libraryLogOutput = PythonLogOutput_New()
+  _libraryLogOutput = PythonLogOutput.New()
   _libraryLogCallback = PythonPrintCallback()
 
   Logger.Instance().ResetOutputs()

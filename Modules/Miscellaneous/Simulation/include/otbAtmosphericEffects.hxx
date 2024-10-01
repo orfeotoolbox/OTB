@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,7 +45,7 @@ AtmosphericEffects<TSpectralResponse , TRSR>
   //LMoad the filter function from the RSR
   for (unsigned int i=0; i<this->m_InputSatRSR->GetNbBands(); ++i)
   {
-    m_DataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, this->m_InputSatRSR->GetRSR()[i]->GetFilterFunctionValues (step));
+    m_DataAtmosphericCorrectionParameters->SetWavelengthSpectralBandWithIndex(i, this->m_InputSatRSR->GetRSR()[i]->GetFilterFunctionValues (step));
   }
 }
 */

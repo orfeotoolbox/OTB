@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -35,6 +35,7 @@ otbRPCTransformTest.cxx
 otbSarTransformTest.cxx
 otbRPCSolverTest.cxx
 otbLeastSquareAffineTransformEstimator.cxx
+# otbSpot5TransformTest.cxx
 )
 
 add_executable(otbTransformTestDriver ${OTBTransformTests})

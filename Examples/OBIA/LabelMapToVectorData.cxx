@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -70,11 +70,11 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
   using LabelType              = unsigned short;
-  using LabeledImageType       = otb::Image<LabelType, Dimension>;
+  using LabelledImageType       = otb::Image<LabelType, Dimension>;
   using VectorDataType         = otb::VectorData<double, 2>;
 
   // We instantiate reader and writer types
-  using LabeledReaderType = otb::ImageFileReader<LabeledImageType>;
+  using LabeledReaderType = otb::ImageFileReader<LabelledImageType>;
   using WriterType        = otb::VectorDataFileWriter<VectorDataType>;
 
   // Label map typedef
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 
   using LabelObjectType    = otb::AttributesMapLabelObject<LabelType, Dimension, double>;
   using LabelMapType       = itk::LabelMap<LabelObjectType>;
-  using LabelMapFilterType = itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>;
+  using LabelMapFilterType = itk::LabelImageToLabelMapFilter<LabelledImageType, LabelMapType>;
 
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
   WriterType::Pointer        writer  = WriterType::New();

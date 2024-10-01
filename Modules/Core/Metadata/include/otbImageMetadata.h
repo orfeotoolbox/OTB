@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,6 +25,7 @@
 #include "otbSARMetadata.h"
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
+#include "otbSpot5Metadata.h"
 #include "otbMacro.h"
 
 #include <boost/any.hpp>
@@ -108,6 +109,7 @@ public:
   const Projection::GCPParam & GetGCPParam() const;
   const Projection::RPCParam & GetRPCParam() const;
   const SARParam & GetSARParam() const;
+  const Spot5Param & GetSpot5Param() const;
 
   std::string GetProjectedGeometry() const;
 

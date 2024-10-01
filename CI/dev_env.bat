@@ -1,5 +1,5 @@
 ::
-:: Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+:: Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 ::
 :: This file is part of Orfeo Toolbox
 ::
@@ -74,8 +74,8 @@ if "%TARGET%"=="10" (
 echo Home dir: %HOMEDRIVE%%HOMEPATH%
 
 :: Setup Python
-set PATH=C:\tools\Python37-%ARCH%;%PATH%
-set PATH=C:\tools\Python37-%ARCH%\Scripts;%PATH%
+set PATH=C:\tools\Python310-%ARCH%;%PATH%
+set PATH=C:\tools\Python310-%ARCH%\Scripts;%PATH%
 
 :: Setup GL dlls
 set PATH=%PATH%;C:\tools\GL\%ARCH%\bin

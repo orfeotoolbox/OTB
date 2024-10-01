@@ -229,7 +229,7 @@ public:
           logger = self.GetLogger()
           logger.AddLogOutput(_libraryLogOutput.GetPointer())
 
-          self.progressReportManager = ProgressReporterManager_New()
+          self.progressReportManager = ProgressReporterManager.New()
           self.progressReportManager.SetLogOutputCallback(_libraryLogCallback)
           self.AddObserver(AddProcessToWatchEvent(),
                            self.progressReportManager.GetAddProcessCommand()
@@ -307,7 +307,7 @@ public:
 
   std::string GetProgressDescription() const;
 
-  void FreeRessources();
+  void FreeResources();
 
   itkSetStringMacro(DocLongDescription);
   itkGetStringMacro(DocLongDescription);

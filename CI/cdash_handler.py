@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,6 +22,7 @@ import os
 import os.path
 import urllib.request
 import urllib.parse
+import requests # to get the body of 400 error, not possible with urllib
 import glob
 import re
 import unittest
@@ -131,7 +132,7 @@ class Handler:
       raise CDashException("Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     elif trace:
       print( "Argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-    buildid_api = "/api/getbuildid.php?"
+    buildid_api = "/api/v1/getbuildid.php?"
     buildid_params = urllib.parse.urlencode({'project': project, 'site': site, 'stamp': stamp , 'name': name})
     full_url = self.url + buildid_api + buildid_params
     if trace:
@@ -140,7 +141,7 @@ class Handler:
     nb_try = max_retry
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     while nb_try:
-      response = urllib.request.urlopen(full_url).read().decode()
+      response = requests.get(full_url).text
       if trace:
         print ( "response: " + response )
       buildid = build_id_regex.search( response )

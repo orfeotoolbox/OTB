@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -319,6 +319,7 @@ MDGeomBmType MDGeomNames = bimapGenerator<MDGeom>(std::map<MDGeom, std::string> 
   {MDGeom::SARCalib,       "SARCalib"},
   {MDGeom::SensorGeometry, "SensorGeometry"},
   {MDGeom::GCP,            "GCP"},
+  {MDGeom::Spot5Geometry,  "Spot5Geometry"},
   {MDGeom::Adjustment,     "Adjustment"}
 });
 

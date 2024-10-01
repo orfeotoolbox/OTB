@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -31,18 +31,24 @@ RUN apt-get update -y \
 # Install pre-compiled OTB binaries
 RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux.tar.gz -o OTB-$OTB_RELEASE-Linux.tar.gz
 
-RUN tar xvf OTB-$OTB_RELEASE-Linux.tar.gz --one-top-level="/app" \
+RUN tar xvf OTB-$OTB_RELEASE-Linux.tar.gz --one-top-level="/app/otb" \
+&& rm OTB-$OTB_RELEASE-Linux.tar.gz
 
 # Persistent env
-ENV CMAKE_PREFIX_PATH=/app/OTB-${OTB_RELEASE}-Linux
-ENV PYTHONPATH=/app/OTB-$OTB_RELEASE-Linux/lib/python3/dist-packages:/app/OTB-${OTB_RELEASE}-Linux/lib/otb/python
+ENV CMAKE_PREFIX_PATH=/app/otb
+ENV PYTHONPATH=/app/otb/lib/python3/dist-packages:/app/otb/lib/otb/python
 ENV GDAL_DRIVER_PATH=disable
-ENV GDAL_DATA=/app/OTB-${OTB_RELEASE}-Linux/share/gdal
-ENV PROJ_LIB=/app/OTB-${OTB_RELEASE}-Linux/share/proj
-ENV PATH=/app/OTB-${OTB_RELEASE}-Linux/bin:$PATH
-ENV LD_LIBRARY_PATH=/app/OTB-${OTB_RELEASE}-Linux/lib:$LD_LIBRARY_PATH
-ENV OTB_APPLICATION_PATH=/app/OTB-${OTB_RELEASE}-Linux/lib/otb/applications
+ENV GDAL_DATA=/app/otb/share/gdal
+ENV PROJ_LIB=/app/otb/share/proj
+ENV PATH=/app/otb/bin:$PATH
+ENV LD_LIBRARY_PATH=/app/otb/lib:$LD_LIBRARY_PATH
+ENV OTB_APPLICATION_PATH=/app/otb/lib/otb/applications
 ENV LC_NUMERIC=C
+ENV OTB_INSTALL_DIR=/app/otb
+
+# run post install to apply sed commands on cmake files and to get python
+# bindings if needed
+RUN sh /app/otb/tools/post_install.sh
 
 # Default command when using 'docker run' or 'docker create'
 CMD /bin/bash

@@ -31,7 +31,7 @@ supplied script ``tools/uninstall_otb.bat``.
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Since OTB 8.0.0, the bindings for Python 3.7 are distributed.
+Since OTB 9.0.0, the bindings for Python 3.10 are distributed.
 Please note that using a different Python version may not be compatible with
 OTB wrappings. If the installation completes
 without issue, information relating to your Python bindings will be provided.
@@ -40,5 +40,5 @@ You must have Python numpy bindings installed in your system. They can be instal
 without admin rights as follows: "pip install --user numpy". This is to give users the option
 to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
-By default, bindings for Python 3.7 will be enabled with the ``otbenv`` script.
+By default, bindings for Python 3.10 will be enabled with the ``otbenv`` script.
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,9 +22,12 @@ INCLUDE_ONCE_MACRO(JPEG)
 
 SETUP_SUPERBUILD(JPEG)
 
+# overwrite CMAKE_INSTALL_LIBDIR since when compiling with centos, it will be
+# installed in lib64 if left unchanged
 set(JPEG_CONFIGURE_COMMAND "${SB_CMAKE_COMMAND}"
   ${SB_CMAKE_ARGS}
   ${SB_CMAKE_CACHE_ARGS}
+  -DCMAKE_INSTALL_LIBDIR:PATH=lib
   -DENABLE_SHARED=TRUE
   -DENABLE_STATIC=FALSE
   -DWITH_SIMD=FALSE
@@ -35,8 +38,8 @@ set(JPEG_CONFIGURE_COMMAND "${SB_CMAKE_COMMAND}"
 
 ExternalProject_Add(JPEG
   PREFIX JPEG
-  URL "https://downloads.sourceforge.net/project/libjpeg-turbo/2.0.0/libjpeg-turbo-2.0.0.tar.gz"
-  URL_MD5 b12a3fcf1d078db38410f27718a91b83
+  URL "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.0.3/libjpeg-turbo-3.0.3.tar.gz"
+  URL_MD5 fdeae6d78ca577a37857f2d14e33adbe
   SOURCE_DIR ${JPEG_SB_SRC}
   BINARY_DIR ${JPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

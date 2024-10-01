@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -35,10 +35,12 @@ ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF ZLIB_LIBRARY)
 ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF JPEG_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF JPEG_LIBRARY)
 
+# overwrite CMAKE_INSTALL_LIBDIR since when compiling with centos, it will be
+# installed in lib64 if left unchanged
 ExternalProject_Add(GEOTIFF
   PREFIX GEOTIFF
-  URL "https://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.7.1.tar.gz"
-  URL_MD5 22879ac6f83460605f9c39147a2ccc7a
+  URL "https://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.7.3.tar.gz"
+  URL_MD5 cdca346d3b01d40418f4894c4beef8e9
   SOURCE_DIR ${GEOTIFF_SB_SRC}
   BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -46,6 +48,7 @@ ExternalProject_Add(GEOTIFF
   DEPENDS ${GEOTIFF_DEPENDENCIES}
   CMAKE_CACHE_ARGS
   ${SB_CMAKE_CACHE_ARGS}
+  -DCMAKE_INSTALL_LIBDIR:PATH=lib
   -DBUILD_TESTING:BOOL=OFF
   -DPROJ4_OSGEO4W_HOME:PATH=${SB_INSTALL_PREFIX}
   ${GEOTIFF_SB_CONFIG}
