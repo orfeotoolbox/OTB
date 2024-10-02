@@ -19,8 +19,7 @@ We are ready to release OTB version MAJOR.MINOR.PATCH. The following steps need 
 * [ ] [Sanity check the binary packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#standalone-packages-sanity-check)
     * [ ] Windows
     * [ ] Linux
-    * [ ] Mac
-    * [ ] Test QGIS on qgis docker image
+    * [ ] QGIS plugin
 
 ### 3. Actual release
 
@@ -55,8 +54,7 @@ Once all blocking issues are closed, and the previous steps are done:
 * [ ] [Sanity check the binary packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#standalone-packages-sanity-check)
     * [ ] Windows
     * [ ] Linux
-    * [ ] Mac
-    * [ ] Test QGIS on qgis docker image
+    * [ ] QGIS plugin
 
 ### 3. Actual release
 
@@ -74,12 +72,13 @@ Once all blocking issues are closed, and the previous steps are done:
     * [ ] Cookbook
     * [ ] Doxygen
     * [ ] WordPress page "Home" and "Download" pages
-* [ ] Upload OTB source archive to [Zenodo](https://zenodo.org/) to create a unique Digital Object Identifier (DOI)
+* [ ] Add the release to "Releases" page of the project
 * [ ] [Update the SuperBuild archive](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#superbuild-archive)
+* [ ] Upload OTB source archive to [Zenodo](https://zenodo.org/) to create a unique Digital Object Identifier (DOI)
 * [ ] Release announcement
     * [ ] On the [forum](https://forum.orfeo-toolbox.org/)
     * [ ] On the [blog](https://www.orfeo-toolbox.org/blog/)
-	* [ ] On [Twitter](https://twitter.com/orfeotoolbox)
+* [ ] Update the Wikipedia page with the version number and release date (https://en.wikipedia.org/wiki/Orfeo_toolbox)
 * [ ] Forward announcement to news_item@osgeo.org ([OSGeo news](https://www.osgeo.org/foundation-news/))
 * [ ] Remove public branches related to MR or bugfix merged before the release
 
