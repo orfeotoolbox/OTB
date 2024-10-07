@@ -105,7 +105,7 @@ DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
 /** Create the required objects for logging. Logger.Instance() is reset in 
  * order to replace the itkStdStreamLogOutput by a PythonLogOutput */
 %pythoncode {
-  _libraryLogOutput = PythonLogOutput()
+  _libraryLogOutput = PythonLogOutput_New()
   _libraryLogCallback = PythonPrintCallback()
 
   Logger.Instance().ResetOutputs()
