@@ -78,8 +78,8 @@ public:
   itkTypeMacro(CorrelationChangeDetector, SuperClass);
 
 protected:
-  CorrelationChangeDetector() {}
-  ~CorrelationChangeDetector() override {}
+  CorrelationChangeDetector() = default;
+  ~CorrelationChangeDetector() = default;
 
 private:
   CorrelationChangeDetector(const Self&) = delete;

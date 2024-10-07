@@ -82,17 +82,17 @@ void Logger::LogSetupInformation()
   {
     std::ostringstream oss;
 
-    oss << "Default RAM limit for OTB is " << otb::ConfigurationManager::GetMaxRAMHint() << " MB" << std::endl;
+    oss << "Default RAM limit for OTB is " << otb::ConfigurationManager::GetMaxRAMHint() << " MB\n";
     this->Info(oss.str());
     oss.str("");
     oss.clear();
 
-    oss << "GDAL maximum cache size is " << GDALGetCacheMax64() / (1024 * 1024) << " MB" << std::endl;
+    oss << "GDAL maximum cache size is " << GDALGetCacheMax64() / (1024 * 1024) << " MB\n";
     this->Info(oss.str());
     oss.str("");
     oss.clear();
 
-    oss << "OTB will use at most " << itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads() << " threads" << std::endl;
+    oss << "OTB will use at most " << itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads() << " threads\n";
     this->Info(oss.str());
     oss.str("");
     oss.clear();
@@ -123,30 +123,8 @@ std::string Logger::BuildFormattedEntry(itk::LoggerBaseEnums::PriorityLevel leve
 {
   static const std::string levelString[] = {"(MUSTFLUSH)", "(FATAL)", "(CRITICAL)", "(WARNING)", "(INFO)", "(DEBUG)", "(NOTSET)"};
 
-  //assert(level <= std::extent<decltype(levelString)>::value);
+  assert(int(level) <= std::extent<decltype(levelString)>::value);
 
-  // const std::string levelStr="";
-  // switch(level)
-  // {
-  //   case itk::LoggerBaseEnums::PriorityLevel::FATAL:
-  //     levelStr=levelString[1];
-  //     break;
-  //   case itk::LoggerBaseEnums::PriorityLevel::CRITICAL:
-  //     levelStr=levelString[2];
-  //     break;
-  //   case itk::LoggerBaseEnums::PriorityLevel::WARNING:
-  //     levelStr=levelString[3];
-  //     break;
-  //   case itk::LoggerBaseEnums::PriorityLevel::INFO:
-  //     levelStr=levelString[4];
-  //     break;
-  //   case itk::LoggerBaseEnums::PriorityLevel::DEBUG:
-  //     levelStr=levelString[5];
-  //     break;
-  //   default:
-  //     levelStr=levelString[6];
-  //     break;
-  // }
   if (strcmp(this->GetName(), "") == 0)
   {
     return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[std::uint8_t(level)] + ": " + content;

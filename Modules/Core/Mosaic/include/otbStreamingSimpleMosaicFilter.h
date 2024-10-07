@@ -80,9 +80,7 @@ protected:
     this->DynamicMultiThreadingOn();
   }
 
-  virtual ~StreamingSimpleMosaicFilter()
-  {
-  }
+  virtual ~StreamingSimpleMosaicFilter() = default;
 
   /** Overridden methods */
   void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;

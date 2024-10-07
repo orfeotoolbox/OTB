@@ -79,7 +79,7 @@ public:
   typedef ProcessObjectType::Pointer ProcessObjectPointerType;
   typedef itk::DataObject            DataObjectType;
   typedef DataObjectType::Pointer    DataObjectPointerType;
-  typedef uint64_t MemoryPrintType;
+  typedef std::uint64_t MemoryPrintType;
   typedef std::set<const ProcessObjectType*> ProcessObjectPointerSetType;
 
   /** Run-time type information (and related methods). */

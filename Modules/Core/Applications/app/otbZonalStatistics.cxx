@@ -336,10 +336,10 @@ public:
 
     while (currentIter != vDataIterators.second)
     {
-      if (!m_VectorDataSrc->Get(currentIter)->IsRoot() && !m_VectorDataSrc->Get(currentIter)->IsDocument() && !m_VectorDataSrc->Get(currentIter)->IsFolder())
+      DataNodeType::Pointer currentGeometry = m_VectorDataSrc->Get(currentIter);
+      if (!currentGeometry->IsRoot() && !currentGeometry->IsDocument() && !currentGeometry->IsFolder())
       {
 
-        DataNodeType::Pointer currentGeometry = m_VectorDataSrc->Get(currentIter);
         if (m_FromLabelImage)
           internalFID = currentGeometry->GetFieldAsInt("polygon_id");
         else

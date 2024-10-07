@@ -148,12 +148,13 @@ CastImageFilter< TInputImage, TOutputImage >
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
+  OutputPixelType value;
+  
   while ( !inputIt.IsAtEnd() )
     {
     while ( !inputIt.IsAtEndOfLine() )
       {
       const InputPixelType &inputPixel = inputIt.Get();
-      OutputPixelType value;
       for ( unsigned int k = 0; k < OutputPixelType::Dimension; k++ )
         {
         value[k] = static_cast< typename OutputPixelType::ValueType >( inputPixel[k] );
