@@ -197,7 +197,7 @@ private:
         "A context file should be used when defining matrix variables.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(
-        "[1] https://beltoforion.de/article.php?a=muparserx\n\n"
+        "[1] https://beltoforion.de/en/muparserx/index.php#idIntro\n\n"
         "[2] BandMath");
     AddDocTag(Tags::Manip);
 

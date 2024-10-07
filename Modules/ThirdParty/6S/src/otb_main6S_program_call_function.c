@@ -18,7 +18,7 @@ static integer c__5 = 5;
 static integer c__3 = 3;
 
 /*<       program call6Sv1_0b >*/
-/* Main program */ OTB_6S_MAIN__()
+/* Main program */int OTB_6S_MAIN__()
 {
     /* Format strings */
     static char fmt_100[] = "(10x,\002 ----->  atmospheric reflectance :    \

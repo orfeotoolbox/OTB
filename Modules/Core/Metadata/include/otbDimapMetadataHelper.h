@@ -23,6 +23,8 @@
 
 #include "OTBMetadataExport.h"
 #include "otbMetadataSupplierInterface.h"
+#include "otbSpot5Metadata.h"
+
 
 namespace otb
 {
@@ -104,6 +106,8 @@ public:
 
   /** Parse Dimap data from a Dimap v2 product */
   void ParseDimapV2(const MetadataSupplierInterface & mds, const std::string & prefix = "Dimap_Document.");
+
+  void ParseSpot5Model(const MetadataSupplierInterface & mds, Spot5Param& spot5Param, const std::string & prefix = "Dimap_Document.");
 
 protected:
 
@@ -220,6 +224,18 @@ private:
     ParseVector(mds, prefix, name, vector);
     return vector[0];
 
+  }
+
+  double GetTime(std::string timeStr){
+    // Time stamps are in the format: "yyyy-mm-ddThh:mm:ss.ssssss"
+    int year, month, day, hour, minute;
+    double second;
+    sscanf(timeStr.c_str(),
+                      "%4d-%2d-%2dT%2d:%2d:%9lf",
+                      &year, &month, &day,
+                      &hour, &minute, &second);
+    return (((((year-2002.0)*12.0 + month - 1.0)*365.0 + day - 1.0)*24.0
+            + hour)*60.0 + minute)*60.0 + second;
   }
 
   DimapData m_Data;

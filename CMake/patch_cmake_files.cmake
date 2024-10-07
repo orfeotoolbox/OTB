@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 function(patch_cmake_files)
+  # parse and prefix all args with PATCH
   cmake_parse_arguments(PATCH  "" "NAME;VERSION;MATCH_STRING;REPLACE_VAR" "" ${ARGN} )
 
   set(PATCH_DIR_NAME ${PATCH_NAME}-${PATCH_VERSION})
@@ -25,14 +26,17 @@ function(patch_cmake_files)
   set(PATCH_STAGE_DIR ${CMAKE_CURRENT_BINARY_DIR}/patched/${PATCH_DIR_NAME})
 
   ##message("COPY ${PATCH_DIR} to ${PATCH_STAGE_DIR} for patching")
-
+  # Use cmake commands instead of mkdir or CP to work with linux AND windows
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E make_directory "${PATCH_STAGE_DIR}"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${PATCH_DIR}" "${PATCH_STAGE_DIR}"
     )
 
+  # here do not use ';' as separator as it will be not be interpreted into
+  # one arg for the following cmake command
   set(DIR_LIST "${PATCH_STAGE_DIR}|${PATCH_STAGE_DIR}/Modules")
 
+  # launch cmake with variables P_DIR, P_MATCH, P_REPLACE on script post_install
   execute_process(COMMAND ${CMAKE_COMMAND}
     -DP_DIRS=${DIR_LIST}
     -DP_MATCH=${PATCH_MATCH_STRING}

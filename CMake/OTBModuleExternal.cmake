@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -59,31 +59,9 @@ else()
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OTB_DIR}/lib)
   endif()
 
-  # OTB installation structure
-  if(NOT OTB_INSTALL_RUNTIME_DIR)
-    set(OTB_INSTALL_RUNTIME_DIR bin)
-  endif()
-  if(NOT OTB_INSTALL_LIBRARY_DIR)
-    set(OTB_INSTALL_LIBRARY_DIR lib)
-  endif()
-  if(NOT OTB_INSTALL_ARCHIVE_DIR)
-    set(OTB_INSTALL_ARCHIVE_DIR lib)
-  endif()
-  if(NOT OTB_INSTALL_INCLUDE_DIR)
-    set(OTB_INSTALL_INCLUDE_DIR include/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
-  endif()
-  if(NOT OTB_INSTALL_DATA_DIR)
-    set(OTB_INSTALL_DATA_DIR share/otb)
-  endif()
-  if(NOT OTB_INSTALL_DOC_DIR)
-    set(OTB_INSTALL_DOC_DIR share/doc/otb)
-  endif()
-  if(NOT OTB_INSTALL_PACKAGE_DIR)
-    set(OTB_INSTALL_PACKAGE_DIR "lib/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-  endif()
-  if(NOT OTB_INSTALL_APP_DIR)
-    set(OTB_INSTALL_APP_DIR lib/otb/applications)
-  endif()
+  # Retrieve all OTB_INSTALL_XXX consts
+  include(OTBConstants)
+  get_install_const()
 
   # Use OTB's flags.
   set(CMAKE_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_C_FLAGS}")
@@ -94,12 +72,11 @@ else()
   option(BUILD_SHARED_LIBS "Build with shared libraries." ${OTB_BUILD_SHARED})
   mark_as_advanced(BUILD_SHARED_LIBS)
 
-  # Add the OTB_MODULES_DIR to the CMAKE_MODULE_PATH and then use the binary
+  # Add the OTB_MODULES_DIRS to the CMAKE_MODULE_PATH and then use the binary
   # directory for the project to write out new ones to.
-  if(OTB_MODULES_DIR)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${OTB_MODULES_DIR})
+  if(OTB_MODULES_DIRS)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${OTB_MODULES_DIRS})
   endif()
-  set(OTB_MODULES_DIR "${OTB_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
 
   #include(OTBExternalData)
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt)
@@ -113,12 +90,24 @@ else()
   set(${otb-module}-targets-install "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/${otb-module}Targets.cmake")
   set(${otb-module}_TARGETS_FILE_INSTALL "${${otb-module}-targets-install}")
   set(${otb-module}-targets-build "${OTB_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}Targets.cmake")
-  set(${otb-module}_TARGETS_FILE_BUILD "${${otb-module}-targets-build}")
   otb_module_impl()
 
-  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt AND NOT ${otb-module}_NO_SRC AND "${${otb-module}-targets}")
+  if (CMAKE_DEBUG)
+    set(__cmakelist_exists FALSE)
+    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt)
+      set(__cmakelist_exists TRUE)
+    endif()
+
+    message(STATUS "[CMAKE_DEBUG] Does ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt exists: ${__cmakelist_exists}")
+    message(STATUS "[CMAKE_DEBUG] ${otb-module}_NO_SRC == ${${otb-module}_NO_SRC}")
+    message(STATUS "[CMAKE_DEBUG] ${otb-module}-targets == ${${otb-module}-targets}")
+  endif()
+
+  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt
+     AND NOT ${otb-module}_NO_SRC
+     AND "${${otb-module}-targets}")
     install(EXPORT ${${otb-module}-targets} DESTINATION "${OTB_INSTALL_PACKAGE_DIR}/Modules"
-      COMPONENT ${${otb-module}_COMPONENT})
+      COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT})
   endif()
 
   set(OTB_TEST_OUTPUT_DIR "${CMAKE_BINARY_DIR}/Testing/Temporary")

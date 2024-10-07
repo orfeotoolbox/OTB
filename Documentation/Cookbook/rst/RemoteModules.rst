@@ -23,13 +23,6 @@ List of available modules
         + License: Apache License 2.0
         + Description: The differential SAR interferometry (DInSAR) technique relies on the processing of two SAR images of the same portion of the Earth’s surface taken at different time. The aim is to analyze potential events (earthquake, destruction, …) by highlighting differences between SAR images. DInSAR involves a set of tools such as creation of deformation grids , coregistration or building of interferograms. The Orfeo Toolbox remote module DiapOTB contains all necessary steps and allows to launch a complete DInSAR chain. This module has been used with Sentinel-1 data with satisfactory results. This module is a port from DIAPASON tool, integrated in the `ESA GeoHazards TEP <http://terradue.github.io/doc-tep-geohazards/tutorials/diapason-sm.html>`__.
 
-  - **otb-mosaic** : Image mosaiking
-
-        + Repository : https://github.com/remicres/otb-mosaic
-        + Author: Rémi Cresson
-        + License: CeCILL-B
-        + Description: This module provides one application dedicated to images mosaicking with several compositing methods available. This module is now part of OTB since version 7.0.0
-
   - **otb-bv** : Estimation of biophysical variables
 
         + Repository:  https://gitlab.orfeo-toolbox.org/jinglada/otb-bv
@@ -150,6 +143,8 @@ the applications of your module will be installed in the same folder as OTB appl
   make -j8 install
 
 the applications will be installed in ``/theModuleInstallFolder/lib`` and the binaries will be available in ``/theModuleInstallFolder/bin`` 
+
+In case you have an OTB install with OTB components separated from Core, you will need to specify the ``-DCMAKE_PREFIX_PATH="/your_first_module_path:/your_other_module_path"`` cmake variable (see :ref:`mod_install`)
 
 **Usage**
 

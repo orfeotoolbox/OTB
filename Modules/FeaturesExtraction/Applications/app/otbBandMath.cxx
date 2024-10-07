@@ -90,7 +90,7 @@ private:
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("[1] http://beltoforion.de/article.php?a=muparser");
+    SetDocSeeAlso("[1] https://beltoforion.de/en/muparser/index.php#idIntro");
     AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImageList, "il", "Input image list");

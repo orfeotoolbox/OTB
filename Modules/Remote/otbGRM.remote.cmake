@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+# otbapp_GenericRegionMerging
+# 
 #Contact: Pierre Lassalle <lassallepierre34@gmail.com> 
 otb_fetch_module(otbGRM
   "This module provides the GRM OTB application to perform multiscale
