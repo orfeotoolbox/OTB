@@ -37,9 +37,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check compiler versions
-set(OTB_MIN_GNU_VER 5)
+set(OTB_MIN_GNU_VER 8)
 set(OTB_MIN_MSVC_VER 19)
-set(OTB_MIN_Clang_VER 3.4)
+set(OTB_MIN_Clang_VER 10)
 if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
   if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
     message(FATAL_ERROR "The version of your ${CMAKE_CXX_COMPILER_ID} "
@@ -113,7 +113,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
-set(OTB_VERSION_MAJOR "9")
+set(OTB_VERSION_MAJOR "10")
 set(OTB_VERSION_MINOR "0")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
