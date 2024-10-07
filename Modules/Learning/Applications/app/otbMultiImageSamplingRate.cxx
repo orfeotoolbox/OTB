@@ -304,7 +304,7 @@ private:
     // total
     case 4:
     {
-      std::vector<std::string> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.total.v"), ' ');
+      auto parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.total.v"), ' ');
       std::vector<unsigned long>  totalList;
       for (unsigned int i = 0; i < parts.size(); i++)
       {

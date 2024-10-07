@@ -73,16 +73,16 @@ protected:
   SarDeburstImageFilter();
 
   // Destructor
-  virtual ~SarDeburstImageFilter() override{};
+  ~SarDeburstImageFilter() = default;
 
   // Needs to be re-implemented since size of output is modified
-  virtual void GenerateOutputInformation() override;
+  void GenerateOutputInformation() override;
 
   // Needs to be re-implemented since size of output is modified
-  virtual void GenerateInputRequestedRegion() override;
+  void GenerateInputRequestedRegion() override;
 
   // Actual processing
-  virtual void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
+  void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
   void ThreadedGenerateDataWithAllSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
   void ThreadedGenerateDataWithOnlyValidSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);

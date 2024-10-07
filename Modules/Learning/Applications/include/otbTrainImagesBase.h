@@ -275,7 +275,7 @@ protected:
         }
         res = itksys::SystemTools::RemoveFile(filePath);
       }
-      bool status = (res.GetKind() == itksys::Status::Kind::Success ? true:false);
+      bool status = res.GetKind() == itksys::Status::Kind::Success;
       return status;
     }
   };

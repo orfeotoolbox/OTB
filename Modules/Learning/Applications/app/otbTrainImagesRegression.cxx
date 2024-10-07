@@ -477,7 +477,7 @@ private:
       }
     }
     m_FileHandler.clear();
-    bool status = (res.GetKind() == itksys::Status::Kind::Success ? true:false);
+    bool status = res.GetKind() == itksys::Status::Kind::Success;
     return status;
   }
 
