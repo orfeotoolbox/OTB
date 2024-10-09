@@ -201,7 +201,6 @@ macro(otb_module_impl)
 
   if(${otb-module}_SYSTEM_LIBRARY_DIRS)
     link_directories(${${otb-module}_SYSTEM_LIBRARY_DIRS})
-    message(STATUS "Link directory for ${otb-module} : " ${${otb-module}_SYSTEM_LIBRARY_DIRS})
   endif()
 
   if(${otb-module}_THIRD_PARTY)
