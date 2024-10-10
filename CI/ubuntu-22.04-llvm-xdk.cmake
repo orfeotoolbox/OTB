@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,8 +18,13 @@
 # limitations under the License.
 #
 
-# Configuration options for ubuntu-20.04-gcc
+# Configuration options for ubuntu-22.04-llvm-xdk
 
 set(site_option
-"opencv_INCLUDE_DIR:PATH=/usr/include/opencv4
-OTB_USE_SHARK:BOOL=OFF")
+"CMAKE_C_COMPILER:STRING=clang
+CMAKE_CXX_COMPILER:STRING=clang++
+CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
+USE_SYSTEM_OPENSSL:BOOL=OFF
+")
