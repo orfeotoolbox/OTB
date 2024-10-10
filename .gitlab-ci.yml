@@ -37,6 +37,7 @@ variables:
   GIT_CHECKOUT: "false"
   # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
+  PACKAGE_OTB_VERSION: "latest"
 
 workflow:
   rules:
@@ -121,12 +122,12 @@ fast-build:
     - merge_requests
     - branches
   stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:22.04
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-20.04-fast
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
     - ccache -s
 
 legal-check:
@@ -147,49 +148,58 @@ legal-check:
 
 #------------------------- prepare & build jobs --------------------------------
 
-# Ubuntu superbuild
-ubuntu-20-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
-
+## Ubuntu superbuild
 ubuntu-22-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
-ubuntu-20-build:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+ubuntu-24-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON
+  artifacts:
+    untracked: false
+    when: on_success
+    access: all
+    expire_in: 24hrs
+    paths:
+      - xdk/lib/python3/*
+
+ubuntu-22-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
   needs:
-    - job: ubuntu-20-prepare
+    - job: ubuntu-22-prepare
       artifacts: true
 
-# Ubuntu 22 build needed for gdal bindings with python 3.10. We package the compiled bindings for python 3.10, this package will be downloaded and extracted automatically when
+# Ubuntu 24 build needed for gdal bindings with python 3.12. We package the compiled bindings for python 3.12, this package will be downloaded and extracted automatically when
 # a user lauches the otbenv profile after unpacking the official archive for the first time (which contains bindings for ubuntu 20 and python 3.8 initially)
-ubuntu-22-gdal-bindings:
+python3.12-gdal-bindings:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   only:
     changes:
       - SuperBuild/CMake/External_gdal.cmake
     refs:
+      - develop
       - /^release-[0-9]+\.[0-9]+$/
+      - merge_requests
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
-    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py310.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+    - PACKAGE_OTB_VERSION=`ls lib/libOTBCommon.so.*.*.* | egrep -o "[0-9]+\.[0-9]+\.[0-9]$"`
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-$PACKAGE_OTB_VERSION-GDAL-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
  
 ## RedHat superbuild
@@ -277,17 +287,17 @@ ubuntu-qa-code-coverage:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   script:
     - ctest -V -S CI/main_qa.cmake
-            -DIMAGE_NAME:string=ubuntu-20.04-llvm-qa
+            -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
             -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
   needs:
-    - job: ubuntu-20-prepare
+    - job: ubuntu-22-prepare
       artifacts: true
 
 ubuntu-qa-static-analysis:
@@ -299,7 +309,7 @@ ubuntu-qa-static-analysis:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
@@ -311,14 +321,14 @@ ubuntu-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   needs:
-    - job: ubuntu-20-prepare
+    - job: ubuntu-22-prepare
       artifacts: true
 
 ubuntu-sonar-report:
   extends: .common
   variables:
     GIT_DEPTH: ""
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   stage: report
   only:
     refs:
@@ -359,7 +369,7 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-20-build
+    - job: ubuntu-22-build
       artifacts: true
     - job: windows-10-build
       artifacts: true
@@ -369,7 +379,7 @@ deploy:
 update-archive:
   tags:
     - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   stage: deploy
   extends: .general
   only:
@@ -384,7 +394,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-20-prepare
+    - job: ubuntu-22-prepare
       artifacts: false
 
 
@@ -413,12 +423,12 @@ release-docker:
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   needs:
-      - job: ubuntu-20-build
+      - job: ubuntu-22-build
         artifacts: true
   script:
       # to authenticate in docker hub, kaniko needs a config file located at
       # /kaniko/.docker/config.json
-      - mkdir -p /kaniko/.docker || true
+      - mkdir -p /kaniko/.docker || true
       - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_HUB_USER}" "${DOCKER_HUB_PWD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
       - /kaniko/executor --cleanup
                        --verbosity warn

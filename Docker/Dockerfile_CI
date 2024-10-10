@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 ARG OTB_RELEASE=9.0.0
 
 # Install system dependencies
@@ -44,7 +44,7 @@ ENV OTB_APPLICATION_PATH=/app/otb/lib/otb/applications
 ENV LC_NUMERIC=C
 ENV OTB_INSTALL_DIR=/app/otb
 
-RUN sh /app/otb/tools/post_install.sh
+RUN sh /app/otb/tools/post_install.sh && sh /app/otb/recompile_bindings.sh
 
 # Default command when using 'docker run' or 'docker create'
 CMD /bin/bash
