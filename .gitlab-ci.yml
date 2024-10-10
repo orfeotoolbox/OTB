@@ -197,7 +197,7 @@ python3.12-gdal-bindings:
       - merge_requests
   script:
     - PACKAGE_OTB_VERSION=`ls lib/libOTBCommon.so.*.*.* | egrep -o "[0-9]+\.[0-9]+\.[0-9]$"`
-    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-$PACKAGE_OTB_VERSION-GDAL-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
   needs:
     - job: ubuntu-24-prepare
       artifacts: true
