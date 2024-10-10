@@ -37,7 +37,7 @@ variables:
   GIT_CHECKOUT: "false"
   # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
-  PACKAGE_GDAL_VERSION: "latest"
+  PACKAGE_OTB_VERSION: "latest"
 
 workflow:
   rules:

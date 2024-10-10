@@ -21,5 +21,4 @@
 # Configuration options for ubuntu-22.04-gcc
 
 set(site_option
-"opencv_INCLUDE_DIR:PATH=/usr/include/opencv4
-OTB_USE_SHARK:BOOL=OFF")
+"OTB_USE_SHARK:BOOL=OFF")
