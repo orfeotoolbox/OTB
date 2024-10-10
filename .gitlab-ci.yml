@@ -122,12 +122,12 @@ fast-build:
     - merge_requests
     - branches
   stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop-headless:20.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:22.04
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-20.04-fast
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
     - ccache -s
 
 legal-check:
@@ -160,6 +160,13 @@ ubuntu-24-prepare:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON
+  artifacts:
+    untracked: false
+    when: on_success
+    access: all
+    expire_in: 24hrs
+    paths:
+      - xdk/lib/python3/*
 
 ubuntu-22-build:
   extends: .common-build
@@ -189,9 +196,8 @@ python3.12-gdal-bindings:
       - /^release-[0-9]+\.[0-9]+$/
       - merge_requests
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -Dci_skip_testing:BOOL=ON
-    - PACKAGE_GDAL_VERSION=`ls lib/libgdal.so.*.*.* | egrep -o "[0-9]+\.[0-9]+\.[0-9]$"`
-    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-$PACKAGE_GDAL_VERSION-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+    - PACKAGE_OTB_VERSION=`ls lib/libOTBCommon.so.*.*.* | egrep -o "[0-9]+\.[0-9]+\.[0-9]$"`
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
   needs:
     - job: ubuntu-24-prepare
       artifacts: true
@@ -284,7 +290,7 @@ ubuntu-qa-code-coverage:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   script:
     - ctest -V -S CI/main_qa.cmake
-            -DIMAGE_NAME:string=ubuntu-20.04-llvm-qa
+            -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
             -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
     - saxon-xslt -o build/ctest_report.xml
