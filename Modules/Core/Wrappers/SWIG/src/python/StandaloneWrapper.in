@@ -53,7 +53,7 @@ file(GLOB OTBPythonWrappers_SOURCES "*.cxx")
 
 # declare the python wrapper library
 add_library(PythonWrapperLib MODULE ${OTBPythonWrappers_SOURCES})
-target_link_libraries(PythonWrapperLib ${Python_LIBRARIES} OTBApplicationEngine)
+target_link_libraries(PythonWrapperLib ${Python_LIBRARIES} ${OTB_LIBRARIES})
 
 set_target_properties(PythonWrapperLib PROPERTIES
   OUTPUT_NAME   "_otbApplication"

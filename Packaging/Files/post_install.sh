@@ -20,8 +20,8 @@
 #
 echo "***** First time launching OTB after installation, doing some post installation steps before use *****"
 # Apply necessary patches for a modular install because cmake generates these file at configure time, not at packaging time
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-9.0/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-9.0/Modules/*.cmake
+sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-10.0/*.cmake
+sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/OTB-10.0/Modules/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/ITK-5.3/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$OTB_INSTALL_DIR"/lib/cmake/ITK-5.3/Modules/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/gdal-config
@@ -32,9 +32,13 @@ pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
 if [ "$pyversion" = "312" ]; then
     echo "*** Python 3.12 detected, downloading gdal bindings compiled for python 3.12 ***"
     PACKAGE_OTB_VERSION=`ls $OTB_INSTALL_DIR/lib/libOTBCommon.so.*.*.* | egrep -o "[0-9]+\.[0-9]+\.[0-9]$"`
-    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$PACKAGE_OTB_VERSION-GDAL-bindings-py312.tar.gz -o "$OTB_INSTALL_DIR"/tools/py312.tar.gz
-    tar -xf "$OTB_INSTALL_DIR"/tools/py312.tar.gz -C "$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
-    rm "$OTB_INSTALL_DIR"/tools/py312.tar.gz
-    echo "*** GDAL bindings for python 3.12 successfully installed ***"
+    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/py312.tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.1-GDAL-bindings-py$pyversion.tar.gz)
+    if [ $HTTP_STATUS -eq 200 ]; then
+        tar -xf "$OTB_INSTALL_DIR"/tools/py312.tar.gz -C "$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
+        rm "$OTB_INSTALL_DIR"/tools/py312.tar.gz
+    else
+        echo "Can not find GDAL bindings at https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.1-GDAL-bindings-py$pyversion.tar.gz"
+        return -1
+    fi
 fi
 echo "OK" > "$OTB_INSTALL_DIR"/tools/install_done.txt

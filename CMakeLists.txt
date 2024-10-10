@@ -375,6 +375,11 @@ if(XDK_INSTALL_PATH)
     endif()
     install(DIRECTORY ${XDK_INSTALL_PATH}/share
             DESTINATION .
+            EXCLUDE PATTERN "cmake"
+            USE_SOURCE_PERMISSIONS
+            COMPONENT Core)
+    install(DIRECTORY ${XDK_INSTALL_PATH}/share/cmake
+            DESTINATION ./lib
             USE_SOURCE_PERMISSIONS
             COMPONENT Core)
     install(DIRECTORY ${XDK_INSTALL_PATH}/include
@@ -428,7 +433,7 @@ if(UNIX)
     COMPONENT Core
     )
     install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/build_gdal_bindings.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/sanitize_rpath.sh
     DESTINATION ./tools
