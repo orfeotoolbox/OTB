@@ -28,10 +28,11 @@ sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/gdal-co
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/curl-config
 sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 # Check python version, if python 3.12 (ubuntu 24.04) download and extract the gdal bindings for python 3.12
-pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')"
-if [ "$pyversion" = "31" ]; then
+pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
+if [ "$pyversion" = "312" ]; then
     echo "*** Python 3.12 detected, downloading gdal bindings compiled for python 3.12 ***"
-    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-GDAL-bindings-py310.tar.gz -o "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
+    PACKAGE_OTB_VERSION=`ls $OTB_INSTALL_DIR/lib/libOTBCommon.so.*.*.* | egrep -o "[0-9]+\.[0-9]+\.[0-9]$"`
+    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$PACKAGE_OTB_VERSION-GDAL-bindings-py312.tar.gz -o "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
     tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz -C "$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
     rm "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
     echo "*** GDAL bindings for python 3.12 successfully installed ***"
