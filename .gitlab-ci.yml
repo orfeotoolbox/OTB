@@ -191,7 +191,7 @@ ubuntu-24-gdal-bindings:
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   script:
-    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-GDAL-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
+    - find xdk/lib/python3/dist-packages/osgeo/ -type f -name "*.so" -printf "%P\n" | tar -czf OTB-10.0-GDAL-bindings-py312.tar.gz --no-recursion -C xdk/lib/python3/dist-packages/osgeo -T -
   needs:
     - job: ubuntu-24-prepare
       artifacts: true
