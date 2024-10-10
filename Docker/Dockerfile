@@ -42,14 +42,12 @@ ENV PROJ_LIB=/app/otb/share/proj
 ENV PATH=/app/otb/bin:$PATH
 ENV LD_LIBRARY_PATH=/app/otb/lib:$LD_LIBRARY_PATH
 ENV OTB_APPLICATION_PATH=/app/otb/lib/otb/applications
-ENV LC_NUMERIC=C
 ENV OTB_INSTALL_DIR=/app/otb
+ENV LC_NUMERIC=C
 
 # run post install to apply sed commands on cmake files and to get python
 # bindings if needed
-RUN sh /app/otb/tools/post_install.sh
-
-# Default command when using 'docker run' or 'docker create'
 RUN sh /app/otb/tools/post_install.sh && sh /app/otb/recompile_bindings.sh
 
+# Default command when using 'docker run' or 'docker create'
 CMD /bin/bash
