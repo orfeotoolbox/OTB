@@ -69,18 +69,18 @@ class OTBStreaming_EXPORT PipelineMemoryPrintCalculator : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef PipelineMemoryPrintCalculator Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = PipelineMemoryPrintCalculator;
+  using Superclass   = itk::Object;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Useful typedefs */
-  typedef itk::ProcessObject         ProcessObjectType;
-  typedef ProcessObjectType::Pointer ProcessObjectPointerType;
-  typedef itk::DataObject            DataObjectType;
-  typedef DataObjectType::Pointer    DataObjectPointerType;
-  typedef std::uint64_t MemoryPrintType;
-  typedef std::set<const ProcessObjectType*> ProcessObjectPointerSetType;
+  using ProcessObjectType           = itk::ProcessObject;
+  using ProcessObjectPointerType    = ProcessObjectType::Pointer;
+  using DataObjectType              = itk::DataObject;
+  using DataObjectPointerType       = DataObjectType::Pointer;
+  using MemoryPrintType             = std::uint64_t;
+  using ProcessObjectPointerSetType = std::set<const ProcessObjectType*> ;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PipelineMemoryPrintCalculator, itk::Object);

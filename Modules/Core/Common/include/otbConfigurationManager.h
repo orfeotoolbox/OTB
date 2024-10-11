@@ -43,7 +43,7 @@ namespace otb
 class OTBCommon_EXPORT ConfigurationManager
 {
 public:
-  typedef uint64_t RAMValueType;
+  using RAMValueType = std::uint64_t ;
   /**
    * DEMDirectory is a directory were DEM tiles are stored.
    *

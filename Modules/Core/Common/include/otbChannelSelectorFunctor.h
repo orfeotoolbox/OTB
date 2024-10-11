@@ -46,25 +46,23 @@ class ChannelSelectorFunctor : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ChannelSelectorFunctor        Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = ChannelSelectorFunctor;
+  using Superclass   = itk::Object;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
   itkTypeMacro(ChannelSelectorFunctor, itk::Object);
 
-  typedef TInputPixel                                       PixelType;
-  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
-  typedef itk::VariableLengthVector<ScalarType>             VectorPixelType;
-  typedef itk::RGBPixel<ScalarType>                         RGBPixelType;
-  typedef itk::RGBAPixel<ScalarType>                        RGBAPixelType;
-
-  typedef VectorPixelType OutputPixelType;
-
-  typedef std::vector<unsigned int> ChannelListType;
+  using PixelType       = TInputPixel;
+  using ScalarType      = typename itk::NumericTraits<PixelType>::ValueType;
+  using VectorPixelType = itk::VariableLengthVector<ScalarType>;
+  using RGBPixelType    = itk::RGBPixel<ScalarType>;
+  using RGBAPixelType   = itk::RGBAPixel<ScalarType>;
+  using OutputPixelType = VectorPixelType;
+  using ChannelListType = std::vector<unsigned int>;
 
   const char* GetDescription() const
   {
@@ -246,9 +244,7 @@ protected:
   }
 
   /** Destructor */
-  ~ChannelSelectorFunctor() override
-  {
-  }
+  ~ChannelSelectorFunctor() = default;
 
 private:
   ChannelListType m_ChannelList;

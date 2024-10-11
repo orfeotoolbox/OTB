@@ -119,7 +119,7 @@ void BilinearProjection::computeLS()
       otbGenericExceptionMacro(itk::ExceptionObject, <<"Difference between the number of linesample points and world points");
    }
    
-   for (uint64_t i = 0; i < m_LineSamplePoints.size(); ++i)
+   for (std::uint64_t i = 0; i < m_LineSamplePoints.size(); ++i)
    {
       Point2DType currentWorldPoint;
       currentWorldPoint[0] = m_worldPoints[i][0];

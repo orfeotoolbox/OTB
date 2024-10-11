@@ -331,12 +331,14 @@ void PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::Re
 
   if (m_IgnoreInfiniteValues)
   {
-    m_IgnoredInfinitePixelCount = std::vector<unsigned int>(numberOfThreads, 0);
+    m_IgnoredInfinitePixelCount.clear();
+    m_IgnoredInfinitePixelCount.resize(numberOfThreads,0);
   }
 
   if (m_IgnoreUserDefinedValue)
   {
-    m_IgnoredUserPixelCount = std::vector<unsigned int>(this->GetNumberOfWorkUnits(), 0);
+    m_IgnoredUserPixelCount.clear();
+    m_IgnoredUserPixelCount.resize(this->GetNumberOfWorkUnits(),0);
   }
 }
 

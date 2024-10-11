@@ -69,15 +69,11 @@ public:
 
   /** Standard class type aliases. */
   using Self = CastImageFilter;
-
   using Superclass = itk::InPlaceImageFilter< TInputImage, TOutputImage >;
-
   using Pointer = itk::SmartPointer< Self >;
   using ConstPointer = itk::SmartPointer< const Self >;
 
-
   using OutputImageRegionType = typename Superclass::OutputImageRegionType;
-
   using InputPixelType = typename TInputImage::PixelType;
   using OutputPixelType = typename TOutputImage::PixelType;
 
