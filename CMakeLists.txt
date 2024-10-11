@@ -379,10 +379,13 @@ if(XDK_INSTALL_PATH)
             COMPONENT Core
             PATTERN "cmake" EXCLUDE
             )
-    install(DIRECTORY ${XDK_INSTALL_PATH}/share/cmake
-            DESTINATION ./lib
-            USE_SOURCE_PERMISSIONS
-            COMPONENT Core)
+    # On Windows this folder does not exist
+    if( EXISTS ${XDK_INSTALL_PATH}/share/cmake)
+      install(DIRECTORY ${XDK_INSTALL_PATH}/share/cmake
+              DESTINATION ./lib
+              USE_SOURCE_PERMISSIONS
+              COMPONENT Core)
+    endif()
     install(DIRECTORY ${XDK_INSTALL_PATH}/include
             DESTINATION .
             USE_SOURCE_PERMISSIONS
