@@ -265,7 +265,7 @@ windows-10-build:
     - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python310-x64"
     - buildcache.exe -s
     - .\CI\copy_boost_dlls.ps1
-    - ctest -VV -S CI/superbuild_packaging.cmake -DPACKAGE_BY_MODULE:BOOL=OFF
+    - ctest -V -S CI/superbuild_packaging.cmake -DPACKAGE_BY_MODULE:BOOL=OFF
     - move "build_packages\OTB-*.zip" . || dir build_packages
   needs:
     - job: windows-10-prepare

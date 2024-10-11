@@ -40,5 +40,7 @@ if [ "$pyversion" = "312" ]; then
         echo "Can not find GDAL bindings at https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.1-GDAL-bindings-py$pyversion.tar.gz"
         return -1
     fi
+    echo "***** Environment and GDAL Python bindings setup complete *****"
+    echo "***** If you have not done it yet, consider recompiling OTB python bindings for python 3.12 before using the bindings ****"
 fi
 echo "OK" > "$OTB_INSTALL_DIR"/tools/install_done.txt
