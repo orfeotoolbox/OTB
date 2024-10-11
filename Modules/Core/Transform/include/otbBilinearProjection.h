@@ -54,49 +54,52 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(BilinearProjection, Object);
 
-  void worldToLineSample(const Point3DType& worldPoint,
-                                  Point2DType&       lineSampPt) const;
-   /*!
-    * METHOD: lineSampleToWorld()
-    * Performs the inverse projection from line, sample to ground (world):
-    */
-   void lineSampleToWorld(const Point2DType& lineSampPt,
-                                  Point3DType&       worldPt) const;
+  Point2DType worldToLineSample(const Point3DType& worldPoint) const;
+  /*!
+  * METHOD: lineSampleToWorld()
+  * Performs the inverse projection from line, sample to ground (world):
+  * @return line sample to 3D pos at height 0.0
+  */
+  Point3DType lineSampleToWorld(Point2DType lineSampPt) const;
    
-   /*!
-    * METHOD: lineSampleHeightToWorld
-    * This projects the image point to the given
-    * elevation above ellipsoid, thereby bypassing reference to a DEM. Useful
-    * for projections that are sensitive to elevation (such as sensor models).
-    */
-   void lineSampleHeightToWorld(const Point2DType& lineSampPt,
-                                        const double&   heightAboveEllipsoid,
-                                        Point3DType&       worldPt) const;
+  /*!
+  * METHOD: lineSampleHeightToWorld
+  * This projects the image point to the given
+  * elevation above ellipsoid, thereby bypassing reference to a DEM. Useful
+  * for projections that are sensitive to elevation (such as sensor models).
+  * 
+  * @return image point to world point at given height
+  */
+  Point3DType lineSampleHeightToWorld(Point2DType lineSampPt,
+                                      double heightAboveEllipsoid) const;
 
-   void setTiePoints(const std::vector<Point2DType>& lsPt, 
-                                      const std::vector<Point3DType>& geoPt);
+  const std::vector<Point2DType>& getLineSamplePoints() const;
 
-   void getTiePoints(std::vector<Point2DType>& lsPt, std::vector<Point3DType>& geoPt) const;
+  void setLineSamplePoints(const std::vector<Point2DType>& lsPt);
 
-   /** Return true if there is any nan in the points coordinates */
-   bool imgPointsHaveNan();
+  const std::vector<Point3DType>& getWorldPoints() const;
 
-   /** Return true if there is any nan in the points coordinates */
-   bool worldPointsHaveNan();
+  void setWorldPoints(const std::vector<Point3DType>& wPt);
 
-   /** Resolve the bilinear system */
-   void computeLS();
+  /** Return true if there is any nan in the points coordinates */
+  bool imgPointsHaveNan();
+
+  /** Return true if there is any nan in the points coordinates */
+  bool worldPointsHaveNan();
+
+  /** Resolve the bilinear system */
+  void computeLS();
 
 protected:
   BilinearProjection();
   BilinearProjection(const Point2DType& ul,
-                    const Point2DType& ur,
-                    const Point2DType& lr,
-                    const Point2DType& ll,
-                    const Point3DType& ulg,
-                    const Point3DType& urg,
-                    const Point3DType& lrg,
-                    const Point3DType& llg);
+                     const Point2DType& ur,
+                     const Point2DType& lr,
+                     const Point2DType& ll,
+                     const Point3DType& ulg,
+                     const Point3DType& urg,
+                     const Point3DType& lrg,
+                     const Point3DType& llg);
   virtual ~BilinearProjection() = default;
 
 private:

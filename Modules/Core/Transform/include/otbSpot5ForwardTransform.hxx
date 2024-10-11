@@ -39,9 +39,9 @@ Spot5ForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transfo
   sensorPoint[0] = static_cast<double>(point[0]) - 0.5;
   sensorPoint[1] = static_cast<double>(point[1]) - 0.5;
   if (NInputDimensions > 2)
-    this->m_Transformer->LineSampleHeightToWorld(sensorPoint, static_cast<double>(point[2]), worldPoint);
+    worldPoint = this->m_Transformer->LineSampleHeightToWorld(sensorPoint, static_cast<double>(point[2]));
   else
-    this->m_Transformer->LineSampleToWorld(sensorPoint, worldPoint);
+    worldPoint = this->m_Transformer->LineSampleToWorld(sensorPoint);
 
   OutputPointType pOut;
   pOut[0] = static_cast<TScalarType>(worldPoint[0]);

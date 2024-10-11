@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -45,7 +45,9 @@ ENV OTB_APPLICATION_PATH=/app/otb/lib/otb/applications
 ENV OTB_INSTALL_DIR=/app/otb
 ENV LC_NUMERIC=C
 
-# Default command when using 'docker run' or 'docker create'
+# run post install to apply sed commands on cmake files and to get python
+# bindings if needed
 RUN sh /app/otb/tools/post_install.sh && sh /app/otb/recompile_bindings.sh
 
+# Default command when using 'docker run' or 'docker create'
 CMD /bin/bash

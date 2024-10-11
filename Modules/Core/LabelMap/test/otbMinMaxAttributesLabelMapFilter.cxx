@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,11 +37,11 @@ typedef double         PixelType;
 typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
 typedef otb::LabelMapWithAdjacency<LabelObjectType> LabelMapType;
 typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
-typedef otb::Image<unsigned int, 2>            LabeledImageType;
+typedef otb::Image<unsigned int, 2>            LabelledImageType;
 
 typedef otb::ImageFileReader<VectorImageType>  ReaderType;
-typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
-typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
+typedef otb::ImageFileReader<LabelledImageType> LabeledReaderType;
+typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelledImageType, LabelMapType> LabelMapFilterType;
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>  ShapeFilterType;
 typedef otb::MinMaxAttributesLabelMapFilter<LabelMapType> MinMaxAttributesLabelMapFilterType;
 

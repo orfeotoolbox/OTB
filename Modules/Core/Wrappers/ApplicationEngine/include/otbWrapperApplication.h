@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -877,7 +877,7 @@ public:
 
   Once registered, the method ReleaseData is called on each one of them.
   */
-  void FreeRessources();
+  void FreeResources();
 
   bool IsExecuteDone();
 
@@ -978,7 +978,7 @@ private:
    * implementation does nothing */
   virtual void AfterExecuteAndWriteOutputs();
 
-  virtual void DoFreeRessources(){};
+  virtual void DoFreeResources(){};
 
   Application(const Application&) = delete;
   void operator=(const Application&) = delete;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -87,12 +87,12 @@ int main(int argc, char* argv[])
   using LabelType             = unsigned int;
   using MaskPixelType         = unsigned char;
   using PixelType             = double;
-  using LabeledImageType      = otb::Image<LabelType, Dimension>;
+  using LabelledImageType      = otb::Image<LabelType, Dimension>;
   using MaskImageType         = otb::Image<MaskPixelType, Dimension>;
   using ImageType             = otb::Image<PixelType, Dimension>;
   using VectorImageType       = otb::VectorImage<PixelType, Dimension>;
   using OutputVectorImageType = otb::VectorImage<unsigned char, Dimension>;
-  using LabeledReaderType     = otb::ImageFileReader<LabeledImageType>;
+  using LabeledReaderType     = otb::ImageFileReader<LabelledImageType>;
   using ReaderType            = otb::ImageFileReader<ImageType>;
   using VectorReaderType      = otb::ImageFileReader<VectorImageType>;
   using WriterType            = otb::ImageFileWriter<MaskImageType>;
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
   // Label map typedef
   using LabelObjectType                  = otb::AttributesMapLabelObject<LabelType, Dimension, double>;
   using LabelMapType                     = itk::LabelMap<LabelObjectType>;
-  using LabelMapFilterType               = itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>;
+  using LabelMapFilterType               = itk::LabelImageToLabelMapFilter<LabelledImageType, LabelMapType>;
   using ShapeLabelMapFilterType          = otb::ShapeAttributesLabelMapFilter<LabelMapType>;
   using RadiometricLabelMapFilterType    = otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType>;
   using OpeningLabelMapFilterType        = otb::AttributesMapOpeningLabelMapFilter<LabelMapType>;
@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
   // Firstly, segment the input image by using the Mean Shift algorithm (see \ref{sec:MeanShift} for deeper
   // explanations).
 
-  using FilterType           = otb::MeanShiftSegmentationFilter<VectorImageType, LabeledImageType, VectorImageType>;
+  using FilterType           = otb::MeanShiftSegmentationFilter<VectorImageType, LabelledImageType, VectorImageType>;
   FilterType::Pointer filter = FilterType::New();
   filter->SetSpatialBandwidth(spatialRadius);
   filter->SetRangeBandwidth(rangeRadius);

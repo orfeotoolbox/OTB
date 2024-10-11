@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -114,7 +114,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "9")
-set(OTB_VERSION_MINOR "0")
+set(OTB_VERSION_MINOR "1")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -427,9 +427,11 @@ if(UNIX)
     DESTINATION .
     COMPONENT Core
     )
-    install( PROGRAMS
+  configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
+                 ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
+  install( PROGRAMS
     ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
-    ${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh
+    ${CMAKE_BINARY_DIR}/post_install.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/sanitize_rpath.sh
     DESTINATION ./tools
     COMPONENT Core

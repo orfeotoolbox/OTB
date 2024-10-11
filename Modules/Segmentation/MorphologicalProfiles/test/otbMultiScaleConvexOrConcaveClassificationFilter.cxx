@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,17 +46,17 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char*
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef otb::Image<LabeledPixelType, 2>        LabeledImageType;
+  typedef otb::Image<LabeledPixelType, 2>        LabelledImageType;
 
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
-  typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
+  typedef otb::ImageFileWriter<LabelledImageType> LabeledWriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType> OpeningProfileFilterType;
   typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType> ClosingProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType, InputImageType> DerivativeFilterType;
-  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType> MultiScaleCharacteristicsFilterType;
-  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType, LabeledImageType> MultiScaleClassificationFilterType;
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabelledImageType> MultiScaleCharacteristicsFilterType;
+  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType, LabelledImageType> MultiScaleClassificationFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -60,14 +60,14 @@ public:
   /** Template parameters typedefs */
   typedef TInputImage                             InputImageType;
   typedef TOutputImage                            OutputImageType;
-  typedef TLabeledImage                           LabeledImageType;
+  typedef TLabeledImage                           LabelledImageType;
   typedef typename InputImageType::Pointer        InputImagePointerType;
   typedef typename OutputImageType::Pointer       OutputImagePointerType;
-  typedef typename LabeledImageType::Pointer      LabeledImagePointerType;
+  typedef typename LabelledImageType::Pointer      LabeledImagePointerType;
   typedef typename Superclass::InputImageListType InputImageListType;
   typedef typename InputImageListType::Pointer    InputImageListPointerType;
   typedef typename OutputImageType::RegionType    RegionType;
-  typedef typename LabeledImageType::PixelType    LabeledPixelType;
+  typedef typename LabelledImageType::PixelType    LabeledPixelType;
   typedef typename OutputImageType::PixelType     OutputPixelType;
 
   /**
