@@ -19,5 +19,5 @@
 # limitations under the License.
 #
 detected_pyversion="$(python3 -V 2>&1)"
-echo "************ Recompiling OTB python bindings with $detected_pyversion ************"
+echo "***** Recompiling OTB python bindings with $detected_pyversion *****"
 ctest -S "$OTB_INSTALL_DIR/share/otb/swig/build_wrapping.cmake" -V
