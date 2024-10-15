@@ -25,6 +25,8 @@ function(_git_clone git_executable git_repository git_tag module_dir)
   set(retryCount 0)
   set(error_code 1)
   while(error_code AND (retryCount LESS 3))
+    message(STATUS "On directory ${CMAKE_CURRENT_SOURCE_DIR} or ${CMAKE_CURRENT_BINARY_DIR}")
+    message(STATUS "${git_executable} clone ${git_repository} ${module_dir}")
     execute_process(
       COMMAND "${git_executable}" clone "${git_repository}" "${module_dir}"
       RESULT_VARIABLE error_code
@@ -37,6 +39,7 @@ function(_git_clone git_executable git_repository git_tag module_dir)
     message(FATAL_ERROR "Failed to clone repository: '${git_repository}'")
   endif()
 
+  message(STATUS "${git_executable} checkout ${git_tag}")
   execute_process(
     COMMAND "${git_executable}" checkout ${git_tag}
     WORKING_DIRECTORY "${module_dir}"
@@ -91,6 +94,7 @@ function(_git_update git_executable git_repository git_tag module_dir)
 
   # Is the hash checkout out that we want?
   if(NOT ("${tag_hash}" STREQUAL "${head_hash}"))
+    message(STATUS "${git_executable} fetch ${git_repository}")
     execute_process(
       COMMAND "${git_executable}" fetch "${git_repository}"
       WORKING_DIRECTORY "${module_dir}"
@@ -100,6 +104,7 @@ function(_git_update git_executable git_repository git_tag module_dir)
       message(FATAL_ERROR "Failed to fetch repository '${git_repository}'")
     endif()
 
+    message("${git_executable} checkout ${git_tag} in ${module_dir}")
     execute_process(
       COMMAND "${git_executable}" checkout ${git_tag}
       WORKING_DIRECTORY "${module_dir}"
@@ -132,6 +137,7 @@ function(_fetch_with_git git_executable git_repository git_tag module_dir)
     _git_clone("${git_executable}" "${git_repository}" "${git_tag}" "${module_dir}")
     message(STATUS " The remote module: ${git_repository} is cloned into the directory ${module_dir}")
   else() # We already have a clone, but we need to check that it has the right revision.
+    message(STATUS " The remote module: ${git_repository} will be updated ${module_dir}")
     _git_update("${git_executable}" "${git_repository}" "${git_tag}" "${module_dir}")
   endif()
 endfunction()
@@ -174,6 +180,7 @@ function(otb_fetch_module _name _description)
     if("${_version}" VERSION_LESS 1.6.6)
       message(FATAL_ERROR "Git version 1.6.6 or later is required.")
     endif()
+    message(STATUS "Before fetching ${_name}")
     _fetch_with_git("${GIT_EXECUTABLE}"
       "${_fetch_options_GIT_REPOSITORY}"
       "${_fetch_options_GIT_TAG}"
