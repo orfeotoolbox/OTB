@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,7 +33,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage, TOutputImage, TL
 {
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0, OutputImageType::New());
-  this->SetNthOutput(1, LabeledImageType::New());
+  this->SetNthOutput(1, LabelledImageType::New());
   m_InitialValue = 0;
   m_Step         = 1;
 }
@@ -45,7 +45,7 @@ TLabeledImage* ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage, T
   {
     return nullptr;
   }
-  return static_cast<LabeledImageType*>(this->itk::ProcessObject::GetOutput(1));
+  return static_cast<LabelledImageType*>(this->itk::ProcessObject::GetOutput(1));
 }
 /**
  * GenerateOutputInformation
@@ -143,7 +143,7 @@ void ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage, TOutputImag
   // defines input and output iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
-  typedef itk::ImageRegionIterator<LabeledImageType>    LabeledIteratorType;
+  typedef itk::ImageRegionIterator<LabelledImageType>    LabeledIteratorType;
 
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
 

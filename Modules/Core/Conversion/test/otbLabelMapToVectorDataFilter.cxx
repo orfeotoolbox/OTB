@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,13 +47,13 @@ int otbLabelMapToVectorDataFilter(int argc, char* argv[])
   // Labeled image type
   const unsigned int     Dimension = 2;
   typedef unsigned short LabelType;
-  typedef otb::Image<LabelType, Dimension> LabeledImageType;
-  typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
+  typedef otb::Image<LabelType, Dimension> LabelledImageType;
+  typedef otb::ImageFileReader<LabelledImageType> LabeledReaderType;
 
   // Label map typedef
   typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType> LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
+  typedef itk::LabelImageToLabelMapFilter<LabelledImageType, LabelMapType> LabelMapFilterType;
   typedef otb::VectorData<double, 2>                                      VectorDataType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataFilterType;

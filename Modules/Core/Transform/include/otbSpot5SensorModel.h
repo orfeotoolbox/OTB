@@ -68,54 +68,52 @@ public:
    * @brief Transform world point (lat,lon,hgt) to image point (col,row).
    * 
    * @param[in] inGeoPoint     ground point in WGS84 (lat, lon, hgt) coordinates
-   * @param[out] outLineSample image point (col,row) coordinates
+   * @return ground point converted to image point (col,row) coordinates
    */
-  void WorldToLineSample(const Point3DType& inGeoPoint,
-                         Point2DType& outLineSample) const;
+  Point2DType WorldToLineSample(const Point3DType& inGeoPoint) const;
 
   /**
    * @brief Transform image point (col, row) with a height to world point (lat,lon,hgt).
    * 
    * @param[in] imPt                 image point (col, row)
    * @param[in] heightAboveEllipsoid height 
-   * @param[out] worldPt             world point (lat,lon,hgt)
+   * @return image point and height converted to world point (lat,lon,hgt)
    */
-  void LineSampleHeightToWorld(const Point2DType& imPt,
-                               double heightAboveEllipsoid,
-                               Point3DType& worldPt) const;
+  Point3DType LineSampleHeightToWorld(Point2DType imPt,
+                                      double heightAboveEllipsoid) const;
 
   /**
    * @brief Transform image point (col, row) to world point (lat,lon,hgt).
    * 
    * @param[in] imPt     image point (col, row)
-   * @param[out] worldPt world point (lat,lon,hgt)
+   * @return image point converted to world point (lat,lon,hgt)
    */
-  void LineSampleToWorld(const Point2DType& imPt, Point3DType& worldPt) const;
+  Point3DType LineSampleToWorld(Point2DType imPt) const;
 
   /**
     * @brief Compute a ray from sensor position and image point.
     * 
     * @param[in] imPt  image point (col row)
-    * @param[out] epPt ephemeris point (3D space point with position and velocity)
+    * @return ephemeris point (3D space point with position and velocity)
     */
-  void ImagingRay(const Point2DType& imPt, Ephemeris&   epPt) const;
+  Ephemeris ImagingRay(Point2DType imPt) const;
 
   /**
    * @brief Compute the nearest intersection (world point) between the ray and the ellipsoid.
    * 
    * @param[in] imRay     ephemeris point (3D space point with position and velocity)
    * @param[in] offset    double offset
-   * @param[out] worldPt  world point (lat,lon,hgt)
+   * @return  world point (lat,lon,hgt)
    */
-  void NearestIntersection(const Ephemeris& imRay, const double& offset, Point3DType& worldPt) const;
+  Point3DType NearestIntersection(const Ephemeris& imRay, double offset) const;
 
   /**
    * @brief Compute world point intersected by image ray.
    * 
    * @param[in] imRay     ephemeris point (3D space point with position and velocity)
-   * @param[out] worldPt  world point (lat,lon,hgt)
+   * @return world point (lat,lon,hgt)
    */
-  void IntersectRay(const Ephemeris& imRay, Point3DType& worldPt) const;
+  Point3DType IntersectRay(const Ephemeris& imRay) const;
 
   /**
    * @brief Compute the bilinear interpolation from a 3D point vector with a double time vector.
@@ -123,12 +121,11 @@ public:
    * @param[in] time time to interpolate
    * @param[in] V    3D point vector
    * @param[in] T    Index time double vector
-   * @param[out] li  3D point interpolated
+   * @return 3D point interpolated
    */
-  void GetBilinearInterpolation(const double& time,
-                          const std::vector<Point3DType>& V,
-                          const std::vector<double>& T,
-                          Point3DType& li) const;
+  Point3DType GetBilinearInterpolation(const double& time,
+                                       const std::vector<Point3DType>& V,
+                                       const std::vector<double>& T) const;
 
   /**
   * @brief Compute the lagrange interpolation from a 3D point vector with a double time vector.
@@ -136,28 +133,27 @@ public:
   * @param[in] time time to interpolate
   * @param[in] V    3D point vector
   * @param[in] T    Index time double vector
-  * @param[out] li  3D point interpolated
+  * @return 3D point interpolated
   */
-  void GetLagrangeInterpolation(const double& time,
-                          const std::vector<Point3DType>& V,
-                          const std::vector<double>& T,
-                          Point3DType& li) const;                        
+  Point3DType GetLagrangeInterpolation(const double& time,
+                                       const std::vector<Point3DType>& V,
+                                       const std::vector<double>& T) const;
 
   /**
    * @brief Get the 3D position of the sensor at time (interpolation of position samples vector from metadata).
    * 
    * @param[in] time  input time
-   * @param[out] ecef 3D position
+   * @return 3D position
    */
-  void GetPositionEcf(const double& time, Point3DType& ecef) const;
+  Point3DType GetPositionEcf(double time) const;
 
   /**
    * @brief Get the 3D velocity of the sensor at time (interpolation of velocity samples vector from metadata).
    * 
    * @param[in]  time input time
-   * @param[out] ecef 3D position
+   * @return 3D position
    */
-  void GetVelocityEcf(const double& time, Point3DType& ecef) const;
+  Point3DType GetVelocityEcf(double time) const;
 
   /**
    * @brief Get look angles on X and Y axis of the sensor at line (interpolation of angles samples vector from metadata).
@@ -172,26 +168,26 @@ public:
    * @brief Get the Attitude of the sensor at time (interpolation of attitude samples vector from metadata).
    * 
    * @param[in] time input time
-   * @param[out] at   3D attitude
+   * @return 3D attitude
    */
-  void GetAttitude(const double& time, Point3DType& at) const;
+  Point3DType GetAttitude(double time) const;
 
   /**
    * @brief Compute SatToOrb matrix with an input time.
    * 
-   * @param[out] result 3X3 matrix computed
    * @param[in] t       input time
+   * @return 3X3 matrix computed
    */
-  void ComputeSatToOrbRotation(MatrixType& result, double t) const;
+  MatrixType ComputeSatToOrbRotation(double t) const;
 
-                        
+
   /** 
   * @brief Update a ImageMetadata object with the stored Spot5Param and GCPs, possibly modified from the 
   * original metadata by the Spot5SensorModel
   * 
   * @param[in] imd ImageMetadata to be updated
   */
-   void UpdateImageMetadata(ImageMetadata & imd);
+  void UpdateImageMetadata(ImageMetadata & imd);
 
 
 protected:

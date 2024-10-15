@@ -24,7 +24,7 @@ PowerShell instance.
 
 .DESCRIPTION
 Running development tools at the command line in PowerShell can be a hassle since 
-they rely on environment varibles and those are set through batch files. This 
+they rely on environment variables and those are set through batch files. This 
 cmdlet runs those batch files and imports any set environment variables into
 the running PowerShell instance. 
 

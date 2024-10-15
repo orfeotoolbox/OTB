@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -622,7 +622,7 @@ void Application::RegisterPipeline()
   }
 }
 
-void Application::FreeRessources()
+void Application::FreeResources()
 {
   std::set<itk::DataObject*> dataSetToRelease; // do not release output
   std::set<itk::DataObject*> dataSet;
@@ -705,7 +705,7 @@ void Application::FreeRessources()
     data->ReleaseData();
   }
   // Call override method
-  DoFreeRessources();
+  DoFreeResources();
 }
 
 int Application::Execute()
@@ -967,7 +967,7 @@ int Application::ExecuteAndWriteOutput()
   this->AfterExecuteAndWriteOutputs();
   m_Chrono.Stop();
 
-  FreeRessources();
+  FreeResources();
   m_Filters.clear();
   return status;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -56,7 +56,7 @@ public:
   typedef FloatVectorImageType::InternalPixelType InputPixelType;
 
   typedef unsigned short LabeledPixelType;
-  typedef otb::Image<LabeledPixelType, 2> LabeledImageType;
+  typedef otb::Image<LabeledPixelType, 2> LabelledImageType;
 
   typedef otb::MultiToMonoChannelExtractROI<InputPixelType, InputPixelType> ExtractorFilterType;
 
@@ -228,8 +228,8 @@ private:
     typedef otb::MorphologicalClosingProfileFilter<FloatImageType, FloatImageType, StructuringElementType> ClosingProfileFilterType;
     typedef otb::ProfileToProfileDerivativeFilter<FloatImageType, FloatImageType> DerivativeFilterType;
 
-    typedef otb::MultiScaleConvexOrConcaveClassificationFilter<FloatImageType, LabeledImageType> MultiScaleClassificationFilterType;
-    typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<FloatImageType, FloatImageType, LabeledImageType> MultiScaleCharacteristicsFilterType;
+    typedef otb::MultiScaleConvexOrConcaveClassificationFilter<FloatImageType, LabelledImageType> MultiScaleClassificationFilterType;
+    typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<FloatImageType, FloatImageType, LabelledImageType> MultiScaleCharacteristicsFilterType;
 
     // Instantiation
     typename OpeningProfileFilterType::Pointer            oprofileFilter       = OpeningProfileFilterType::New();

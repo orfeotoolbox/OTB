@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -72,13 +72,13 @@ fi
 LC_NUMERIC=C
 
 # set GDAL_DATA variable used by otb application
-GDAL_DATA=$OTB_INSTALL_DIR/share/gdal
+GDAL_DATA="$OTB_INSTALL_DIR/share/gdal"
 
-PROJ_LIB=$OTB_INSTALL_DIR/share/proj
+PROJ_LIB="$OTB_INSTALL_DIR/share/proj"
 
 export GDAL_DRIVER_PATH=disable
 
-export LD_LIBRARY_PATH=$OTB_INSTALL_DIR/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$OTB_INSTALL_DIR/lib:$LD_LIBRARY_PATH"
 
 # export variables
 export LC_NUMERIC
@@ -91,9 +91,9 @@ export OTB_INSTALL_DIR
 
 # The first time after install, run that script to patch cmake files with the right install path. This cannot be done until OTB is installed
 # This call permits to the user not to launch this by hand
-if [ ! -e $OTB_INSTALL_DIR/tools/install_done.txt ]
+if [ ! -e "$OTB_INSTALL_DIR"/tools/install_done.txt ]
 then
-  source $OTB_INSTALL_DIR/tools/post_install.sh
+  source "$OTB_INSTALL_DIR"/tools/post_install.sh
 else
   echo "**** OTB environment setup complete ****"
 fi

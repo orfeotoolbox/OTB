@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -228,7 +228,7 @@ private:
     if (IsParameterEnabled("mask"))
     {
       otbAppLogINFO("Using input mask");
-      // Load mask image and cast into LabeledImageType
+      // Load mask image and cast into LabelledImageType
       MaskImageType::Pointer inMask = GetParameterUInt8Image("mask");
 
       m_ClassificationFilter->SetInputMask(inMask);

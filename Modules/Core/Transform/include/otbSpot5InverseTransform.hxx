@@ -34,7 +34,6 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 typename Spot5InverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 Spot5InverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const InputPointType& point) const
 {
-  Spot5SensorModel::Point2DType sensorPoint;
   Spot5SensorModel::Point3DType worldPoint;
   worldPoint[0] = static_cast<double>(point[0]);
   worldPoint[1] = static_cast<double>(point[1]);
@@ -43,7 +42,7 @@ Spot5InverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transfo
   else
     worldPoint[2] = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(point[0], point[1]);
 
-  this->m_Transformer->WorldToLineSample(worldPoint, sensorPoint);
+  Spot5SensorModel::Point2DType sensorPoint(this->m_Transformer->WorldToLineSample(worldPoint));
 
   OutputPointType pOut;
 

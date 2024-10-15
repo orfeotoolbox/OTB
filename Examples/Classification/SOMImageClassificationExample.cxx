@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,12 +51,12 @@ int main(int itkNotUsed(argc), char* argv[])
   // \doxygen{otb}{VectorImage}s. The labeled image will be a scalar image.
 
   using ImageType        = otb::VectorImage<PixelType, Dimension>;
-  using LabeledImageType = otb::Image<LabeledPixelType, Dimension>;
+  using LabelledImageType = otb::Image<LabeledPixelType, Dimension>;
   // We can now define the type for the classifier filter, which is
   // templated over its input and output image types and the SOM type.
 
   using SOMMapType               = otb::SOMMap<ImageType::PixelType>;
-  using ClassificationFilterType = otb::SOMImageClassificationFilter<ImageType, LabeledImageType, SOMMapType>;
+  using ClassificationFilterType = otb::SOMImageClassificationFilter<ImageType, LabelledImageType, SOMMapType>;
   // And finally, we define the readers (for the input image and theSOM)
   // and the writer. Since the images,
   // to classify can be very big, we will use a streamed writer which
@@ -64,7 +64,7 @@ int main(int itkNotUsed(argc), char* argv[])
 
   using ReaderType    = otb::ImageFileReader<ImageType>;
   using SOMReaderType = otb::ImageFileReader<SOMMapType>;
-  using WriterType    = otb::ImageFileWriter<LabeledImageType>;
+  using WriterType    = otb::ImageFileWriter<LabelledImageType>;
   // We instantiate the classifier and the reader objects and we set
   // the existing SOM obtained in a previous training step.
 

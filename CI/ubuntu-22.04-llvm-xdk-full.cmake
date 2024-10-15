@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-# Configuration options for ubuntu-20.04-llvm-xdk
+# Configuration options for ubuntu-22.04-llvm-xdk
 
 set(site_option
 "CMAKE_C_COMPILER:STRING=clang

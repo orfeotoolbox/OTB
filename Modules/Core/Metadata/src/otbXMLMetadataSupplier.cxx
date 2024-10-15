@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -255,7 +255,7 @@ unsigned int XMLMetadataSupplier::GetNumberOf(std::string const & path) const
   }
   return idx.size();
 }
-unsigned int XMLMetadataSupplier::GetAttributId(std::string const& path, std::string const& value) const
+unsigned int XMLMetadataSupplier::GetAttributeId(std::string const& path, std::string const& value) const
 {
   // Search for the joker
   std::size_t found = path.find("_#");

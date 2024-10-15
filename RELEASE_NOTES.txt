@@ -1,5 +1,42 @@
+OTB-v 9.1.0 - Changes since version 9.0.0 (September 27th, 2024)
+-------------------------------------------------------------
+
+Features added:
+  * !1044: COMP: add otbenv powershell script by Tristan Laurent
+  * !1015: Add Spot5 SWH support to otb9 by Thibaut ROMAIN
+
+Bugs fixed:
+  * !1043: COMP: fix -Wimplicit-int on OTB6S by Tristan Laurent
+  * !1029: COMP: install libtiff and libjpeg in lib instead of lib64 in RedHat builds by Tristan Laurent
+  * !1024: BUILD: correctly transfer cmake GDAL args to disable spatialite by Tristan Laurent
+  * !1018: BUG: fix otbenv script for non-bash env on RH based OS by Tristan Laurent
+  * !1009: FIX: Fix metadata key to invalid_pixels in otbSARConcatenateBursts by Valentin Genin
+  * !1014: ENH: Drop Boost version check for small_vector by Laurențiu Nicola
+
+Dependencies update:
+  * !1035: COMP: update libjpegturbo from 2.0.0 to 3.0.3 by Tristan Laurent
+  * !1023: UPD: from geotiff 1.7.1 to 1.7.3 by Tristan Laurent
+  * !1021: ENH: update GDAL to 3.9.0 by Thibaut ROMAIN
+
+Documentation:
+  * !1041: DOC: Remove Mosaic from the list of remote modules by Rémi Cresson
+  * !1039: DOC: update OS, compiler and python versions by Tristan Laurent
+  * !1032: BUG: update dead link for BandMath and BandMathX by Thibaut ROMAIN
+  * !1022: DOC: #2050 remove dead link to rst file on top of every cookbook pages by Tristan Laurent
+  * !1017: DOC: add missing parameters doc about QGis plugin by Tristan Laurent
+  * !1013: DOC: document minimum Boost version as 1.73.0 by Laurențiu Nicola
+  * !1011: DOC: adapt QGis page with the new otb plugin by Tristan Laurent
+  * !1008: Support sensor doc update by Tristan Laurent
+
+CI:
+  * !1034: Use only windows jobs and adapt variables to powershell syntax by Tristan Laurent
+  * !1030: CI: rename all centos packages with _RedHat by Tristan Laurent
+  * !1019: BUG: fix filename too long when creating superbuild archive by Thibaut ROMAIN
+  * !1010: Fix ci gdalbindings problem when pushing branch by Thibaut ROMAIN
+
+
 OTB-v 9.0.0 - Changes since version 8.1.2 (February 28th, 2024)
---------------------------------------------------------------
+---------------------------------------------------------------
 
 Features added:
   * !995: CI: Add an Ubuntu 22 job by Thibaut ROMAIN

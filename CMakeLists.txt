@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -436,9 +436,11 @@ if(UNIX)
     DESTINATION .
     COMPONENT Core
     )
-    install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/build_gdal_bindings.sh
-    ${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh
+  configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
+                 ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
+  install( PROGRAMS
+    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
+    ${CMAKE_BINARY_DIR}/post_install.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/sanitize_rpath.sh
     DESTINATION ./tools
     COMPONENT Core

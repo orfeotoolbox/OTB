@@ -49,13 +49,11 @@ Spot5SensorModel::Spot5SensorModel(const ImageMetadata & imd)
 void Spot5SensorModel::InitBilinearTransform(){
     
     Point2DType ul, ur, lr, ll;
-    Point3DType ulg, urg, lrg, llg;
 
     ul[0] = 0; ul[1] = 0;
     ur[0] = m_Spot5Param.ImageSize[0] - 1; ur[1] = 0;
     ll[0] = 0; ll[1] =  m_Spot5Param.ImageSize[1] - 1;
-    lr[0] = m_Spot5Param.ImageSize[0] - 1;
-    lr[1] = m_Spot5Param.ImageSize[1] - 1;
+    lr[0] = m_Spot5Param.ImageSize[0] - 1; lr[1] = m_Spot5Param.ImageSize[1] - 1;
 
     m_ImageRect = PolygonType::New();
     m_ImageRect->AddVertex(Point2DToIndex(ul));
@@ -63,10 +61,10 @@ void Spot5SensorModel::InitBilinearTransform(){
     m_ImageRect->AddVertex(Point2DToIndex(lr));
     m_ImageRect->AddVertex(Point2DToIndex(ll));
 
-    LineSampleToWorld(ul, ulg);
-    LineSampleToWorld(ur, urg);
-    LineSampleToWorld(lr, lrg);
-    LineSampleToWorld(ll, llg);
+    const Point3DType ulg(LineSampleToWorld(ul));
+    const Point3DType urg(LineSampleToWorld(ur));
+    const Point3DType lrg(LineSampleToWorld(lr));
+    const Point3DType llg(LineSampleToWorld(ll));
 
     m_GroundRect = PolygonType::New();
     m_GroundRect->AddVertex(Point3DToIndex(ulg));
@@ -77,9 +75,9 @@ void Spot5SensorModel::InitBilinearTransform(){
     std::vector<Point2DType> impts {ul,ur,lr,ll};
     std::vector<Point3DType> wrldpts {ulg,urg,lrg,llg};
     m_BilinearProj = BilinearProjection::New();
-    m_BilinearProj->setTiePoints(impts,wrldpts);
+    m_BilinearProj->setLineSamplePoints(impts);
+    m_BilinearProj->setWorldPoints(wrldpts);
     m_BilinearProj->computeLS();
-
 }
 
 Spot5SensorModel::ContinuousIndexType 
@@ -98,7 +96,7 @@ Spot5SensorModel::Point3DToIndex(const itk::Point<double, 3> point) const{
   return indexPoint;
 }
 
-void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DType& outLineSample) const
+itk::Point<double, 2> Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint) const
 {
   
   static const double PIXEL_THRESHOLD    = .1; // acceptable pixel error
@@ -111,9 +109,10 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
   int iters = 0;
   Point3DType wdp (inGeoPoint);
 
-  if (!(m_GroundRect->IsInside(Point3DToIndex(wdp))||m_GroundRect->IsOnEdge(Point3DToIndex(wdp)))){
-    m_BilinearProj->worldToLineSample(wdp, outLineSample);
-    return;
+  if (!(m_GroundRect->IsInside(Point3DToIndex(wdp)) ||
+        m_GroundRect->IsOnEdge(Point3DToIndex(wdp))))
+  {
+    return m_BilinearProj->worldToLineSample(wdp);
   }
 
 
@@ -121,8 +120,7 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
 
 
   // Initialize with binilear interpolation
-  Point2DType ip;
-  m_BilinearProj->worldToLineSample(wdp, ip);
+  Point2DType ip(m_BilinearProj->worldToLineSample(wdp));
 
   Point2DType ip_du;
   Point2DType ip_dv;
@@ -131,7 +129,6 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
   double dlat_du, dlat_dv, dlon_du, dlon_dv;
   double delta_lat, delta_lon, delta_u, delta_v;
   double inverse_norm;
-  bool done = false;
 
   //***
   // Begin iterations:
@@ -149,28 +146,28 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
     //***
     // Compute numerical partials at current guessed point:
     //***
-    LineSampleHeightToWorld(ip,    height, gp);
-    LineSampleHeightToWorld(ip_du, height, gp_du);
-    LineSampleHeightToWorld(ip_dv, height, gp_dv);
+    gp = LineSampleHeightToWorld(ip, height);
+    gp_du = LineSampleHeightToWorld(ip_du, height);
+    gp_dv = LineSampleHeightToWorld(ip_dv, height);
 
     dlat_du = gp_du[1] - gp[1]; //e
     dlon_du = gp_du[0] - gp[0]; //g
     dlat_dv = gp_dv[1] - gp[1]; //f
     dlon_dv = gp_dv[0] - gp[0]; //h
     
-    //
-    // Test for convergence:
-    //
-    delta_lat = inGeoPoint[1] - gp[1];
-    delta_lon = inGeoPoint[0] - gp[0];    
 
     //
     // Compute linearized estimate of image point given gp delta:
     //
     inverse_norm = dlat_dv*dlon_du - dlat_du*dlon_dv; // fg-eh
 
-    if (inverse_norm > DBL_EPSILON)
+    if (std::abs(inverse_norm) > DBL_EPSILON)
     {
+      //
+      // Test for convergence:
+      //
+      delta_lat = inGeoPoint[1] - gp[1];
+      delta_lon = inGeoPoint[0] - gp[0];
       delta_u = (-dlon_dv*delta_lat + dlat_dv*delta_lon)/inverse_norm;
       delta_v = ( dlon_du*delta_lat - dlat_du*delta_lon)/inverse_norm;
       ip[0] += delta_u;
@@ -181,91 +178,78 @@ void Spot5SensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DT
       delta_u = 0;
       delta_v = 0;
     }
-    done = (std::abs(delta_u) < PIXEL_THRESHOLD)&&
-           (std::abs(delta_v) < PIXEL_THRESHOLD);
-    if (done) break;
+    if ((std::abs(delta_u) < PIXEL_THRESHOLD) &&
+        (std::abs(delta_v) < PIXEL_THRESHOLD))
+      break;
     iters++;
-  } while (iters < MAX_NUM_ITERATIONS);
+  } while (iters < MAX_NUM_ITERATIONS); /* && ((std::abs(delta_u) < PIXEL_THRESHOLD)
+                                               && (std::abs(delta_v) < PIXEL_THRESHOLD)) */
 
-  outLineSample = ip - m_Spot5Param.SubImageOffset;
+  return ip - m_Spot5Param.SubImageOffset;
 
 }
 
-void Spot5SensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
-                                             double  heightAboveEllipsoid,
-                                             Point3DType& worldPt) const
+itk::Point<double, 3> Spot5SensorModel::LineSampleHeightToWorld(Point2DType imPt,
+                                             double  heightAboveEllipsoid) const
 {
 
   // Outside the image
   if (!insideImage(imPt, 1.0 - FLT_EPSILON))
   {
-    m_BilinearProj->lineSampleToWorld(imPt, worldPt);
-    return;
+    return m_BilinearProj->lineSampleToWorld(imPt);
   }
 
-  Ephemeris ray;
-  ImagingRay(imPt, ray);
-
   // Ecef coordinate point intersection
-  Point3DType intersectPt;
-  NearestIntersection(ray, heightAboveEllipsoid, intersectPt);
-
   // Conversion to lat long coordinates
-  worldPt = EcefToWorld(intersectPt);
-
+  return EcefToWorld(NearestIntersection(ImagingRay(imPt), heightAboveEllipsoid));
 }
 
-void Spot5SensorModel::LineSampleToWorld(const Point2DType& imPt,
-                                             Point3DType& worldPt) const
+itk::Point<double, 3> Spot5SensorModel::LineSampleToWorld(Point2DType imPt) const
 {
 
   if (!insideImage(imPt, 2.0))
   {
-    m_BilinearProj->lineSampleToWorld(imPt, worldPt);
-    return;
+    return m_BilinearProj->lineSampleToWorld(imPt);
   }
 
   // Determine ray and intersect with terrain model
-  Ephemeris ray;
-  ImagingRay(imPt, ray);
-  IntersectRay(ray, worldPt);
-
+  return IntersectRay(ImagingRay(imPt));
 }
 
 
 
 
-void Spot5SensorModel::GetBilinearInterpolation(
-      const double& time,
-      const std::vector<Point3DType>& V,
-      const std::vector<double>& T,
-      Point3DType& li) const
+itk::Point<double, 3> Spot5SensorModel::GetBilinearInterpolation(
+                                            const double& time,
+                                            const std::vector<Point3DType>& V,
+                                            const std::vector<double>& T) const
 {
   // get iterator to first element >= time
   const auto first_sup_value = std::lower_bound(T.begin(), T.end(), time);
 
   if(first_sup_value == T.begin())
   {
-    li = V[0];
+    return V[0];
   }
   else if(first_sup_value == T.end())
   {
-    li = V[1];
+    return V[1];
   }
   else
   {
     const int32_t samp0 = std::distance(T.begin(), first_sup_value);
-    double t = (T[samp0-1]-time)/(T[samp0-1] - (*first_sup_value));
+    double t = (*(first_sup_value-1)-time)/
+               (*(first_sup_value-1) - (*first_sup_value));
+    const auto& it_v = V.begin() + samp0;
 
-    li = V[samp0-1] + (V[samp0]-V[samp0-1])*t;
+    return *(it_v-1) + ((*it_v)-*(it_v-1))*t;
   }
 }
 
-void Spot5SensorModel::GetLagrangeInterpolation(
-      const double& time,
-      const std::vector<Point3DType>& V,
-      const std::vector<double>& T,
-      Point3DType& li) const
+itk::Point<double, 3> Spot5SensorModel::GetLagrangeInterpolation(
+                                              const double& time,
+                                              const std::vector<Point3DType>& V,
+                                              const std::vector<double>& T) const
 {
   //
   // Verify that t is within allowable range:
@@ -346,42 +330,39 @@ void Spot5SensorModel::GetLagrangeInterpolation(
     S[2] += p[2];
   }
 
-  li = S;
-
+  return S;
 }
 
 
-void Spot5SensorModel::GetPositionEcf(const double& time,
-                                               Point3DType& ecef)  const
+itk::Point<double, 3> Spot5SensorModel::GetPositionEcf(double time)  const
 {
   if((m_Spot5Param.EcefPosSamples.size() < 8)||
     (m_Spot5Param.EcefTimeSamples.size() < 8))
   {
-    GetBilinearInterpolation(time, m_Spot5Param.EcefPosSamples, m_Spot5Param.EcefTimeSamples, ecef);
+    return GetBilinearInterpolation(time, m_Spot5Param.EcefPosSamples, m_Spot5Param.EcefTimeSamples);
   }
   else
   {
-    GetLagrangeInterpolation(time, m_Spot5Param.EcefPosSamples, m_Spot5Param.EcefTimeSamples, ecef);
+    return GetLagrangeInterpolation(time, m_Spot5Param.EcefPosSamples, m_Spot5Param.EcefTimeSamples);
   }                                       
 }
 
 
-void Spot5SensorModel::GetVelocityEcf(const double& time,
-                                               Point3DType& ecef)  const
+itk::Point<double, 3> Spot5SensorModel::GetVelocityEcf(double time)  const
 {
   if((m_Spot5Param.EcefVelSamples.size() < 8)||
     (m_Spot5Param.EcefTimeSamples.size() < 8))
   {
-    GetBilinearInterpolation(time, m_Spot5Param.EcefVelSamples, m_Spot5Param.EcefTimeSamples, ecef);
+    return GetBilinearInterpolation(time, m_Spot5Param.EcefVelSamples, m_Spot5Param.EcefTimeSamples);
   }
   else
   {
-    GetLagrangeInterpolation(time, m_Spot5Param.EcefVelSamples, m_Spot5Param.EcefTimeSamples, ecef);
+    return GetLagrangeInterpolation(time, m_Spot5Param.EcefVelSamples, m_Spot5Param.EcefTimeSamples);
   }
 }
 
 void Spot5SensorModel::GetPixelLookAngleXY(unsigned int line,
-                                          double& psiX, double& psiY) const
+                                           double& psiX, double& psiY) const
 {
   if (line >= m_Spot5Param.PixelLookAngleX.size())
   {
@@ -396,12 +377,12 @@ void Spot5SensorModel::GetPixelLookAngleXY(unsigned int line,
 
 }
 
-void Spot5SensorModel::GetAttitude(const double& time, Point3DType& at)  const
+itk::Point<double, 3> Spot5SensorModel::GetAttitude(double time)  const
 {
-  GetBilinearInterpolation(time, m_Spot5Param.AttitudesSamples, m_Spot5Param.AttitudesSamplesTimes, at);
+  return GetBilinearInterpolation(time, m_Spot5Param.AttitudesSamples, m_Spot5Param.AttitudesSamplesTimes);
 }
 
-void Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double& offset, Point3DType& worldPt) const
+itk::Point<double, 3> Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, double offset) const
 {
   // WGS 84 parameters conversion
   double wgsA = 6378137.000;
@@ -451,11 +432,11 @@ void Spot5SensorModel::NearestIntersection(const Ephemeris& imRay, const double&
       t = t2;
   }
 
-  worldPt  = imRay.position + imRay.velocity * t; 
+  return imRay.position + imRay.velocity * t; 
 
 }
 
-void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt) const 
+itk::Point<double, 3> Spot5SensorModel::IntersectRay(const Ephemeris& imRay) const 
 {
 
   static const double CONVERGENCE_THRESHOLD = 0.001; // meters
@@ -467,17 +448,17 @@ void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt
   double          distance;
   int             iteration_count = 0;
 
-  worldPt = EcefToWorld(prev_intersect_pt);
+  Point3DType worldPt(EcefToWorld(prev_intersect_pt));
 
   // Loop to iterate on ray intersection with variable elevation surface:
   do
   {
-    
+
     // Intersect ray with ellipsoid inflated by h_ellips:
     h_ellips = DEMHandler::GetInstance().GetHeightAboveEllipsoid(worldPt[0], worldPt[1]);
     
 
-    NearestIntersection(imRay, h_ellips, new_intersect_pt);
+    new_intersect_pt = NearestIntersection(imRay, h_ellips);
 
     // Assign the ground point to the latest iteration's intersection point:
     worldPt = EcefToWorld(new_intersect_pt);
@@ -500,14 +481,14 @@ void Spot5SensorModel::IntersectRay(const Ephemeris& imRay, Point3DType& worldPt
                                     << "point. Result is probably inaccurate." << std::endl);
   }
   
+  return worldPt;
 }
 
-void Spot5SensorModel::ComputeSatToOrbRotation(MatrixType& result, double t) const
+itk::Matrix<double, 3, 3> Spot5SensorModel::ComputeSatToOrbRotation(double t) const
 {
-
+  itk::Matrix<double, 3, 3> result;
   /* Linearly interpolate attitudes angles: */
-  Point3DType att;
-  GetAttitude(t, att);
+  Point3DType att(GetAttitude(t));
 
   /* Compute trig functions to populate rotation matrices: ANGLES IN RADIANS */
   double cp = cos(att[0]);
@@ -527,12 +508,12 @@ void Spot5SensorModel::ComputeSatToOrbRotation(MatrixType& result, double t) con
   result(2, 0) = (-sp*sy+cp*sr*cy);
   result(2, 1) = (-sp*cy-cp*sr*sy);
   result(2, 2) =  cp*cr;
+
+  return result;
 }
 
-void Spot5SensorModel::ImagingRay(const Point2DType& imPt, Ephemeris& imRay)  const
+Ephemeris Spot5SensorModel::ImagingRay(Point2DType imPt)  const
 {
-  Point3DType sensorPos; 
-  Point3DType sensorVel;
   Point2DType imPtTmp;
 
   imPtTmp[0] = imPt[0] + m_Spot5Param.SubImageOffset[0];
@@ -542,11 +523,8 @@ void Spot5SensorModel::ImagingRay(const Point2DType& imPt, Ephemeris& imRay)  co
   double timeLine = m_Spot5Param.RefLineTime + m_Spot5Param.LineSamplingPeriod*(imPtTmp[1] - m_Spot5Param.RefLineTimeLine);
 
   /* 2. Interpolate ephemeris position and velocity (in ECF): */
-  Point3DType  ecfPos;
-  Point3DType  ecfVel;
-
-  GetPositionEcf(timeLine, ecfPos);
-  GetVelocityEcf(timeLine, ecfVel);
+  Point3DType  ecfPos(GetPositionEcf(timeLine));
+  Point3DType  ecfVel(GetVelocityEcf(timeLine));
 
   /* 3. Establish the look direction in Vehicle LSR space (S_sat). ANGLES IN RADIANS*/
   double psiX, psiY;
@@ -558,10 +536,7 @@ void Spot5SensorModel::ImagingRay(const Point2DType& imPt, Ephemeris& imRay)  co
   u_sat[2] = -1.0;
 
   /* 4. Transform vehicle LSR space look direction vector to orbital LSR space (S_orb): */
-  MatrixType satToOrbit;
-  ComputeSatToOrbRotation(satToOrbit, timeLine);
-
-  Vector3DType uOrb = satToOrbit*u_sat;
+  Vector3DType uOrb = ComputeSatToOrbRotation(timeLine) * u_sat;
   uOrb.Normalize();
 
   // 5. Transform orbital LSR space look direction vector to ECF.
@@ -599,8 +574,8 @@ void Spot5SensorModel::ImagingRay(const Point2DType& imPt, Ephemeris& imRay)  co
   Vector3DType uEcf  = (orbToEcfRotation*uOrb);
 
   /* Establish the imaging ray given direction and origin: */
-  imRay.position = ecfPos;
-  imRay.velocity = uEcf;
+  // Ephemeris.time , Ephemeris.position, Ephemeris.velocity
+  return {0, ecfPos, uEcf};
 }
 
 
