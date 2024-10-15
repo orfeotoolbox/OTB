@@ -192,9 +192,7 @@ python3.12-gdal-bindings:
     changes:
       - SuperBuild/CMake/External_gdal.cmake
     refs:
-      - develop
       - /^release-[0-9]+\.[0-9]+$/
-      - merge_requests
   script:
     - |
       MAJOR_VERSION=$(egrep "set\(OTB_VERSION_MAJOR" < CMakeLists.txt | egrep -o "[0-9]+")
