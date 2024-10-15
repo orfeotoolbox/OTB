@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(MUPARSER)
 
 ExternalProject_Add(MUPARSER
   PREFIX MUPARSER
-  URL "https://github.com/beltoforion/muparser/archive/v2.3.2.tar.gz"
-  URL_MD5 cbc1b284e03abc7081b3c30997959893
+  URL "https://github.com/beltoforion/muparser/archive/v2.3.4.tar.gz"
+  URL_MD5 b92180a648be88238008ea01a597ccb9
   BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
