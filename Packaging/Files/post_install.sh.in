@@ -45,7 +45,7 @@ python_distpackage_path="$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
 gdal_python_found="$(find $python_distpackage_path -name "*$pyversion-x86_64-linux*")"
 if [ "$pyversion" = "312" ] && [ -z $gdal_python_found ]; then
     echo "***** Python 3.12 detected, downloading gdal bindings compiled for python 3.12 *****"
-    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/py312.tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz)
+    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz)
     if [ $HTTP_STATUS -eq 200 ]; then
         tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz -C $python_distpackage_path
         rm "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
