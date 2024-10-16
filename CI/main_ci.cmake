@@ -129,10 +129,12 @@ else()
   set(CTEST_BUILD_TARGET install)
 endif()
 
-ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-            RETURN_VALUE _build_rv
-            CAPTURE_CMAKE_ERROR _build_error
-            )
+if(NOT ci_skip_build)
+  ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+              RETURN_VALUE _build_rv
+              CAPTURE_CMAKE_ERROR _build_error
+              )
+endif()
 
 # Build log
 file ( WRITE 
