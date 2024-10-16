@@ -295,7 +295,6 @@ ubuntu-qa-code-coverage:
   script:
     - ctest -V -S CI/main_qa.cmake
             -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
-            -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
