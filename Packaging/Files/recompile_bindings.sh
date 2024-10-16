@@ -20,4 +20,4 @@
 #
 detected_pyversion="$(python3 -V 2>&1)"
 echo "***** Recompiling OTB python bindings with $detected_pyversion *****"
-ctest -S "$OTB_INSTALL_DIR/share/otb/swig/build_wrapping.cmake" -V
+ctest -S "$OTB_INSTALL_DIR/share/otb/swig/build_wrapping.cmake" -VV
