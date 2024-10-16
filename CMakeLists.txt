@@ -439,7 +439,7 @@ if(UNIX)
   configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
                  ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
   install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/build_gdal_bindings.sh
     ${CMAKE_BINARY_DIR}/post_install.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/sanitize_rpath.sh
     DESTINATION ./tools

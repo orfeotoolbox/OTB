@@ -30,8 +30,8 @@ ADD_SUPERBUILD_CMAKE_VAR(PNG ZLIB_LIBRARY)
 
 ExternalProject_Add(PNG
   PREFIX PNG
-  URL "https://downloads.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.gz"
-  URL_MD5 6c7519f6c75939efa0ed3053197abd54
+  URL "https://downloads.sourceforge.net/project/libpng/libpng16/1.6.44/libpng-1.6.44.tar.gz"
+  URL_MD5 a780d4929c0bb47aaaf53d2e080b2a79
   BINARY_DIR ${PNG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
