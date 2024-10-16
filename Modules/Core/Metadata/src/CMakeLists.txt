@@ -67,6 +67,9 @@ set(OTBMetadata_SRC
   otbRadarsat2ImageMetadataInterfaceFactory.cxx
   otbRadarsat2ImageMetadataInterface.cxx
 
+  otbNisarImageMetadataInterfaceFactory.cxx
+  #otbRadarsat2ImageMetadataInterface.cxx
+
   otbNoDataHelper.cxx
   otbFilterFunctionValues.cxx
   otbMetaDataKey.cxx
