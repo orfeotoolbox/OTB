@@ -35,8 +35,10 @@ sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 
 pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
 ostype="$(lsb_release -is)"
+
+bindings_version=$(ldd "$OTB_INSTALL_DIR"/lib/otb/python/_otbApplication.so | egrep -o "^.libpython3\.[0-9]+" | xargs | sed 's/libpython\([0-9]\).\([0-9]*\)/\1\2/')
 # Recompile OTB Python bindings
-if [ "$pyversion" -ne "310" ] && [ $ostype != "RedHatEnterprise" ] ; then
+if [ "$pyversion" -ne "$bindings_version" ] ; then
     sh "$OTB_INSTALL_DIR"/recompile_bindings.sh
 fi
 # Check python version, if python 3.12 (ubuntu 24 and debian > 12) download and extract the gdal bindings for python 3.12
