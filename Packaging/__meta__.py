@@ -1,0 +1,64 @@
+#
+# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+"""
+Holds project meta-information for setup.py
+"""
+
+from __future__ import unicode_literals
+
+__title__ = "OrfeoToolbox"
+__description__ = "A C++ and =."
+# TODO TLA: take version from VERSION file
+__version__ = "10.0.0"
+__author__ = "Thibaut ROMAIN"
+__author_email__ = "thibaut.romain@cs-soprasteria.Com"
+__url__ = "https://gitlab.orfeo-toolbox.org/"
+__license__ = "Apache 2.0"
+__copyright__ = "2017-2024, CNES"
+__bug_tracker__ = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues"
+__documentation__ = "https://www.orfeo-toolbox.org/CookBook"
+__source_code__ = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb"
+__community__ = "https://forum.orfeo-toolbox.org/"
+__keywords__ = "GIS, Pleiades, orthorectification"
+
+# https://pypi.python.org/pypi?%3Aaction=list_classifiers.
+# and inspired from https://github.com/SimpleITK/SimpleITK/blob/master/Wrapping/Python/Packaging/setup.py.in
+__classifiers__ = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: C++",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.12",
+    # when version is a release candidate, use the following status
+    "Development Status :: 4 - Beta",
+    # when it is a normal release, use this one
+    # "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Environment :: Console",
+    "Topic :: Scientific/Engineering"
+    "Topic :: Scientific/Engineering :: GIS"
+    "Topic :: Software Development :: Libraries",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Natural Language :: English",
+]
