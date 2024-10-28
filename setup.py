@@ -19,8 +19,8 @@
 #
 
 import os
-from setuptools import setup
-import __meta__
+from setuptools import setup, find_namespace_packages
+import re
 
 # align 
 def request_gdal_version() -> str:
@@ -32,12 +32,14 @@ def request_gdal_version() -> str:
     except Exception:  # pylint: disable=broad-except
         return '3.9.0'
 
+def normalize(name):
+    return re.sub(r"[-_.]+", "-", name).lower()
 
 
+BASEDIR = os.path.dirname(os.path.abspath(os.path.realpath(__file__)))
 with open(os.path.join(BASEDIR, "README.md"), "r") as f:
     readme = f.read()
 
-BASEDIR = os.path.dirname(os.path.abspath(os.path.realpath(__file__)))
 
 # all metadata are in the same file
 metadata = {}
@@ -45,6 +47,7 @@ with open(os.path.join(BASEDIR, "__meta__.py"), "r") as f:
     exec(f.read(), metadata)
 
 
+# All files named LICENSE* or LICENCE*, NOTICE*, all README* files
 setup(
     name                          = normalize(metadata["__title__"]),
     version                       = metadata["__version__"],
@@ -55,7 +58,7 @@ setup(
     author_email                  = metadata["__author_email__"],
     url                           = metadata["__url__"],
     license                       = metadata["__license__"],
-    keywords                      = metadata["__keywords__"]
+    keywords                      = metadata["__keywords__"],
 
     # Liste les packages à insérer dans la distribution
     # plutôt que de le faire à la main, on utilise la fonction
@@ -63,7 +66,7 @@ setup(
     # python recursivement dans le dossier courant.
     # C'est pour cette raison que l'on a tout mis dans un seul dossier:
     # on peut ainsi utiliser cette fonction facilement
-    packages=find_namespace_packages(exclude=("*.tests", "*.tests.*", "tests.*", "tests")),
+    packages=find_namespace_packages('lib', exclude=("*.tests", "*.tests.*", "tests.*", "tests", "cmake", "otb")),
     package_data={"": ["LICENSE", "NOTICE"]},
     include_package_data=True, # Take MANIFEST.in into account
 
@@ -121,11 +124,5 @@ setup(
         "Community": metadata["__community__"],
     },
 
-    scripts = ['s1tiling/S1Processor.py'],
-    entry_points = {
-        'console_scripts': [
-            'S1Processor = s1tiling.S1Processor:run',
-            'S1LIAMap    = s1tiling.S1Processor:run_lia',
-        ],
-    },
+    #scripts = ['s1tiling/S1Processor.py'],
 )

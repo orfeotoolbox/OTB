@@ -435,7 +435,19 @@ if(UNIX)
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.profile
     DESTINATION .
     COMPONENT Core
-    )
+  )
+  # create py version concatenating Major and minor version
+  execute_process(COMMAND python3 "-V"
+                  OUTPUT_VARIABLE PY_VERSION_COMPLETE
+                  RESULT_VARIABLE HAVE_PYTHON_VERSION)
+
+  if (HAVE_PYTHON_VERSION)
+    message(FATAL_ERROR "Can not get python version with \"python3 -V\"")
+  endif()
+  # here we care only about the cmake matches
+  message(STATUS "Python version == ${PY_VERSION_COMPLETE}")
+  string(REGEX MATCH "([0-9]+)\.([0-9]+)" TEMP_USELESS_VAR ${PY_VERSION_COMPLETE})
+  set(PY_VERSION "${CMAKE_MATCH_1}${CMAKE_MATCH_2}")
   configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
                  ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
   install( PROGRAMS
@@ -444,8 +456,15 @@ if(UNIX)
     ${OTB_SOURCE_DIR}/Packaging/Files/sanitize_rpath.sh
     DESTINATION ./tools
     COMPONENT Core
-    )
+  )
 endif()
+
+# if (gen python package)
+configure_file(${OTB_SOURCE_DIR}/Packaging/__meta__.py.in
+${CMAKE_BINARY_DIR}/__meta__.py @ONLY)
+file(COPY_FILE ${OTB_SOURCE_DIR}/setup.py ${CMAKE_BINARY_DIR}/setup.py)
+file(COPY_FILE ${OTB_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md)
+# endif() # gen_python_package
 
 #my_file_ext is required for otbcli files which has
 # no extension on linux. (hence we cannot use SCRIPT_EXT
