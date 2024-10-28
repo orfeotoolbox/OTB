@@ -1,0 +1,129 @@
+[build-system]
+requires = ["scikit-build-core", "swig"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "OTB"
+version = "@OTB_VERSION_STRING@"
+license = {file= "LICENSE"}
+# TODO TLA: replace this with the generic address
+authors = {
+    { name = "OTB Dream Team", email = "thibaut.romain@cs-soprasteria.com" }
+}
+keywords = ["GIS", "Pleiades", "SPOT" , "orthorectification"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: C++",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.12",
+    # when version is a release candidate, use the following status
+    "Development Status :: 4 - Beta",
+    # when it is a normal release, use this one
+    # "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Environment :: Console",
+    "Topic :: Scientific/Engineering"
+    "Topic :: Scientific/Engineering :: GIS"
+    "Topic :: Software Development :: Libraries",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Natural Language :: English",
+]
+requires-python = ">=3.8"
+dependencies = [
+    # the dependency list can be build later with cmake and fill with a var like @ PYTHON_DEPS @
+]
+
+[project.urls]
+# TODO TLA
+# need to be replaced with the pypi download page
+Dowload = "https://www.orfeo-toolbox.org/download/"
+Home = "https://www.orfeo-toolbox.org"
+Issues = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues"
+Source = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb"
+
+[tool.scikit-build]
+# The versions of CMake to allow. If CMake is not present on the system or does
+# not pass this specifier, it will be downloaded via PyPI if possible. An empty
+# string will disable this check.
+# Stick to the version at the main cmakelist
+cmake.version = ">=3.13"
+
+# A list of args to pass to CMake when configuring the project. Setting this in
+# config or envvar will override toml. See also ``cmake.define``.
+#cmake.args = [@PYPROJECT_CMAKE_ARGS@]
+
+# A table of defines to pass to CMake when configuring the project. Additive.
+cmake.define = {}
+
+# Verbose printout when building.
+cmake.verbose = true
+
+# The build type to use when building the project. Valid options are: "Debug",
+# "Release", "RelWithDebInfo", "MinSizeRel", "", etc.
+cmake.build-type = "Release"
+
+# The source directory to use when building the project. Currently only affects
+# the native builder (not the setuptools plugin).
+cmake.source-dir = "."
+
+# The versions of Ninja to allow. If Ninja is not present on the system or does
+# not pass this specifier, it will be downloaded via PyPI if possible. An empty
+# string will disable this check.
+#ninja.version = ">=1.11"
+
+# If CMake is not present on the system or is older required, it will be
+# downloaded via PyPI if possible. An empty string will disable this check.
+#ninja.make-fallback = true
+
+# The logging level to display, "DEBUG", "INFO", "WARNING", and "ERROR" are
+# possible options.
+logging.level = "INFO"
+
+# Files to include in the SDist even if they are skipped by default. Supports
+# gitignore syntax.
+sdist.include = ["CMakeLists.txt", "CMake/*.cmake", "README.md", "pyproject.toml"]
+
+# Files to exclude from the SDist even if they are included by default. Supports
+# gitignore syntax.
+#sdist.exclude = ["scripts"]
+
+# The Python tags. The default (empty string) will use the default Python
+# version. You can also set this to "cp37" to enable the CPython 3.7+ Stable ABI
+# / Limited API (only on CPython and if the version is sufficient, otherwise
+# this has no effect). Or you can set it to "py3" or "py2.py3" to ignore Python
+# ABI compatibility. The ABI tag is inferred from this tag.
+#wheel.py-api = "@PYPROJECT_PY_API@"
+
+# A list of license files to include in the wheel. Supports glob patterns.
+wheel.license-files = ["LICEN[CS]E*", "NOTICE"]
+
+# Target the platlib or the purelib. If not set, the default is to target the
+# platlib if wheel.cmake is true, and the purelib otherwise.
+wheel.platlib = "@PYPROJECT_PLATLIB@"
+
+# If CMake is less than this value, backport a copy of FindPython. Set to 0
+# disable this, or the empty string.
+backport.find-python = "3.13.0"
+
+# Select the editable mode to use. Can be "redirect" (default) or "inplace".
+editable.mode = "redirect"
+
+# Rebuild the project when the package is imported. The build-directory must be
+# set.
+editable.rebuild = false
+
+# The components to install. If empty, all default components are installed.
+install.components = []
+
+# Whether to strip the binaries. True for scikit-build-core 0.5+.
+install.strip = true
+
+# If set, this will provide a method for backward compatibility.
+minimum-version = "0.9.5"
+
+# The build directory. Defaults to a temporary directory, but can be set.
+build-dir = "build/{wheel_tag}"
