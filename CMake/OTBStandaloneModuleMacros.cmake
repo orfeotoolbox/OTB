@@ -570,7 +570,6 @@ macro(otb_module_impl)
   endif()
 
 
-  # TODO TLA: create a macro for this part as it is the same in otb modules
   if (${IS_P0_MODULE})
     # DO NOT QUOTE LISTS as they already are interpreted as multi var args
     # quoting them will "cancel" the list effect and malform the generated
@@ -588,6 +587,14 @@ macro(otb_module_impl)
       EXPORT_CODE_BUILD "${${otb-module}_EXPORT_CODE_BUILD}"
       EXPORT_CODE_INSTALL "${${otb-module}_EXPORT_CODE_INSTALL}"
     )
+    # --------------------------------------------------------------------
+
+  endif()
+
+  # read test CMakeLists AFTER writing <otb-module>.cmake as test needs this
+  # file
+  if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
+    add_subdirectory(test)
   endif()
 
   # read test CMakeLists AFTER writing <otb-module>.cmake as test needs this

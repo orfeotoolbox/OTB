@@ -24,7 +24,6 @@
 #-----------------------------------------------------------------------------
 # Private helper macros.
 
-
 # Append to current CMakelist and under the include and link directories
 # properties with the include and lib dirs of $mod and its depends
 macro(_otb_module_use_recurse mod)
