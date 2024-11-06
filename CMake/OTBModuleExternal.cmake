@@ -42,8 +42,14 @@ if(NOT EXISTS ${OTB_CMAKE_DIR}/OTBModuleMacros.cmake)
 endif()
 
 if(OTB_BUILD_MODULE_AS_STANDALONE)
-  message(STATUS "You are building this module as a standalone CMake project. "
+  # Display the standalone message once avoid spaming cmake display
+  get_property(STANDALONE_MSG_DEPS GLOBAL PROPERTY STANDALONE_MSG_DEPS_PROPERTY)
+  if (NOT STANDALONE_MSG_DEPS)
+    message(STATUS "You are building this module as a standalone CMake project. "
           "Beware that dependencies to other remote modules will not be tracked.")
+    set_property(GLOBAL PROPERTY STANDALONE_MSG_DEPS_PROPERTY YES)
+  endif()
+
   include(OTBStandaloneModuleMacros)
   otb_module_impl()
 else()

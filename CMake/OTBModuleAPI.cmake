@@ -21,6 +21,8 @@
 #-----------------------------------------------------------------------------
 # Private helper macros.
 
+# Append to current CMakelist and under the include and link directories
+# properties with the include and lib dirs of $mod and its depends
 macro(_otb_module_use_recurse mod)
   if(NOT ${dep}_USED)
     set(${mod}_USED 1)
@@ -76,7 +78,7 @@ macro(otb_module_load mod)
     endforeach()
 
     if(NOT ${mod}_LOADED)
-      message(FATAL_ERROR "No such module: \"${mod}\"")
+      message(FATAL_ERROR "No such module: \"${mod}\" . Check if file ${mod}.cmake exists in \"${OTB_MODULES_DIRS}\" folders")
     endif()
   endif()
 endmacro()
