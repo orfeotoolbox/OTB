@@ -568,81 +568,22 @@ macro(otb_module_impl)
 
   # TODO TLA: create a macro for this part as it is the same in otb modules
   if (${IS_P0_MODULE})
-    # Define variables used by OTBModuleInfo that will be configured in
-    # ${otb-module}Info
-    # /!\ Create:
-    # - An INSTALL <otb-module>.cmake that will be installed with the include path
-    # set WHEN installed
-    # - A BUILD <otb-module>.cmake for current build. This file is later read by
-    # otb_module_use
-    #
-    # 4 variables need to be configured:
-    # - otb-module-DEPENDS -> all dependencies that can be resolved as cmake modules
-    # - otb-module-LIBRARIES -> all libs
-    # - otb-module-LIBRARY_DIRS -> the paths where the libs are
-    # - otb-module-INCLUDE_DIRS -> paths of includes
-    # - otb-module-EXPORT_CODE -> what you want
-
-
-    # --------------- COMMON VARS FOR BOTH BUILD AND INSTALL FILES ------------
-    set(otb-module-DEPENDS "${OTB_MODULE_${otb-module}_DEPENDS}")
-    # Dependencies
-    foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
-      if (${dep}_ENABLED)
-        list(APPEND otb-module-DEPENDS ${dep})
-      endif()
-    endforeach()
-
-    # define "normal" include first to use them prior to system
-    set(otb-module-INCLUDE_DIRS-build "${${otb-module}_INCLUDE_DIRS}")
-    set(otb-module-INCLUDE_DIRS-install "\${GROUP_${__current_component}_LOCATION}/${${otb-module}_INSTALL_INCLUDE_DIR}")
-
-    # system includes does not differs for build and install
-    if(${otb-module}_SYSTEM_INCLUDE_DIRS)
-      list(APPEND otb-module-INCLUDE_DIRS-build
-           "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
-      list(APPEND otb-module-INCLUDE_DIRS-install
-           "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
-    endif()
-
-    # LIBS
-    set(otb-module-LIBRARIES "${${otb-module}_LIBRARIES}")
-    # As Group can be separated and installed to different places, ensure
-    # that includes and library path are not relative to OTB but to Group
-    # location
-    # here use ${GROUP_${${otb-module}_COMPONENT}_LOCATION} that will be init
-    # when reading the <GROUP>Config.cmake file to the root of the Group
-    set(otb-module-LIBRARY_DIRS "\${GROUP_${__current_component}_LOCATION}/lib")
-
-    # add system lib dir if it exists
-    if (${${otb-module}_SYSTEM_LIBRARY_DIRS})
-      list(APPEND otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
-    endif()
-
-    # -------------- BUILD USABLE <otb-module>.cmake ---------------------
-    set(otb-module-EXPORT_CODE "${${otb-module}_EXPORT_CODE_BUILD}")
-    set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
-    configure_file(${OTB_DIR}/OTBModuleInfo.cmake.in "${CMAKE_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${otb-module}.cmake" @ONLY)
-
-    # ------------ INSTALL USABLE <otb-module>.cmake ---------------------
-    set(otb-module-EXPORT_CODE "${${otb-module}_EXPORT_CODE_INSTALL}")
-    set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-install}")
-    # create a file with variables previously fields
-    # file will be installed in lib/cmake/OTB-X.X/Module
-    # For P0 module the path is the same as OTB install path
-    configure_file(${OTB_DIR}/OTBModuleInfo.cmake.in "${CMAKE_BINARY_DIR}/CMakeFiles/${otb-module}.cmake" @ONLY)
-    install(FILES ${CMAKE_BINARY_DIR}/CMakeFiles/${otb-module}.cmake
-            DESTINATION "${OTB_INSTALL_PACKAGE_DIR}/Modules"
-            COMPONENT ${__current_component}
+    # DO NOT QUOTE LISTS as they already are interpreted as multi var args
+    # quoting them will "cancel" the list effect and malform the generated
+    # files
+    generate_cmake_module_configs(${otb-module} ${OTB_DIR}
+      COMPONENT "${__current_component}"
+      DEPENDS ${OTB_MODULE_${otb-module}_DEPENDS}
+      OPTIONAL_DEPENDS ${OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS}
+      LIBRARIES ${${otb-module}_LIBRARIES}
+      LIBRARY_DIRS "\${GROUP_${__current_component}_LOCATION}/lib"
+      SYSTEM_LIBRARY_DIRS ${${otb-module}_SYSTEM_LIBRARY_DIRS}
+      INCLUDE_DIRS_BUILD ${${otb-module}_INCLUDE_DIRS}
+      INCLUDE_DIRS_INSTALL "\${GROUP_${__current_component}_LOCATION}/${${otb-module}_INSTALL_INCLUDE_DIR}"
+      SYSTEM_INCLUDE_DIRS ${${otb-module}_SYSTEM_INCLUDE_DIRS}
+      EXPORT_CODE_BUILD "${${otb-module}_EXPORT_CODE_BUILD}"
+      EXPORT_CODE_INSTALL "${${otb-module}_EXPORT_CODE_INSTALL}"
     )
-    # --------------------------------------------------------------------
-
-    unset(otb-module-EXPORT_CODE)
-    unset(otb-module-INCLUDE_DIRS)
-    unset(otb-module-INCLUDE_DIRS-build)
-    unset(otb-module-INCLUDE_DIRS-install)
-    unset(otb-module-LIBRARY_DIRS)
-    unset(otb-module-LIBRARIES)
   endif()
 
   # read test CMakeLists AFTER writing <otb-module>.cmake as test needs this
