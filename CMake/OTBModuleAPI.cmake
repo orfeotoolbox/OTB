@@ -17,9 +17,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+#-----------------------------------------------------------------------------
+# This file is included by the generated OTBConfig.cmake
+# which is read by every cmake file calling
+# find_package(OTB...)
 #-----------------------------------------------------------------------------
 # Private helper macros.
+
 
 # Append to current CMakelist and under the include and link directories
 # properties with the include and lib dirs of $mod and its depends
@@ -82,6 +86,132 @@ macro(otb_module_load mod)
     endif()
   endif()
 endmacro()
+
+# Create two <module>.cmake files for <module_name>. This file contains
+# include path, lib path, library list and cmake dependencies properties of
+# <module_name>. These properties can be loaded by otb_module_use during current
+# build and by another module depending of <module_name>. As some properties
+# change if <module_name> is currently build or already installed, TWO file are
+# generated.
+# - <module_name> is MANDATORY!
+# - DEPENDS <list> are the cmake target dependencies
+# - OPTIONAL_DEPENDS <list> a list added to cmake dependencies only if their are previously enabled
+# - LIBRARIES <list> is the library list
+# - LIBRARY_DIRS <list> is a list of path
+# - SYSTEM_LIBRARY_DIRS <list> same as library dirs but for system libs
+# - INCLUDE_DIRS_BUILD <list> is a list of include paths of <module_name> DURING ITS BUILD
+# - INCLUDE_DIRS_INSTALL <list> is a list of include path of <module_name> where there will be installed
+# - SYSTEM_INCLUDE_DIRS <list> a list of system include path
+# - EXPORT_CODE_BUILD and EXPORT_CODE install 
+function(generate_cmake_module_configs
+         module_name otb_dir)
+  # ---------- Argument definition and reading
+  set(oneValueArgs COMPONENT
+                   EXPORT_CODE_BUILD
+                   EXPORT_CODE_INSTALL)
+  set(multiValuesArgs DEPENDS
+                      OPTIONAL_DEPENDS
+                      LIBRARIES
+                      LIBRARY_DIRS
+                      SYSTEM_LIBRARY_DIRS
+                      INCLUDE_DIRS_BUILD
+                      INCLUDE_DIRS_INSTALL
+                      SYSTEM_INCLUDE_DIRS)
+
+  # parse arguments and put their values in var arg_<argument_name>
+  cmake_parse_arguments(PARSE_ARGV 2 arg "" "${oneValueArgs}" "${multiValuesArgs}")
+
+  if (arg_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "generate_cmake_module_configs Unknown args: ${arg_UNPARSED_ARGUMENTS}")
+  endif()
+  
+
+  # ----------- END argument part
+
+  set(otb-module-DEPENDS "")
+  set(otb-module-LIBRARIES "")
+  set(otb-module-LIBRARY_DIRS "")
+  set(otb-module-INCLUDE_DIRS-install "")
+  set(otb-module-INCLUDE_DIRS-build "")
+  set(otb-module-INCLUDE_DIRS "")
+  set(otb-module-EXPORT_CODE "")
+
+  # --------------- COMMON VARS FOR BOTH BUILD AND INSTALL FILES ------------
+  # DEPENDENCIES, normal and optionnal
+  if (arg_DEPENDS)
+    set(otb-module-DEPENDS "${arg_DEPENDS}")
+  endif()
+  if (arg_OPTIONAL_DEPENDS)
+    foreach(dep IN LISTS arg_OPTIONAL_DEPENDS)
+      if (${dep}_ENABLED)
+        list(APPEND otb-module-DEPENDS ${dep})
+      endif()
+    endforeach()
+  endif()
+
+  # Libraries to link to
+  if (arg_LIBRARIES)
+    set(otb-module-LIBRARIES "${arg_LIBRARIES}")
+  endif()
+
+  # Add group and system library dir to module configuration
+  if (arg_LIBRARY_DIRS)
+    if (arg_COMPONENT)
+      set(otb-module-LIBRARY_DIRS "${arg_LIBRARY_DIRS}")
+    else()
+      message(STATUS "COMPONENT of ${module_name} does not exists when setting otb-module-LIBRARY_DIRS")
+    endif()
+  endif()
+  if (arg_SYSTEM_LIBRARY_DIRS)
+    list(APPEND otb-module-LIBRARY_DIRS "${arg_SYSTEM_LIBRARY_DIRS}")
+  endif()
+
+  # INCLUDES DIRS: the OTB sources include path and system include path
+  # The include location for build cmake file is not the same as the install one
+  # The include path used during build is the same as in the source tree
+  # the one for the install is located in include/OTB-<Major>.<Minor>
+
+  # define OTB include first to use them prior to system ones
+  if (arg_INCLUDE_DIRS_INSTALL)
+    list(APPEND otb-module-INCLUDE_DIRS-install "${arg_INCLUDE_DIRS_INSTALL}")
+  endif()
+  if (arg_INCLUDE_DIRS_BUILD)
+    list(APPEND otb-module-INCLUDE_DIRS-build "${arg_INCLUDE_DIRS_BUILD}")
+  endif()
+
+  # system includes does not differs for build and install
+  if(arg_SYSTEM_INCLUDE_DIRS)
+    list(APPEND otb-module-INCLUDE_DIRS-build "${arg_SYSTEM_INCLUDE_DIRS}")
+    list(APPEND otb-module-INCLUDE_DIRS-install "${arg_SYSTEM_INCLUDE_DIRS}")
+  endif()
+
+  # CMake file used during CURRENT BUILD by otb_module_use
+  if (arg_EXPORT_CODE_BUILD)
+    set(otb-module-EXPORT_CODE "${arg_EXPORT_CODE_BUILD}")
+  endif()
+  set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
+  configure_file("${otb_dir}/OTBModuleInfo.cmake.in" "${CMAKE_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules/${module_name}.cmake" @ONLY)
+
+  # CMake file used by dependencies and INSTALLED with OTB or module
+  if (arg_EXPORT_CODE_INSTALL)
+    set(otb-module-EXPORT_CODE "${arg_EXPORT_CODE_INSTALL}")
+  endif()
+  set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-install}")
+  configure_file("${otb_dir}/OTBModuleInfo.cmake.in" "${CMAKE_BINARY_DIR}/CMakeFiles/${module_name}.cmake" @ONLY)
+  # create a file with variables previously fields
+  # file will be installed in lib/cmake/OTB-X.X/Module
+  # For P0 module the path is the same as OTB install path
+  if (arg_COMPONENT)
+    install(FILES ${CMAKE_BINARY_DIR}/CMakeFiles/${module_name}.cmake
+            DESTINATION "${OTB_INSTALL_PACKAGE_DIR}/Modules"
+            COMPONENT ${arg_COMPONENT}
+    )
+  else()
+    install(FILES ${CMAKE_BINARY_DIR}/CMakeFiles/${module_name}.cmake
+      DESTINATION "${OTB_INSTALL_PACKAGE_DIR}/Modules"
+    )
+  endif()
+endfunction()
 
 # otb_module_config(<namespace> [modules...])
 #
