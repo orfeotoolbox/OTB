@@ -96,12 +96,13 @@ ${${group}_documentation} */\n"
   endforeach()
 endforeach()
 
-set( _content ${group_list_dox} )
-configure_file(
-  "${OTB_SOURCE_DIR}/Utilities/Doxygen/Module.dox.in"
-  "${OTB_BINARY_DIR}/Utilities/Doxygen/Modules/OTB-AllGroups.dox"
-  )
-
+if (BUILD_DOCUMENTATION)
+  set( _content ${group_list_dox} )
+  configure_file(
+    "${OTB_SOURCE_DIR}/Utilities/Doxygen/Module.dox.in"
+    "${OTB_BINARY_DIR}/Utilities/Doxygen/Modules/OTB-AllGroups.dox"
+    )
+endif()
 #------------------------------------------------
 # Turn on the OTB_BUILD option for each group
 

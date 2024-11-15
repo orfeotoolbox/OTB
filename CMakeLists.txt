@@ -20,6 +20,16 @@
 
 cmake_minimum_required(VERSION 3.13.0)
 
+set(__scikit_already_check FALSE)
+get_property(__scikit_already_check GLOBAL PROPERTY scikit_already_check)
+
+if (SKBUILD AND (NOT __scikit_already_check))
+  message(STATUS "Ouiiiiiiiiiiiiii")
+  add_subdirectory("SuperBuild")
+  set_property(GLOBAL PROPERTY scikit_already_check TRUE)
+  return()
+endif()
+
 foreach(p
     CMP0072 # CMake 3.11
     CMP0078 # CMake 3.13
@@ -508,7 +518,9 @@ endif()
 
 #----------------------------------------------------------------------
 # Provide an option for generating documentation.
-add_subdirectory(Utilities/Doxygen)
+if(BUILD_DOCUMENTATION)
+  add_subdirectory(Utilities/Doxygen)
+endif()
 
 add_subdirectory(Utilities/Completion)
 

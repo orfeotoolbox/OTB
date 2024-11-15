@@ -7,7 +7,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "OTB"
-version = "@OTB_VERSION_STRING@"
+version = "9.1.0"
 license = { file = "LICENSE"}
 # TODO TLA: replace this with the generic address
 authors = [
@@ -66,9 +66,6 @@ cmake.version = ">=3.15"
 # config or envvar will override toml. See also ``cmake.define``.
 # cmake.args = [@PYPROJECT_CMAKE_ARGS@]
 
-# A table of defines to pass to CMake when configuring the project. Additive.
-cmake.define = {}
-
 # Verbose printout when building.
 cmake.verbose = true
 
@@ -104,10 +101,11 @@ sdist.exclude = [".gitlab",
                  ".travis.yml",
                  ".gitlab-ci.yml",
                  "CI",
+                 "Data",
                  "Docker",
                  "Documentation",
                  "Examples",
-                 "Utilities"
+                 "Utilities/Doxygen"
                 ]
 
 # run cmake during sdist build. Can be usefull if source distribution needs
@@ -126,7 +124,7 @@ wheel.license-files = ["LICEN[CS]E*", "NOTICE"]
 
 # Target the platlib or the purelib. If not set, the default is to target the
 # platlib if wheel.cmake is true, and the purelib otherwise.
-wheel.platlib = "@PYPROJECT_PLATLIB@"
+# wheel.platlib = "@PYPROJECT_PLATLIB@"
 
 # If CMake is less than this value, backport a copy of FindPython. Set to 0
 # disable this, or the empty string.
@@ -153,10 +151,13 @@ minimum-version = "build-system.requires"
 # The build directory. Defaults to a temporary directory, but can be set.
 build-dir = "build/{wheel_tag}"
 
+# Define cmake args as if you wanted to build otb in the same time as building
+# superbuild
 [tool.scikit-build.cmake.define]
-CMAKE_BUILD_TYPE = "Release"
 BUILD_COOKBOOK = false
+BUILD_DOCUMENTATION = false
 BUILD_TESTING = false
+CMAKE_PREFIX_PATH = "SuperBuild"
 OTBGroup_Core = true
 OTBGroup_FeatureExtraction = false
 OTBGroup_Hyperspectral = false
