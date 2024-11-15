@@ -1,20 +1,24 @@
 [build-system]
-requires = ["scikit-build-core", "swig"]
+# use scikit build core as the build backend. Thus it needs to be in
+# dependencies
+# cmake or ninja deps are automatically resolved
+requires = ["scikit-build-core>=0.7", "swig"]
 build-backend = "scikit_build_core.build"
 
 [project]
 name = "OTB"
 version = "@OTB_VERSION_STRING@"
-license = {file= "LICENSE"}
+license = { file = "LICENSE"}
 # TODO TLA: replace this with the generic address
-authors = {
+authors = [
     { name = "OTB Dream Team", email = "thibaut.romain@cs-soprasteria.com" }
-}
+]
 keywords = ["GIS", "Pleiades", "SPOT" , "orthorectification"]
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: C++",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.12",
     # when version is a release candidate, use the following status
@@ -24,14 +28,17 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Environment :: Console",
-    "Topic :: Scientific/Engineering"
-    "Topic :: Scientific/Engineering :: GIS"
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Software Development",
     "Topic :: Software Development :: Libraries",
     "Operating System :: Unix",
     "Operating System :: POSIX",
     "Operating System :: Microsoft :: Windows",
     "Natural Language :: English",
 ]
+# as this package is usable by redhat 8 use 3.8 as min dep
 requires-python = ">=3.8"
 dependencies = [
     # the dependency list can be build later with cmake and fill with a var like @ PYTHON_DEPS @
@@ -40,21 +47,24 @@ dependencies = [
 [project.urls]
 # TODO TLA
 # need to be replaced with the pypi download page
-Dowload = "https://www.orfeo-toolbox.org/download/"
+Download = "https://www.orfeo-toolbox.org/download/"
 Home = "https://www.orfeo-toolbox.org"
 Issues = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues"
 Source = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb"
 
+# variables here can be specified during build time with
+# -C skbuild.<var> or with SKBUILD_<var> env variable
 [tool.scikit-build]
 # The versions of CMake to allow. If CMake is not present on the system or does
 # not pass this specifier, it will be downloaded via PyPI if possible. An empty
 # string will disable this check.
-# Stick to the version at the main cmakelist
-cmake.version = ">=3.13"
+# Stick to the version at the main cmakelist or the min version supported
+# by scikit build core
+cmake.version = ">=3.15"
 
 # A list of args to pass to CMake when configuring the project. Setting this in
 # config or envvar will override toml. See also ``cmake.define``.
-#cmake.args = [@PYPROJECT_CMAKE_ARGS@]
+# cmake.args = [@PYPROJECT_CMAKE_ARGS@]
 
 # A table of defines to pass to CMake when configuring the project. Additive.
 cmake.define = {}
@@ -88,8 +98,21 @@ logging.level = "INFO"
 sdist.include = ["CMakeLists.txt", "CMake/*.cmake", "README.md", "pyproject.toml"]
 
 # Files to exclude from the SDist even if they are included by default. Supports
-# gitignore syntax.
-#sdist.exclude = ["scripts"]
+# gitignore syntax. By default the file listed in gitignore are exclude
+sdist.exclude = [".gitlab",
+                 ".sonar-project.properties",
+                 ".travis.yml",
+                 ".gitlab-ci.yml",
+                 "CI",
+                 "Docker",
+                 "Documentation",
+                 "Examples",
+                 "Utilities"
+                ]
+
+# run cmake during sdist build. Can be usefull if source distribution needs
+# cmake generated files
+# sdist.cmake = true
 
 # The Python tags. The default (empty string) will use the default Python
 # version. You can also set this to "cp37" to enable the CPython 3.7+ Stable ABI
@@ -116,6 +139,8 @@ editable.mode = "redirect"
 # set.
 editable.rebuild = false
 
+build.verbose = false
+
 # The components to install. If empty, all default components are installed.
 install.components = []
 
@@ -123,7 +148,24 @@ install.components = []
 install.strip = true
 
 # If set, this will provide a method for backward compatibility.
-minimum-version = "0.9.5"
+minimum-version = "build-system.requires"
 
 # The build directory. Defaults to a temporary directory, but can be set.
 build-dir = "build/{wheel_tag}"
+
+[tool.scikit-build.cmake.define]
+CMAKE_BUILD_TYPE = "Release"
+BUILD_COOKBOOK = false
+BUILD_TESTING = false
+OTBGroup_Core = true
+OTBGroup_FeatureExtraction = false
+OTBGroup_Hyperspectral = false
+OTBGroup_Learning = false
+OTBGroup_Miscellaneous = false
+OTBGroup_Remote = false
+OTBGroup_SAR = false
+OTBGroup_Segmentation = false
+OTBGroup_StereoProcessing = false
+OTBGroup_ThirdParty = false
+OTB_WRAP_PYTHON = true
+OTB_WRAP_QGIS = false
