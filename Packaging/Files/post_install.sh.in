@@ -41,15 +41,15 @@ if [ "$pyversion" -ne "310" ] && [ $ostype != "RedHatEnterprise" ] ; then
 fi
 # Check python version, if python 3.12 (ubuntu 24 and debian > 12) download and extract the gdal bindings for python 3.12
 # In case your install is from compiled code, the gdal bindings will be already there in the installation
-python_distpackage_path="$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
+python_distpackage_path="$OTB_INSTALL_DIR/lib/python3/dist-packages/osgeo/"
 gdal_python_found="$(find $python_distpackage_path -name "*$pyversion-x86_64-linux*")"
-if [ "$pyversion" = "312" ] && [ -z $gdal_python_found ]; then
-    echo "***** Python 3.12 detected, downloading gdal bindings compiled for python 3.12 *****"
-    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz)
+if [ -z "$gdal_python_found" ]; then
+    echo "***** Python $pyversion detected, downloading gdal bindings compiled for this Python version *****"
+    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/gdal-py$pyversion.tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz)
     if [ $HTTP_STATUS -eq 200 ]; then
-        tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz -C $python_distpackage_path
-        rm "$OTB_INSTALL_DIR"/tools/gdal-py312.tar.gz
-        echo "***** GDAL bindings for python 3.12 successfully installed *****"
+        tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py$pyversion.tar.gz -C $python_distpackage_path
+        rm "$OTB_INSTALL_DIR"/tools/gdal-py$pyversion.tar.gz
+        echo "***** GDAL bindings for python $pyversion successfully installed *****"
     else
         echo "Can not find GDAL bindings at https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz"
         return -1

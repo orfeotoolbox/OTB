@@ -9,22 +9,6 @@ environment script ``otbenv`` to properly setup variables such as
 source the script). In other cases, you should set these variables depending on
 your configuration.
 
-On Unix systems, it is typically available in the ``/usr/lib/otb/python``
-directory. Depending on how you installed OTB, you may need to configure the
-environment variable ``PYTHONPATH`` to include this directory so that the module
-becomes available from Python.
-
-On Windows, you can install the ``otb-python`` package, and the module
-will be automatically available from an OSGeo4W shell.
-
-As for the command line, the path to the application modules needs to
-be properly set with the ``OTB_APPLICATION_PATH`` environment
-variable. The standard location on Unix systems is
-``/usr/lib/otb/applications``. On Windows, the applications are
-available in the ``otb-bin`` OSGeo4W package, and the environment is
-configured automatically so ``OTB_APPLICATION_PATH`` doesn't need to
-be modified ``OTB_APPLICATION_PATH``.
-
 Once your environment is set, you can use OTB applications from Python, just
 like this small example:
 
@@ -513,6 +497,22 @@ Here is a small example of what can be done:
   
   # Only a portion of "out" was exported but ReadImageInfo is still able to detect the 
   # correct full size of the image
+
+A Higher level Python API for OTB : pyOTB
+-----------------------------------------
+
+If you want a high level API to develop your OTB pipeline entirely in Python
+you can use `pyOTB  <https://pyotb.readthedocs.io/en/stable/>`__
+
+it is easy to install it with pip.
+
+Develop a pipeline with ITK 5 python filters
+--------------------------------------------
+
+With ITK 5, pip install itk is now available, it exposes all itk filters in python,
+this enables you to develop an application using itk filters, which is able to handle xarray or numpy tables
+
+To develop a pipeline with itk filters, you can follow the `documentation <https://docs.itk.org/en/latest/learn/python_quick_start.html>`__ 
 
 
 Corner cases

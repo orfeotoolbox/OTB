@@ -1,28 +1,28 @@
-We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. They include
-all of the OTB applications along with command line launchers.
-Since OTB 9.0, it is now possible to have a modular installation, you have to choose which package to download depending on your use case.
-
-See the page :doc:`Modules` to pick the ones you need.
+Recommended Installation : One package containing all the modules 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-10.0.0-Linux.tar.gz** package.
 
 **Important note for RedHat / Fedora / Rocky users**
 
 If you are using Fedora, Redhat8, please download the package **Linux_RedHat** which contains GDAL bindings in a different folder than the standard Linux package.
 It is because the default system Python user site in RedHat, and distributions based on it, is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
 
-Recommended Installation : One package containing all the modules 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-9.0.0-Linux.tar.gz** package.
-
 You can download the package from the website and extract it in your file manager, or from command line :
 
 .. code-block:: bash
 
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux.tar.gz -o /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz
-   tar xf /Path/To/Downloads/OTB-9.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-10.0.0-Linux.tar.gz -o /Path/To/Downloads/OTB-10.0.0-Linux.tar.gz
+   tar xf /Path/To/Downloads/OTB-10.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
    source /Path/To/OTB_install/otbenv.profile
 
 Advanced Installation : Modular installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. They include
+all of the OTB applications along with command line launchers.
+Since OTB 9.0, it is now possible to have a modular installation, you have to choose which package to download depending on your use case.
+
+See the page :doc:`Modules` to pick the ones you need.
 
 Because OTB is a quite big software, the modular installation helps you to have only the needed software instead of all OTB. You need at least the Core and Dependencies modules and you can install only the components that matters to you.
 
@@ -38,11 +38,11 @@ You can then use directly the applications packaged in the Learning package alon
 .. code-block:: bash
 
    # Download mandatory packages to run OTB: Core and Dependencies
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o OTB-9.0.0-Linux-Core.tar.gz
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Dependencies.tar.gz -o OTB-9.0.0-Linux-Dependencies.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-10.0.0-Linux-Core.tar.gz -o OTB-10.0.0-Linux-Core.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-10.0.0-Linux-Dependencies.tar.gz -o OTB-10.0.0-Linux-Dependencies.tar.gz
    # Download optional packages, note that Learning needs FeaturesExtraction
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o OTB-9.0.0-Linux-FeaturesExtraction.tar.gz
-   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Learning.tar.gz -o OTB-9.0.0-Linux-Learning.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-10.0.0-Linux-FeaturesExtraction.tar.gz -o OTB-10.0.0-Linux-FeaturesExtraction.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-10.0.0-Linux-Learning.tar.gz -o OTB-10.0.0-Linux-Learning.tar.gz
    ...
 
 .. _mod_install:
@@ -57,10 +57,10 @@ Unless specific needs we advice you to extract all packages on the same director
 .. code-block:: bash
 
    # Install each tar gz in the same "top level" folder
-   tar xvf OTB-9.0.0-Linux-Core.tar.gz --one-top-level="/Path/To/Install/OTB"
-   tar xvf OTB-9.0.0-Linux-FeaturesExtraction.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-10.0.0-Linux-Core.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-10.0.0-Linux-FeaturesExtraction.tar.gz --one-top-level="/Path/To/Install/OTB"
    # It is necessary to install the dependencies AFTER the other modules
-   tar xvf OTB-9.0.0-Linux-Dependencies.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-10.0.0-Linux-Dependencies.tar.gz --one-top-level="/Path/To/Install/OTB"
    ...
    source /Path/To/Install/OTB/otbenv.profile
 
@@ -98,7 +98,7 @@ Python bindings
 
 **Our recommendation is to always recompile the python bindings when you install OTB**
 
-Since OTB 8.0.0 OTB bindings for Python 3.8 are distributed as a binary
+Since OTB 10.0.0 OTB bindings for Python 3.10 are distributed as a binary
 package. Please note that using a different Python version may not be compatible with
 OTB wrappings directly after installation. If the installation completes
 without issue, information relating to your Python bindings will be provided. 
@@ -107,12 +107,12 @@ You must have Python NumPy bindings installed in your system. They can be instal
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
 to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
-By default, bindings for Python 3.8 will be enabled with the ``otbenv`` script.
+By default, bindings for Python 3.10 will be enabled with the ``otbenv`` script.
 
 Recompiling Python bindings
 ```````````````````````````
 
-If you are using another version of Python 3 than 3.8, but still want to use OTB Python bindings, it is possible
+If you are using another version of Python 3 than 3.10, but still want to use OTB Python bindings, it is possible
 to compile the python bindings again with your version of Python. CMake is required (it is available in most package
 managers or at [https://cmake.org/]). Make sure you installed the necessary dependencies in the :doc:`First_Steps` page
 

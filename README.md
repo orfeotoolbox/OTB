@@ -29,7 +29,6 @@ not a black box!
 * [GitHub mirror](https://github.com/orfeotoolbox/)
 * [Build status](http://cdash.orfeo-toolbox.org/index.php?project=OTB)
 * [Bug tracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug)
-* [Wiki](http://wiki.orfeo-toolbox.org/index.php/Main_Page)
 * [Task tracking](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
 
 ### Installation
