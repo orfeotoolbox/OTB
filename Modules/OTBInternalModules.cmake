@@ -24,15 +24,20 @@
 # otb_internal_modules_repos, otb_internal_modules_git_tag,
 # otb_internal_modules_desc
 list(APPEND otb_internal_modules
-    "Miscellaneous")
+    "Miscellaneous"
+    "FeaturesExtraction")
 
 list(APPEND otb_internal_modules_repos
-    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git")
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git"
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/featuresextraction.git")
 
 list(APPEND otb_internal_modules_git_tag
-    "88dd67667f5e42d04a9ed44526ed6be854c9bc8f")
+    "main"
+    "init_P0_module"
+    )
 
 list(APPEND otb_internal_modules_get_submodules
+     "OFF"
      "OFF")
 
 list(APPEND otb_internal_modules_desc
@@ -41,6 +46,8 @@ objects transmittance and reflectance and sensor characteristics, it can be poss
 to generate realistic hyperspectral synthetic set of data. This module includes
 PROSPECT (leaf optical properties) and SAIL (canopy bidirectional reflectance)
 models, as well as PROSAIL, which is the combination of the two previous ones."
+
+"OTB Features Extraction Application" # TODO TLA: improve the doc
 )
 
 set(i 0) # group index
