@@ -302,7 +302,9 @@ macro(otb_module_impl)
   set_property(GLOBAL PROPERTY ${__current_component}_MOD_DEPS
                                ${MODULE_DEPENDS_OF_COMPONENT})
 
-  if (NOT ${${otb-module}-targets}_EXPORTED)
+  get_property(_is_target_exported GLOBAL PROPERTY ${${otb-module}-targets}_EXPORTED)
+  # check if _is_target_exported is unset or FALSE
+  if (NOT DEFINED _is_target_exported OR NOT _is_target_exported)
     if (CMAKE_DEBUG)
       message(STATUS "[CMAKE_DEBUG] Exporting target ${${otb-module}-targets} part of component ${__current_component} in file ${__current_component}Targets.cmake located at ${OTB_INSTALL_PACKAGE_DIR}")
     endif()
@@ -310,8 +312,7 @@ macro(otb_module_impl)
             FILE ${__current_component}Targets.cmake
             DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
             COMPONENT ${__current_component})
-    # define variable in cmake CACHE to make it global
-    set(${${otb-module}-targets}_EXPORTED 1 CACHE INTERNAL "Bool to not declare multiple times ${${otb-module}-targets}.cmake file" FORCE)
+    set_property(GLOBAL PROPERTY ${${otb-module}-targets}_EXPORTED TRUE)
   endif() # NOT DEFINED ${${otb-module}-targets}_EXPORTED
   otb_module_doxygen(${otb-module})   # module name
   unset(__current_component)
