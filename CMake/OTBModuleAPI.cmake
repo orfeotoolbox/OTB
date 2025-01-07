@@ -122,7 +122,7 @@ function(generate_cmake_module_configs
   cmake_parse_arguments(PARSE_ARGV 2 arg "" "${oneValueArgs}" "${multiValuesArgs}")
 
   if (arg_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "generate_cmake_module_configs Unknown args: ${arg_UNPARSED_ARGUMENTS}")
+    message(FATAL_ERROR "generate_cmake_module_configs: Unknown args: ${arg_UNPARSED_ARGUMENTS}")
   endif()
   
 
