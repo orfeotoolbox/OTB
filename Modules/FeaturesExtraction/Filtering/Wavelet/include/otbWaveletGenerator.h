@@ -26,6 +26,7 @@
 #include <vector>
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
+#include "OTBWaveletExport.h"
 
 namespace otb
 {

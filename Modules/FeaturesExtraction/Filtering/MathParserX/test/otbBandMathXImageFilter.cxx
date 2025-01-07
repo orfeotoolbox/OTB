@@ -115,7 +115,7 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
 
   FilterType::Pointer filter = FilterType::New();
-  std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
+  std::cout << "Number Of Threads  :  " << filter->GetNumberOfWorkUnits() << std::endl;
 
   filter->SetNthInput(0, image1);
   filter->SetNthInput(1, image2);
@@ -399,7 +399,7 @@ int otbBandMathXImageFilterConv(int itkNotUsed(argc), char* argv[])
   imageAb3Var  = (n / (n - 1)) * (imageAb3Var / n - imageAb3Mean * imageAb3Mean); // unbiased
 
   FilterType::Pointer filter = FilterType::New();
-  std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
+  std::cout << "Number Of Threads  :  " << filter->GetNumberOfWorkUnits() << std::endl;
 
   double expo = 1.1;
 
@@ -616,7 +616,7 @@ int otbBandMathXImageFilterWithIdx(int itkNotUsed(argc), char* argv[])
   }
 
   FilterType::Pointer filter = FilterType::New();
-  std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
+  std::cout << "Number Of Threads  :  " << filter->GetNumberOfWorkUnits() << std::endl;
 
   filter->SetNthInput(0, image1);
   filter->SetNthInput(1, image2);

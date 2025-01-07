@@ -21,6 +21,7 @@
 #ifndef otbKMeansImageClassificationFilter_hxx
 #define otbKMeansImageClassificationFilter_hxx
 
+#include "otbMacro.h" //for 
 #include "otbKMeansImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
@@ -75,8 +76,8 @@ void KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimens
 }
 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
-void KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, TMaskImage>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
+void KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, TMaskImage>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr = this->GetInputMask();

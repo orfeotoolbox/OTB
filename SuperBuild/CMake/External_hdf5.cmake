@@ -29,8 +29,8 @@ set(HDF5_SB_CONFIG)
 
 ExternalProject_Add(HDF5
   PREFIX HDF5
-  URL "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.3/src/hdf5-1.12.3.tar.gz"
-  URL_MD5 4da24fcd281b9eeb05dae9b258f72a72
+  URL "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.5/hdf5-1.14.5.tar.gz"
+  URL_MD5 600d29af6ccb7f1e3401560e1422ba5e
   SOURCE_DIR ${HDF5_SB_SRC}
   BINARY_DIR ${HDF5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

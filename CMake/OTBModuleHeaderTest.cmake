@@ -68,7 +68,9 @@ macro( otb_module_headertest _name )
       AND Python_EXECUTABLE
       AND NOT (Python_VERSION VERSION_LESS 3)
       AND NOT (${_name} STREQUAL OTBTestKernel)
-      AND NOT (CMAKE_GENERATOR MATCHES "^Visual Studio 10.*"))
+      AND NOT (${_name} STREQUAL OTBDate)
+      AND NOT (${_name} STREQUAL OTBShark)
+      AND NOT (CMAKE_GENERATOR MATCHES "^NMake Makefiles *"))
 
     # Count how many tests we are going to get, and put the source files in
     # the list _outputs.
@@ -93,7 +95,6 @@ macro( otb_module_headertest _name )
     add_custom_target( ${_name}HeaderTestClean
       ${CMAKE_COMMAND} -E remove ${_outputs} )
     add_dependencies( OTBHeaderTests ${_name}HeaderTestClean )
-
     # We check to see if the headers are changed.  If so, remove the header test
     # source files so they are regenerated.
     set( _headers_list_md5 "${${_name}_BINARY_DIR}/test/CMakeFiles/HeadersList.md5" )
@@ -112,7 +113,6 @@ macro( otb_module_headertest _name )
     if( ${_regenerate_sources} )
       file( REMOVE ${_outputs} )
     endif()
-
     set( _test_num 1 )
     foreach( _header_test_src ${_outputs} )
       get_filename_component( _test_name ${_header_test_src} NAME_WE )
@@ -127,7 +127,7 @@ macro( otb_module_headertest _name )
         ${BANNED_HEADERS}
         )
       add_executable( ${_test_name} ${_header_test_src} )
-      target_link_libraries( ${_test_name} OTBCommon )
+      target_link_libraries( ${_test_name} OTBCommon)
 
       if (${_name}_LIBRARIES)
         target_link_libraries(${_test_name} ${${_name}_LIBRARIES})

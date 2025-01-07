@@ -25,7 +25,6 @@
 
 #include "otbMultiChannelsPolarimetricSynthesisFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkProgressReporter.h"
 #include "otbMath.h"
 
 namespace otb
@@ -41,6 +40,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>::
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
   m_ArchitectureType = PolarimetricData::New();
+  this->DynamicMultiThreadingOn();
 }
 
 /**
@@ -138,8 +138,7 @@ void MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFuncti
  * ThreadedGenerateData Performs the pixel-wise addition
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                          itk::ThreadIdType threadId)
+void MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
 
   InputImagePointer  inputPtr  = this->GetInput();
@@ -155,8 +154,6 @@ void MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFuncti
   itk::ImageRegionConstIterator<TInputImage> inputIt(inputPtr, inputRegionForThread);
   itk::ImageRegionIterator<TOutputImage>     outputIt(outputPtr, outputRegionForThread);
 
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
@@ -171,7 +168,6 @@ void MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFuncti
       outputIt.Set(m_Gain * GetFunctor()(inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[2], inputIt.Get()[3]));
       ++inputIt;
       ++outputIt;
-      progress.CompletedPixel(); // potential exception thrown here
     }
     break;
 
@@ -182,7 +178,6 @@ void MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFuncti
       outputIt.Set(m_Gain * GetFunctor()(inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2]));
       ++inputIt;
       ++outputIt;
-      progress.CompletedPixel(); // potential exception thrown here
     }
     break;
 
@@ -193,7 +188,6 @@ void MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFuncti
       outputIt.Set(m_Gain * GetFunctor()(inputIt.Get()[0], inputIt.Get()[1], 0, 0));
       ++inputIt;
       ++outputIt;
-      progress.CompletedPixel(); // potential exception thrown here
     }
     break;
 
@@ -204,7 +198,6 @@ void MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFuncti
       outputIt.Set(m_Gain * GetFunctor()(0, 0, inputIt.Get()[2], inputIt.Get()[3]));
       ++inputIt;
       ++outputIt;
-      progress.CompletedPixel(); // potential exception thrown here
     }
     break;
 

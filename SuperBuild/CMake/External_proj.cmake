@@ -25,8 +25,8 @@ SETUP_SUPERBUILD(PROJ)
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PROJ SQLITE TIFF CURL)
 
-set(PROJ_URL "https://download.osgeo.org/proj/proj-9.3.1.tar.gz")
-set(PROJ_MD5 b5c3f36fdca3bc425aca09d77c4ec25a)
+set(PROJ_URL "https://download.osgeo.org/proj/proj-9.5.0.tar.gz")
+set(PROJ_MD5 ac46b4e31562890d012ea6b31e579cf6)
 set(PROJ_FLAGS -DBUILD_SHARED_LIBS:BOOL=TRUE -DBUILD_TESTING:BOOL=OFF -DENABLE_TIFF:BOOL=ON -DENABLE_CURL:BOOL=ON)
 
 ExternalProject_Add(PROJ
@@ -50,8 +50,6 @@ ExternalProject_Add(PROJ
   LOG_BUILD 1
   LOG_INSTALL 1
   )
-
-SUPERBUILD_PATCH_SOURCE(PROJ)
 
 set(_SB_PROJ_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)

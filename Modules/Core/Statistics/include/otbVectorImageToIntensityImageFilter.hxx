@@ -24,7 +24,6 @@
 #include "otbVectorImageToIntensityImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
-#include "otbMacro.h"
 #include "otbMath.h"
 
 namespace otb
@@ -35,11 +34,11 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::VectorImageToIntensityImageFilter()
 {
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>
-void VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                        itk::ThreadIdType threadId)
+void VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
 
   InputImageConstPointerType inputPtr  = this->GetInput();
@@ -54,7 +53,6 @@ void VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::ThreadedGener
   // Define the iterators
   itk::ImageRegionConstIterator<InputImageType> inputIt(inputPtr, inputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>     outputIt(outputPtr, outputRegionForThread);
-  itk::ProgressReporter                         progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
@@ -72,7 +70,6 @@ void VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::ThreadedGener
     outputIt.Set(static_cast<OutputPixelType>(sum));
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
   }
 }
 /**

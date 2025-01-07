@@ -32,6 +32,7 @@
 #include "otbImageFileWriter.h"
 
 #include "itkImagePCAShapeModelEstimator.h"
+#include "vcl_legacy_aliases.h"
 
 // Data definitions
 #define IMGWIDTH 2

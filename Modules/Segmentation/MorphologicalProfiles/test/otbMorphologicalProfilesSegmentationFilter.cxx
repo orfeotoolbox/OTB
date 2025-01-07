@@ -59,7 +59,7 @@ int otbMorphologicalProfilesSegmentationFilter(int argc, char* argv[])
   filter->SetProfileStep(step);
   filter->SetInput(reader->GetOutput());
 
-  // filter->SetNumberOfThreads(1);
+  // filter->SetNumberOfWorkUnits(1);
   LabelWriterType::Pointer writerLabel = LabelWriterType::New();
 
   writerLabel->SetFileName(outputFileName);

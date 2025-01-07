@@ -39,6 +39,7 @@ namespace otb
 template <class TImage>
 BandMathImageFilter<TImage>::BandMathImageFilter()
 {
+  this->DynamicMultiThreadingOff();
   // This number will be incremented each time an image
   // is added over the one minimumrequired
   this->SetNumberOfRequiredInputs(1);
@@ -134,7 +135,7 @@ template <typename TImage>
 void BandMathImageFilter<TImage>::BeforeThreadedGenerateData()
 {
   typename std::vector<ParserType::Pointer>::iterator itParser;
-  unsigned int                                        nbThreads     = this->GetNumberOfThreads();
+  unsigned int                                        nbThreads     = this->GetNumberOfWorkUnits();
   unsigned int                                        nbInputImages = this->GetNumberOfInputs();
   unsigned int                                        nbAccessIndex = 4; // to give access to image and physical index
   unsigned int                                        i, j;
@@ -205,7 +206,7 @@ void BandMathImageFilter<TImage>::BeforeThreadedGenerateData()
 template <typename TImage>
 void BandMathImageFilter<TImage>::AfterThreadedGenerateData()
 {
-  unsigned int nbThreads = this->GetNumberOfThreads();
+  unsigned int nbThreads = this->GetNumberOfWorkUnits();
   unsigned int i;
 
   m_UnderflowCount = 0;

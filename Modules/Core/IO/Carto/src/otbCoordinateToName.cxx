@@ -54,7 +54,7 @@ CoordinateToName::CoordinateToName() : m_Lon(-1000.0), m_Lat(-1000.0), m_Multith
 
   m_Curl = CurlHelper::New();
 
-  m_Threader = itk::MultiThreader::New();
+  m_Threader = PlatformMultiThreader::New();
 
   m_UpdateDistance = 0.01; // about 1km at equator
 }
@@ -83,13 +83,14 @@ bool CoordinateToName::Evaluate()
   return true;
 }
 
-ITK_THREAD_RETURN_TYPE
-CoordinateToName::ThreadFunction(void* arg)
+
+itk::ITK_THREAD_RETURN_TYPE
+CoordinateToName::ThreadFunction(void *arg)
 {
-  struct itk::MultiThreader::ThreadInfoStruct* pInfo = (itk::MultiThreader::ThreadInfoStruct*)(arg);
-  CoordinateToName::Pointer                    lThis = (CoordinateToName*)(pInfo->UserData);
+  struct itk::MultiThreaderBase::WorkUnitInfo * pInfo = (itk::MultiThreaderBase::WorkUnitInfo *) (arg);
+  CoordinateToName::Pointer  lThis = (CoordinateToName*) (pInfo->UserData);
   lThis->DoEvaluate();
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 void CoordinateToName::DoEvaluate()

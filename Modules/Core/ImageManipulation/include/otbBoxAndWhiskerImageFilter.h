@@ -99,7 +99,7 @@ protected:
   }
 
   /** Main computation method implemented as a multithreaded filter */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
   void GenerateOutputInformation() override;
   void AllocateOutputs() override;
 

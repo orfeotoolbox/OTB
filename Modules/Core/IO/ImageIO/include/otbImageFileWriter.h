@@ -26,7 +26,7 @@
 #include "itkProcessObject.h"
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
-#include "itkFastMutexLock.h"
+#include <mutex>
 #include <string>
 #include "OTBImageIOExport.h"
 
@@ -284,7 +284,7 @@ private:
   unsigned int m_IOComponents;
 
   /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
-  itk::SimpleFastMutexLock m_Lock;
+  mutable std::mutex m_Lock;
 };
 
 } // end namespace otb

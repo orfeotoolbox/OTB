@@ -42,7 +42,9 @@ ClampImageFilter<TInputImage, TOutputImage>::ClampImageFilter()
   :
   m_Lower(std::numeric_limits<OutputPixelValueType>::lowest()),
   m_Upper(std::numeric_limits<OutputPixelValueType>::max())
-{}
+{
+  this->DynamicMultiThreadingOn();  
+}
 
 template <class TInputImage, class TOutputImage>
 void ClampImageFilter<TInputImage, TOutputImage>::SetThresholds(OutputPixelValueType lowerVal, OutputPixelValueType upperVal)
@@ -124,7 +126,7 @@ void ClampImageFilter<TInputImage, TOutputImage>::ClampOutside(const OutputPixel
 template <class TInputImage, class TOutputImage>
 void
 ClampImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   const auto& regionSize = outputRegionForThread.GetSize();
 
@@ -132,8 +134,6 @@ ClampImageFilter<TInputImage, TOutputImage>
   {
     return;
   }
-  const auto            numberOfLinesToProcess = outputRegionForThread.GetNumberOfPixels() / regionSize[0];
-  itk::ProgressReporter p(this, threadId, numberOfLinesToProcess);
 
   // Build output iterator
   itk::ImageScanlineConstIterator<InputImageType>  inIt(this->GetInput(), outputRegionForThread);
@@ -157,7 +157,6 @@ ClampImageFilter<TInputImage, TOutputImage>
     }
     outIt.NextLine();
     inIt.NextLine();
-    p.CompletedPixel(); // may throw
   }
 }
 

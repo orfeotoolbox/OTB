@@ -205,7 +205,7 @@ void StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>::operat
       }
 
       // Compute principal moments and axes
-      vnl_symmetric_eigensystem<double> eigen(centralMoments.GetVnlMatrix());
+      vnl_symmetric_eigensystem<double> eigen(centralMoments.GetVnlMatrix().as_ref());
       vnl_diag_matrix<double>           pm = eigen.D;
       for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
       {
@@ -216,7 +216,7 @@ void StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>::operat
 
       // Add a final reflection if needed for a proper rotation,
       // by multiplying the last row by the determinant
-      vnl_real_eigensystem                  eigenrot(principalAxes.GetVnlMatrix());
+      vnl_real_eigensystem                  eigenrot(principalAxes.GetVnlMatrix().as_ref());
       vnl_diag_matrix<std::complex<double>> eigenval = eigenrot.D;
       std::complex<double>                  det(1.0, 0.0);
 

@@ -69,7 +69,7 @@ int otbAmplitudePhaseToRGBFunctor(int itkNotUsed(argc), char* argv[])
   colormapper->SetInput1(modulusFilter->GetOutput());
   colormapper->SetInput2(constFilter->GetOutput());
   colormapper->SetInput3(phaseFilter->GetOutput());
-  colormapper->SetNumberOfThreads(1);
+  colormapper->SetNumberOfWorkUnits(1);
 
   writer->SetInput(colormapper->GetOutput());
 

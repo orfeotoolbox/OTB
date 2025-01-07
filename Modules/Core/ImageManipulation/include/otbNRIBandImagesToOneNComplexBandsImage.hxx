@@ -38,7 +38,8 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 NRIBandImagesToOneNComplexBandsImage<TInputImage, TOutputImage>::NRIBandImagesToOneNComplexBandsImage()
 {
-  // this->SetNumberOfThreads(1);
+  // this->SetNumberOfWorkUnits(1);
+  this->DynamicMultiThreadingOn();
 }
 
 /**
@@ -70,12 +71,8 @@ void NRIBandImagesToOneNComplexBandsImage<TInputImage, TOutputImage>::BeforeThre
  * ThreadedGenerateData
  */
 template <class TInputImage, class TOutputImage>
-void NRIBandImagesToOneNComplexBandsImage<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                           itk::ThreadIdType threadId)
+void NRIBandImagesToOneNComplexBandsImage<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   unsigned int nbInputs = this->GetNumberOfInputs();
 
@@ -112,7 +109,6 @@ void NRIBandImagesToOneNComplexBandsImage<TInputImage, TOutputImage>::ThreadedGe
       ++vInIt[i];
     ++outIt;
 
-    progress.CompletedPixel();
   }
 }
 

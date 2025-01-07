@@ -1383,7 +1383,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       m_BytePerPixel = sizeof(long);
       if (m_BytePerPixel == 8)
       {
-        itkWarningMacro(<< "Cast a long (64 bits) image into an int (32 bits) one.")
+        itkWarningMacro(<< "Cast a long (64 bits) image into an int (32 bits) one.");
       }
       m_PxType->pixType = GDT_Int32;
     }
@@ -1392,7 +1392,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       m_BytePerPixel = sizeof(unsigned long);
       if (m_BytePerPixel == 8)
       {
-        itkWarningMacro(<< "Cast an unsigned long (64 bits) image into an unsigned int (32 bits) one.")
+        itkWarningMacro(<< "Cast an unsigned long (64 bits) image into an unsigned int (32 bits) one.");
       }
       m_PxType->pixType = GDT_UInt32;
     }
@@ -1751,8 +1751,7 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double>& origin)
     return false;
   }
 
-  std::vector<itksys::String> originValues;
-  originValues = itksys::SystemTools::SplitString(originTag->GetText(), ' ', false);
+  auto originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
 
   // Compute origin in GDAL convention (the half-pixel shift is applied later)
   std::istringstream ss0(originValues[0]);

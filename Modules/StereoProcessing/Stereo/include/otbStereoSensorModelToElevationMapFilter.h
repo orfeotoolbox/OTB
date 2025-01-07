@@ -191,7 +191,7 @@ protected:
   ~StereoSensorModelToElevationFilter() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputRegionType& outputRegionForThread) override;
 
   /** Generate the input requested regions  */
   void GenerateInputRequestedRegion(void) override;
@@ -204,7 +204,7 @@ protected:
       *
       * \sa ProcessObject::VerifyInputInformation
       */
-  void VerifyInputInformation() override
+  void VerifyInputInformation() const override
   {
   }
 

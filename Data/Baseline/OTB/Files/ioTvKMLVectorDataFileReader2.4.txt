@@ -1,0 +1,22 @@
+VectorData (0x63553878a120)
+  RTTI typeinfo:   otb::VectorData<double, 2u, double>
+  Reference Count: 2
+  Modified Time: 94
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (0x63553878a410) 
+  Source output name: Primary
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 18
+  UpdateMTime: 95
+  RealTimeStamp: 0 seconds 
+
++Root (Root)
+  +Document (KmlFile)
+    +Collection ()
+      +Point () [-123.939, 49.1646]
+      +Polygon () 7 points, 0 interior rings

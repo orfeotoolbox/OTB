@@ -29,7 +29,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -93,7 +92,7 @@ void LeeImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 }
 
 template <class TInputImage, class TOutputImage>
-void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void LeeImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -110,9 +109,6 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const Outpu
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_Radius);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   //  InputRealType pixel;
   InputRealType sum;
@@ -184,8 +180,6 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const Outpu
 
       ++bit;
       ++it;
-
-      progress.CompletedPixel();
     }
   }
 }

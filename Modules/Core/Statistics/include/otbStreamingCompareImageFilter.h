@@ -159,7 +159,7 @@ protected:
   /** Allows skipping the verification of physical space between
    *  the two input images (see flag m_PhysicalSpaceCheck)
    */
-  void VerifyInputInformation() override;
+  void VerifyInputInformation() const override;
 
 private:
   PersistentCompareImageFilter(const Self&) = delete;

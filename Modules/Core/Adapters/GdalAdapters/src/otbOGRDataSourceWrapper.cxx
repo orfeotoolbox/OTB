@@ -27,7 +27,6 @@
 #include <clocale> // toupper
 // ITK includes
 #include "itkMacro.h" // itkExceptionMacro
-#include "itkExceptionObject.h"
 #include "itksys/SystemTools.hxx"
 // OTB includes
 #include "otbOGRDriversInit.h"

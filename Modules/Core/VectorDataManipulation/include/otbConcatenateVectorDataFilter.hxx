@@ -82,98 +82,93 @@ void ConcatenateVectorDataFilter<TVectorData>::GenerateData()
   // this->GetOutput()->SetMetaDataDictionary(this->GetInput(0)->GetMetaDataDictionary());
 
   // Prepare the output
-  // typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetDataTree()->GetRoot()->Get();
+  // typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetRoot();
+  auto outputPtr = this->GetOutput();
+  auto inputPtr = this->GetInput(0);
 
-
-  typename DataTreeType::Pointer outputTree = this->GetOutput()->GetDataTree();
-  typename TreeNodeType::Pointer inputRoot  = const_cast<TreeNodeType*>(this->GetInput(0)->GetDataTree()->GetRoot());
-
-  outputTree->SetRoot(inputRoot);
-
-  typename DataNodeType::Pointer outputDocument = this->GetOutput()->GetDataTree()->GetRoot()->GetChild(0)->Get();
-
+  outputPtr->Graft(inputPtr);
+  typename DataNodeType::Pointer outputDocument = outputPtr->GetChildrenList(outputPtr->GetRoot()).at(0);
+  //outputPtr->Add(outputDocument,outputPtr->GetRoot());
   // Adding the layer to the data tree
-  //   this->GetOutput()->GetDataTree()->Add(m_Document, outputRoot);
-  //   this->GetOutput()->GetDataTree()->Add(m_Folder, m_Document);
+  //   this->GetOutput()->Add(m_Document, outputRoot);
+  //   this->GetOutput()->Add(m_Folder, m_Document);
 
   // Retrieve all the inputs
   for (unsigned int idx = 1; idx < this->GetNumberOfInputs(); ++idx)
   {
     // Add the current vectordata
-    TreeNodeType* currentInputRoot = const_cast<TreeNodeType*>(this->GetInput(idx)->GetDataTree()->GetRoot());
-
-    ProcessNode(currentInputRoot, outputDocument);
+    ProcessNode(this->GetInput(idx),this->GetInput(idx)->GetRoot(),outputPtr, outputDocument);
   }
 }
 
 
 template <class TVectorData>
-void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(TreeNodeType* source, DataNodeType* outputDocument)
+void ConcatenateVectorDataFilter<TVectorData>::ProcessNode(const VectorDataType* inputVd,DataNodeType* source, VectorDataType* outputVd,DataNodeType* outputDocument)
 {
   if (source == nullptr)
     return;
 
 
   // Get the children list from the input node
-  ChildrenListType children = source->GetChildrenList();
+  ChildrenListType children = inputVd->GetChildrenList(source);
 
   // For each child
   typename ChildrenListType::iterator it;
   for (it = children.begin(); it != children.end(); ++it)
   {
     // get the data node
-    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType dataNode = (*it);
 
     switch (dataNode->GetNodeType())
     {
     case ROOT:
     {
-      ProcessNode((*it), outputDocument);
+      //ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case DOCUMENT:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FOLDER:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FEATURE_POINT:
     {
-      this->GetOutput()->GetDataTree()->Add(dataNode, outputDocument);
+      outputVd->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_LINE:
     {
-      this->GetOutput()->GetDataTree()->Add(dataNode, outputDocument);
+      outputVd->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_POLYGON:
     {
-      this->GetOutput()->GetDataTree()->Add(dataNode, outputDocument);
+      outputVd->Add(dataNode, outputDocument);
       break;
     }
     case FEATURE_MULTIPOINT:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FEATURE_MULTILINE:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FEATURE_MULTIPOLYGON:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     case FEATURE_COLLECTION:
     {
-      ProcessNode((*it), outputDocument);
+      ProcessNode(inputVd,dataNode,outputVd,outputDocument);
       break;
     }
     }

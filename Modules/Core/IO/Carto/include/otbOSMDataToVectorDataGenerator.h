@@ -27,6 +27,7 @@
 #include <string>
 
 #include "OTBCartoExport.h"
+#include "itkMacro.h"
 #include "otbVectorData.h"
 #include "otbVectorDataSource.h"
 

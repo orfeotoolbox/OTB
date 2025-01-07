@@ -83,6 +83,8 @@ protected:
     Superclass::PrintSelf(os, indent);
   }
 
+  virtual void VerifyInputInformation() const {};
+
 private:
   PersistentImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;

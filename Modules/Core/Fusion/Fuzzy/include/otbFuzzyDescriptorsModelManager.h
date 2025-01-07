@@ -24,7 +24,7 @@
 #include <vector>
 #include <utility>
 #include <string>
-
+#include "OTBFuzzyExport.h"
 
 namespace otb
 {

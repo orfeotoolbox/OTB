@@ -41,7 +41,6 @@ typename OrientationPathFunction<TInputPath, TOutput>::OutputType OrientationPat
 {
   VertexListPointer vertexList;
   VertexType        cindex;
-  VertexType        IndexOut;
   int               nbPath;
   RealType          Theta;
 

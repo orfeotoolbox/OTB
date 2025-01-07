@@ -350,6 +350,7 @@ void VectorDataKeywordlist::operator=(const Self& p)
   }
 }
 
+
 void VectorDataKeywordlist::Print(std::ostream& os, itk::Indent indent) const
 {
   this->PrintSelf(os, indent.GetNextIndent());

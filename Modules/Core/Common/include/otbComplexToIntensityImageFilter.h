@@ -71,12 +71,11 @@ class ITK_EXPORT ComplexToIntensityImageFilter
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexToIntensityImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                       Function::ComplexToIntensity<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
-                                        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = ComplexToIntensityImageFilter;
+  using Superclass   = itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                       Function::ComplexToIntensity<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -84,9 +83,9 @@ public:
   /** Runtime information support. */
   itkTypeMacro(ComplexToIntensityImageFilter, UnaryFunctorImageFilter);
 
-  typedef typename TInputImage::PixelType                        InputPixelType;
-  typedef typename TOutputImage::PixelType                       OutputPixelType;
-  typedef typename itk::NumericTraits<InputPixelType>::ValueType InputPixelValueType;
+  using InputPixelType      = typename TInputImage::PixelType;
+  using OutputPixelType     = typename TOutputImage::PixelType;
+  using InputPixelValueType = typename itk::NumericTraits<InputPixelType>::ValueType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -96,12 +95,8 @@ public:
 
 
 protected:
-  ComplexToIntensityImageFilter()
-  {
-  }
-  ~ComplexToIntensityImageFilter() override
-  {
-  }
+  ComplexToIntensityImageFilter() = default;
+  ~ComplexToIntensityImageFilter() override = default;
 
 private:
   ComplexToIntensityImageFilter(const Self&) = delete;

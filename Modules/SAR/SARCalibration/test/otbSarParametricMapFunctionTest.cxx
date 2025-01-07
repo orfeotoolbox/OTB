@@ -59,8 +59,6 @@ int otbSarParametricMapFunctionTest(int itkNotUsed(argc), char* argv[])
   FunctionType::PointType  p0;
   IndexType                index;
   InputPixelType           value;
-  FunctionType::PointType  pDst;
-
 
   p0[0] = static_cast<unsigned int>(size[0] / 2.);
   p0[1] = static_cast<unsigned int>(size[1] / 4.);

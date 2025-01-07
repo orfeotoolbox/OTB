@@ -37,6 +37,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Multivaria
 {
   this->SetNumberOfRequiredInputs(2);
   m_CovarianceEstimator = CovarianceEstimatorType::New();
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -135,7 +136,7 @@ void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Gener
   {
     // Case where nbbands1 == nbbands2
 
-    VnlMatrixType invs22 = vnl_matrix_inverse<RealType>(s22);
+    VnlMatrixType invs22 = vnl_matrix_inverse<RealType>(s22).as_matrix();
 
     // Build the generalized eigensystem
     VnlMatrixType s12s22is21 = s12 * invs22 * s21;
@@ -261,8 +262,7 @@ void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Gener
 }
 
 template <class TInputImage, class TOutputImage>
-void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                itk::ThreadIdType threadId)
+void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // Retrieve input images pointers
   const TInputImage* input1Ptr = this->GetInput1();
@@ -286,8 +286,6 @@ void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Threa
   unsigned int nbComp2   = input2Ptr->GetNumberOfComponentsPerPixel();
   unsigned int outNbComp = outputPtr->GetNumberOfComponentsPerPixel();
 
-
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   while (!inIt1.IsAtEnd() && !inIt2.IsAtEnd() && !outIt.IsAtEnd())
   {
@@ -349,7 +347,6 @@ void MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>::Threa
     ++inIt1;
     ++inIt2;
     ++outIt;
-    progress.CompletedPixel();
   }
 }
 }

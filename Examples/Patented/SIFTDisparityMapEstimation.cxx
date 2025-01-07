@@ -121,8 +121,8 @@ int main(int argc, char* argv[])
   filter2->SetInput(0, movingReader->GetOutput());
   filter2->SetScalesNumber(3);
 
-  filter1->SetNumberOfThreads(1);
-  filter2->SetNumberOfThreads(1);
+  filter1->SetNumberOfWorkUnits(1);
+  filter2->SetNumberOfWorkUnits(1);
 
   euclideanMatcher->SetInput1(filter1->GetOutput());
   euclideanMatcher->SetInput2(filter2->GetOutput());

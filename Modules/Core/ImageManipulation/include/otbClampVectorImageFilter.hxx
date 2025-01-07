@@ -41,7 +41,9 @@ ClampVectorImageFilter<TInputImage, TOutputImage>::ClampVectorImageFilter()
   m_Upper(itk::NumericTraits<OutputImageInternalPixelType>::max()),
   m_DLower(static_cast<double>(m_Lower)),
   m_DUpper(static_cast<double>(m_Upper))
-{}
+{
+    this->DynamicMultiThreadingOn();
+}
 
 
 /**
@@ -114,7 +116,7 @@ void ClampVectorImageFilter<TInputImage, TOutputImage>::ClampOutside(const Outpu
  *
  */
 template <class TInputImage, class TOutputImage>
-void ClampVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ClampVectorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   itkDebugMacro(<< "Actually executing");
 
@@ -129,9 +131,6 @@ void ClampVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(con
 
   InputIterator  inIt(inputPtr, outputRegionForThread);
   OutputIterator outIt(outputPtr, outputRegionForThread);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // walk the regions, threshold each pixel
   while (!outIt.IsAtEnd() && !inIt.IsAtEnd())
@@ -166,7 +165,6 @@ void ClampVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(con
 
     ++inIt;
     ++outIt;
-    progress.CompletedPixel();
   }
 }
 

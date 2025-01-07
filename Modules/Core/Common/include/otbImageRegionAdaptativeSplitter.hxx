@@ -37,15 +37,14 @@ unsigned int ImageRegionAdaptativeSplitter<VImageDimension>::GetNumberOfSplits(c
   // Set parameters
   this->SetImageRegion(region);
   this->SetRequestedNumberOfSplits(requestedNumber);
-
+  
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
   // Check if we need to compute split map agagin
-  m_Lock.Lock();
   if (!m_IsUpToDate)
   {
     // Do so if we need to
     this->EstimateSplitMap();
   }
-  m_Lock.Unlock();
 
   // Return the size of the split map
   return m_StreamVector.size();
@@ -57,15 +56,13 @@ itk::ImageRegion<VImageDimension> ImageRegionAdaptativeSplitter<VImageDimension>
 {
   // Set parameters
   this->SetImageRegion(region);
-
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
   // Check if we need to compute split map agagin
-  m_Lock.Lock();
   if (!m_IsUpToDate)
   {
     // Do so if we need to
     this->EstimateSplitMap();
   }
-  m_Lock.Unlock();
 
   // Return the requested split
   return m_StreamVector.at(i);

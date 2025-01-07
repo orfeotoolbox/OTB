@@ -30,7 +30,7 @@
 #include "otbPCAModelFactory.h"
 #endif
 
-#include "itkMutexLockHolder.h"
+#include <mutex>
 
 namespace otb
 {
@@ -97,9 +97,11 @@ DimensionalityReductionModelFactory<TInputValue, TOutputValue>::CreateDimensiona
 }
 
 template <class TInputValue, class TOutputValue>
-void DimensionalityReductionModelFactory<TInputValue, TOutputValue>::RegisterBuiltInFactories()
-{
-  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
+void
+DimensionalityReductionModelFactory<TInputValue,TOutputValue>
+::RegisterBuiltInFactories()
+{ 
+  std::lock_guard<std::mutex> lockHolder(mutex);
 
   RegisterFactory(SOM2DModelFactory<TInputValue, TOutputValue>::New());
   RegisterFactory(SOM3DModelFactory<TInputValue, TOutputValue>::New());
@@ -125,7 +127,7 @@ void DimensionalityReductionModelFactory<TInputValue, TOutputValue>::RegisterFac
 template <class TInputValue, class TOutputValue>
 void DimensionalityReductionModelFactory<TInputValue, TOutputValue>::CleanFactories()
 {
-  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
+  std::lock_guard<std::mutex> lockHolder(mutex);
 
   std::list<itk::ObjectFactoryBase*>           factories = itk::ObjectFactoryBase::GetRegisteredFactories();
   std::list<itk::ObjectFactoryBase*>::iterator itFac;

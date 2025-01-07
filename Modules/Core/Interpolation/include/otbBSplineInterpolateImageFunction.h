@@ -81,6 +81,8 @@ public:
   /** PointType typedef support */
   typedef typename Superclass::PointType PointType;
 
+  typedef typename Superclass::SizeType SizeType;
+
   /** Iterator typedef support */
   typedef itk::ImageLinearIteratorWithIndex<TImageType> Iterator;
 
@@ -125,6 +127,12 @@ public:
   /** Update coefficients filter. Coefficient filter are computed over the buffered
    region of the input image. */
   virtual void UpdateCoefficientsFilter(void);
+
+  virtual SizeType GetRadius() const
+  {
+    typename itk::InterpolateImageFunction<TImageType, TCoordRep>::SizeType radius({2,2});
+    return radius;
+  }
 
 protected:
   BSplineInterpolateImageFunction();

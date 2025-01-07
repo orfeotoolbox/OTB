@@ -77,12 +77,8 @@ public:
   itkTypeMacro(CBAMIChangeDetector, SuperClass);
 
 protected:
-  CBAMIChangeDetector()
-  {
-  }
-  ~CBAMIChangeDetector() override
-  {
-  }
+  CBAMIChangeDetector() {}
+  ~CBAMIChangeDetector() override {}
 
 private:
   CBAMIChangeDetector(const Self&) = delete;

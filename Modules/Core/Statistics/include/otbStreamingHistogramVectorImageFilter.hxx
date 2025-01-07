@@ -46,9 +46,8 @@ PersistentHistogramVectorImageFilter<TInputImage>::PersistentHistogramVectorImag
   //
   // allocate the data objects for the outputs which are
   // just decorators around pixel types and histogram list
-
+  this->DynamicMultiThreadingOff();
   m_Size.Fill(255);
-
   HistogramListPointerType output = static_cast<HistogramListType*>(this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, output.GetPointer());
 }
@@ -114,7 +113,7 @@ void PersistentHistogramVectorImageFilter<TInputImage>::Reset()
   TInputImage* inputPtr = const_cast<TInputImage*>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
-  unsigned int numberOfThreads   = this->GetNumberOfThreads();
+  unsigned int numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
   // TODO which is the good value ? (false in MVD2)
@@ -188,7 +187,7 @@ void PersistentHistogramVectorImageFilter<TInputImage>::Synthetize()
 {
   HistogramListType* outputHisto = this->GetHistogramListOutput();
 
-  int          numberOfThreads   = this->GetNumberOfThreads();
+  int          numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
 
   // copy histograms to output

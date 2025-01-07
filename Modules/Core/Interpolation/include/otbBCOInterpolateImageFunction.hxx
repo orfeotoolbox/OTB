@@ -51,9 +51,10 @@ void BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::SetRadius(unsigned
 }
 
 template <class TInputImage, class TCoordRep>
-unsigned int BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::GetRadius() const
+typename itk::InterpolateImageFunction<TInputImage, TCoordRep>::SizeType BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::GetRadius() const
 {
-  return m_Radius;
+  typename itk::InterpolateImageFunction<TInputImage, TCoordRep>::SizeType radius({m_Radius,m_Radius});
+  return radius;
 }
 
 template <class TInputImage, class TCoordRep>

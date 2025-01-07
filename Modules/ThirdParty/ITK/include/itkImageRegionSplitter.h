@@ -71,7 +71,7 @@ namespace itk
  */
 
 template< unsigned int VImageDimension >
-class ITK_EXPORT ImageRegionSplitter:public ImageRegionSplitterBase
+class ITK_ABI_EXPORT ImageRegionSplitter : public ImageRegionSplitterBase
 {
 public:
   /** Standard class typedefs. */

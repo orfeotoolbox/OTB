@@ -123,6 +123,11 @@ protected:
 
   void GenerateOutputRequestedRegion(itk::DataObject* output) override;
 
+  void VerifyInputInformation() const override
+  {
+    
+  }
+
 private:
   ComputeHistoFilter(const Self&) = delete;
   void operator=(const Self&) = delete;

@@ -20,7 +20,7 @@ JPEG_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\jpeg.lib
 #if using an external png library uncomment the follwing lines
 PNG_EXTERNAL_LIB = 1
 PNGDIR = @SB_INSTALL_PREFIX_NATIVE@\include
-PNG_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\libpng.lib
+PNG_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\libpng16.lib
 
 # if using an external libtiff library
 TIFF_INC = -I@SB_INSTALL_PREFIX_NATIVE@\include

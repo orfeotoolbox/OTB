@@ -29,7 +29,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
-#include "itkProgressReporter.h"
+
 
 namespace otb
 {
@@ -42,6 +42,7 @@ GammaMAPImageFilter<TInputImage, TOutputImage>::GammaMAPImageFilter()
 {
   m_Radius.Fill(1);
   SetNbLooks(1.0);
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -93,7 +94,7 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegio
 }
 
 template <class TInputImage, class TOutputImage>
-void GammaMAPImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void GammaMAPImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -110,9 +111,6 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const 
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_Radius);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   //  InputRealType pixel;
   InputRealType sum;
@@ -195,8 +193,6 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const 
 
       ++bit;
       ++it;
-
-      progress.CompletedPixel();
     }
   }
 }

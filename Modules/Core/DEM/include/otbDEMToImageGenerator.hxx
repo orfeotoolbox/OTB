@@ -24,6 +24,7 @@
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"
 #include "itkProgressReporter.h"
+#include "vcl_legacy_aliases.h"
 
 namespace otb
 {
@@ -31,6 +32,7 @@ namespace otb
 template <class TDEMImage>
 DEMToImageGenerator<TDEMImage>::DEMToImageGenerator()
 {
+  this->DynamicMultiThreadingOn();
   m_OutputSpacing[0]    = 0.0001;
   m_OutputSpacing[1]    = -0.0001;
   m_OutputSize[0]       = 1;
@@ -89,15 +91,12 @@ void DEMToImageGenerator<TDEMImage>::BeforeThreadedGenerateData()
 
 
 template <class TDEMImage>
-void DEMToImageGenerator<TDEMImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void DEMToImageGenerator<TDEMImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   DEMImagePointerType DEMImage = this->GetOutput();
 
   // Create an iterator that will walk the output region
   ImageIteratorType outIt = ImageIteratorType(DEMImage, outputRegionForThread);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Walk the output image, evaluating the height at each pixel
   IndexType currentindex;
@@ -154,7 +153,6 @@ void DEMToImageGenerator<TDEMImage>::ThreadedGenerateData(const OutputImageRegio
       // Back to the MNT default value
       DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
     }
-    progress.CompletedPixel();
   }
 }
 

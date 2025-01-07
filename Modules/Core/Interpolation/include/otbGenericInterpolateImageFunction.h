@@ -88,9 +88,11 @@ public:
 
   /** Set/Get the window radius*/
   virtual void SetRadius(unsigned int rad);
-  virtual unsigned int GetRadius() const
+  virtual typename itk::InterpolateImageFunction<TInputImage, TCoordRep>::SizeType GetRadius() const
   {
-    return m_Function.GetRadius();
+    auto rad = m_Function.GetRadius();
+    typename itk::InterpolateImageFunction<TInputImage, TCoordRep>::SizeType size({rad,rad});
+    return size;
   }
   // unsigned int GetRadius() { return this->GetFunction().GetRadius(); };
 

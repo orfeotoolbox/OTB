@@ -216,7 +216,7 @@ void SarDeburstImageFilter<TImage>::GenerateInputRequestedRegion()
 
 // Actual processing
 template <class TImage>
-void SarDeburstImageFilter<TImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
+void SarDeburstImageFilter<TImage>::DynamicThreadedGenerateData(const RegionType& outputRegionForThread)
 {
   if (m_OnlyValidSample)
   {

@@ -111,8 +111,12 @@ protected:
 
   void BeforeThreadedGenerateData() override;
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
-  void VerifyInputInformation() override{};
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
+  
+  void VerifyInputInformation() const override
+  {
+
+  }
 
 private:
   ApplyGainFilter(const Self&) = delete;

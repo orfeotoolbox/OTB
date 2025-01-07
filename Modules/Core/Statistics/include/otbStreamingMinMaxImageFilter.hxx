@@ -34,6 +34,7 @@ namespace otb
 template <class TInputImage>
 PersistentMinMaxImageFilter<TInputImage>::PersistentMinMaxImageFilter()
 {
+  this->DynamicMultiThreadingOff();
   // TODO : SetNumberOfRequiredOutputs
 
   // first output is a copy of the image, DataObject created by
@@ -151,7 +152,7 @@ template <class TInputImage>
 void PersistentMinMaxImageFilter<TInputImage>::Synthetize()
 {
   int i;
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   PixelType minimum = itk::NumericTraits<PixelType>::max();
   PixelType maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
@@ -182,7 +183,7 @@ void PersistentMinMaxImageFilter<TInputImage>::Synthetize()
 template <class TInputImage>
 void PersistentMinMaxImageFilter<TInputImage>::Reset()
 {
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   m_ThreadMin.resize(numberOfThreads);
   m_ThreadMax.resize(numberOfThreads);

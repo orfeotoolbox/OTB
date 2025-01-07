@@ -216,7 +216,7 @@ protected:
   /** Before Parallel textures extraction */
   void BeforeThreadedGenerateData() override;
   /** Parallel textures extraction */
-  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputRegionType& outputRegion) override;
 
 private:
   ScalarImageToTexturesFilter(const Self&) = delete;

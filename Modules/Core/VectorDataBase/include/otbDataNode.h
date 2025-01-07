@@ -283,6 +283,19 @@ public:
    */
   //   void ClearFields();
 
+  /**
+   * \brief Perform a reset of all fields of a datanode using an input node
+   * \warning Be aware that m_data contains itk smart pointers to polygon =>
+   *  if you modify this polygon it will be modified in the input data node
+   * \param inputNode 
+   */
+  void Reset(const DataNode& inputNode)
+  {
+    this->SetNodeType(inputNode.GetNodeType());
+    this->SetNodeId(inputNode.GetNodeId());
+    CopyFieldList(&inputNode);
+    this->m_Data = inputNode.m_Data;
+  }
 protected:
   /** Constructor */
   DataNode();
@@ -298,7 +311,7 @@ protected:
 private:
   DataNode(const Self&) = delete;
   void operator=(const Self&) = delete;
-
+//TODO Refactor modern cpp
   /** typedef of the data associated with the node */
   typedef struct
   {

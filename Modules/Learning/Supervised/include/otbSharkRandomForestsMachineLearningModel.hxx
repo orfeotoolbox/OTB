@@ -59,9 +59,9 @@ template <class TInputValue, class TOutputValue>
 void SharkRandomForestsMachineLearningModel<TInputValue, TOutputValue>::Train()
 {
 #ifdef _OPENMP
-  omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
-#endif
-
+  omp_set_num_threads(itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads());
+#endif // _OPENMP
+  
   std::vector<shark::RealVector> features;
   std::vector<unsigned int>      class_labels;
 
@@ -167,10 +167,10 @@ void SharkRandomForestsMachineLearningModel<TInputValue, TOutputValue>::DoPredic
   shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
 
 #ifdef _OPENMP
-  omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
+  omp_set_num_threads(itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads());
+#endif // _OPENMP
 
-#endif
-  if (proba != nullptr || quality != nullptr)
+  if( proba !=nullptr || quality != nullptr)
   {
     shark::Data<shark::RealVector> probas = m_RFModel.decisionFunction()(inputSamples);
     if (proba != nullptr)

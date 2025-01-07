@@ -21,6 +21,7 @@
 set(DOCUMENTATION "TODO")
 
 otb_module(OTBMathParserX
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBITK

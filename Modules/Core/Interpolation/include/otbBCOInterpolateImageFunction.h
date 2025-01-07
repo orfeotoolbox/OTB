@@ -83,6 +83,7 @@ public:
   /** Index typedef support. */
   typedef typename Superclass::IndexType      IndexType;
   typedef typename Superclass::IndexValueType IndexValueType;
+  typedef typename Superclass::SizeType       SizeType;
 
   /** Point typedef support. */
   typedef typename Superclass::PointType PointType;
@@ -95,8 +96,8 @@ public:
   typedef boost::container::small_vector<double, 7> CoefContainerType;
 
   /** Set/Get the window radius */
-  virtual void         SetRadius(unsigned int radius);
-  virtual unsigned int GetRadius() const;
+  virtual void  SetRadius(unsigned int radius);
+  virtual SizeType GetRadius() const;
 
   /** Set/Get the optimisation coefficient (Common values are -0.5, -0.75 or -1.0) */
   virtual void   SetAlpha(double alpha);

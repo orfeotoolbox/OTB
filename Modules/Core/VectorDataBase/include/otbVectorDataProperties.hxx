@@ -75,37 +75,36 @@ void VectorDataProperties<TVectorData>::ComputeBoundingRegion()
   m_BoundingRegion.SetSize(size);
 
   /** Compute the bounding region*/
-  InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(m_VectorDataObject->GetDataTree()->GetRoot());
-  ProcessNode(inputRoot);
+  ProcessNode(m_VectorDataObject,m_VectorDataObject->GetRoot());
 }
 
 template <class TVectorData>
-void VectorDataProperties<TVectorData>::ProcessNode(InternalTreeNodeType* source)
+void VectorDataProperties<TVectorData>::ProcessNode(VectorDataType* inputVdata,DataNodePointerType source)
 {
   // Get the children list from the input node
-  ChildrenListType children = source->GetChildrenList();
+  ChildrenListType children = inputVdata->GetChildrenList(source);
 
   // For each child
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
   {
     // Copy input DataNode info
-    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType dataNode = (*it);
 
     switch (dataNode->GetNodeType())
     {
     case otb::ROOT:
     {
-      ProcessNode((*it));
+      //ProcessNode(inputVdata,(*it));
       break;
     }
     case otb::DOCUMENT:
     {
-      ProcessNode((*it));
+      ProcessNode(inputVdata,(*it));
       break;
     }
     case otb::FOLDER:
     {
-      ProcessNode((*it));
+      ProcessNode(inputVdata,(*it));
       break;
     }
     case FEATURE_POINT:

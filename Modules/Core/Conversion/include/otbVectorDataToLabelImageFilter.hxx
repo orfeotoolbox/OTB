@@ -151,12 +151,6 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateOutputInfo
       otbMsgDevMacro(<< "Projection information unavailable");
     }
 
-    // Retrieving root node
-    DataTreeConstPointerType tree = vd->GetDataTree();
-
-    // Get the input tree root
-    InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(tree->GetRoot());
-
     // Iterative method to build the layers from a VectorData
     OGRLayer*                 ogrCurrentLayer = nullptr;
     std::vector<OGRLayer*>    ogrLayerVector;
@@ -166,7 +160,7 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateOutputInfo
     // OGRDataSource but don t release it. Destruction is done in the
     // destructor
     m_OGRDataSourcePointer = nullptr;
-    ogrLayerVector         = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot, m_OGRDataSourcePointer, ogrCurrentLayer, oSRS);
+    ogrLayerVector         = IOConversion->ConvertDataTreeNodeToOGRLayers(vd,vd->GetRoot(), m_OGRDataSourcePointer, ogrCurrentLayer, oSRS);
 
     // From OGRLayer* to OGRGeometryH vector
     for (unsigned int idx2 = 0; idx2 < ogrLayerVector.size(); ++idx2)

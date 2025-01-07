@@ -43,7 +43,8 @@ void NumberOfDivisionsTiledStreamingManager<TImage>::PrepareStreaming(itk::DataO
 {
   otbMsgDevMacro(<< "Activating NumberOfDivisionsTiledStreamingManager streaming mode") if (m_NumberOfDivisions < 1)
   {
-    itkWarningMacro(<< "NumberOfDivisions set to 0 : streaming disabled") m_NumberOfDivisions = 1;
+    itkWarningMacro(<< "NumberOfDivisions set to 0 : streaming disabled");
+    m_NumberOfDivisions = 1;
   }
 
   this->m_Splitter               = otb::ImageRegionSquareTileSplitter<itkGetStaticConstMacro(ImageDimension)>::New();

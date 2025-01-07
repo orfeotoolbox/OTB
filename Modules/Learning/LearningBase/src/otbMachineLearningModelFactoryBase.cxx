@@ -22,6 +22,5 @@
 
 namespace otb
 {
-
-itk::SimpleMutexLock MachineLearningModelFactoryBase::mutex;
+std::mutex MachineLearningModelFactoryBase::mutex;
 } // end namespace otb

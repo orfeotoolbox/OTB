@@ -23,6 +23,7 @@ expression to the pixels of an image. Note that classes based on MuParserX have
 better capabilities than the ones based on MuParser.")
 
 otb_module(OTBMathParser
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBITK

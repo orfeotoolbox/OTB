@@ -26,6 +26,8 @@
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
+#include "vcl_legacy_aliases.h"
+
 
 namespace otb
 {
@@ -40,6 +42,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::Persist
     m_IgnoreUserDefinedValue(false),
     m_UserIgnoredValue(itk::NumericTraits<InternalPixelType>::Zero)
 {
+  this->DynamicMultiThreadingOff();
   // first output is a copy of the image, DataObject created by
   // superclass
 
@@ -50,8 +53,8 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::Persist
     this->itk::ProcessObject::SetNthOutput(i, this->MakeOutput(i).GetPointer());
   }
   // Initiate ignored pixel counters
-  m_IgnoredInfinitePixelCount = std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
-  m_IgnoredUserPixelCount     = std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
+  m_IgnoredInfinitePixelCount = std::vector<unsigned int>(this->GetNumberOfWorkUnits(), 0);
+  m_IgnoredUserPixelCount     = std::vector<unsigned int>(this->GetNumberOfWorkUnits(), 0);
 }
 
 template <class TInputImage, class TPrecision>
@@ -267,7 +270,7 @@ void PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::Re
   TInputImage* inputPtr = const_cast<TInputImage*>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
-  unsigned int numberOfThreads   = this->GetNumberOfThreads();
+  unsigned int numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
   if (m_EnableMinMax)
@@ -328,12 +331,14 @@ void PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::Re
 
   if (m_IgnoreInfiniteValues)
   {
-    m_IgnoredInfinitePixelCount = std::vector<unsigned int>(numberOfThreads, 0);
+    m_IgnoredInfinitePixelCount.clear();
+    m_IgnoredInfinitePixelCount.resize(numberOfThreads,0);
   }
 
   if (m_IgnoreUserDefinedValue)
   {
-    m_IgnoredUserPixelCount = std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
+    m_IgnoredUserPixelCount.clear();
+    m_IgnoredUserPixelCount.resize(this->GetNumberOfWorkUnits(),0);
   }
 }
 
@@ -363,7 +368,7 @@ void PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::Sy
   unsigned int ignoredUserPixelCount     = 0;
 
   // Accumulate results from all threads
-  const itk::ThreadIdType numberOfThreads = this->GetNumberOfThreads();
+  const itk::ThreadIdType numberOfThreads = this->GetNumberOfWorkUnits();
   for (itk::ThreadIdType threadId = 0; threadId < numberOfThreads; ++threadId)
   {
     if (m_EnableMinMax)

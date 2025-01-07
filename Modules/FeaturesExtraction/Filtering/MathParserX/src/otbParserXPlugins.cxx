@@ -23,7 +23,7 @@
 
 #include "otbMath.h"
 #include "itkNumericTraits.h"
-#include <itkExceptionObject.h>
+#include "itkMacro.h"
 
 #include <vector>
 

@@ -77,14 +77,13 @@ public:
 protected:
   StreamingSimpleMosaicFilter()
   {
+    this->DynamicMultiThreadingOn();
   }
 
-  virtual ~StreamingSimpleMosaicFilter()
-  {
-  }
+  virtual ~StreamingSimpleMosaicFilter() = default;
 
   /** Overridden methods */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   StreamingSimpleMosaicFilter(const Self&); // purposely not implemented

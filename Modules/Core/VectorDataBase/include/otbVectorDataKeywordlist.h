@@ -160,6 +160,26 @@ public:
   /** Deep copy operator*/
   void operator=(const Self&);
 
+  friend bool operator==(const Self &lhs, const Self &rhs)
+  {
+    unsigned int equalfields = 0;
+    if(lhs.GetNumberOfFields()==rhs.GetNumberOfFields())
+    {
+      for(unsigned int i = 0; i < lhs.m_FieldList.size(); ++i)
+      {
+        if(lhs.HasField((rhs.m_FieldList[i].first)->GetNameRef()))
+        {
+          equalfields++;
+        }
+      }
+    }
+    if (equalfields == lhs.GetNumberOfFields())
+    {
+      return true;
+    }
+    return false;
+  };
+
 protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

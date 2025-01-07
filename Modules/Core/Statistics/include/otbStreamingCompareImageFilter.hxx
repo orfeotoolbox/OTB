@@ -34,7 +34,8 @@ template <class TInputImage>
 PersistentCompareImageFilter<TInputImage>::PersistentCompareImageFilter()
   : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1), m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1), m_DiffCount(1), m_PhysicalSpaceCheck(true)
 {
-  this->SetNumberOfRequiredInputs(2);
+  this->DynamicMultiThreadingOff();
+  this->SetNumberOfRequiredInputs( 2 );
   // first output is a copy of the image, DataObject created by
   // superclass
 
@@ -196,7 +197,7 @@ void PersistentCompareImageFilter<TInputImage>::Synthetize()
   unsigned long diffCount;
   RealType      squareOfDifferences, absoluteValueOfDifferences;
 
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   PixelType minimumRef, maximumRef;
   RealType  mse;
@@ -247,7 +248,7 @@ void PersistentCompareImageFilter<TInputImage>::Synthetize()
 template <class TInputImage>
 void PersistentCompareImageFilter<TInputImage>::Reset()
 {
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   // Resize the thread temporaries
   m_Count.SetSize(numberOfThreads);
@@ -268,7 +269,7 @@ void PersistentCompareImageFilter<TInputImage>::Reset()
 }
 
 template <class TInputImage>
-void PersistentCompareImageFilter<TInputImage>::VerifyInputInformation()
+void PersistentCompareImageFilter<TInputImage>::VerifyInputInformation() const
 {
   if (m_PhysicalSpaceCheck)
     Superclass::VerifyInputInformation();

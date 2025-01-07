@@ -22,6 +22,8 @@
 #define otbPolygonCompacityFunctor_h
 
 #include "otbMath.h"
+#include "vcl_legacy_aliases.h"
+#include "vnl/vnl_math.h"
 
 namespace otb
 {

@@ -318,7 +318,7 @@ void FunctorImageFilter<TFunction, TNameMap>::GenerateOutputInformation()
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TFunction, class TNameMap>
-void FunctorImageFilter<TFunction, TNameMap>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void FunctorImageFilter<TFunction, TNameMap>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   const auto& regionSize = outputRegionForThread.GetSize();
 
@@ -326,8 +326,6 @@ void FunctorImageFilter<TFunction, TNameMap>::ThreadedGenerateData(const OutputI
   {
     return;
   }
-  const auto            numberOfLinesToProcess = outputRegionForThread.GetNumberOfPixels() / regionSize[0];
-  itk::ProgressReporter p(this, threadId, numberOfLinesToProcess);
 
   // Build output iterator
   itk::ImageScanlineIterator<OutputImageType> outIt(this->GetOutput(), outputRegionForThread);
@@ -350,7 +348,6 @@ void FunctorImageFilter<TFunction, TNameMap>::ThreadedGenerateData(const OutputI
       outIt.Set(outputValueHolder);
     }
     outIt.NextLine();
-    p.CompletedPixel(); // may throw
   }
 }
 

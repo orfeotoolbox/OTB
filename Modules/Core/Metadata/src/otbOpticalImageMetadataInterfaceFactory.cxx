@@ -30,9 +30,7 @@
 #include "otbWorldView2ImageMetadataInterfaceFactory.h"
 #include "otbPleiadesImageMetadataInterfaceFactory.h"
 #include "otbSpot6ImageMetadataInterfaceFactory.h"
-
-#include "itkMutexLock.h"
-#include "itkMutexLockHolder.h"
+#include <mutex>
 
 namespace otb
 {
@@ -41,12 +39,11 @@ namespace otb
 void OpticalImageMetadataInterfaceFactory::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
-
-  static itk::SimpleMutexLock mutex;
-  {
+  static std::mutex mutex;
+    {
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
-    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
+    std::lock_guard<std::mutex> mutexHolder(mutex);
     if (firstTime)
     {
       itk::ObjectFactoryBase::RegisterFactory(IkonosImageMetadataInterfaceFactory::New());

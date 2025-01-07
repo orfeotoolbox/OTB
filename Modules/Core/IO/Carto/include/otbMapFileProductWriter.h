@@ -36,6 +36,7 @@
 
 // projection filter
 #include "otbGenericRSResampleImageFilter.h"
+#include "OTBCartoExport.h"
 #include <string>
 
 namespace otb
@@ -67,7 +68,7 @@ namespace otb
  * \ingroup OTBCarto
  */
 template <class TInputImage>
-class ITK_EXPORT MapFileProductWriter : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT MapFileProductWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

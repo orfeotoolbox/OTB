@@ -23,7 +23,8 @@
 #include "otbMacro.h"
 #include "otbLogger.h"
 
-#include "itkMultiThreader.h"
+#include "itkMultiThreaderBase.h"
+
 #include "itksys/SystemTools.hxx"
 
 #ifdef _OPENMP
@@ -65,12 +66,12 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
   }
 }
 
-itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
+itk::LoggerBaseEnums::PriorityLevel ConfigurationManager::GetLoggerLevel()
 {
   std::string svalue;
 
   // Default value is INFO
-  itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::INFO;
+  itk::LoggerBaseEnums::PriorityLevel level = itk::LoggerBase::INFO;
   itksys::SystemTools::GetEnv("OTB_LOGGER_LEVEL", svalue);
   // on windows a variable set with set EX="" will keep the "". We need
   // to remove them.
@@ -109,9 +110,9 @@ int ConfigurationManager::InitOpenMPThreads()
 {
   int ret = 1;
 #ifdef _OPENMP
-  ret = itk::MultiThreader::GetGlobalDefaultNumberOfThreads();
+  ret = itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads();
   omp_set_num_threads(ret);
-#endif
+#endif //_OPENMP
   return ret;
 }
 }

@@ -22,6 +22,7 @@
 #define otbImageClassificationFilter_hxx
 
 #include "otbImageClassificationFilter.h"
+#include "otbMacro.h" //for 
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
@@ -33,10 +34,11 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TMaskImage>
 ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>::ImageClassificationFilter()
 {
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();
-
+  
   this->SetNumberOfRequiredOutputs(3);
   this->SetNthOutput(0, TOutputImage::New());
   this->SetNthOutput(1, ConfidenceImageType::New());
@@ -97,7 +99,7 @@ void ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>::BeforeThr
   {
 #ifdef _OPENMP
     // OpenMP will take care of threading
-    this->SetNumberOfThreads(1);
+    this->SetNumberOfWorkUnits(1);
 #endif
   }
 }

@@ -31,15 +31,8 @@ namespace otb
  * Processing
  */
 template <class TInputImage, class TOutputImage, class TInternalValueType>
-void StreamingSimpleMosaicFilter<TInputImage, TOutputImage, TInternalValueType>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                      itk::ThreadIdType threadId)
+void StreamingSimpleMosaicFilter<TInputImage, TOutputImage, TInternalValueType>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
-
-  // Debug info
-  itkDebugMacro(<< "Actually executing thread " << threadId << " in region " << outputRegionForThread);
-
-  // Support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Get output pointer
   OutputImageType* mosaicImage = this->GetOutput();
@@ -111,9 +104,6 @@ void StreamingSimpleMosaicFilter<TInputImage, TOutputImage, TInternalValueType>:
 
     // Update output pixel value
     outputIt.Set(outputPixel);
-
-    // Update progress
-    progress.CompletedPixel();
 
   } // next output pixel
 }

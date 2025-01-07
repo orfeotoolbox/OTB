@@ -36,6 +36,7 @@ template <class TInputImage, class TOutputImage>
 EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::EstimateInnerProductPCAImageFilter()
   : m_NumberOfPrincipalComponentsRequired(1), m_CenterData(true)
 {
+  this->DynamicMultiThreadingOn();
 }
 
 /**
@@ -77,8 +78,7 @@ void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::BeforeThread
 }
 
 template <class TInputImage, class TOutputImage>
-void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                         itk::ThreadIdType threadId)
+void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   typename InputImageType::ConstPointer inputPtr  = this->GetInput();
   typename OutputImageType::Pointer     outputPtr = this->GetOutput();
@@ -94,8 +94,6 @@ void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::ThreadedGene
   // Define the iterators
   itk::ImageRegionConstIterator<TInputImage> inputIt(inputPtr, inputRegionForThread);
   itk::ImageRegionIterator<TOutputImage>     outputIt(outputPtr, outputRegionForThread);
-
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
@@ -119,7 +117,6 @@ void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::ThreadedGene
     outputIt.Set(outputPixel);
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
   }
 }
 }

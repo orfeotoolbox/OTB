@@ -270,9 +270,9 @@ void StreamingImageVirtualWriter<TInputImage>::GenerateData(void)
 template <class TInputImage>
 const bool& StreamingImageVirtualWriter<TInputImage>::GetAbortGenerateData() const
 {
-  m_Lock.Lock();
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
   bool ret = Superclass::GetAbortGenerateData();
-  m_Lock.Unlock();
+  m_Lock.unlock();
   if (ret)
     return otb::Utils::TrueConstant;
   return otb::Utils::FalseConstant;
@@ -281,9 +281,8 @@ const bool& StreamingImageVirtualWriter<TInputImage>::GetAbortGenerateData() con
 template <class TInputImage>
 void StreamingImageVirtualWriter<TInputImage>::SetAbortGenerateData(bool val)
 {
-  m_Lock.Lock();
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
   Superclass::SetAbortGenerateData(val);
-  m_Lock.Unlock();
 }
 
 } // end namespace otb

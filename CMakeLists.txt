@@ -37,9 +37,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check compiler versions
-set(OTB_MIN_GNU_VER 5)
+set(OTB_MIN_GNU_VER 8)
 set(OTB_MIN_MSVC_VER 19)
-set(OTB_MIN_Clang_VER 3.4)
+set(OTB_MIN_Clang_VER 10)
 if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
   if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
     message(FATAL_ERROR "The version of your ${CMAKE_CXX_COMPILER_ID} "
@@ -113,8 +113,8 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
-set(OTB_VERSION_MAJOR "9")
-set(OTB_VERSION_MINOR "1")
+set(OTB_VERSION_MAJOR "10")
+set(OTB_VERSION_MINOR "0")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -376,7 +376,16 @@ if(XDK_INSTALL_PATH)
     install(DIRECTORY ${XDK_INSTALL_PATH}/share
             DESTINATION .
             USE_SOURCE_PERMISSIONS
-            COMPONENT Core)
+            COMPONENT Core
+            PATTERN "cmake" EXCLUDE
+            )
+    # On Windows this folder does not exist
+    if( EXISTS ${XDK_INSTALL_PATH}/share/cmake)
+      install(DIRECTORY ${XDK_INSTALL_PATH}/share/cmake
+              DESTINATION ./lib
+              USE_SOURCE_PERMISSIONS
+              COMPONENT Core)
+    endif()
     install(DIRECTORY ${XDK_INSTALL_PATH}/include
             DESTINATION .
             USE_SOURCE_PERMISSIONS
@@ -430,7 +439,7 @@ if(UNIX)
   configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
                  ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
   install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/build_gdal_bindings.sh
     ${CMAKE_BINARY_DIR}/post_install.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/sanitize_rpath.sh
     DESTINATION ./tools

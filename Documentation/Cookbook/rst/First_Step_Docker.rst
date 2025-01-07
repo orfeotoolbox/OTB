@@ -25,7 +25,7 @@ Apply your first BandMath processing
 
     .. code-block:: bash
 
-        docker run -it -v /home/user/Data:/Data orfeotoolbox/otb:latest otbcli_BandMath –il /Data/phr_xs.tif –out ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
+        docker run -it -v /home/user/Data:/Data orfeotoolbox/otb:latest otbcli_BandMath –il /Data/phr_xs.tif –out /Data/ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
 
 **Important Note**:
     If you are on MacOS, there is a trick to use the docker image due to the ARM architecture, it is described in the `README <https://hub.docker.com/r/orfeotoolbox/otb>`_ of the official docker hub image page

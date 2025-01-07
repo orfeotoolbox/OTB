@@ -26,7 +26,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkObjectFactory.h"
 #include "itkExtractImageFilterRegionCopier.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -39,6 +38,7 @@ MultiChannelExtractROI<TInputPixelType, TOutputPixelType>::MultiChannelExtractRO
   : ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2>>(), m_FirstChannel(0), m_LastChannel(0), m_ChannelsKind(0)
 {
   ClearChannels();
+  this->DynamicMultiThreadingOn();
 }
 
 /**
@@ -235,16 +235,12 @@ void MultiChannelExtractROI<TInputPixelType, TOutputPixelType>::GenerateOutputIn
 }
 
 template <class TInputPixelType, class TOutputPixelType>
-void MultiChannelExtractROI<TInputPixelType, TOutputPixelType>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                     itk::ThreadIdType threadId)
+void MultiChannelExtractROI<TInputPixelType, TOutputPixelType>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   itkDebugMacro(<< "Actually executing");
   // Get the input and output pointers
   typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define the portion of the input to walk for this thread
   InputImageRegionType inputRegionForThread;
@@ -269,7 +265,6 @@ void MultiChannelExtractROI<TInputPixelType, TOutputPixelType>::ThreadedGenerate
       outIt.Set(inIt.Get());
       ++outIt;
       ++inIt;
-      progress.CompletedPixel();
     }
   }
   // Specific behaviour
@@ -296,7 +291,6 @@ void MultiChannelExtractROI<TInputPixelType, TOutputPixelType>::ThreadedGenerate
       outIt.Set(pixelOutput);
       ++outIt;
       ++inIt;
-      progress.CompletedPixel();
     }
   }
 }

@@ -71,7 +71,6 @@ set(OTBITK_ITK_REQUIRED_MODULE_LIST
     ITKEigen
     #ITKFEM
     ITKNarrowBand
-    ITKNeuralNetworks
     ITKOptimizers
     ITKOptimizersv4
     ITKPolynomials
@@ -102,9 +101,7 @@ set(OTBITK_ITK_REQUIRED_MODULE_LIST
 
 find_package(ITK COMPONENTS ${OTBITK_ITK_REQUIRED_MODULE_LIST})
 mark_as_advanced(ITK_DIR)
-
-# set ( ITK_NO_IO_FACTORY_REGISTER_MANAGER TRUE )
-# include (${ITK_USE_FILE})
+#include (${ITK_USE_FILE})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${ITK_REQUIRED_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ITK_REQUIRED_CXX_FLAGS}")

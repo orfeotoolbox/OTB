@@ -31,8 +31,8 @@ endif()
 
 ExternalProject_Add(MUPARSERX
   PREFIX MUPARSERX
-  URL "https://github.com/beltoforion/muparserx/archive/v4.0.8.zip"
-  URL_MD5 b4cbf819a7a8a3d74fd1dcc1890a3670
+  URL "https://github.com/beltoforion/muparserx/archive/v4.0.12.zip"
+  URL_MD5 dca30d184b15447751c321ce85b400a1
   BINARY_DIR ${MUPARSERX_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -47,8 +47,5 @@ ExternalProject_Add(MUPARSERX
   LOG_BUILD 1
   LOG_INSTALL 1
   )
-
-#Patch mpParserMessageProvider.cpp. This patch is integrated upstream but not yet released (last release is 4.0.7)
-SUPERBUILD_PATCH_SOURCE(MUPARSERX)
 
 SUPERBUILD_UPDATE_CMAKE_VARIABLES(MUPARSERX FALSE muparserx muparserx)

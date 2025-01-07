@@ -21,6 +21,7 @@
 set(DOCUMENTATION "This module contains classes for wavelet analysis.")
 
 otb_module(OTBWavelet
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBITK

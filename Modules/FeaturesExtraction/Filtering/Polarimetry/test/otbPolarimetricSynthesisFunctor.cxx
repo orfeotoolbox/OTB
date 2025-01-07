@@ -21,6 +21,7 @@
 #include <complex>
 #include <cmath>
 #include "otbPolarimetricSynthesisFunctor.h"
+#include <iostream>
 
 int otbPolarimetricSynthesisFunctor(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {

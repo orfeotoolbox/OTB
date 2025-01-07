@@ -25,6 +25,7 @@
 
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 #include "itkMeasurementVectorTraits.h"
+#include "vcl_legacy_aliases.h"
 
 namespace otb
 {

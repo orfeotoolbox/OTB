@@ -36,12 +36,13 @@ template <class TInputImage>
 PersistentMinMaxVectorImageFilter<TInputImage>::PersistentMinMaxVectorImageFilter()
   : m_NoDataFlag(false), m_NoDataValue(itk::NumericTraits<InternalPixelType>::Zero)
 {
+  
   // first output is a copy of the image, DataObject created by
   // superclass
   //
   // allocate the data objects for the outputs which are
   // just decorators around pixel types
-
+  this->DynamicMultiThreadingOff();
   for (int i = 1; i < 3; ++i)
   {
     typename PixelObjectType::Pointer output = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
@@ -122,7 +123,7 @@ void PersistentMinMaxVectorImageFilter<TInputImage>::Reset()
   TInputImage* inputPtr = const_cast<TInputImage*>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
-  unsigned int numberOfThreads   = this->GetNumberOfThreads();
+  unsigned int numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
   // Variable Initialization
@@ -148,7 +149,7 @@ void PersistentMinMaxVectorImageFilter<TInputImage>::Synthetize()
 {
   int i;
 
-  int          numberOfThreads   = this->GetNumberOfThreads();
+  int          numberOfThreads   = this->GetNumberOfWorkUnits();
   unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
 
   PixelType minimumVector;

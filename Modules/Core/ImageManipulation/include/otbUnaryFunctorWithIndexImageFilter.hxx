@@ -24,6 +24,7 @@
 #include "otbUnaryFunctorWithIndexImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
+#include "otbMacro.h" //for 
 
 namespace otb
 {
@@ -34,6 +35,7 @@ template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>::UnaryFunctorWithIndexImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
+  this->DynamicMultiThreadingOn();
 }
 template <class TInputImage, class TOutputImage, class TFunction>
 void UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>::GenerateInputRequestedRegion()
@@ -83,8 +85,7 @@ void UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>::Gen
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                  itk::ThreadIdType threadId)
+void UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   InputImagePointer  inputPtr  = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
   OutputImagePointer outputPtr = this->GetOutput(0);
@@ -96,8 +97,6 @@ void UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>::Thr
   IteratorType                           inputIt = IteratorType(inputPtr, inputRegionForThread);
   itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
 
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
@@ -106,7 +105,6 @@ void UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>::Thr
     outputIt.Set(m_Functor(inputIt.Get(), inputIt.GetIndex()));
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
   }
 }
 

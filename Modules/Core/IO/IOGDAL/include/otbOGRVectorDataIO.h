@@ -47,11 +47,11 @@ namespace otb
 class OTBIOGDAL_EXPORT OGRVectorDataIO : public VectorDataIOBase
 {
 public:
-  /** Standard class typedefs. */
-  typedef OGRVectorDataIO               Self;
-  typedef VectorDataIOBase              Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  /** Standard class usings. */
+  using Self = OGRVectorDataIO;
+  using Superclass = VectorDataIOBase;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,31 +59,28 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(OGRVectorDataIO, VectorDataIOBase);
 
-  /** Byte order typedef */
-  typedef Superclass::ByteOrder ByteOrder;
+  /** Byte order using */
+  using ByteOrder = Superclass::ByteOrder;
 
-  /** Data typedef */
-  typedef VectorData<double, 2> VectorDataType;
-  typedef VectorDataType::DataTreeType           DataTreeType;
-  typedef DataTreeType::TreeNodeType             InternalTreeNodeType;
-  typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
-  typedef DataTreeType::Pointer                  DataTreePointerType;
-  typedef DataTreeType::ConstPointer             DataTreeConstPointerType;
-  typedef VectorDataType::DataNodeType           DataNodeType;
-  typedef DataNodeType::Pointer                  DataNodePointerType;
-  typedef DataNodeType::PointType                PointType;
-  typedef DataNodeType::LineType                 LineType;
-  typedef LineType::VertexListType               VertexListType;
-  typedef VertexListType::ConstPointer           VertexListConstPointerType;
-  typedef LineType::Pointer                      LinePointerType;
-  typedef DataNodeType::PolygonType              PolygonType;
-  typedef PolygonType::Pointer                   PolygonPointerType;
-  typedef DataNodeType::PolygonListType          PolygonListType;
-  typedef PolygonListType::Pointer               PolygonListPointerType;
-  typedef VectorDataType::Pointer                VectorDataPointerType;
-  typedef VectorDataType::ConstPointer           VectorDataConstPointerType;
-  typedef Superclass::SpacingType                SpacingType;
-  typedef Superclass::PointType                  OriginType;
+  /** Data using */
+  using VectorDataType = VectorData<double, 2>;
+  using DataTreeType = VectorDataType::DataTreeType;
+  using ChildrenListType = VectorDataType::ChildrenListType;
+  using DataNodeType = VectorDataType::DataNodeType;
+  using DataNodePointerType = DataNodeType::Pointer;
+  using PointType = DataNodeType::PointType;
+  using LineType = DataNodeType::LineType;
+  using VertexListType = LineType::VertexListType;
+  using VertexListConstPointerType = VertexListType::ConstPointer;
+  using LinePointerType = LineType::Pointer;
+  using PolygonType = DataNodeType::PolygonType;
+  using PolygonPointerType = PolygonType::Pointer;
+  using PolygonListType = DataNodeType::PolygonListType;
+  using PolygonListPointerType = PolygonListType::Pointer;
+  using VectorDataPointerType = VectorDataType::Pointer;
+  using VectorDataConstPointerType = VectorDataType::ConstPointer;
+  using SpacingType = Superclass::SpacingType;
+  using OriginType = Superclass::PointType;
 
   /*-------- This part of the interface deals with reading data. ------ */
 

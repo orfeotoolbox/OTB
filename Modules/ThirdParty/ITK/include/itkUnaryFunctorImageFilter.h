@@ -50,7 +50,7 @@ namespace itk
  * \ingroup OTBITK
  */
 template< class TInputImage, class TOutputImage, class TFunction >
-class ITK_EXPORT UnaryFunctorImageFilter:public InPlaceImageFilter< TInputImage, TOutputImage >
+class ITK_TEMPLATE_EXPORT UnaryFunctorImageFilter:public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard class typedefs. */
@@ -122,10 +122,9 @@ protected:
    * portion of the output image specified by the parameter
    * "outputRegionForThread"
    *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   * \sa ImageToImageFilter::DynamicThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
 private:
   UnaryFunctorImageFilter(const Self &) = delete;

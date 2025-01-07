@@ -35,6 +35,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunction>::UnaryFunctorNeighborhoodVectorImageFilter()
 {
+  this->DynamicMultiThreadingOn();
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
   for (unsigned int i = 0; i < InputImageDimension; ++i)
@@ -56,8 +57,7 @@ void UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunct
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                           itk::ThreadIdType threadId)
+void UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunction>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
 
   InputImageRegionType inputRegionForThread;
@@ -71,9 +71,6 @@ void UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunct
   itk::ImageRegionIterator<TOutputImage> outputIt(this->GetOutput(), outputRegionForThread);
   outputIt.GoToBegin();
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   while (!outputIt.IsAtEnd() && !neighInputIt.IsAtEnd())
   {
     outputIt.Set(m_Functor(neighInputIt));
@@ -81,7 +78,6 @@ void UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunct
     ++neighInputIt;
     ++outputIt;
 
-    progress.CompletedPixel();
   }
 }
 

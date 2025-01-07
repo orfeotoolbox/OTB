@@ -22,6 +22,8 @@
 #define otbObjectListToObjectListFilter_h
 
 #include "otbObjectListSource.h"
+#include "otbMacro.h" //for ITK_THREAD_RETURN_TYPE in ITK5
+#include "itkMultiThreaderBase.h"
 
 namespace otb
 {
@@ -105,7 +107,7 @@ protected:
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the
    * control to ThreadedGenerateData(). */
-  static ITK_THREAD_RETURN_TYPE ThreaderCallback(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE ThreaderCallback(void *arg);
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct

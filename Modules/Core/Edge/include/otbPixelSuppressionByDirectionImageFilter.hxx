@@ -21,6 +21,7 @@
 #ifndef otbPixelSuppressionByDirectionImageFilter_hxx
 #define otbPixelSuppressionByDirectionImageFilter_hxx
 
+#include "otbMacro.h" //for 
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 
 #include "itkDataObject.h"
@@ -42,9 +43,9 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::PixelSuppressionByDirectionImageFilter()
 {
-
   m_Radius.Fill(1);
   m_AngularBeam = static_cast<double>(0.);
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -132,8 +133,7 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
 }
 
 template <class TInputImage, class TOutputImage>
-void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                             itk::ThreadIdType threadId)
+void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
 
   itk::ConstantBoundaryCondition<InputImageType> cbc;
@@ -155,9 +155,6 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Threaded
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(inputDirection, outputRegionForThread, m_Radius);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // typename TInputImage::IndexType     bitIndex;
 
@@ -265,7 +262,6 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Threaded
       ++bit;
       ++itin;
       ++itout;
-      progress.CompletedPixel();
     }
   }
 }

@@ -38,6 +38,7 @@ ComputeGainLutFilter<TInputImage, TOutputImage>::ComputeGainLutFilter()
   m_Min     = std::numeric_limits<double>::quiet_NaN();
   m_Max     = std::numeric_limits<double>::quiet_NaN();
   m_Step    = -1;
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -48,14 +49,10 @@ void ComputeGainLutFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData
 }
 
 template <class TInputImage, class TOutputImage>
-void ComputeGainLutFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                           itk::ThreadIdType itkNotUsed(threadId))
+void ComputeGainLutFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   assert(m_Step > 0);
   assert(m_NbBin > 0);
-  // TODO error
-  // itk::ProgressReporter progress(this , threadId ,
-  //               outputRegionForThread.GetNumberOfPixels() );
 
   typename InputImageType::ConstPointer input(this->GetInput());
   typename OutputImageType::Pointer     output(this->GetOutput());

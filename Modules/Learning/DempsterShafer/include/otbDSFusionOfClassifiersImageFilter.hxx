@@ -462,16 +462,12 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::Optimiz
 
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-void DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                   itk::ThreadIdType threadId)
+void DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr = this->GetInputMask();
   OutputImagePointerType     outputPtr    = this->GetOutput();
-
-  // Progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
@@ -511,7 +507,6 @@ void DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::Th
       // else, outIt is set to the m_LabelForNoDataPixels value
       outIt.Set(m_LabelForNoDataPixels);
     }
-    progress.CompletedPixel();
   }
 }
 /**

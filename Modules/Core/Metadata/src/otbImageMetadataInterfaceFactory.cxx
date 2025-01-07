@@ -37,9 +37,7 @@
 #include "otbSentinel1ImageMetadataInterfaceFactory.h"
 #include "otbCosmoImageMetadataInterfaceFactory.h"
 #include "otbRadarsat2ImageMetadataInterfaceFactory.h"
-
-#include "itkMutexLock.h"
-#include "itkMutexLockHolder.h"
+#include <mutex>
 
 #include <iostream>
 #include <iterator>
@@ -93,12 +91,11 @@ ImageMetadataInterfaceFactory
 void ImageMetadataInterfaceFactory::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
-
-  static itk::SimpleMutexLock mutex;
-  {
+  static std::mutex mutex;
+    {
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
-    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
+    std::lock_guard<std::mutex> mutexHolder(mutex);
     if (firstTime)
     {
       itk::ObjectFactoryBase::RegisterFactory(IkonosImageMetadataInterfaceFactory::New());

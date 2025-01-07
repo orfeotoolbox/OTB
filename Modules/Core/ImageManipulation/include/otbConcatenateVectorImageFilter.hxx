@@ -22,6 +22,7 @@
 #define otbConcatenateVectorImageFilter_hxx
 
 #include "otbConcatenateVectorImageFilter.h"
+#include "otbMacro.h" //for 
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
@@ -34,6 +35,7 @@ template <class TInputImage1, class TInputImage2, class TOutputImage>
 ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::ConcatenateVectorImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
+  this->DynamicMultiThreadingOn();
 }
 /**
  * Destructor.
@@ -116,15 +118,12 @@ void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::Bef
  * Main computation method.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                  itk::ThreadIdType threadId)
+void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // retrieves inputs and output pointer
   InputImage1PointerType input1 = this->GetInput1();
   InputImage2PointerType input2 = this->GetInput2();
   OutputImagePointerType output = this->GetOutput();
-
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define the portion of the input to walk for this thread
   typename InputImage1Type::RegionType inputRegionForThread;

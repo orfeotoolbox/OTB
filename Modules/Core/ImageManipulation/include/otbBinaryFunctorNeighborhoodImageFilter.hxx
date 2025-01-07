@@ -25,7 +25,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
-
+#include "otbMacro.h"
 namespace otb
 {
 
@@ -153,8 +153,8 @@ void BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputIma
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction>
-void BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
 
   // unsigned int i;
@@ -192,8 +192,6 @@ void BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputIma
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage1>::FaceListType::iterator fit1;
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage2>::FaceListType::iterator fit2;
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
@@ -217,7 +215,6 @@ void BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputIma
       ++neighInputIt1;
       ++neighInputIt2;
       ++outputIt;
-      progress.CompletedPixel();
     }
   }
 }

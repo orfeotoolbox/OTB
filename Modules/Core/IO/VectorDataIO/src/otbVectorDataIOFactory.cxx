@@ -26,8 +26,7 @@
 #endif
 
 #include "itkObjectFactoryBase.h"
-#include "itkMutexLock.h"
-#include "itkMutexLockHolder.h"
+#include <mutex>
 
 namespace otb
 {
@@ -75,12 +74,11 @@ VectorDataIOFactory::VectorDataIOBasePointerType VectorDataIOFactory::CreateVect
 void VectorDataIOFactory::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
-
-  static itk::SimpleMutexLock mutex;
-  {
+  static std::mutex mutex;
+    {
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
-    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
+    std::lock_guard<std::mutex> mutexHolder(mutex);
     if (firstTime)
     {
       itk::ObjectFactoryBase::RegisterFactory(OGRVectorDataIOFactory::New());

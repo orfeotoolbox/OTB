@@ -23,7 +23,6 @@
 
 #include "otbUnaryFunctorWithIndexWithOutputSizeImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -83,8 +82,8 @@ void UnaryFunctorWithIndexWithOutputSizeImageFilter<TInputImage, TOutputImage, T
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void UnaryFunctorWithIndexWithOutputSizeImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void UnaryFunctorWithIndexWithOutputSizeImageFilter<TInputImage, TOutputImage, TFunction>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
   InputImagePointer  inputPtr  = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
   OutputImagePointer outputPtr = this->GetOutput(0);
@@ -96,8 +95,6 @@ void UnaryFunctorWithIndexWithOutputSizeImageFilter<TInputImage, TOutputImage, T
   IteratorType                           inputIt = IteratorType(inputPtr, inputRegionForThread);
   itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
 
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
@@ -106,7 +103,6 @@ void UnaryFunctorWithIndexWithOutputSizeImageFilter<TInputImage, TOutputImage, T
     outputIt.Set(m_Functor(inputIt.Get(), inputIt.GetIndex()));
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
   }
 }
 

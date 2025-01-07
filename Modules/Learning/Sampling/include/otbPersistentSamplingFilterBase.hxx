@@ -28,6 +28,7 @@
 #include "otbMacro.h"
 #include "otbStopwatch.h"
 #include "itkProgressReporter.h"
+#include "itkMultiThreaderBase.h"
 
 namespace otb
 {
@@ -161,7 +162,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::GenerateData(void)
   // Get the output pointer
   // const InputImageType *outputPtr = this->GetOutput();
 
-  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->VectorThreaderCallback, &str);
 
   // multithread the execution
@@ -181,7 +182,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::AllocateOutputs(void
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
   ogr::Layer       inLayer = vectors->GetLayer(m_LayerIndex);
 
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
 
   // Prepare temporary input
   this->m_InMemoryInputs.clear();
@@ -279,7 +280,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::FillOneOutput(unsign
     itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
   }
 
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
   for (unsigned int thread = 0; thread < numberOfThreads; thread++)
   {
     ogr::Layer inLayer = this->m_InMemoryOutputs[thread][outIdx]->GetLayerChecked(0);
@@ -646,7 +647,7 @@ void PersistentSamplingFilterBase<TInputImage, TMaskImage>::DispatchInputVectors
 
   inLayer.SetSpatialFilter(&tmpPolygon);
 
-  unsigned int            numberOfThreads = this->GetNumberOfThreads();
+  unsigned int            numberOfThreads = this->GetNumberOfWorkUnits();
   std::vector<ogr::Layer> tmpLayers;
   tmpLayers.reserve(numberOfThreads);
   for (unsigned int i = 0; i < numberOfThreads; i++)
@@ -777,22 +778,23 @@ PersistentSamplingFilterBase<TInputImage, TMaskImage>::GetAdditionalFields()
   return this->m_AdditionalFields;
 }
 
-template <class TInputImage, class TMaskImage>
-ITK_THREAD_RETURN_TYPE PersistentSamplingFilterBase<TInputImage, TMaskImage>::VectorThreaderCallback(void* arg)
+template<class TInputImage, class TMaskImage>
+itk::ITK_THREAD_RETURN_TYPE
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::VectorThreaderCallback(void *arg)
 {
-  VectorThreadStruct* str = (VectorThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct*)(arg))->UserData);
-
-  int threadId    = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->ThreadID;
-  int threadCount = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->NumberOfThreads;
+  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->UserData);
+  int threadId = ((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->WorkUnitID;
+  int threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *)(arg))->NumberOfWorkUnits;
 
   ogr::Layer layer = str->Filter->GetInMemoryInput(threadId);
 
   if (threadId < threadCount)
-  {
-    str->Filter->ThreadedGenerateVectorData(layer, threadId);
-  }
-
-  return ITK_THREAD_RETURN_VALUE;
+    {
+    str->Filter->ThreadedGenerateVectorData(layer,threadId);
+    }
+    
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 template <class TInputImage, class TMaskImage>

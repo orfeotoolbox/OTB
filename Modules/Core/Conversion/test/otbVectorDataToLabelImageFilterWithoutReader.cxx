@@ -110,12 +110,12 @@ int main(int itkNotUsed(argc), char* argv[])
   polygon2->SetFieldAsInt("DN", 64);
 
 
-  DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
+  DataNodeType::Pointer root = data->GetRoot();
 
-  data->GetDataTree()->Add(document, root);
-  data->GetDataTree()->Add(folder, document);
-  data->GetDataTree()->Add(polygon1, folder);
-  data->GetDataTree()->Add(polygon2, folder);
+  data->Add(document, root);
+  data->Add(folder, document);
+  data->Add(polygon1, folder);
+  data->Add(polygon2, folder);
 
   data->Update();
 

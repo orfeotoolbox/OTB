@@ -24,6 +24,7 @@
 #include "otbPersistentImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbImage.h"
+#include "otbMacro.h" //for ITK_THREAD_RETURN_TYPE in ITK5
 #include <string>
 
 namespace otb
@@ -175,7 +176,7 @@ protected:
   const std::vector<SimpleFieldDefn>& GetAdditionalFields();
 
   /** Callback function to launch VectorThreadedGenerateData in each thread */
-  static ITK_THREAD_RETURN_TYPE VectorThreaderCallback(void* arg);
+  static itk::ITK_THREAD_RETURN_TYPE VectorThreaderCallback(void *arg);
 
   /** basically the same struct as itk::ImageSource::ThreadStruct */
   struct VectorThreadStruct

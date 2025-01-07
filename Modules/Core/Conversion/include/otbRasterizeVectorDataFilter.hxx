@@ -74,11 +74,8 @@ void RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::Generate
       otbMsgDevMacro(<< "Projection information unavailable");
     }
 
-    // Retrieving root node
-    DataTreeConstPointerType tree = vd->GetDataTree();
-
     // Get the input tree root
-    InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(tree->GetRoot());
+    DataNodePointerType root = vd->GetRoot();
 
     // Iterative method to build the layers from a VectorData
     OGRRegisterAll();
@@ -90,7 +87,7 @@ void RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::Generate
     // OGRDataSource but don t release it. Destruction is done in the
     // destructor
     m_OGRDataSourcePointer = nullptr;
-    ogrLayerVector         = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot, m_OGRDataSourcePointer, ogrCurrentLayer, oSRS);
+    ogrLayerVector         = IOConversion->ConvertDataTreeNodeToOGRLayers(vd,root, m_OGRDataSourcePointer, ogrCurrentLayer, oSRS);
 
     // Cast OGRLayer* to OGRLayerH
     for (unsigned int idx2 = 0; idx2 < ogrLayerVector.size(); ++idx2)

@@ -31,6 +31,7 @@ namespace otb
 template <class TDisparityImage, class TInputImage, class TOutputDEMImage, class TEpipolarGridImage, class TMaskImage>
 DisparityMapToDEMFilter<TDisparityImage, TInputImage, TOutputDEMImage, TEpipolarGridImage, TMaskImage>::DisparityMapToDEMFilter()
 {
+  this->DynamicMultiThreadingOff();
   // Set the number of inputs
   this->SetNumberOfRequiredInputs(7);
   this->SetNumberOfRequiredInputs(1);
@@ -586,7 +587,7 @@ void DisparityMapToDEMFilter<TDisparityImage, TInputImage, TOutputDEMImage, TEpi
 
   typename DisparityMapType::RegionType requestedRegion = horizDisp->GetRequestedRegion();
 
-  m_UsedInputSplits = m_InputSplitter->GetNumberOfSplits(requestedRegion, this->GetNumberOfThreads());
+  m_UsedInputSplits = m_InputSplitter->GetNumberOfSplits(requestedRegion, this->GetNumberOfWorkUnits());
 
   m_LeftToGroundTransform  = RSTransformType::New();
   m_RightToGroundTransform = RSTransformType::New();
@@ -603,7 +604,7 @@ void DisparityMapToDEMFilter<TDisparityImage, TInputImage, TOutputDEMImage, TEpi
     m_UsedInputSplits = 0;
   }
 
-  if (m_UsedInputSplits <= static_cast<unsigned int>(this->GetNumberOfThreads()))
+  if (m_UsedInputSplits <= static_cast<unsigned int>(this->GetNumberOfWorkUnits()))
   {
     m_TempDEMRegions.clear();
 

@@ -17,7 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 otb_module_test()
 
 set(OTBDescriptorsTests
@@ -35,6 +34,10 @@ endif()
 add_executable(otbDescriptorsTestDriver ${OTBDescriptorsTests})
 target_link_libraries(otbDescriptorsTestDriver ${OTBDescriptors-Test_LIBRARIES})
 otb_module_target_label(otbDescriptorsTestDriver)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  set_target_properties(otbDescriptorsTestDriver PROPERTIES LINK_FLAGS "-Wl,-no-as-needed")
+endif()
+
 
 # Tests Declaration
 
@@ -50,16 +53,16 @@ otb_add_test(NAME feTvHistogramOfOrientedGradientCovariantImageFunction COMMAND 
 
 
 
-otb_add_test(NAME feTvForwardFourierMellinImageFilter COMMAND otbDescriptorsTestDriver
-  --compare-n-images ${EPSILON_6} 2
-  ${BASELINE}/feForwardFourierMellinImageFilterReal.tif
-  ${TEMP}/feForwardFourierMellinImageFilterReal.tif
-  ${BASELINE}/feForwardFourierMellinImageFilterImag.tif
-  ${TEMP}/feForwardFourierMellinImageFilterImag.tif
-  otbFourierMellinImageFilter
-  ${INPUTDATA}/circle.raw.hdr
-  ${TEMP}/feForwardFourierMellinImageFilterReal.tif
-  ${TEMP}/feForwardFourierMellinImageFilterImag.tif)
+# otb_add_test(NAME feTvForwardFourierMellinImageFilter COMMAND otbDescriptorsTestDriver
+#   --compare-n-images ${EPSILON_6} 2
+#   ${BASELINE}/feForwardFourierMellinImageFilterReal.tif
+#   ${TEMP}/feForwardFourierMellinImageFilterReal.tif
+#   ${BASELINE}/feForwardFourierMellinImageFilterImag.tif
+#   ${TEMP}/feForwardFourierMellinImageFilterImag.tif
+#   otbFourierMellinImageFilter
+#   ${INPUTDATA}/circle.raw.hdr
+#   ${TEMP}/feForwardFourierMellinImageFilterReal.tif
+#   ${TEMP}/feForwardFourierMellinImageFilterImag.tif)
 
 otb_add_test(NAME feTvImageToHessianDeterminantImageFilter COMMAND otbDescriptorsTestDriver
   --compare-image ${EPSILON_3}

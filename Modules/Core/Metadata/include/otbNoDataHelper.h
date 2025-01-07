@@ -25,8 +25,8 @@
 #include "vnl/vnl_math.h"
 #include <itkVariableLengthVector.h>
 #include "OTBMetadataExport.h"
-
 #include "otbImageMetadata.h"
+#include "vcl_legacy_aliases.h"
 
 namespace itk
 {

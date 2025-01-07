@@ -21,6 +21,7 @@
 #ifndef otbUnaryFunctorNeighborhoodWithOffsetImageFilter_hxx
 #define otbUnaryFunctorNeighborhoodWithOffsetImageFilter_hxx
 
+#include "otbMacro.h" //for 
 #include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
@@ -36,6 +37,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>::UnaryFunctorNeighborhoodWithOffsetImageFilter()
 {
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
   m_Offset.Fill(1);
@@ -47,7 +49,7 @@ void UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TF
 {
   Superclass::BeforeThreadedGenerateData();
 
-  for (itk::ThreadIdType i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (itk::ThreadIdType i = 0; i < this->GetNumberOfWorkUnits(); ++i)
   {
     m_FunctorList.push_back(m_Functor);
   }

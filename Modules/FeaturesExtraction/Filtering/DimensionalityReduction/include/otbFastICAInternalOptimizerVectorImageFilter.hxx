@@ -35,7 +35,7 @@ template <class TInputImage, class TOutputImage>
 FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::FastICAInternalOptimizerVectorImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
-
+  this->DynamicMultiThreadingOff();
   m_CurrentBandForLoop = 0;
   m_Beta               = 0.;
   m_Den                = 0.;
@@ -62,9 +62,9 @@ void FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::Reset
     throw itk::ExceptionObject(__FILE__, __LINE__, "Give the initial W matrix", ITK_LOCATION);
   }
 
-  m_BetaVector.resize(this->GetNumberOfThreads());
-  m_DenVector.resize(this->GetNumberOfThreads());
-  m_NbSamples.resize(this->GetNumberOfThreads());
+  m_BetaVector.resize(this->GetNumberOfWorkUnits());
+  m_DenVector.resize(this->GetNumberOfWorkUnits());
+  m_NbSamples.resize(this->GetNumberOfWorkUnits());
 
   std::fill(m_BetaVector.begin(), m_BetaVector.end(), 0.);
   std::fill(m_DenVector.begin(), m_DenVector.end(), 0.);
@@ -126,7 +126,7 @@ void FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::Synth
   double den      = 0.;
   double nbSample = 0;
 
-  for (itk::ThreadIdType i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (itk::ThreadIdType i = 0; i < this->GetNumberOfWorkUnits(); ++i)
   {
     beta += m_BetaVector[i];
     den += m_DenVector[i];

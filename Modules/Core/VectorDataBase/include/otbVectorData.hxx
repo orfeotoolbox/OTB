@@ -22,7 +22,6 @@
 #define otbVectorData_hxx
 
 #include "otbVectorData.h"
-#include "itkPreOrderTreeIterator.h"
 #include "otbMetaDataKey.h"
 
 namespace otb
@@ -31,10 +30,10 @@ namespace otb
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 VectorData<TPrecision, VDimension, TValuePrecision>::VectorData()
 {
-  m_DataTree               = DataTreeType::New();
-  DataNodePointerType root = DataNodeType::New();
-  root->SetNodeId("Root");
-  m_DataTree->SetRoot(root);
+  m_root = DataNodeType::New();
+  m_root->SetNodeType(otb::ROOT);
+  m_root->SetNodeId("Root");
+  boost::add_vertex(m_root, m_DataTree);
   m_Origin.Fill(0);
   m_Spacing.Fill(1);
 }
@@ -103,37 +102,41 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::SetOrigin(const float 
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-bool VectorData<TPrecision, VDimension, TValuePrecision>::Clear()
+void VectorData<TPrecision, VDimension, TValuePrecision>::Clear()
 {
-  return m_DataTree->Clear();
+  m_DataTree.clear();
+  //Always add a root node by default
+  boost::add_vertex(m_root,m_DataTree);
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 int VectorData<TPrecision, VDimension, TValuePrecision>::Size() const
 {
-  return m_DataTree->Count();
+  return boost::num_vertices(m_DataTree);
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void VectorData<TPrecision, VDimension, TValuePrecision>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << std::endl;
+  os << "\n";
 
-  itk::PreOrderTreeIterator<DataTreeType> it(m_DataTree);
-  it.GoToBegin();
-
-  while (!it.IsAtEnd())
+  typename boost::graph_traits<DataTreeType>::vertex_iterator it,it_end;
+  boost::tie(it, it_end) = vertices(m_DataTree);
+  uint8_t indentcounts = 0;
+  for (;it!=it_end;it++)
   {
-    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
-    bool                                    goesOn   = true;
-    while (itParent.HasParent() && goesOn)
+    for(auto i = 0; i<indentcounts;i++)
     {
       os << indent;
-      goesOn = itParent.GoToParent();
     }
-    os << "+" << it.Get()->GetNodeTypeAsString() << std::endl;
-    ++it;
+    os << "+" << m_DataTree[*it]->GetNodeTypeAsString() << "\n";
+    typename boost::graph_traits<DataTreeType>::adjacency_iterator ai, a_end; 
+    boost::tie(ai, a_end) = boost::adjacent_vertices(*it, m_DataTree);
+    for (; ai != a_end; ai++) {
+        indentcounts++;
+        break;
+    }
   }
 }
 
@@ -146,25 +149,18 @@ void VectorData<TPrecision, VDimension, TValuePrecision>::Graft(const itk::DataO
   if (data)
   {
     // Attempt to cast data to an Image
-    const Self* vdData;
-
-    try
-    {
-      vdData = dynamic_cast<const Self*>(data);
-    }
-    catch (...)
-    {
-      return;
-    }
+    const Self* vdData = dynamic_cast<const Self*>(data);
 
     if (vdData)
     {
       // Copy all the needed data : DataTree, spacing, origin and
       // Projection Ref
-      m_DataTree = const_cast<DataTreeType*>(vdData->GetDataTree());
+      this->m_DataTree.clear(); //Before copy make sure the datatree is EMPTY
+      this->CopyDataTree(vdData);
       this->SetSpacing(vdData->GetSpacing());
       this->SetOrigin(vdData->GetOrigin());
       this->SetProjectionRef(vdData->GetProjectionRef());
+      this->m_root = vdData->GetRoot();
     }
     else
     {

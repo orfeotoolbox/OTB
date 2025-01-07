@@ -25,6 +25,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
+#include "otbMacro.h" //for 
 
 // Just to get the forward/inverse definitions
 #include "otbWaveletOperatorBase.h"
@@ -98,9 +99,10 @@ public:
   }
 
 protected:
-  SubsampleImageFilter()
-  {
+  SubsampleImageFilter ()
+    {
     m_SubsampleFactor.Fill(1);
+    this->DynamicMultiThreadingOn();
   }
   ~SubsampleImageFilter() override
   {
@@ -124,7 +126,7 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Allows multithreading */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

@@ -25,8 +25,9 @@
 #include "otbGeographicalDistance.h"
 #include "otbMacro.h"
 #include <string>
+#include "vcl_legacy_aliases.h" 
 
-int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
+int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
 {
   // Look for tolerance value
   std::string  s_tol    = argv[argc - 1]; // last argument

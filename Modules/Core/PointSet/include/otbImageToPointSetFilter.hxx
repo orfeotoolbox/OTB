@@ -22,6 +22,7 @@
 #define otbImageToPointSetFilter_hxx
 
 #include "otbImageToPointSetFilter.h"
+#include "itkMultiThreaderBase.h"
 
 namespace otb
 {
@@ -160,13 +161,13 @@ void ImageToPointSetFilter<TInputImage, TOutputPointSet>::GenerateData(void)
 
     // Initializing object per thread
     typename PointsContainerType::Pointer defaultPointsContainer = PointsContainerType::New();
-    this->m_PointsContainerPerThread                             = OutputPointsContainerForThreadType(this->GetNumberOfThreads(), defaultPointsContainer);
+    this->m_PointsContainerPerThread                             = OutputPointsContainerForThreadType(this->GetNumberOfWorkUnits(), defaultPointsContainer);
 
     typename PointDataContainerType::Pointer defaultPointDataContainer = PointDataContainerType::New();
-    this->m_PointDataContainerPerThread = OutputPointDataContainerForThreadType(this->GetNumberOfThreads(), defaultPointDataContainer);
+    this->m_PointDataContainerPerThread = OutputPointDataContainerForThreadType(this->GetNumberOfWorkUnits(), defaultPointDataContainer);
 
     // Setting up multithreader
-    this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+    this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
     this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
 
     // multithread the execution
@@ -235,15 +236,17 @@ void ImageToPointSetFilter<TInputImage, TOutputPointSet>::ThreadedGenerateData(c
 }
 
 template <class TInputImage, class TOutputPointSet>
-ITK_THREAD_RETURN_TYPE ImageToPointSetFilter<TInputImage, TOutputPointSet>::ThreaderCallback(void* arg)
+itk::ITK_THREAD_RETURN_TYPE
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
+::ThreaderCallback(void *arg)
 {
   ThreadStruct*     str;
   unsigned int      total, threadCount;
   itk::ThreadIdType threadId;
 
-  threadId    = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->ThreadID;
-  threadCount = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->NumberOfThreads;
-  str         = (ThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct*)(arg))->UserData);
+  threadId = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->WorkUnitID;
+  threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->NumberOfWorkUnits;
+  str = (ThreadStruct *) (((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->UserData);
 
   // execute the actual method with appropriate output region
   // first find out how many pieces extent can be split into.
@@ -261,7 +264,7 @@ ITK_THREAD_RETURN_TYPE ImageToPointSetFilter<TInputImage, TOutputPointSet>::Thre
   //   few threads idle.
   //   }
 
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 template <class TInputImage, class TOutputPointSet>

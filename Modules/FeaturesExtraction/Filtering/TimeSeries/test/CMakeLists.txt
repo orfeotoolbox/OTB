@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+# This test module causes undeclared declspec import on windows which is not understandable
+if(NOT WIN32)
 otb_module_test()
 set(OTBTimeSeriesTests
   otbEnvelopeSavitzkyGolayInterpolationFunctorTest.cxx
@@ -51,3 +53,4 @@ otb_add_test(NAME mtTvTimeSeriesLeastSquaresFittingFunctorWeights COMMAND otbTim
   otbTimeSeriesLeastSquareFittingFunctorWeightsTest
   1 2 3
   )
+endif()

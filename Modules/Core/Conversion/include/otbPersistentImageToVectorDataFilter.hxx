@@ -56,9 +56,9 @@ void PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::Reset()
   typedef typename DataNodeType::Pointer              DataNodePointerType;
 
   this->GetOutputVectorData()->Clear();
-  DataNodePointerType root = DataNodeType::New();
-  root->SetNodeId("Root");
-  this->GetOutputVectorData()->GetDataTree()->SetRoot(root);
+  // DataNodePointerType root = DataNodeType::New();
+  // root->SetNodeId("Root");
+  // this->GetOutputVectorData()->SetRoot(root);
 
   DataNodePointerType folder = DataNodeType::New();
   folder->SetNodeType(otb::FOLDER);
@@ -66,8 +66,8 @@ void PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::Reset()
   DataNodePointerType document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
 
-  this->GetOutputVectorData()->GetDataTree()->Add(document, this->GetOutputVectorData()->GetDataTree()->GetRoot()->Get());
-  this->GetOutputVectorData()->GetDataTree()->Add(folder, document);
+  this->GetOutputVectorData()->Add(document, this->GetOutputVectorData()->GetRoot());
+  this->GetOutputVectorData()->Add(folder, document);
 }
 
 template <class TImage, class TOutputVectorData>

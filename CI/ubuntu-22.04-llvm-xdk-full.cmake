@@ -54,15 +54,15 @@ if(NOT ${ci_do_doxygen} EQUAL -1)
   set(site_option
 "${site_option}
 BUILD_DOCUMENTATION:BOOL=ON
-OTB_DOXYGEN_ITK_TAGFILE:FILEPATH=${CTEST_BINARY_DIRECTORY}/InsightDoxygenDocTag-4.13.0
-OTB_DOXYGEN_ITK_DOXYGEN_URL:STRING=\"https://itk.org/Doxygen413/html\"
+OTB_DOXYGEN_ITK_TAGFILE:FILEPATH=${CTEST_BINARY_DIRECTORY}/InsightDoxygenDocTag-5.3.0
+OTB_DOXYGEN_ITK_DOXYGEN_URL:STRING=\"https://itk.org/Doxygen53/html\"
 ")
   set (ENABLE_DOXYGEN ON)
   # The ITK doxygen tag file needs to be patched before being used for OTB
   # See otb-devutils/Scripts/tagfile_fix.py
   message(STATUS "Get resources for Doxygen build ...")
-  execute_process(COMMAND wget https://www.orfeo-toolbox.org/packages/archives/Doxygen/InsightDoxygenDocTag-4.13.0.gz
+  execute_process(COMMAND wget https://www.orfeo-toolbox.org/packages/archives/Doxygen/InsightDoxygenDocTag-5.3.0.gz
                   WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY})
-  execute_process(COMMAND gzip -d InsightDoxygenDocTag-4.13.0.gz
+  execute_process(COMMAND gzip -d InsightDoxygenDocTag-5.3.0.gz
                   WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY})
 endif()

@@ -21,9 +21,7 @@ Download OTB
 
 .. code-block:: bash
 
-    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Core.tar.gz -o /Path/Download/OTB-Core-9.0.tar.gz
-    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-FeaturesExtraction.tar.gz -o /Path/Download/OTB-FeaturesExtraction-9.0.tar.gz
-    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-9.0.0-Linux-Dependencies.tar.gz -o /Path/Download/OTB-Dependencies-9.0.tar.gz
+    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-10.0.0-Linux.tar.gz -o /Path/Download/OTB-10.0.tar.gz
 
 
 Installation
@@ -33,9 +31,7 @@ Installation
 
    # Install otb
    cd /Path/Download
-   tar xvf OTB-Core-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
-   tar xvf OTB-Features-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
-   tar xvf OTB-Dependencies-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-10.0.tar.gz --one-top-level="/Path/To/Install/OTB"
    source /Path/To/Install/OTB/otbenv.profile
 
 Download an example image
@@ -50,17 +46,17 @@ Compute NDVI using the CLI interface
 
 .. code-block:: bash
 
-    otbcli_BandMath –il /Path/You/Want/phr_xs.tif –out ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
+    otbcli_BandMath –il /Path/You/Want/phr_xs.tif –out /Path/You/Want/ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
 
 Use Python API to compute NDVI
 ++++++++++++++++++++++++++++++
 
-To use the Python API you have first to recompile the bindings for your version of Python. By default they are compiled for Python 3.8
+To use the Python API you have first to recompile the bindings for your version of Python. By default they are compiled for Python 3.10
 
 .. code-block:: bash
 
    # Recompile python bindings
-   cd /Path/To/OTB-9.0
+   cd /Path/To/OTB-10.0
    source otbenv.profile
    sh recompile-bindings.sh
 

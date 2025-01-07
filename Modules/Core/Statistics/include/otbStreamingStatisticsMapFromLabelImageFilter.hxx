@@ -42,7 +42,9 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   //
   // allocate the data objects for the outputs which are
   // just decorators around pixel types
-  typename PixelValueMapObjectType::Pointer output = static_cast<PixelValueMapObjectType*>(this->MakeOutput(1).GetPointer());
+  this->DynamicMultiThreadingOff();
+  typename PixelValueMapObjectType::Pointer output
+      = static_cast<PixelValueMapObjectType*>(this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, output.GetPointer());
 
   this->Reset();
@@ -208,7 +210,7 @@ void PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLa
   m_MinRadiometricValue.clear();
   m_MaxRadiometricValue.clear();
   m_LabelPopulation.clear();
-  m_AccumulatorMaps.resize(this->GetNumberOfThreads());
+  m_AccumulatorMaps.resize(this->GetNumberOfWorkUnits());
 }
 
 template <class TInputVectorImage, class TLabelImage>

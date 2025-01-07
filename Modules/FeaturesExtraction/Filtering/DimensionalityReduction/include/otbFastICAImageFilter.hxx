@@ -266,7 +266,7 @@ void FastICAImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>::
     // Decorrelation of the W vectors
     InternalMatrixType         W_tmp = W * W.transpose();
     vnl_svd<MatrixElementType> solver(W_tmp);
-    InternalMatrixType         valP = solver.W();
+    InternalMatrixType         valP = solver.W().as_matrix();
     for (unsigned int i = 0; i < valP.rows(); ++i)
       valP(i, i) = 1. / std::sqrt(static_cast<double>(valP(i, i))); // Watch for 0 or neg
     InternalMatrixType transf = solver.U();

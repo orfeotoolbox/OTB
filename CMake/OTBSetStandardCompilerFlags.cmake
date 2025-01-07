@@ -231,6 +231,7 @@ macro(check_compiler_platform_flags)
       endif()
     endif()
   endif()
+
   #-----------------------------------------------------------------------------
   #OTB requires special compiler flags on some platforms.
   if(CMAKE_COMPILER_IS_GNUCXX)

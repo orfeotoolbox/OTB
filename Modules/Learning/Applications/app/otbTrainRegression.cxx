@@ -24,7 +24,6 @@
 #include "otbListSampleGenerator.h"
 
 #include "otbImageToEnvelopeVectorDataFilter.h"
-#include "itkPreOrderTreeIterator.h"
 
 // Statistic XML Reader
 #include "otbStatisticsXMLFileReader.h"
@@ -86,7 +85,6 @@ public:
 
   typedef otb::ImageToEnvelopeVectorDataFilter<SampleImageType, VectorDataType> EnvelopeFilterType;
 
-  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
 
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
 
@@ -227,7 +225,7 @@ private:
       // Avoid commented lines or too short ones
       if (!line.empty() && line[0] != '#')
       {
-        std::vector<itksys::String> words = itksys::SystemTools::SplitString(line, sep);
+        std::vector<std::string> words = itksys::SystemTools::SplitString(line, sep);
         if (nbCols == 0)
         {
           // detect separator and feature size
@@ -329,12 +327,13 @@ private:
 
       VectorDataType::Pointer envelope = envelopeFilter->GetOutput();
 
-      TreeIteratorType itVector(envelope->GetDataTree());
-      for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
+      auto itVectorPair = envelope->GetIteratorPair();
+      auto currentIt = itVectorPair.first;
+      for (; currentIt != itVectorPair.second; ++currentIt)
       {
-        if (itVector.Get()->IsPolygonFeature())
+        if (envelope->Get(currentIt)->IsPolygonFeature())
         {
-          itVector.Get()->SetFieldAsInt(std::string("class"), 1);
+          envelope->Get(currentIt)->SetFieldAsInt(std::string("class"), 1);
         }
       }
 

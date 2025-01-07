@@ -46,7 +46,7 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::SetInput
 }
 
 template <class TInputVectorData, class TOutputVectorData>
-const typename VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::InputVectorDataType*
+typename VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::InputVectorDataType*
 VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
@@ -54,7 +54,7 @@ VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::GetInput(void
     return nullptr;
   }
 
-  return static_cast<const TInputVectorData*>(this->itk::ProcessObject::GetInput(0));
+  return static_cast<TInputVectorData*>(this->itk::ProcessObject::GetInput(0));
 }
 
 template <class TInputVectorData, class TOutputVectorData>
@@ -77,131 +77,104 @@ void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::Generate
   InputVectorDataPointer  inputPtr  = this->GetInput();
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
-  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
-  OutputDataTreePointerType                                  tree = outputPtr->GetDataTree();
-
   // Get the input tree root
-  InputInternalTreeNodeType* inputRoot = const_cast<InputInternalTreeNodeType*>(inputPtr->GetDataTree()->GetRoot());
+  typename InputDataNodeType::Pointer inputRoot = inputPtr->GetRoot();
 
-  // Create the output tree root
-  typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
-  OutputDataNodePointerType                                  newDataNode = OutputDataNodeType::New();
-  newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
-  newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
-  typename OutputInternalTreeNodeType::Pointer outputRoot = OutputInternalTreeNodeType::New();
-  outputRoot->Set(newDataNode);
-  tree->SetRoot(outputRoot);
+  // // Create the output tree root
+  // typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
+  // OutputDataNodePointerType outputRoot = OutputDataNodeType::New();
+  // outputRoot->SetNodeType(inputRoot->GetNodeType());
+  // outputRoot->SetNodeId(inputRoot->GetNodeId());
+  // outputPtr->SetRoot(outputRoot);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  this->ProcessNode(inputRoot, outputRoot);
+  this->ProcessNode(inputPtr,inputRoot,outputPtr,outputPtr->GetRoot());
   chrono.Stop();
   otbMsgDevMacro(<< "VectoDataProjectionFilter: features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }
 
 template <class TInputVectorData, class TOutputVectorData>
-void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::ProcessNode(InputInternalTreeNodeType* source,
-                                                                                    OutputInternalTreeNodeType* destination) const
+void VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>::ProcessNode(InputVectorDataPointer inputVdata,
+                                                                                    InputDataNodePointerType source,
+                                                                                    OutputVectorDataPointer outputVdata,
+                                                                                    OutputDataNodePointerType destination) const
 {
   // Get the children list from the input node
-  typedef typename InputInternalTreeNodeType::ChildrenListType InputChildrenListType;
-  InputChildrenListType                                        children = source->GetChildrenList();
+  typedef typename InputVectorDataType::ChildrenListType InputChildrenListType;
+  InputChildrenListType children = inputVdata->GetChildrenList(source);
 
   // For each child
   typename InputChildrenListType::const_iterator it = children.begin();
   while (it != children.end())
   {
-    typename OutputInternalTreeNodeType::Pointer               newContainer;
-    typedef typename InputVectorDataType::DataNodePointerType  InputDataNodePointerType;
-    typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
     // Copy input DataNode info
-    InputDataNodePointerType  dataNode    = (*it)->Get();
     OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
-    newDataNode->SetNodeType(dataNode->GetNodeType());
-    newDataNode->SetNodeId(dataNode->GetNodeId());
-    newDataNode->SetMetaDataDictionary(dataNode->GetMetaDataDictionary());
+    newDataNode->SetNodeType((*it)->GetNodeType());
+    newDataNode->SetNodeId((*it)->GetNodeId());
+    newDataNode->SetMetaDataDictionary((*it)->GetMetaDataDictionary());
 
-    switch (dataNode->GetNodeType())
+    switch ((*it)->GetNodeType())
     {
     case ROOT:
     {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
+      //outputVdata->Add(newDataNode,destination);
+      //ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case DOCUMENT:
     {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FOLDER:
     {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FEATURE_POINT:
     {
-      newDataNode->SetPoint(this->ProcessPoint(dataNode->GetPoint()));
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      newDataNode->SetPoint(this->ProcessPoint((*it)->GetPoint()));
+      outputVdata->Add(newDataNode,destination);
       break;
     }
     case FEATURE_LINE:
     {
-      newDataNode->SetLine(this->ProcessLine(dataNode->GetLine()));
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      newDataNode->SetLine(this->ProcessLine((*it)->GetLine()));
+      outputVdata->Add(newDataNode,destination);
       break;
     }
     case FEATURE_POLYGON:
     {
-      newDataNode->SetPolygonExteriorRing(this->ProcessPolygon(dataNode->GetPolygonExteriorRing()));
-      newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList(dataNode->GetPolygonInteriorRings()));
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
+      newDataNode->SetPolygonExteriorRing(this->ProcessPolygon((*it)->GetPolygonExteriorRing()));
+      newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList((*it)->GetPolygonInteriorRings()));
+      outputVdata->Add(newDataNode,destination);
       break;
     }
     case FEATURE_MULTIPOINT:
     {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FEATURE_MULTILINE:
     {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FEATURE_MULTIPOLYGON:
     {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     case FEATURE_COLLECTION:
     {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it), newContainer);
+      outputVdata->Add(newDataNode,destination);
+      ProcessNode(inputVdata,(*it),outputVdata,newDataNode);
       break;
     }
     }

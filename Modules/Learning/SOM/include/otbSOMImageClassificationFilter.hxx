@@ -65,8 +65,7 @@ void SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage
 }
 
 template <class TInputImage, class TOutputImage, class TSOMMap, class TMaskImage>
-void SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                        itk::ThreadIdType itkNotUsed(threadId))
+void SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr = this->GetInputMask();

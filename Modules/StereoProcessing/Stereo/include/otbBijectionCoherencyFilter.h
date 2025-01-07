@@ -121,7 +121,7 @@ protected:
   void GenerateInputRequestedRegion() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputRegionType& outputRegionForThread) override;
 
 private:
   BijectionCoherencyFilter(const Self&) = delete;

@@ -22,11 +22,6 @@ INCLUDE_ONCE_MACRO(ITK)
 
 SETUP_SUPERBUILD(ITK)
 
-# if(MSVC)
-# set(ITK_SB_SRC "C:/Temp/ITK")
-# set(ITK_SB_BUILD_DIR ${ITK_SB_SRC}/build)
-# endif()
-
 set(ITK_ENABLED_MODULES
   Common
   FiniteDifference
@@ -84,7 +79,6 @@ set(ITK_ENABLED_MODULES
   Eigen
   #FEM
   NarrowBand
-  NeuralNetworks
   Optimizers
   Optimizersv4
   Polynomials
@@ -131,6 +125,8 @@ list(APPEND ITK_SB_CONFIG
   -DUSE_SYSTEM_FFTW:BOOL=ON
   )
 ADD_SUPERBUILD_CMAKE_VAR(ITK FFTW_INCLUDE_PATH)
+ADD_SUPERBUILD_CMAKE_VAR(ITK FFTW_LIBRARIES)
+ADD_SUPERBUILD_CMAKE_VAR(ITK FFTWD_LIBRARIES)
 
 if (WIN32)
   list(APPEND ITK_SB_CONFIG
@@ -139,15 +135,15 @@ if (WIN32)
 endif()
 
 #variables are later used in packaging
-set(SB_ITK_VERSION_MAJOR "4")
-set(SB_ITK_VERSION_MINOR "13")
+set(SB_ITK_VERSION_MAJOR "5")
+set(SB_ITK_VERSION_MINOR "3")
 
 set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_ITK_VERSION_MINOR})
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "https://github.com/InsightSoftwareConsortium/ITK/archive/v4.13.3.tar.gz"
-  URL_MD5 cc0e2d9b243f28db84b8b4a45a23f9d7
+  URL "https://github.com/InsightSoftwareConsortium/ITK/archive/v5.3.0.tar.gz"
+  URL_MD5 0eea824a392f7676c23bb24f4d8e3ceb
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -174,4 +170,3 @@ ExternalProject_Add(ITK
   )
 
 SUPERBUILD_PATCH_SOURCE(ITK)
-

@@ -163,6 +163,19 @@ In case you have an OTB install with OTB components separated from Core, you wil
 
 We strongly recommend **adding these exports in your .bashrc** in order to make your applications available system wise
 
+**Packaging**
+
+To package your remote module, you just have to adapt the "packaging.cmake" file found in `Remote Module Template <https://gitlab.orfeo-toolbox.org/remote_modules/remote-module-template>`__
+Remember to add "include(packaging.cmake)" at the end of your main CMakeLists.txt
+Once done,
+
+.. code-block:: bash
+
+  cd /Path/to/build_folder
+  make package
+
+You should have a package called RemoteModuleName-1.0.0.tar.gz in the build_packages folder
+
 Writing your own remote module
 ------------------------------
 

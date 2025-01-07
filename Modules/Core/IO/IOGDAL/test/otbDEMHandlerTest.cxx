@@ -21,6 +21,7 @@
 
 #include "itkMacro.h"
 #include "otbDEMHandler.h"
+#include "vcl_legacy_aliases.h"
 
 int otbDEMHandlerTest(int argc, char* argv[])
 {

@@ -23,7 +23,7 @@
 #define otbLabelToBoundaryImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
-
+#include "otbMacro.h"
 namespace otb
 {
 namespace Functor
@@ -95,6 +95,7 @@ public:
 protected:
   LabelToBoundaryImageFilter()
   {
+    
     this->SetRadius(1);
   }
   ~LabelToBoundaryImageFilter() override

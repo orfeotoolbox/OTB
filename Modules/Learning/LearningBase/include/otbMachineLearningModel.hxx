@@ -26,8 +26,7 @@
 #endif
 
 #include "otbMachineLearningModel.h"
-
-#include "itkMultiThreader.h"
+#include "itkMultiThreaderBase.h"
 
 namespace otb
 {
@@ -100,13 +99,13 @@ MachineLearningModel<TInputValue, TOutputValue, TConfidenceValue>::PredictBatch(
 
 #pragma omp parallel shared(nb_threads, nb_batches) private(threadId)
     {
-      // Get number of threads configured with ITK
-      omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
-      nb_threads = omp_get_num_threads();
-      threadId   = omp_get_thread_num();
-      nb_batches = std::min(nb_threads, (unsigned int)input->Size());
-      // Ensure that we do not spawn unnecessary threads
-      if (threadId < nb_batches)
+    // Get number of threads configured with ITK
+    omp_set_num_threads(itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads());
+    nb_threads = omp_get_num_threads();
+    threadId = omp_get_thread_num();
+    nb_batches = std::min(nb_threads,(unsigned int)input->Size());
+    // Ensure that we do not spawn unnecessary threads
+    if(threadId<nb_batches)
       {
         unsigned int batch_size  = ((unsigned int)input->Size() / nb_batches);
         unsigned int batch_start = threadId * batch_size;

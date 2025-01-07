@@ -60,6 +60,7 @@ void StreamingShrinkStreamingManager<TImage>::PrepareStreaming(itk::DataObject* 
 template <class TInputImage, class TOutputImage>
 PersistentShrinkImageFilter<TInputImage, TOutputImage>::PersistentShrinkImageFilter() : m_ShrinkFactor(10)
 {
+  
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 }
@@ -160,14 +161,12 @@ void PersistentShrinkImageFilter<TInputImage, TOutputImage>::BeforeThreadedGener
 }
 
 template <class TInputImage, class TOutputImage>
-void PersistentShrinkImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void PersistentShrinkImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const RegionType& outputRegionForThread)
 {
-  // std::cout << "outputRegionForThread " << threadId << "  " << outputRegionForThread << std::endl;
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
   const InputImageType* inputPtr = this->GetInput();
 
   itk::ImageRegionConstIteratorWithIndex<InputImageType> inIt(inputPtr, outputRegionForThread);
-  for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt, progress.CompletedPixel())
+  for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
   {
     const IndexType& inIndex = inIt.GetIndex();
     // TODO the pixel value should be taken near the centre of the cell, not at the corners

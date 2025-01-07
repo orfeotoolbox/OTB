@@ -26,4 +26,3 @@ for bin_file in $BINARY_FILES; do
             $OTB_INSTALL_DIR/bin/patchelf "--set-rpath" "$OTB_INSTALL_DIR/lib" $bin_file
     fi
 done
-echo "***** OTB installation is complete *****"

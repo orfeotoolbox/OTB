@@ -117,7 +117,7 @@ protected:
   {
   }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
 private:
   PersistentVectorImageToMatrixFilter(const Self&) = delete;

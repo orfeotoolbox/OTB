@@ -18,6 +18,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-echo "************ Recompiling OTB python bindings with your version of Python ************"
+detected_pyversion="$(python3 -V 2>&1)"
+echo "***** Recompiling OTB python bindings with $detected_pyversion *****"
 ctest -S "$OTB_INSTALL_DIR/share/otb/swig/build_wrapping.cmake" -VV
