@@ -130,9 +130,13 @@ set(OTB_MODULES_ALL)
 # file
 # After this loop the OTB_MODULES_ALL contains a module list of wanted groups
 foreach( _group ${enabled_groups_list} )
-  # match all otb-module.cmake files in ${OTB_SOURCE_DIR}/Modules/${group}
-  # and its subdirs
-  file( GLOB_RECURSE _${_group}_module_files RELATIVE "${OTB_SOURCE_DIR}" ${OTB_SOURCE_DIR}/Modules/${_group}/otb-module.cmake )
+  # match all otb-module.cmake files in ${OTB_SOURCE_DIR}/Modules/${group}/*
+  # and its subdirs.
+  # Note the '*' to skip the otb-module.cmake at the root of each group.
+  # If we read the otb-module.cmake (for instance when there are remote module)
+  # the group itself will be in OTB_MODULE_ENABLED list later but with
+  # wrong dependency order.
+  file( GLOB_RECURSE _${_group}_module_files RELATIVE "${OTB_SOURCE_DIR}" ${OTB_SOURCE_DIR}/Modules/${_group}/*/otb-module.cmake )
   foreach( _module_file ${_${_group}_module_files} )
     # read otb-module.cmake file, doing this init module variables
     include(${OTB_SOURCE_DIR}/${_module_file})
