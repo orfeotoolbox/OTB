@@ -132,7 +132,7 @@ function(setup_group_desc_doc)
     set( _${group}_module_list )
     # match all otb-module.cmake files in ${OTB_SOURCE_DIR}/Modules/${group}
     # and its subdirs
-    file( GLOB_RECURSE _${group}_module_files ${OTB_SOURCE_DIR}/Modules/${group}/otb-module.cmake )
+    file( GLOB_RECURSE _${group}_module_files ${OTB_SOURCE_DIR}/Modules/${group}/*/otb-module.cmake )
     foreach( _module_file ${_${group}_module_files} )
       # get module name in otb-module
       file( STRINGS ${_module_file} _module_line REGEX "otb_module[ \n]*\\([ \n]*[A-Za-z0-9]*" )
