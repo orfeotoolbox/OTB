@@ -21,4 +21,5 @@
 project(OTBStatistics)
 
 set(OTBStatistics_LIBRARIES OTBStatistics)
+message(WARNING "-------------------HELLLLOOOOOO-------------------")
 otb_module_impl()
