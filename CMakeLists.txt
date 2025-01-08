@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -152,7 +152,7 @@ if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 endif()
 
-#convert path to native for reconfiguring otbcli.bat.in
+#convert path to native for reconfiguring otbcli.ps1.in
 file(TO_NATIVE_PATH "${OTB_INSTALL_APP_DIR}" OTB_INSTALL_APP_DIR_NATIVE)
 
 #-----------------------------------------------------------------------------
@@ -484,17 +484,11 @@ if(UNIX)
     )
 endif()
 
-#my_file_ext is required for otbcli files which has
-# no extension on linux. (hence we cannot use SCRIPT_EXT
-
-#For windows otbenv.bash and otbenv.bat is required.
+# For windows otbenv.bash and otbenv.ps1 is required.
 # Former is for windows shell users and latter is for other
 # linux emulator such as bash for windows or mobxterm
-set(my_file_ext "")
 if(WIN32)
-  set(my_file_ext ".bat")
   install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bat
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.ps1
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bash
     DESTINATION .
