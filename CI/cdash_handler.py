@@ -32,7 +32,7 @@ import time
 import xml.etree.ElementTree as ET
 
 
-trace = True
+trace = False
 
 """
 Check needed environment parameters
@@ -232,45 +232,44 @@ class Handler:
     CI_COMMIT_SHA             -> Commit SHA1
     CI_PROJECT_ID             -> Project ID
     CI_PROJECT_DIR            -> Project source directory
-    K8S_SECRET_API_TOKEN      -> Token for Gitlab API
     CI_MERGE_REQUEST_REF_PATH -> Ref name to push the status (only for merge request pipeline)
     CI_COMMIT_REF_NAME        -> Ref name to push the status
   They can be overridden by a full command line :
-    cdash_handler.py commit_sha1  project_id  project_directory  token  ref_name
+    cdash_handler.py trace_log commit_sha1  project_id  project_directory  ref_name
 """
 if __name__ == "__main__":
+  if (len(sys.argv) >= 2):
+    trace = int(sys.argv[1])
+    if ( len(sys.argv) < 5 and len(sys.argv) > 2 ):
+      print("Missing arguments,")
+      print("2 possible usage usages :")
+      print("- " + sys.argv[0] + " trace_log (0 by default)")
+      print("- " + sys.argv[0] + " trace_log commit_sha1 project_id project_directory ref_name")
+      sys.exit(1)
   if trace:
     print(sys.argv)
-  if ( len(sys.argv) < 6 and len(sys.argv) > 1 ):
-    print("Usage : "+sys.argv[0]+" commit_sha1 project_id project_directory token ref_name")
-    sys.exit(1)
 
   if os.environ.get('CI_SKIP_CDASH', False):
     sys.exit(0)
 
   allow_failure = os.environ.get('CI_ALLOW_FAILURE', False)
 
-  if ( len(sys.argv) >= 6):
-    sha1 = sys.argv[1]
-    proj = sys.argv[2]
-    pdir = sys.argv[3]
-    token = sys.argv[4]
+  if ( len(sys.argv) >= 5):
+    sha1 = sys.argv[2]
+    proj = sys.argv[3]
+    pdir = sys.argv[4]
     refn = sys.argv[5]
   else:
-    if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'CI_COMMIT_REF_NAME']):
+    if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'CI_COMMIT_REF_NAME'], verbose=trace):
       sys.exit(1)
     sha1 = os.environ['CI_COMMIT_SHA']
     refn = os.environ['CI_COMMIT_REF_NAME']
     proj = os.environ['CI_PROJECT_ID']
     pdir = os.environ['CI_PROJECT_DIR']
-    if CheckEnvParameters(['CI_MERGE_REQUEST_REF_PATH', 'CI_MERGE_REQUEST_PROJECT_ID'], verbose=False):
+    if CheckEnvParameters(['CI_MERGE_REQUEST_REF_PATH', 'CI_MERGE_REQUEST_PROJECT_ID'], verbose=trace):
       targetProj = os.environ['CI_MERGE_REQUEST_PROJECT_ID']
       if proj == targetProj:
         refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
-    if CheckEnvParameters(['K8S_SECRET_API_TOKEN']):
-      token = os.environ['K8S_SECRET_API_TOKEN']
-    else:
-      token = None
   handler = Handler()
   build_dir = os.path.join( pdir , "build/")
   if trace:
@@ -288,23 +287,9 @@ if __name__ == "__main__":
       cdash_url = handler.GetBuildUrl()
       ( state , error ) = handler.GetLogStatus( os.path.join( pdir , "log") )
     print("CDash build URL : "+cdash_url)
-    if token is None:
-      sys.exit(0)
-    gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
-    gitlab_url += proj + "/statuses/" + sha1
   except CDashException as e:
     if allow_failure:
       state = 'success'
     else:
       print(e)
       sys.exit(1)
-
-  params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\
-   'target_url' : cdash_url , 'description' : error , 'ref' : refn })
-  gitlab_request = urllib.request.Request(gitlab_url)
-  gitlab_request.add_header('PRIVATE-TOKEN' , token )
-  if trace:
-    print ("gitlab_request.url: " + gitlab_request.full_url)
-  res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
-  if trace:
-    print ("gitlab_request.text: " + res.read().decode())
