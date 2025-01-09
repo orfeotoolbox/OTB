@@ -162,7 +162,7 @@ macro(otb_write_app_launcher)
 # DO NOT MODIFY
 #
 
-$OTB_LAUNCHER=""
+$OTB_LAUNCHER=\"\"
 
 # Use the launcher inside the script dir, otherwise use the one in PATH
 if (Test-Path \"$PSScriptRoot\\${_launcher_type}.ps1\" -PathType Leaf) {
