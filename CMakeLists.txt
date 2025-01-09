@@ -394,6 +394,12 @@ if(XDK_INSTALL_PATH)
             DESTINATION .
             USE_SOURCE_PERMISSIONS
             COMPONENT Core)
+    if (WIN32)
+      install(DIRECTORY ${XDK_INSTALL_PATH}/bin
+              DESTINATION ${OTB_INSTALL_PREFIX}
+              USE_SOURCE_PERMISSIONS
+              COMPONENT Core)
+    endif()
     install(DIRECTORY ${XDK_INSTALL_PATH}/cmake
             DESTINATION ./lib
             USE_SOURCE_PERMISSIONS
