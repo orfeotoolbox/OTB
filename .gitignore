@@ -13,3 +13,8 @@ archives*
 CMakeLists.txt.user
 .directory*
 build_packages*
+# Folder created by CI pipeline. Sometimes to reproduce a bug, we play CI
+# pipeline. Thus we don't want these folders to be commited
+build
+xdk
+log
