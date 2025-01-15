@@ -411,8 +411,15 @@ macro(_OTB_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
     endif()
   endif()
 
-  configure_file("${CMAKE_SOURCE_DIR}/CMake/exportheader.cmake.in"
+  if (${IS_P0_MODULE})
+    # When OTB_DIR is declared with P0_MODULE, it is with find_package(OTB) and
+    # it is automatically set to otb cmake files directory
+    configure_file("${OTB_DIR}/exportheader.cmake.in"
+  "${EXPORT_FILE_NAME}" @ONLY)
+  else()
+    configure_file("${CMAKE_SOURCE_DIR}/CMake/exportheader.cmake.in"
     "${EXPORT_FILE_NAME}" @ONLY)
+  endif()
 endmacro()
 
 function(OTB_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
