@@ -6,10 +6,10 @@ be downloaded from `otb download page <https://www.orfeo-toolbox.org/download>`_
 Extract the zip archive and use one of the launchers, they contain all applications
 and their launchers (both command line and graphical launchers are provided):
 
--  ``otbenv.bat``: A script to initialize the environment for OTB
+-  ``otbenv.ps1``: A script to initialize the environment for OTB
    executables
 
--  ``bin``: A folder containing application launchers (otbcli.bat) and the DLLs.
+-  ``bin``: A folder containing application launchers (otbcli.ps1) and the DLLs.
 
 -  ``lib``: A folder containing application DLLs.
 
@@ -20,13 +20,10 @@ and their launchers (both command line and graphical launchers are provided):
    to uninstall OTB libraries and headers while keeping all the dependencies.
 
 If you want to use the otbcli launcher, you can initialize a command
-prompt with ``otbenv.bat``.
+prompt with ``otbenv.ps1``.
 
 The package can be used to compile other projects using OTB (binaries, libraries
-and headers are included). If you want to build OTB from source using this
-package, you should first uninstall the specific OTB files from the package to
-leave only the dependencies (what we call an XDK). You can do it using the
-supplied script ``tools/uninstall_otb.bat``.
+and headers are included).
 
 Python bindings
 ~~~~~~~~~~~~~~~

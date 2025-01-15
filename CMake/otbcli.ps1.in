@@ -1,0 +1,43 @@
+#
+# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Prefer using the launcher inside the script dir, otherwise
+# use the one in the path
+if (Test-Path "$PSScriptRoot\otbApplicationLauncherCommandLine.exe" -PathType Leaf) {
+  $env:OTB_CLI_LAUNCHER = "$PSScriptRoot\otbApplicationLauncherCommandLine.exe"
+}
+else {
+  $env:OTB_CLI_LAUNCHER = "otbApplicationLauncherCommandLine.exe"
+}
+
+# work for install tree
+if (Test-Path "$PSScriptRoot\..\@OTB_INSTALL_APP_DIR_NATIVE@" -PathType Leaf) {
+  $env:OTB_APPLICATION_PATH = "$PSScriptRoot\..\@OTB_INSTALL_APP_DIR_NATIVE@;$env:OTB_APPLICATION_PATH"
+}
+
+# call otbenv script to get GDAL_DATA, correct PATH
+# and LC_NUMERIC
+if (Test-Path "$PSScriptRoot\..\otbenv.ps1" -PathType Leaf) {
+  . "$PSScriptRoot\..\otbenv.ps1"
+}
+
+# The '&' character tells powershell to run variable as external tool
+# Starts the otbApplicationLauncherCommandLine with all args
+# https://slai.github.io/posts/powershell-and-external-commands-done-right/#but-what-if-i-want-to-build-the-arguments-to-pass-in-my-script
+&"$env:OTB_CLI_LAUNCHER" $args

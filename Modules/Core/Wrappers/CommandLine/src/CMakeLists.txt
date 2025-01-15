@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -45,15 +45,15 @@ get_target_property(CLI_OUTPUT_DIR otbApplicationLauncherCommandLine RUNTIME_OUT
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts)
 
 if (WIN32)
-configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.bat.in
-                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbcli.bat
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.ps1.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbcli.ps1
                 @ONLY )
-file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbcli.bat
+file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbcli.ps1
      DESTINATION ${CLI_OUTPUT_DIR}
      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # TODO : test if NO_INSTALL is set
-install(PROGRAMS ${CLI_OUTPUT_DIR}/otbcli.bat
+install(PROGRAMS ${CLI_OUTPUT_DIR}/otbcli.ps1
         DESTINATION ${OTBCommandLine_INSTALL_RUNTIME_DIR}
         COMPONENT Core)
 

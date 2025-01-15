@@ -37,3 +37,12 @@ OTB_USE_OPENCV:BOOL=ON
 OTB_USE_OPENMP:BOOL=OFF
 OTB_USE_SHARK:BOOL=ON
 ")
+
+# As windows have a dumb dynamic linkage system, we need to use
+# the XDK_INSTALL_PATH option to ensure dlls are copied from xdk to otb bin
+# folder 
+if(XDK_INSTALL_PATH)
+  set(site_option
+"XDK_INSTALL_PATH=${XDK_INSTALL_PATH}
+${site_option}")
+endif()
