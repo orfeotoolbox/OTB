@@ -559,9 +559,8 @@ macro(otb_module_impl)
     if (BUILD_SHARED_LIBS)
       # export flags are only added when building shared libs, they cause
       # mismatched visibility warnings when building statically.
-      add_compiler_export_flags(my_abi_flags)
-      set_property(TARGET ${otb-module} APPEND
-        PROPERTY COMPILE_FLAGS "${my_abi_flags}")
+      set_target_properties(${otb-module} PROPERTIES CXX_VISIBILITY_PRESET "hidden")
+      set_target_properties(${otb-module} PROPERTIES VISIBILITY_INLINES_HIDDEN "hidden")
     endif()
   endif()
 
