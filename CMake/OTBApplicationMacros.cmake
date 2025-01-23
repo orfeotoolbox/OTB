@@ -80,7 +80,7 @@ macro(otb_create_application)
     endif()
   else()
     install(TARGETS ${APPLICATION_TARGET_NAME}
-            LIBRARY DESTINATION lib
+            LIBRARY DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
             COMPONENT Dependencies)
   endif()
 

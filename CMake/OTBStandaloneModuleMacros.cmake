@@ -211,27 +211,32 @@ function(otb_module_target_install _name _component)
     message(STATUS "[CMAKE_DEBUG] In \"otb_module_target_install\" __export_name == ${__export_name}")
   endif()
   # By default set the install path of target file to lib/cmake/<project_name>
-  set(target_file_dir ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+  set(target_file_dir ${OTB_INSTALL_LIBRARY_DIR}/cmake/${PROJECT_NAME})
 
   if (${IS_P0_MODULE})
     set(${otb-module}_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-    set(target_file_dir "${CMAKE_INSTALL_LIBDIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+    # use the OTB_INSTALL_PACKAGE_DIR instead of
+    # CMake_Install_LIBDIR/cmake/OTB because it will be installed on lib64
+    # on RHEL
+    set(target_file_dir "${OTB_INSTALL_PACKAGE_DIR}")
   endif()
 
+  # Same note here, avoid using CMAKE_INSTALL_LIBDIR as it will be installed
+  # in lib64 on centos
   if (_component)
     install(TARGETS ${_name}
       EXPORT  ${__export_name}
       RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${_component}
-      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_component}
-      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_component}
+      LIBRARY DESTINATION ${OTB_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
+      ARCHIVE DESTINATION ${OTB_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
       INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
     )
   else()
     install(TARGETS ${_name}
             EXPORT  ${__export_name}
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            LIBRARY DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
+            ARCHIVE DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
             INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
     )
   endif()
