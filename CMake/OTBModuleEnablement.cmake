@@ -210,18 +210,10 @@ endforeach()
 option(OTB_BUILD_DEFAULT_MODULES "Build the default OTB modules." OFF)
 
 #----------------------------------------------------------------------
-# Provide an option to build the tests of dependencies of a module when
-# BUILD_TESTING is ON.
-# NOTE TLA: commenting this as it seems to only be used here
-# option(OTB_BUILD_ALL_MODULES_FOR_TESTS "Build the tests of module dependencies." OFF)
-# mark_as_advanced(OTB_BUILD_ALL_MODULES_FOR_TESTS)
-
-
 # Provide an cmake option for each module.
 # This option is hide later if module is compiled anyway (in group, in default
 # or is a dependency of another module)
 foreach(otb-module ${OTB_MODULES_ALL})
-  # NOTE TLA: DEBUG to remove
   if(NOT ${otb-module}_IS_TEST)
     option(Module_${otb-module} "Request building ${otb-module}" OFF)
     mark_as_advanced(Module_${otb-module})
