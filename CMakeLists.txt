@@ -473,6 +473,25 @@ if(UNIX)
     DESTINATION .
     COMPONENT Core
     )
+  # output of python3 --version is "Python XX.XX.XX", notice the space that
+  # is used
+  execute_process(
+    COMMAND python3 --version
+    RESULT_VARIABLE CMD_RES
+    OUTPUT_VARIABLE PYTHON_VERSION_DURING_BUILD
+  )
+  # Get the first two digit and concatenate them
+  string(REGEX MATCH " ([0-9]+)\.([0-9]+)" TMP_VAR "${PYTHON_VERSION_DURING_BUILD}")
+
+  if (${CMAKE_MATCH_COUNT} EQUAL 2)
+    # CMAKE_MATCH_0 is the entire match
+    # See https://cmake.org/cmake/help/latest/variable/CMAKE_MATCH_n.html
+    set(PYTHON_VERSION_DURING_BUILD "${CMAKE_MATCH_1}${CMAKE_MATCH_2}")
+  else()
+    # set default version
+    set(PYTHON_VERSION_DURING_BUILD "310")
+  endif()
+  
   configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
                  ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
   install( PROGRAMS
