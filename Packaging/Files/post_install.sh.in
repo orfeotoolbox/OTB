@@ -37,9 +37,9 @@ ostype="$(lsb_release -is)"
 
 if [ "$ostype" != "RedHatEnterprise" ] ; then
   concatpyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
-  # Recompile OTB Python bindings. By default on non RHEL OS, the packaged
-  # bindings are compiled for version 3.10
-  if [ "$concatpyversion" -ne "310" ]; then
+  # Compare the concat version with the version used to build this OTB package
+  # The python build version is filled by cmake
+  if [ "$concatpyversion" -ne "@PYTHON_VERSION_DURING_BUILD@" ]; then
     sh "$OTB_INSTALL_DIR"/recompile_bindings.sh
   fi
   # Check python version, if python 3.12 (ubuntu 24 and debian > 12) download
