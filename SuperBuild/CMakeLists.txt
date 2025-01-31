@@ -22,6 +22,14 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project(OTB-SuperBuild)
 
+if(POLICY CMP0135)
+  # avoid cmake warnings about missing DOWNLOAD_EXTRACT_TIMESTAMP
+  # when using ExternalProject_Add in External_<dep>.cmake files.
+  # As we also build on rhel and cmake version < 3.24 here,
+  # we need to use policy settings
+  cmake_policy(SET CMP0135 NEW)
+endif()
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
