@@ -39,6 +39,7 @@ namespace otb
 class GDALDatasetWrapper : public itk::LightObject
 {
   friend class GDALDriverManagerWrapper;
+  friend class GDALImageIO;
 
 public:
   typedef GDALDatasetWrapper      Self;

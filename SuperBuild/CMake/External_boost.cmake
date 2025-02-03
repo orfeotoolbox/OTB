@@ -98,7 +98,6 @@ ExternalProject_Add(BOOST
   LOG_CONFIGURE 1
   LOG_BUILD 1
   LOG_INSTALL 1
-  DOWNLOAD
 )
 
 #HINT: avoid all uses of  _SB_* in External_<project>.cmake
