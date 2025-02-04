@@ -54,6 +54,45 @@ GDALDriverManagerWrapper::~GDALDriverManagerWrapper()
   // GDALDestroyDriverManager();
 }
 
+GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::OpenFromMemory(const void* mem_ptr, const std::vector<uint64_t>& dimensions, const GDALDataType pix_type, const uint32_t byte_per_pixel, const uint16_t nb_bands, const uint64_t& band_offset) const {
+  GDALDatasetWrapper::Pointer datasetWrapper = nullptr;
+
+  GDALDriver* memDriver = GetDriverByName("MEM");
+
+  if (memDriver != NULL) {
+    // create a dataset in memory but with 0 band, bands are added later
+    GDALDataset* dataset = memDriver->Create("", dimensions[0], dimensions[1], 0, pix_type, nullptr);
+    // The shift between bands was previously used with BANDOFFSET parameter
+    // set to the byte per pixel size.
+    // On normal case if not provided, the bandoffset is nbLines * lineSize.
+    // BUT in ou case data in memory are not agenced per band.
+    // For each X,Y pos the memory contains all band info.
+    for (int i = 0; i < nb_bands; ++i) {
+      char data_ptr[64] = {'\0'};
+      char pixel_offset[64] = {'\0'};
+      char line_offset[64] = {'\0'};
+      char band_start_in_mem[32] = {'\0'};
+      // use CPLPrintPointer to avoid worrying between windows and linux adress
+      int nRet = CPLPrintPointer(band_start_in_mem,
+                static_cast<GByte*>(const_cast<void*>(mem_ptr)) + band_offset * i,
+                                  sizeof(band_start_in_mem));
+      band_start_in_mem[nRet] = 0;
+
+      snprintf(data_ptr, sizeof(data_ptr), "DATAPOINTER=%s", band_start_in_mem);
+      snprintf(pixel_offset, sizeof(pixel_offset), "PIXELOFFSET=%d", byte_per_pixel * nb_bands);
+      snprintf(line_offset, sizeof(line_offset), "LINEOFFSET=%lu",
+                byte_per_pixel * nb_bands * dimensions[0]);
+      char *band_opt[4] = {data_ptr, pixel_offset, line_offset, nullptr};
+      dataset->AddBand(pix_type, band_opt);
+    }
+
+    GDALDatasetWrapper::Pointer datasetWrapper = GDALDatasetWrapper::New();
+    datasetWrapper->m_Dataset = dataset;
+  }
+
+  return datasetWrapper;
+}
+
 // Open the file for reading and returns a smart dataset pointer
 GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::Open(std::string filename) const
 {

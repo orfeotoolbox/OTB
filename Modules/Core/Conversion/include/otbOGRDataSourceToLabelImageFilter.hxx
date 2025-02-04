@@ -29,6 +29,7 @@
 #include "otbMetaDataKey.h"
 #include "otbImage.h"
 #include "otbNoDataHelper.h"
+#include "otbGDALDriverManagerWrapper.h"
 
 #include "gdal_alg.h"
 #include "stdint.h" //needed for uintptr_t
@@ -167,30 +168,24 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
 
   // nb bands
   const unsigned int& nbBands = this->GetOutput()->GetNumberOfComponentsPerPixel();
+  const std::vector<uint64_t> dimensions = {bufferedRegion.GetSize()[0],
+                                            bufferedRegion.GetSize()[1]};
 
-  // register drivers
-  GDALAllRegister();
-
-  std::ostringstream stream;
-  stream << "MEM:::"
-         << "DATAPOINTER=" << (uintptr_t)(this->GetOutput()->GetBufferPointer()) << ","
-         << "PIXELS=" << bufferedRegion.GetSize()[0] << ","
-         << "LINES=" << bufferedRegion.GetSize()[1] << ","
-         << "BANDS=" << nbBands << ","
-         << "DATATYPE=" << GDALGetDataTypeName(GdalDataTypeBridge::GetGDALDataType<OutputImageInternalPixelType>()) << ","
-         << "PIXELOFFSET=" << sizeof(OutputImageInternalPixelType) * nbBands << ","
-         << "LINEOFFSET=" << sizeof(OutputImageInternalPixelType) * nbBands * bufferedRegion.GetSize()[0] << ","
-         << "BANDOFFSET=" << sizeof(OutputImageInternalPixelType);
-
-  GDALDatasetH dataset = GDALOpen(stream.str().c_str(), GA_Update);
-
+  GDALDatasetWrapper::Pointer dataset =
+            GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
+                this->GetOutput()->GetBufferPointer(),
+                dimensions,
+                GdalDataTypeBridge::GetGDALDataType<OutputImageInternalPixelType>(),
+                sizeof(OutputImageInternalPixelType), nbBands,
+                sizeof(OutputImageInternalPixelType)
+            );
   // Add the projection ref to the dataset
-  GDALSetProjection(dataset, this->GetOutput()->GetProjectionRef().c_str());
+  GDALSetProjection(dataset->GetDataSet(), this->GetOutput()->GetProjectionRef().c_str());
 
   // Set the nodata value
   for (unsigned int band = 0; band < nbBands; ++band)
   {
-    GDALRasterBandH hBand = GDALGetRasterBand(dataset, band + 1);
+    GDALRasterBandH hBand = GDALGetRasterBand(dataset->GetDataSet(), band + 1);
     GDALFillRaster(hBand, m_BackgroundValue, 0);
   }
 
@@ -210,10 +205,10 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;
   geoTransform[4] = 0.;
-  GDALSetGeoTransform(dataset, const_cast<double*>(geoTransform.GetDataPointer()));
+  GDALSetGeoTransform(dataset->GetDataSet(), const_cast<double*>(geoTransform.GetDataPointer()));
 
   // Burn the geometries into the dataset
-  if (dataset != nullptr)
+  if (dataset->GetDataSet() != nullptr)
   {
     std::vector<std::string> options;
 

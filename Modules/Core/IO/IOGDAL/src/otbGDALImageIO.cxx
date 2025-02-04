@@ -1431,34 +1431,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   }
   else
   {
-    // buffer casted in unsigned long cause under Win32 the address
-    // doesn't begin with 0x, the address in not interpreted as
-    // hexadecimal but alpha numeric value, then the conversion to
-    // integer make us pointing to an non allowed memory block => Crash.
-    // use intptr_t to cast void* to unsigned long. included stdint.h for
-    // uintptr_t typedef.
-    // Get in MEMory raster driver
-    GDALDriver* memDriver = GDALDriverManagerWrapper::GetInstance().GetDriverByName("MEM");
-
-    // qu'est ce que le dataset?
-    GDALDataset* dataset = memDriver->Create("", m_Dimensions[0], m_Dimensions[1], 0, m_PxType->pixType, nullptr);
-    u_int64_t bandspace = (m_Dimensions[0]*m_Dimensions[1])*m_BytePerPixel;
-
-    for (int i = 0; i < m_NbBands; ++i) {
-        char data_ptr[64] = {'\0'};
-        char pixel_offset[64] = {'\0'};
-        char line_offset[64] = {'\0'};
-        snprintf(data_ptr, sizeof(data_ptr), "DATAPOINTER=%s",
-                 std::to_string((uintptr_t)(buffer + bandspace * i)).c_str());
-        snprintf(pixel_offset, sizeof(pixel_offset), "PIXELOFFSET=%lu", m_BytePerPixel * m_NbBands);
-        snprintf(line_offset, sizeof(line_offset), "LINEOFFSET=%lu",
-                 m_BytePerPixel * m_NbBands * m_Dimensions[0]);
-        char *band_opt[4] = {data_ptr, pixel_offset, line_offset, nullptr};
-        dataset->AddBand(m_PxType->pixType, band_opt);
-    }
-
-    m_Dataset = GDALDatasetWrapper::New();
-    m_Dataset->m_Dataset = dataset;
+    m_Dataset = GDALDriverManagerWrapper::GetInstance().OpenFromMemory(buffer, m_Dimensions, m_PxType->pixType, m_BytePerPixel, m_NbBands, m_BytePerPixel);
   }
 
   if (m_Dataset.IsNull())
