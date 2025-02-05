@@ -168,13 +168,12 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
 
   // nb bands
   const unsigned int& nbBands = this->GetOutput()->GetNumberOfComponentsPerPixel();
-  const std::vector<uint64_t> dimensions = {bufferedRegion.GetSize()[0],
-                                            bufferedRegion.GetSize()[1]};
 
   GDALDatasetWrapper::Pointer dataset =
             GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
                 this->GetOutput()->GetBufferPointer(),
-                dimensions,
+                bufferedRegion.GetSize()[0],
+                bufferedRegion.GetSize()[1],
                 GdalDataTypeBridge::GetGDALDataType<OutputImageInternalPixelType>(),
                 sizeof(OutputImageInternalPixelType), nbBands,
                 sizeof(OutputImageInternalPixelType)

@@ -114,15 +114,15 @@ void LabelImageToVectorDataFilter<TInputImage, TPrecision>::GenerateData(void)
 
   typename InputImageType::Pointer inImage = const_cast<InputImageType*>(this->GetInput());
 
-  SizeType size = this->GetInput()->GetLargestPossibleRegion().GetSize();
-
   unsigned int nbBands      = this->GetInput()->GetNumberOfComponentsPerPixel();
   unsigned int bytePerPixel = sizeof(InputPixelType);
 
 
   GDALDatasetWrapper::Pointer dataset =
             GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
-                this->GetInput()->GetBufferPointer(), {size[0], size[1]},
+                this->GetInput()->GetBufferPointer(),
+                this->GetInput()->GetLargestPossibleRegion().GetSize()[0],
+                this->GetInput()->GetLargestPossibleRegion().GetSize()[1],
                 GdalDataTypeBridge::GetGDALDataType<InputPixelType>(), bytePerPixel, nbBands, bytePerPixel);
 
   // Set input Projection ref and Geo transform to the dataset.
@@ -177,15 +177,14 @@ void LabelImageToVectorDataFilter<TInputImage, TPrecision>::GenerateData(void)
   typename InputImageType::ConstPointer inputMask = this->GetInputMask();
   if (!inputMask.IsNull())
   {
-    size         = this->GetInputMask()->GetLargestPossibleRegion().GetSize();
     nbBands      = this->GetInputMask()->GetNumberOfComponentsPerPixel();
     bytePerPixel = sizeof(InputPixelType);
 
-    const std::vector<uint64_t> dimensions = {size[0], size[1]};
-
     GDALDatasetWrapper::Pointer maskDataset =
               GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
-                  this->GetInputMask()->GetBufferPointer(), dimensions,
+                  this->GetInputMask()->GetBufferPointer(),
+                  this->GetInputMask()->GetLargestPossibleRegion().GetSize()[0],
+                  this->GetInputMask()->GetLargestPossibleRegion().GetSize()[1],
                   GdalDataTypeBridge::GetGDALDataType<InputPixelType>(), bytePerPixel, nbBands, bytePerPixel);
 
     // Set input Projection ref and Geo transform to the dataset.

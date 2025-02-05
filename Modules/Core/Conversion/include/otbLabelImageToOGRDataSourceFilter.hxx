@@ -138,7 +138,9 @@ void LabelImageToOGRDataSourceFilter<TInputImage>::GenerateData(void)
 
   GDALDatasetWrapper::Pointer dataset =
           GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
-              this->GetInput()->GetBufferPointer(), {size[0], size[1]},
+              this->GetInput()->GetBufferPointer(),
+              this->GetInput()->GetLargestPossibleRegion().GetSize()[0],
+              this->GetInput()->GetLargestPossibleRegion().GetSize()[1],
               GdalDataTypeBridge::GetGDALDataType<InputPixelType>(), bytePerPixel, nbBands, bytePerPixel);
 
   // Set input Projection ref and Geo transform to the dataset.
@@ -193,13 +195,14 @@ void LabelImageToOGRDataSourceFilter<TInputImage>::GenerateData(void)
   typename InputImageType::ConstPointer inputMask = this->GetInputMask();
   if (!inputMask.IsNull())
   {
-    size         = this->GetInputMask()->GetLargestPossibleRegion().GetSize();
     nbBands      = this->GetInputMask()->GetNumberOfComponentsPerPixel();
     bytePerPixel = sizeof(InputPixelType);
 
     GDALDatasetWrapper::Pointer maskDataset =
             GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
-                this->GetInputMask()->GetBufferPointer(), {size[0], size[1]},
+                this->GetInputMask()->GetBufferPointer(),
+                this->GetInput()->GetLargestPossibleRegion().GetSize()[0],
+                this->GetInput()->GetLargestPossibleRegion().GetSize()[1],
                 GdalDataTypeBridge::GetGDALDataType<InputPixelType>(), bytePerPixel, nbBands, bytePerPixel);
 
     // Set input Projection ref and Geo transform to the dataset.

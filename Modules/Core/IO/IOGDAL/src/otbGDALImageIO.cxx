@@ -1431,7 +1431,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   }
   else
   {
-    m_Dataset = GDALDriverManagerWrapper::GetInstance().OpenFromMemory(buffer, m_Dimensions, m_PxType->pixType, m_BytePerPixel, m_NbBands, m_BytePerPixel);
+    m_Dataset = GDALDriverManagerWrapper::GetInstance().OpenFromMemory(buffer, m_Dimensions[0], m_Dimensions[1], m_PxType->pixType, m_BytePerPixel, m_NbBands, m_BytePerPixel);
   }
 
   if (m_Dataset.IsNull())

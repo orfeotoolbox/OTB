@@ -54,14 +54,22 @@ GDALDriverManagerWrapper::~GDALDriverManagerWrapper()
   // GDALDestroyDriverManager();
 }
 
-GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::OpenFromMemory(const void* mem_ptr, const std::vector<uint64_t>& dimensions, const GDALDataType pix_type, const uint32_t byte_per_pixel, const uint16_t nb_bands, const uint64_t& band_offset) const {
+GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::OpenFromMemory(
+                                const void* mem_ptr,
+                                const uint64_t& width,
+                                const uint64_t& height,
+                                const GDALDataType pix_type,
+                                const uint32_t byte_per_pixel,
+                                const uint16_t nb_bands,
+                                const uint64_t& band_offset) const
+{
   GDALDatasetWrapper::Pointer datasetWrapper = nullptr;
 
   GDALDriver* memDriver = GetDriverByName("MEM");
 
   if (memDriver != NULL) {
     // create a dataset in memory but with 0 band, bands are added later
-    GDALDataset* dataset = memDriver->Create("", dimensions[0], dimensions[1], 0, pix_type, nullptr);
+    GDALDataset* dataset = memDriver->Create("", width, height, 0, pix_type, nullptr);
     // The shift between bands was previously used with BANDOFFSET parameter
     // set to the byte per pixel size.
     // On normal case if not provided, the bandoffset is nbLines * lineSize.
@@ -81,7 +89,7 @@ GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::OpenFromMemory(const void*
       snprintf(data_ptr, sizeof(data_ptr), "DATAPOINTER=%s", band_start_in_mem);
       snprintf(pixel_offset, sizeof(pixel_offset), "PIXELOFFSET=%d", byte_per_pixel * nb_bands);
       snprintf(line_offset, sizeof(line_offset), "LINEOFFSET=%lu",
-                byte_per_pixel * nb_bands * dimensions[0]);
+                byte_per_pixel * nb_bands * width);
       char *band_opt[4] = {data_ptr, pixel_offset, line_offset, nullptr};
       dataset->AddBand(pix_type, band_opt);
     }

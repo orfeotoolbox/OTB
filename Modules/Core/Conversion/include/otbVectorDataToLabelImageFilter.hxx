@@ -232,7 +232,8 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   GDALDatasetWrapper::Pointer dataset =
       GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
         this->GetOutput()->GetBufferPointer(),
-        {bufferedRegion.GetSize()[0], bufferedRegion.GetSize()[1]},
+        bufferedRegion.GetSize()[0],
+        bufferedRegion.GetSize()[1],
         GdalDataTypeBridge::GetGDALDataType<OutputImageInternalPixelType>(), sizeof(OutputImageInternalPixelType), nbBands,
         sizeof(OutputImageInternalPixelType)
       );
