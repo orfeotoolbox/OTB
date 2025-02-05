@@ -225,8 +225,6 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
 
     GDALRasterizeLayers(dataset, nbBands, &m_BandsToBurn[0], m_SrcDataSetLayers.size(), &(m_SrcDataSetLayers[0]), nullptr, nullptr, &foreground[0],
                         ogr::StringListConverter(options).to_ogr(), nullptr, nullptr);
-    // release the dataset
-    GDALClose(dataset);
   }
 }
 

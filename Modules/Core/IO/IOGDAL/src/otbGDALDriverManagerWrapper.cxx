@@ -86,7 +86,7 @@ GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::OpenFromMemory(const void*
       dataset->AddBand(pix_type, band_opt);
     }
 
-    GDALDatasetWrapper::Pointer datasetWrapper = GDALDatasetWrapper::New();
+    datasetWrapper = GDALDatasetWrapper::New();
     datasetWrapper->m_Dataset = dataset;
   }
 

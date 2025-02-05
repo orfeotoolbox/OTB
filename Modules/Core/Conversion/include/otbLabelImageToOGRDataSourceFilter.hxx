@@ -42,8 +42,6 @@ LabelImageToOGRDataSourceFilter<TInputImage>::LabelImageToOGRDataSourceFilter() 
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 
-  GDALAllRegister();
-
   this->ProcessObject::SetNthOutput(0, this->MakeOutput(0));
 }
 
