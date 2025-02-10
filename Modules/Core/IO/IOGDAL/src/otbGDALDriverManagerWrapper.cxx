@@ -55,7 +55,7 @@ GDALDriverManagerWrapper::~GDALDriverManagerWrapper()
 }
 
 GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::OpenFromMemory(
-                                const void* mem_ptr,
+                                void* mem_ptr,
                                 const uint64_t& width,
                                 const uint64_t& height,
                                 const GDALDataType pix_type,
@@ -82,7 +82,7 @@ GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::OpenFromMemory(
       char band_start_in_mem[32] = {'\0'};
       // use CPLPrintPointer to avoid worrying between windows and linux adress
       int nRet = CPLPrintPointer(band_start_in_mem,
-                static_cast<GByte*>(const_cast<void*>(mem_ptr)) + band_offset * i,
+                static_cast<GByte*>(mem_ptr) + band_offset * i,
                                   sizeof(band_start_in_mem));
       band_start_in_mem[nRet] = 0;
 

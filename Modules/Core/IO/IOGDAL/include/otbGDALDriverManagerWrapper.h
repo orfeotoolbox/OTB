@@ -81,7 +81,7 @@ public:
                                      char** papszOptions) const;
 
   GDALDatasetWrapper::Pointer OpenFromMemory(
-                                const void* mem_ptr,
+                                void* mem_ptr,
                                 const uint64_t& width,
                                 const uint64_t& height,
                                 const GDALDataType pix_type,

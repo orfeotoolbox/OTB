@@ -120,7 +120,7 @@ void LabelImageToVectorDataFilter<TInputImage, TPrecision>::GenerateData(void)
 
   GDALDatasetWrapper::Pointer dataset =
             GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
-                this->GetInput()->GetBufferPointer(),
+                const_cast<InputPixelType*>(this->GetInput()->GetBufferPointer()),
                 this->GetInput()->GetLargestPossibleRegion().GetSize()[0],
                 this->GetInput()->GetLargestPossibleRegion().GetSize()[1],
                 GdalDataTypeBridge::GetGDALDataType<InputPixelType>(), bytePerPixel, nbBands, bytePerPixel);
@@ -182,7 +182,7 @@ void LabelImageToVectorDataFilter<TInputImage, TPrecision>::GenerateData(void)
 
     GDALDatasetWrapper::Pointer maskDataset =
               GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
-                  this->GetInputMask()->GetBufferPointer(),
+                  const_cast<InputPixelType*>(this->GetInputMask()->GetBufferPointer()),
                   this->GetInputMask()->GetLargestPossibleRegion().GetSize()[0],
                   this->GetInputMask()->GetLargestPossibleRegion().GetSize()[1],
                   GdalDataTypeBridge::GetGDALDataType<InputPixelType>(), bytePerPixel, nbBands, bytePerPixel);
