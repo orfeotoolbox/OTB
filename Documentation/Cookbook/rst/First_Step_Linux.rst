@@ -16,42 +16,31 @@ Debian / Ubuntu
 Simple OTB use case : Compute NDVI with the CLI interface
 `````````````````````````````````````````````````````````
 
-Download OTB
-++++++++++++
+Download and install OTB
+++++++++++++++++++++++++
 
 .. code-block:: bash
 
-    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-10.0.0-Linux.tar.gz -o /Path/Download/OTB-10.0.tar.gz
-
-
-Installation
-++++++++++++
-
-.. code-block:: bash
-
-   # Install otb
-   cd /Path/Download
-   tar xvf OTB-10.0.tar.gz --one-top-level="/Path/To/Install/OTB"
-   source /Path/To/Install/OTB/otbenv.profile
+    bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh) 9.1.0 $HOME/otb"
 
 Download an example image
 +++++++++++++++++++++++++
 
 .. code-block:: bash
 
-    curl https://www.orfeo-toolbox.org/packages/examples/phr_xs.tif -o /Path/You/Want/phr_xs.tif
+    curl https://www.orfeo-toolbox.org/packages/examples/phr_xs.tif -o $HOME/Data/phr_xs.tif
 
 Compute NDVI using the CLI interface
 ++++++++++++++++++++++++++++++++++++
 
 .. code-block:: bash
 
-    otbcli_BandMath –il /Path/You/Want/phr_xs.tif –out /Path/You/Want/ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
+    otbcli_BandMath –il $HOME/Data/phr_xs.tif –out $HOME/Data/ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
 
 Use Python API to compute NDVI
 ++++++++++++++++++++++++++++++
 
-To use the Python API you have first to recompile the bindings for your version of Python. By default they are compiled for Python 3.10
+To use the Python API you have first to recompile the bindings for your version of Python if this version is different than 3.10.
 
 .. code-block:: bash
 
