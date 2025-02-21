@@ -21,7 +21,7 @@ Download and install OTB
 
 .. code-block:: bash
 
-    bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh) 9.1.0 $HOME/otb"
+    bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)" -s 9.1.0 $HOME/otb
 
 Download an example image
 +++++++++++++++++++++++++
@@ -35,6 +35,7 @@ Compute NDVI using the CLI interface
 
 .. code-block:: bash
 
+    source $HOME/otb/otbenv.profile
     otbcli_BandMath –il $HOME/Data/phr_xs.tif –out $HOME/Data/ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
 
 Use Python API to compute NDVI
@@ -45,7 +46,7 @@ To use the Python API you have first to recompile the bindings for your version 
 .. code-block:: bash
 
    # Recompile python bindings
-   cd /Path/To/OTB-10.0
+   cd $HOME/otb
    source otbenv.profile
    sh recompile-bindings.sh
 
