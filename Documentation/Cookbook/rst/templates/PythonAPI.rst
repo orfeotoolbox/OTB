@@ -22,7 +22,6 @@ that are not installed on your default PYTHONPATH.
     os.add_dll_directory("/Path/To/OTB_INSTALL/lib/")
     import otbApplication as otb
 
-
 Once your environment is set, you can use OTB applications from Python, just
 like this small example:
 

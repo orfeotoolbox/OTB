@@ -1,5 +1,5 @@
-One liner installation
-~~~~~~~~~~~~~~~~~~~~~~
+One line installation
+~~~~~~~~~~~~~~~~~~~~~
 For a ready to use installation, we provide a script that installs and set the environment for you :
 
 .. code-block:: bash
@@ -13,7 +13,7 @@ You can customize the default installation by adding parameters to the one line 
 
 .. code-block:: bash
 
-   bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh) OTB_VERSION OTB_INSTALL_DIRECTORY"
+   bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)" -s OTB_VERSION OTB_INSTALL_DIRECTORY
 
 Manual Installation : One package containing all the modules 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

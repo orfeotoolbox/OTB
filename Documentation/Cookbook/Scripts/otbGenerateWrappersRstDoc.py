@@ -560,4 +560,4 @@ if __name__ == "__main__":
 
     #GenerateRstForApplications(args.rst_dir,args.otb_root)
     GenerateRstForModules(args.rst_dir,args.otb_root)
-    GenerateRstForRemoteModules(args.rst_dir,args.otb_root)
+    #GenerateRstForRemoteModules(args.rst_dir,args.otb_root)
