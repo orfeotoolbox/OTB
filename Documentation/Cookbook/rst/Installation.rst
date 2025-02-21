@@ -24,7 +24,7 @@ OTB 10.x is known to work on:
     +--------------------------------------------+-------------------------------+--------------------+
     | RedHat 8                                   | GCC 8                         | Python >= 3.8      |
     +--------------------------------------------+-------------------------------+--------------------+
-    | Windows 10                                 | MSVC 2019                     | Python 3.10        |
+    | Windows 10 / 11                            | MSVC 2019                     | Python 3.10        |
     +--------------------------------------------+-------------------------------+--------------------+
 
 If you want to use another version of python you will need to recompile python bindings as explained in `"Recompiling Python Bindings" <#recompiling-python-bindings>`__.

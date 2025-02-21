@@ -1,5 +1,22 @@
-Recommended Installation : One package containing all the modules 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+One liner installation
+~~~~~~~~~~~~~~~~~~~~~~
+For a ready to use installation, we provide a script that installs and set the environment for you :
+
+.. code-block:: bash
+
+   bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)"
+
+This script downloads the latest version of OTB and installs it in your "$HOME/otb-OTB_VERSION".
+Then, it automatically sources the otb environment, so you are ready to use OTB.
+
+You can customize the default installation by adding parameters to the one line installer :
+
+.. code-block:: bash
+
+   bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh) OTB_VERSION OTB_INSTALL_DIRECTORY"
+
+Manual Installation : One package containing all the modules 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-10.0.0-Linux.tar.gz** package.
 
 **Important note for RedHat / Fedora / Rocky users**
@@ -15,8 +32,8 @@ You can download the package from the website and extract it in your file manage
    tar xf /Path/To/Downloads/OTB-10.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
    source /Path/To/OTB_install/otbenv.profile
 
-Advanced Installation : Modular installation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Advanced Manual Installation : Modular installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. They include
 all of the OTB applications along with command line launchers.
@@ -29,7 +46,7 @@ Because OTB is a quite big software, the modular installation helps you to have 
 Download
 ````````
 
-In order to run OTB you will need the **OTB-Dependencies-9.0.tar.gz** package to run the Core **AND** optional packages that you can install afterwards.
+In order to run OTB you will need the **OTB-Dependencies.tar.gz** package to run the Core **AND** optional packages that you can install afterwards.
 
 Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning.
 In that case you will just need to download the OTB-Learning package and its dependencies.
