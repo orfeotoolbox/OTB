@@ -4,7 +4,7 @@ In order to run properly, you need to make sure you installed the required syste
 Important Note
 ``````````````
 
-Monteverdi has been removed in OTB >= 9 version, you can use QGIS which is now the default viewer for launching OTB applications
+Monteverdi has been removed in OTB >= 9 version, you can use QGIS which is now the default viewer for launching OTB applications (see :doc:`QGISInterface` )
 
 Installation of required dependencies
 `````````````````````````````````````
