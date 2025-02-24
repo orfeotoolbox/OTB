@@ -9,6 +9,19 @@ environment script ``otbenv`` to properly setup variables such as
 source the script). In other cases, you should set these variables depending on
 your configuration.
 
+Important Note for Windows Users
+--------------------------------
+
+On Windows, since Python 3.8, you have to add a call to os.add_dll_directory to be able to import modules
+that are not installed on your default PYTHONPATH.
+
+.. code-block:: python
+
+    import os
+    os.add_dll_directory("/Path/To/OTB_INSTALL/lib/otb/python")
+    os.add_dll_directory("/Path/To/OTB_INSTALL/lib/")
+    import otbApplication as otb
+
 Once your environment is set, you can use OTB applications from Python, just
 like this small example:
 

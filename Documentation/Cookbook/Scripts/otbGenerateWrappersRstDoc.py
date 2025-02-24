@@ -469,6 +469,34 @@ def GenerateRstForModules(rst_dir,otb_root):
                 with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w',encoding='utf-8') as appFile:
                     appFile.write(render_application(otb_root,appName, appList,False))
     
+def GenerateRstForRemoteModules(rst_dir,otb_root):
+    otb_remote_modules_dir = os.path.join(otb_root,"Modules/Remote")
+    appIndexFile = open(rst_dir + '/Applications.rst', 'w')
+    appIndexFile.write(RstPageHeading("Applications by module", "2", ref="apprefdoc"))
+    moduleslist = [modname for modname in os.listdir(otb_remote_modules_dir)
+            if os.path.isdir(os.path.join(otb_remote_modules_dir, modname))]
+    moduleslist.sort()
+    for mod in moduleslist:
+        appIndexFile.write('\tApplications/'+ mod + '.rst\n')
+        moduleappDir = mod + "/app"
+        currentModuleDir = os.path.join(otb_remote_modules_dir,moduleappDir)
+        sortedapplist = sorted(os.listdir(currentModuleDir))
+        for currentApp in sortedapplist:
+            if ".cxx" in currentApp or ".cpp" in currentApp:
+                appName = currentApp.split('.')[0][3:]
+                modFileName = rst_dir + '/Applications/' + mod + '.rst'
+                if os.path.isfile(modFileName):
+                    with open(modFileName, 'a') as tagFile:
+                        tagFile.write("\tapp_" + appName + "\n")
+                else:
+                    with open(modFileName, 'a') as tagFile:
+                        tagFile.write(RstPageHeading(mod,"1"))
+                        tagFile.write("\tapp_" + appName + "\n")
+
+                # Write application rst
+                with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w',encoding='utf-8') as appFile:
+                    appFile.write(render_application(otb_root,appName, sortedapplist,False))
+    
 def GenerateRstForApplications(rst_dir,otb_root):
     "Generate .rst files for all applications"
 
@@ -532,3 +560,4 @@ if __name__ == "__main__":
 
     #GenerateRstForApplications(args.rst_dir,args.otb_root)
     GenerateRstForModules(args.rst_dir,args.otb_root)
+    #GenerateRstForRemoteModules(args.rst_dir,args.otb_root)
