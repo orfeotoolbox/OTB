@@ -6,14 +6,27 @@ For a ready to use installation, we provide a script that installs and set the e
 
    bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)"
 
-This script downloads the latest version of OTB and installs it in your "$HOME/otb-OTB_VERSION".
-Then, it automatically sources the otb environment, so you are ready to use OTB.
+This script without arguments downloads the latest version of OTB and installs it in your "$HOME/otb-OTB_VERSION".
+Then, it initializes the necessary environment variables and paths and downloads the GDAL python bindings corresponding to your Python version.
 
-You can customize the default installation by adding parameters to the one line installer :
+After the installation, you are ready to use OTB by calling :
+
+.. code-block:: bash
+
+   source $HOME/otb/otbenv.profile
+
+You can customize the command by adding parameters to the one line installer :
 
 .. code-block:: bash
 
    bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)" -s OTB_VERSION OTB_INSTALL_DIRECTORY
+
+**Example**
+I want to download the 9.1.0 version and install it to /home/user/apps/otb :
+
+.. code-block:: bash
+
+   bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)" -s "9.1.0" "/home/user/apps/otb"
 
 Manual Installation : One package containing all the modules 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
