@@ -22,6 +22,15 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project(OTB-SuperBuild)
 
+if(POLICY CMP0135)
+  # avoid cmake warnings about missing DOWNLOAD_EXTRACT_TIMESTAMP
+  # when using ExternalProject_Add in External_<dep>.cmake files.
+  # As we also build on rhel and cmake version < 3.24 here,
+  # we need to use policy settings
+  cmake_policy(SET CMP0135 NEW)
+endif()
+
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -276,6 +285,7 @@ option(OTB_USE_CURL "Enable module Curl in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 option(OTB_USE_GSL "Enable module GSL in OTB" ON)
 option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
+option(OTB_USE_FFTW "Download and compile FFTW third party (license change to GPLv2)" OFF)
 #option() does not change the value in cache so we have to set the option via the set CACHE FORCE method
 if(OTB_BUILD_Learning MATCHES ON)
   set(OTB_USE_LIBSVM ON CACHE BOOL "Enable module LibSVM in OTB" FORCE)
