@@ -120,17 +120,29 @@ foreach(ITK_MODULE ${ITK_ENABLED_MODULES})
 endforeach()
 
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(ITK ZLIB FFTW)
+# by default we don't distribute otb with fftw as it implies a GPLv2
+# contamination
+if (OTB_USE_FFTW)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(ITK ZLIB FFTW)
+else()
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(ITK ZLIB)
+  add_compile_definitions(ITK_USE_FFTWD=0)
+  add_compile_definitions(ITK_USE_FFTWF=0)
+endif()
 ADD_SUPERBUILD_CMAKE_VAR(ITK ZLIB_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(ITK ZLIB_LIBRARY)
 
-# These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
-list(APPEND ITK_SB_CONFIG
-  -DUSE_FFTWF:BOOL=ON
-  -DUSE_FFTWD:BOOL=ON
-  -DUSE_SYSTEM_FFTW:BOOL=ON
-  )
-ADD_SUPERBUILD_CMAKE_VAR(ITK FFTW_INCLUDE_PATH)
+if (OTB_USE_FFTW)
+  # These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
+  list(APPEND ITK_SB_CONFIG
+    -DUSE_FFTWF:BOOL=ON
+    -DUSE_FFTWD:BOOL=ON
+    -DUSE_SYSTEM_FFTW:BOOL=ON
+    )
+  ADD_SUPERBUILD_CMAKE_VAR(ITK FFTW_INCLUDE_PATH)
+  ADD_SUPERBUILD_CMAKE_VAR(ITK FFTW_LIBRARIES)
+  ADD_SUPERBUILD_CMAKE_VAR(ITK FFTWD_LIBRARIES)
+endif()
 
 if (WIN32)
   list(APPEND ITK_SB_CONFIG
@@ -174,4 +186,3 @@ ExternalProject_Add(ITK
   )
 
 SUPERBUILD_PATCH_SOURCE(ITK)
-

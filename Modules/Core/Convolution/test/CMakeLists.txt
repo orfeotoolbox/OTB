@@ -23,10 +23,13 @@ otb_module_test()
 set(OTBConvolutionTests
 otbConvolutionTestDriver.cxx
 otbConvolutionImageFilter.cxx
-otbOverlapSaveConvolutionImageFilter.cxx
 otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 otbGaborFilterGenerator.cxx
 )
+
+if (OTB_USE_FFTW)
+  list(APPEND OTBConvolutionTests otbOverlapSaveConvolutionImageFilter.cxx)
+endif()
 
 add_executable(otbConvolutionTestDriver ${OTBConvolutionTests})
 target_link_libraries(otbConvolutionTestDriver ${OTBConvolution-Test_LIBRARIES})
@@ -43,35 +46,34 @@ otb_add_test(NAME bfTvConvolutionImageFilter COMMAND otbConvolutionTestDriver
   ${TEMP}/bfTvConvolutionImageFilter.tif
   )
 
-if(ITK_USE_FFTWD)
+if(OTB_USE_FFTW)
+  if(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL "4"))
+    message(WARNING "Disable OverlapSaveConvolution tests")
+  else()
+    otb_add_test(NAME bfTvOverlapSaveConvolutionImageFilter COMMAND otbConvolutionTestDriver
+      --compare-image ${EPSILON_7}
+      ${BASELINE}/bfTvConvolutionImageFilter.tif
+      ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
+      otbOverlapSaveConvolutionImageFilter
+      ${INPUTDATA}/QB_Suburb.png
+      ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
+      )
 
-if(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL "4"))
-  message(WARNING "Disable OverlapSaveConvolution tests")
-else()
-otb_add_test(NAME bfTvOverlapSaveConvolutionImageFilter COMMAND otbConvolutionTestDriver
-  --compare-image ${EPSILON_7}
-  ${BASELINE}/bfTvConvolutionImageFilter.tif
-  ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
-  otbOverlapSaveConvolutionImageFilter
-  ${INPUTDATA}/QB_Suburb.png
-  ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
-  )
-
-otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter COMMAND otbConvolutionTestDriver
-  --compare-image ${EPSILON_7}
-  ${TEMP}/bfTvCompareConvolutionOutput.tif
-  ${TEMP}/bfTvCompareOSConvolutionoutput.tif
-  otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter
-  ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
-  ${TEMP}/bfTvCompareConvolutionOutput.tif
-  ${TEMP}/bfTvCompareOSConvolutionoutput.tif
-  32 32 #Radius
-  0.02 0.025 # a b
-  -45 # theta
-  0.0125 0.0125 #u0 v0
-  0
-  )
-endif()
+    otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter COMMAND otbConvolutionTestDriver
+      --compare-image ${EPSILON_7}
+      ${TEMP}/bfTvCompareConvolutionOutput.tif
+      ${TEMP}/bfTvCompareOSConvolutionoutput.tif
+      otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter
+      ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
+      ${TEMP}/bfTvCompareConvolutionOutput.tif
+      ${TEMP}/bfTvCompareOSConvolutionoutput.tif
+      32 32 #Radius
+      0.02 0.025 # a b
+      -45 # theta
+      0.0125 0.0125 #u0 v0
+      0
+      )
+  endif()
 
 endif()
 
