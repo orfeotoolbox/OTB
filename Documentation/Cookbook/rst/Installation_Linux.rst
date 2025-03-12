@@ -150,7 +150,7 @@ At the root of the OTB installation run :
 
 .. code-block:: bash
 
-    source otbenv.profile 
+    source otbenv.profile
     ./recompile_bindings.sh
 
 You should now be able to import ``otbApplication`` through Python !
@@ -162,12 +162,15 @@ We strongly recommend to use a virtual env to **avoid conflicts between OTB and 
 
 .. code-block:: bash
 
-   # Source your OTB environment
-   source <your installation directory>/otbenv.profile
-   # Create a virtual env and install some libraries
-   python -m venv ./otb_venv
-   source otb_venv/bin/activate
+   # Go to yoyr OTB dir and set environment
+   source otbenv.profile
+   # Create a virtual env, it can be located in any directory
+   python -m venv ./venv
+   source venv/bin/activate
+   # Install mandatory python requirements
    pip install --upgrade pip "numpy<2"
+   # Recompile python bindings with the right python executable
+   ./recompile_bindings.sh
    # Compile rasterio and shapely using OTB's GDAL and GEOS libraries
    pip install rasterio shapely --no-binary :all:
    # Install normally any pip package that isn't built against OTB dependencies
@@ -175,7 +178,7 @@ We strongly recommend to use a virtual env to **avoid conflicts between OTB and 
    # Test imports
    python -c "import rasterio ; import geopandas ; import otbApplication as otb"
    # Auto run OTB env script next time you activate
-   echo "source $OTB_INSTALL_DIR/otbenv.profile" >> otb_venv/bin/activate
+   echo "source $OTB_INSTALL_DIR/otbenv.profile" >> venv/bin/activate
 
 
 Notes:
@@ -189,6 +192,6 @@ With OTB 9 one can move the installation folder, but once it is done, there is a
 
 .. code-block:: bash
 
-   rm /Path/To/Moved/OTB/tools/install_done.txt
-   source /Path/To/Moved/OTB/otbenv.profile
+   rm tools/install_done.txt
+   source otbenv.profile
    # At this time a message will be displayed showing that this is a new installation, this is normal
