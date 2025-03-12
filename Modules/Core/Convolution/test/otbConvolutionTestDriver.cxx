@@ -19,11 +19,12 @@
  */
 
 #include "otbTestMain.h"
+#include <iostream>
 
 void RegisterTests()
 {
   REGISTER_TEST(otbConvolutionImageFilter);
-#if defined(ITK_USE_FFTWD)
+#if defined(OTB_USE_FFTW)
   REGISTER_TEST(otbOverlapSaveConvolutionImageFilter);
   REGISTER_TEST(otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter);
 #endif

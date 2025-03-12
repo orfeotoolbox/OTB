@@ -35,7 +35,7 @@
 #include "itkImageRegionIterator.h"
 #include "otbMath.h"
 
-#ifdef ITK_USE_FFTWD
+#ifdef OTB_USE_FFTW
 #include "itkFFTWCommon.h"
 #endif
 
@@ -54,7 +54,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 template <class TInputImage, class TOutputImage, class TBoundaryCondition>
 void OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>::GenerateInputRequestedRegion()
 {
-#if defined ITK_USE_FFTWD
+#if defined OTB_USE_FFTW
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
@@ -108,7 +108,7 @@ void OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondi
      * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) */
     ::GenerateData()
 {
-#if defined ITK_USE_FFTWD
+#if defined OTB_USE_FFTW
   // Input/Output pointers
   typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInput();
