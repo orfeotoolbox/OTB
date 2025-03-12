@@ -19,7 +19,6 @@
  */
 
 #include "otbTestMain.h"
-#include <iostream>
 
 void RegisterTests()
 {
