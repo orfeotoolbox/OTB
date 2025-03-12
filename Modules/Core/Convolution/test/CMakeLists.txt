@@ -32,6 +32,11 @@ if (OTB_USE_FFTW)
 endif()
 
 add_executable(otbConvolutionTestDriver ${OTBConvolutionTests})
+# enable FFTW tests when using OTB_USE_FFTW option
+if (OTB_USE_FFTW)
+  target_compile_definitions(otbConvolutionTestDriver PUBLIC "OTB_USE_FFTW=1")
+endif()
+
 target_link_libraries(otbConvolutionTestDriver ${OTBConvolution-Test_LIBRARIES})
 otb_module_target_label(otbConvolutionTestDriver)
 
@@ -74,7 +79,6 @@ if(OTB_USE_FFTW)
       0
       )
   endif()
-
 endif()
 
 otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbConvolutionTestDriver

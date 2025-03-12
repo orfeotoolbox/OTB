@@ -128,6 +128,7 @@ fast-build:
     - git checkout -f -q $CI_COMMIT_SHA
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
+    - ctest -VV -S CI/FFTW_tests.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
     - ccache -s
 
 legal-check:
