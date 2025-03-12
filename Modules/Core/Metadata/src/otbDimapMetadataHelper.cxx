@@ -458,7 +458,6 @@ void DimapMetadataHelper::ParseSpot5Model(const MetadataSupplierInterface & mds,
 
 }
 
-} // end namespace otb
 void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, const std::string & prefix)
 {
   std::vector<std::string> missionVec;
