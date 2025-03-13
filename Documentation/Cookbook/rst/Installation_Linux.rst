@@ -153,16 +153,17 @@ At the root of the OTB installation run :
     source otbenv.profile
     ./recompile_bindings.sh
 
-You should now be able to import ``otbApplication`` through Python !
+You should now be able to import ``otbApplication`` through your system's Python !
+To use another Python version and isolated venv, see the next section.
 
 Create an healthy Python environment for OTB
 ````````````````````````````````````````````
 
-We strongly recommend to use a virtual env to **avoid conflicts between OTB and GDAL when you develop python scripts that uses other dependencies like rasterio, scikit...**
+We strongly recommend to use a virtual env to **avoid conflicts between OTB and other python packages based on GDAL (e.g. rasterio and geopandas)**
 
 .. code-block:: bash
 
-   # Go to yoyr OTB dir and set environment
+   # Go to your OTB directory and set environment
    source otbenv.profile
    # Create a virtual env, it can be located in any directory
    python -m venv ./venv
@@ -171,7 +172,7 @@ We strongly recommend to use a virtual env to **avoid conflicts between OTB and 
    pip install --upgrade pip "numpy<2"
    # Recompile python bindings with the right python executable
    ./recompile_bindings.sh
-   # Compile rasterio and shapely using OTB's GEOS, PROJ and GDAL libraries
+   # Compile rasterio and geopandas dependencies using OTB's GEOS, PROJ and GDAL libraries
    pip install rasterio pyogrio pyproj shapely --no-binary :all:
    # Install normally any pip package that isn't built against OTB dependencies
    pip install geopandas scikit-image scikit-learn
