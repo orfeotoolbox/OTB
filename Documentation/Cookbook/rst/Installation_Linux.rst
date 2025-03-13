@@ -172,7 +172,7 @@ We strongly recommend to use a virtual env to **avoid conflicts between OTB and 
    # Recompile python bindings with the right python executable
    ./recompile_bindings.sh
    # Compile rasterio and shapely using OTB's GDAL and GEOS libraries
-   pip install rasterio shapely --no-binary :all:
+   pip install rasterio pyogrio pyproj shapely --no-binary :all:
    # Install normally any pip package that isn't built against OTB dependencies
    pip install geopandas scikit-image scikit-learn
    # Test imports
