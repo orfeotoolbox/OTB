@@ -126,8 +126,14 @@ fast-build:
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
+    # pull data needed by the two convolution test
+    - |
+      git lfs pull --include Data/Baseline/OTB/Images/bfTvConvolutionImageFilter.tif
+      git lfs pull --include Data/Input/QB_Suburb.png
+      git lfs pull --include Data/Input/QB_PAN_ROI_1000_100.tif
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
+    - ctest -VV -S CI/FFTW_tests.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
     - ccache -s
 
 legal-check:

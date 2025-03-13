@@ -13,3 +13,6 @@ archives*
 CMakeLists.txt.user
 .directory*
 build_packages*
+build
+install
+log
