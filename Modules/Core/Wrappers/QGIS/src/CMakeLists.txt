@@ -41,17 +41,32 @@ set(generate_descriptor_cmd "$<TARGET_FILE:otbQgisDescriptor>")
 if(CMAKE_SKIP_RPATH AND "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
   set(generate_descriptor_cmd "env;LD_LIBRARY_PATH=${OTB_BINARY_DIR}/lib;$<TARGET_FILE:otbQgisDescriptor>")
 endif()
+# generate dependency list
+# put all app into a file
+# same for dfiles
+set(QGIS_APP_LIST_FILE "${CMAKE_CURRENT_BINARY_DIR}/qgis_apps_list.txt")
+file(TOUCH "${QGIS_APP_LIST_FILE}")
+set(QGIS_APP_DESCRIPTOR_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description")
 foreach(app_name ${app_names})
   add_dependencies(otbQgisDescriptor otbapp_${app_name})
+  file(APPEND "${QGIS_APP_LIST_FILE}" "${app_name}\n")
   set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/${app_name}.txt")
-  add_custom_command(OUTPUT "${dfile}"
-    COMMAND ${generate_descriptor_cmd}
-    "${app_name}" "${app_location}" "./${OTB_INSTALL_DATA_DIR}/description/"
-    WORKING_DIRECTORY ${OTB_BINARY_DIR}
-    COMMENT "./bin/otbQgisDescriptor ${app_name} ${app_location} ./${OTB_INSTALL_DATA_DIR}/description/"
-    VERBATIM)
-  list(APPEND dfiles "${dfile}")
+  # add_custom_command(OUTPUT "${dfile}"
+  #   COMMAND ${generate_descriptor_cmd}
+  #   "${app_name}" "${app_location}" "./${OTB_INSTALL_DATA_DIR}/description/"
+  #   WORKING_DIRECTORY ${OTB_BINARY_DIR}
+  #   COMMENT "./bin/otbQgisDescriptor ${app_name} ${app_location} ./${OTB_INSTALL_DATA_DIR}/description/"
+  #   VERBATIM)
 endforeach()
 
-add_custom_target(generate_descriptors DEPENDS ${dfiles} )
-add_dependencies(${otb-module}-all generate_descriptors)
+# call otbQgisDescriptor with the app list, the location to create the files 
+# add_custom_command(OUTPUT "${QGIS_APP_DESCRIPTOR_PATH}/algs.txt"
+#   COMMAND ${generate_descriptor_cmd}
+#   "${CMAKE_CURRENT_BINARY_DIR}/qgis_apps.txt" "${app_location}" "./${OTB_INSTALL_DATA_DIR}/description/"
+#   WORKING_DIRECTORY ${OTB_BINARY_DIR}
+#   COMMENT "Generate gqis descriptor files"
+#   VERBATIM)
+
+
+# add_custom_target(generate_descriptors DEPENDS "${QGIS_APP_DESCRIPTOR_PATH}/algs.txt")
+# add_dependencies(${otb-module}-all generate_descriptors)
