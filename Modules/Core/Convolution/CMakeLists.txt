@@ -22,7 +22,7 @@ project(OTBConvolution)
 
 option(OTB_USE_FFTW "Download and compile FFTW third party (license change to GPLv2)" OFF)
 if (OTB_USE_FFTW)
-  message(NOTICE "/!\\ /!\\ /!\\ You are actually compiling OTB with FFTW. As FFTW is distributed under GNU GPLv2, OTB is now provided with GNU GPLv2 license /!\\ /!\\ /!\\ ")
+  message(AUTHOR_WARNING "/!\\ /!\\ /!\\ You are actually compiling OTB with FFTW. As FFTW is distributed under GNU GPLv2, OTB is now provided with GNU GPLv2 license /!\\ /!\\ /!\\ ")
 else()
   message(STATUS "Compiling with FFTW disabled, otbOverlapSaveConvolutionImageFilter will not be available")
 endif()
