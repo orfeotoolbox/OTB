@@ -51,11 +51,8 @@ else
   # non-bash shell
   OTB_INSTALL_DIR="$( dirname -- "$( readlink -f -- "$0"; )"; )"
 fi
-# required to build modules or python bindings
-export CMAKE_PREFIX_PATH="$OTB_INSTALL_DIR"
-# required when using `pip install --no-binary`
-export CFLAGS="-I$OTB_INSTALL_DIR/include"
-export LDFLAGS="-L$OTB_INSTALL_DIR/lib"
+CMAKE_PREFIX_PATH="$OTB_INSTALL_DIR"
+export CMAKE_PREFIX_PATH
 
 # check and set OTB_APPLICATION_PATH
 OTB_APPLICATION_PATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
