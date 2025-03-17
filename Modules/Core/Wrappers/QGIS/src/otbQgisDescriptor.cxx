@@ -33,43 +33,6 @@
 #define QGIS_DEBUG 0
 
 using namespace otb::Wrapper;
-static const std::unordered_map<ParameterType, std::string> parameterTypeToString {
-  {ParameterType_Bool, "QgsProcessingParameterBoolean"},
-  {ParameterType_Int, "QgsProcessingParameterNumber"},
-  {ParameterType_Float, "QgsProcessingParameterNumber"},
-  {ParameterType_Double, "QgsProcessingParameterNumber"},
-  {ParameterType_RAM, "QgsProcessingParameterNumber"},
-  {ParameterType_Radius, "QgsProcessingParameterNumber"},
-  {ParameterType_Choice, "OTBParameterChoice"},
-  {ParameterType_String, "QgsProcessingParameterString"},
-  {ParameterType_InputImage, "QgsProcessingParameterRasterLayer"},
-  {ParameterType_InputFilename, "QgsProcessingParameterFile"},
-  {ParameterType_InputImageList, "QgsProcessingParameterMultipleLayers"},
-  {ParameterType_InputVectorData, "QgsProcessingParameterVectorLayer"},
-  {ParameterType_InputFilenameList, "QgsProcessingParameterMultipleLayers"},
-  {ParameterType_InputVectorDataList, "QgsProcessingParameterMultipleLayers"},
-  {ParameterType_OutputImage, "QgsProcessingParameterRasterDestination"},
-  {ParameterType_OutputVectorData, "QgsProcessingParameterVectorDestination"},
-  {ParameterType_OutputFilename, "QgsProcessingParameterFileDestination"},
-  {ParameterType_Directory, "QgsProcessingParameterFile"},
-  {ParameterType_Field, "QgsProcessingParameterField"},
-  {ParameterType_Band, "QgsProcessingParameterBand"},
-  {ParameterType_StringList, "QgsProcessingParameterString"},
-  {ParameterType_ListView, "QgsProcessingParameterEnum"}
-};
-
-bool addModuleToAlgorithmList(std::ofstream& algs_list_file,
-                              const std::string& module,
-                              const std::string& group)
-{
-  if (algs_list_file) {
-    algs_list_file << group << "|" << module << std::endl;
-    return algs_list_file.good();
-  }
-  else {
-    return false;
-  }
-}
 
 std::string getMandatoryOutputImageParam(const Application::Pointer app,
                                          const std::vector<std::string>& app_keys) {
@@ -87,6 +50,39 @@ std::string getMandatoryOutputImageParam(const Application::Pointer app,
 std::string QGISLineFactory(const Application::Pointer app,
                             const std::string& paramKey)
 {
+  static const std::unordered_map<ParameterType, std::string> parameterTypeToString {
+    {ParameterType_Bool, "QgsProcessingParameterBoolean"},
+    {ParameterType_Int, "QgsProcessingParameterNumber"},
+    {ParameterType_Float, "QgsProcessingParameterNumber"},
+    {ParameterType_Double, "QgsProcessingParameterNumber"},
+    {ParameterType_RAM, "QgsProcessingParameterNumber"},
+    {ParameterType_Radius, "QgsProcessingParameterNumber"},
+    {ParameterType_Choice, "OTBParameterChoice"},
+    {ParameterType_String, "QgsProcessingParameterString"},
+    {ParameterType_InputImage, "QgsProcessingParameterRasterLayer"},
+    {ParameterType_InputFilename, "QgsProcessingParameterFile"},
+    {ParameterType_InputImageList, "QgsProcessingParameterMultipleLayers"},
+    {ParameterType_InputVectorData, "QgsProcessingParameterVectorLayer"},
+    {ParameterType_InputFilenameList, "QgsProcessingParameterMultipleLayers"},
+    {ParameterType_InputVectorDataList, "QgsProcessingParameterMultipleLayers"},
+    {ParameterType_OutputImage, "QgsProcessingParameterRasterDestination"},
+    {ParameterType_OutputVectorData, "QgsProcessingParameterVectorDestination"},
+    {ParameterType_OutputFilename, "QgsProcessingParameterFileDestination"},
+    {ParameterType_Directory, "QgsProcessingParameterFile"},
+    {ParameterType_Field, "QgsProcessingParameterField"},
+    {ParameterType_Band, "QgsProcessingParameterBand"},
+    {ParameterType_StringList, "QgsProcessingParameterString"},
+    {ParameterType_ListView, "QgsProcessingParameterEnum"}
+  };
+
+  enum FilterType {
+    NONE = 0b00000000,
+    STRING = 0b00000001,
+    NUMERIC = 0b00000010,
+    MIXED = 0b00000011
+  };
+
+
   std::ostringstream qgis_line;
   const Parameter::Pointer param         (app->GetParameterByKey(paramKey));
   ParameterType            type          (param->GetType());
@@ -135,20 +131,26 @@ std::string QGISLineFactory(const Application::Pointer app,
   bool isEpsgCode = false;
 
   // use QgsProcessingParameterCrs if required.
-  // CHeck if paramKey ==epsg only or epsg is one onf the extension
-  const std::regex epsg_regex("*\.epsg\.*", std::regex_constants::grep);
-  std::cmatch tmp_match; // useless param just for function
-  if (paramKey == "epsg" || std::regex_match(paramKey, tmp_match, epsg_regex))
-  {
+  // Check if paramKey == "epsg" only or epsg is one of the extensions
+  // use double \ to get one in final expression
+  const std::regex epsg_regex(".+\\.epsg\\..+");
+  if (paramKey == "epsg" || std::regex_match(paramKey, epsg_regex)) {
     qgis_type  = "QgsProcessingParameterCrs";
     isEpsgCode = true;
   }
 
   qgis_line << qgis_type << "|" << paramKey << "|" << description;
 
-  std::vector<std::string>  name_list;
-  std::vector<std::string>  key_list;
+  int filterType;
+  std::vector<std::string> name_list;
+  std::vector<std::string> key_list;
   std::string values;
+  std::string proc_param_field;
+  ListViewParameter *lv_param;
+  ChoiceParameter* choiceParam;
+  FieldParameter* fieldParam;
+  BandParameter* bandParam;
+
   switch (type)
   {
   case ParameterType_Int:
@@ -220,7 +222,7 @@ std::string QGISLineFactory(const Application::Pointer app,
     default_value = "None|None";
     break;
   case ParameterType_ListView:
-    ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
+    lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
     name_list  = app->GetChoiceNames(paramKey);
     for( auto k : name_list)
       values += k + ";";
@@ -240,36 +242,36 @@ std::string QGISLineFactory(const Application::Pointer app,
       values.pop_back();
 
     qgis_line << "|" << values;
-    ChoiceParameter* choiceParam = dynamic_cast<ChoiceParameter*>(param.GetPointer());
+    choiceParam = dynamic_cast<ChoiceParameter*>(param.GetPointer());
     default_value           = std::to_string(choiceParam->GetValue());
     break;
   case ParameterType_Field:
-    FieldParameter* fieldParam = dynamic_cast<FieldParameter*>(param.GetPointer());
+    fieldParam = dynamic_cast<FieldParameter*>(param.GetPointer());
+    filterType = FilterType::NONE;
 
-    enum {
-          STRING  = 0b00000001,
-          NUMERIC = 0b00000010
-    };
-
-    int filterType = 0b00000000;
     for (auto type : fieldParam->GetTypeFilter())
     {
       if (type == OFTString)
-        filterType |= STRING;
+      filterType |= FilterType::STRING;
       else if (type == OFTInteger || type == OFTInteger64 || type == OFTReal)
-        filterType |= NUMERIC;
+      filterType |= FilterType::NUMERIC;
     }
+
+    if (filterType == FilterType::NONE || filterType == FilterType::MIXED)
+      proc_param_field = "QgsProcessingParameterField.Any";
+    else if (filterType == FilterType::STRING)
+      proc_param_field = "QgsProcessingParameterField.String";
+    else if (filterType == FilterType::NUMERIC)
+      proc_param_field = "QgsProcessingParameterField.Numeric";
 
     qgis_line << "|None|"
           << fieldParam->GetVectorData()
-          << "|"  << (filterType == STRING  ? "QgsProcessingParameterField.String" :
-                      filterType == NUMERIC ? "QgsProcessingParameterField.Numeric" :
-                      "QgsProcessingParameterField.Any")
+          << "|" << proc_param_field
           << "|" << (fieldParam->GetSingleSelection() ? "False" : "True")
           << "|" << optional;
     break;
   case ParameterType_Band:
-    BandParameter* bandParam = dynamic_cast<BandParameter*>(param.GetPointer());
+    bandParam = dynamic_cast<BandParameter*>(param.GetPointer());
 
     qgis_line << "|None|"
           << bandParam->GetRasterData() << "|"
@@ -300,11 +302,13 @@ std::string QGISLineFactory(const Application::Pointer app,
   return qgis_line.str();
 }
 
-bool writeModuleQGISDescriptor(const Application::Pointer app,
+void writeModuleQGISDescriptor(const Application::Pointer app,
                                const std::string& module_name,
                                const std::string& group,
                                const std::string& descriptor_file_path) {
   // RAII capsule to automatically close file when we are out of scope
+  // as this function is able to throw, we must ensure that the file is
+  // correctly closed
   auto module_descriptor = std::unique_ptr<std::ofstream, std::function<void(std::ofstream*)>>(
                               new std::ofstream(descriptor_file_path, std::ios::out),
                               [](std::ofstream* o) { o->close(); }
@@ -347,6 +351,8 @@ bool writeModuleQGISDescriptor(const Application::Pointer app,
       *module_descriptor << param_line << std::endl;
   }
 
+  // if there is a mandatory output, add a parameter to specify the type of
+  // output pixels
   if (!mandatory_out_param_name.empty())
   {
     *module_descriptor << "*QgsProcessingParameterEnum|outputpixeltype|Output pixel type|uint8;int;float;double|False|2|True" << std::endl;
@@ -356,43 +362,67 @@ bool writeModuleQGISDescriptor(const Application::Pointer app,
 
 int main(int argc, char* argv[])
 {
+  // ------- Args parsing --------
   if (argc < 3)
   {
-    std::cerr << "Usage : " << argv[0] << " name OTB_APPLICATION_PATH [out_dir]" << std::endl;
+    std::cerr << "Usage : " << argv[0] << " module_list_file OTB_APPLICATION_PATH [out_dir]" << std::endl;
     return EXIT_FAILURE;
   }
 
-  const std::string module(argv[1]);
-
+  const std::string module_list_path(argv[1]);
   ApplicationRegistry::AddApplicationPath(argv[2]);
-  Application::Pointer appli = ApplicationRegistry::CreateApplicationFaster(module);
 
-  assert(!appli.IsNull());
-
-  std::string output_file = module + ".txt";
-  std::string algs_txt    = "algs.txt";
-
+  std::string work_dir("");
+  std::string output_file = module_list_path + ".txt";
   if (argc > 3)
   {
-    output_file = std::string(argv[3]) + module + ".txt";
-    algs_txt    = std::string(argv[3]) + "algs.txt";
+    work_dir = std::string(argv[3]) + "/";
+  }
+  // ------------------------
+
+  // get the list of all modules to generate their descriptors
+  std::ifstream module_list_file(module_list_path, std::ios_base::in);
+  const std::string algs_txt    = work_dir + "algs.txt";
+
+  // get the algs_txt that contains modules and their groups
+  std::ofstream algs_list;
+  algs_list.open(algs_txt, std::ios::out | std::ios::app);
+
+  std::string module_name;
+
+  // for all modules list, write the detailled QGIS descriptor and add it
+  // in the algs.txt list with its group
+  while (std::getline(module_list_file, module_name)) {
+    bool descriptor_written = false;
+    Application::Pointer appli = ApplicationRegistry::
+                                  CreateApplicationFaster(module_name);
+    assert(!appli.IsNull());
+    const std::string group = appli->GetDocTags().size() > 0 ?
+                              appli->GetDocTags()[0] : "";
+    assert(!group.empty());
+
+    std::string qgis_desc_path = work_dir + module_name + ".txt";
+
+    // write detailled module desc
+    try {
+      writeModuleQGISDescriptor(appli, module_name, group, qgis_desc_path);
+      descriptor_written = true;
+    }
+    catch (const std::runtime_error& e) {
+      std::cerr << "Error while writing " << qgis_desc_path << ": " << e.what()
+                << std::endl;
+    }
+
+    // add it in list
+    if (descriptor_written) {
+      algs_list << group << "|" << module_name << std::endl;
+    }
+
+    appli = nullptr;
   }
 
-  const std::string group = appli->GetDocTags().size() > 0 ? appli->GetDocTags()[0] : "";
-  assert(!group.empty());
-
-  // write module
-  writeModuleQGISDescriptor(appli, module, group, output_file);
-
-  std::cerr << "Writing " << output_file << std::endl;
-
-  std::ofstream indexFile;
-  indexFile.open(algs_txt, std::ios::out | std::ios::app);
-  indexFile << group << "|" << module << std::endl;
-  indexFile.close();
-  std::cerr << "Updated " << algs_txt << std::endl;
-
-  appli = nullptr;
+  algs_list.close();
+  module_list_file.close();
   ApplicationRegistry::CleanRegistry();
 
   return EXIT_SUCCESS;
