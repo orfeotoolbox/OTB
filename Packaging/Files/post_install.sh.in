@@ -51,17 +51,17 @@ if [ "$ostype" != "RedHatEnterprise" ] ; then
   # Note that the install path differs from OS. To handle it,
   # check before the folder name (always prefixed of python3)
   osgeo_pkg_path=$(find "$OTB_INSTALL_DIR/lib" -mindepth 3 -maxdepth 3 -type d -name "osgeo")
-  gdal_python_found="$(find $osgeo_pkg_path -name "*$concatpyversion-x86_64-linux*")"
+  gdal_python_found="$(find "$osgeo_pkg_path" -name "*$concatpyversion-x86_64-linux*")"
   if [ -z "$gdal_python_found" ]; then
     echo "***** Python $concatpyversion detected, downloading gdal bindings compiled for this Python version *****"
-    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/gdal-py$concatpyversion.tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$concatpyversion.tar.gz)
+    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-"$OTB_SHORT_VERSION"-GDAL-bindings-py"$concatpyversion".tar.gz)
     if [ "$HTTP_STATUS" -eq 200 ]; then
-      tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py$concatpyversion.tar.gz -C $python_distpackage_path
-      rm "$OTB_INSTALL_DIR"/tools/gdal-py$concatpyversion.tar.gz
+      tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz -C "$osgeo_pkg_path"
+      rm "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz
       echo "***** GDAL bindings for python $concatpyversion successfully installed *****"
     else
       echo "Can not find GDAL bindings at https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$concatpyversion.tar.gz"
-      return -1
+      return 255
     fi
   fi
 fi
