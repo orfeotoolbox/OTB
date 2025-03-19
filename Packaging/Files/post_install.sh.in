@@ -30,6 +30,7 @@ sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/OTB-"$OTB_S
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/ITK-5.3/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/ITK-5.3/Modules/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/gdal-config
+sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/geos-config
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/curl-config
 sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 
