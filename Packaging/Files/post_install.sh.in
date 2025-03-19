@@ -25,13 +25,14 @@ OTB_SHORT_VERSION=@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@
 echo "***** First time launching OTB after installation, doing some post installation steps before use *****"
 # Apply necessary patches for a modular install because cmake generates these file at configure time, not at packaging time
 CMAKE_DIRS="$OTB_INSTALL_DIR/lib/cmake"
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/OTB-"$OTB_SHORT_VERSION"/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/OTB-"$OTB_SHORT_VERSION"/Modules/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/ITK-5.3/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/ITK-5.3/Modules/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/gdal-config
-sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/geos-config
-sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/curl-config
+sed -i 's#/builds/otb/xdk#${OTB_INSTALL_PREFIX}#g' "${CMAKE_DIRS}/OTB-${OTB_SHORT_VERSION}/"*.cmake
+sed -i 's#/builds/otb/xdk#${OTB_INSTALL_PREFIX}#g' "${CMAKE_DIRS}/OTB-${OTB_SHORT_VERSION}/Modules/"*.cmake
+sed -i 's#/builds/otb/xdk#${OTB_INSTALL_PREFIX}#g' "${CMAKE_DIRS}/ITK-5.3/"*.cmake
+sed -i 's#/builds/otb/xdk#${OTB_INSTALL_PREFIX}#g' "${CMAKE_DIRS}/ITK-5.3/Modules/"*.cmake
+sed -i 's#/builds/otb/xdk#${OTB_INSTALL_DIR}#g'    "${OTB_INSTALL_DIR}/bin/gdal-config"
+sed -i 's#/builds/otb/xdk#${OTB_INSTALL_DIR}#g'    "${OTB_INSTALL_DIR}/bin/geos-config"
+sed -i 's#/builds/otb/xdk#${OTB_INSTALL_DIR}#g'    "${OTB_INSTALL_DIR}/bin/curl-config"
+
 sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 
 ostype="$(lsb_release -is)"
