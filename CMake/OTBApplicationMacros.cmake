@@ -191,9 +191,9 @@ else {
   $OTB_LAUNCHER = \"${_launcher_type}.ps1\"
 }
 
-# As we are using another powershell script, execute it with the '. <path>' syntax
-# Start application
-. \"$OTB_LAUNCHER\" \"${APPLAUNCHER_NAME}\" $args
+# As we are using another powershell we need to use InvokeExpression Syntax
+# The '&' is to run the script in its own shell without polluting this one
+Invoke-Expression \"&'$OTB_LAUNCHER' ${APPLAUNCHER_NAME} $args\"
 ")
   else()
     # Launcher script in Shell format
