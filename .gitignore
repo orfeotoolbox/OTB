@@ -19,3 +19,7 @@ build
 install
 xdk
 log
+#P0Modules to ignore now
+Modules/Miscellaneous
+Modules/FeaturesExtraction
+Modules/Learning
