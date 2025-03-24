@@ -25,46 +25,78 @@
 # otb_internal_modules_desc
 list(APPEND otb_internal_modules
     "Miscellaneous"
-    "FeaturesExtraction")
+    "FeaturesExtraction"
+    "Learning")
 
 list(APPEND otb_internal_modules_repos
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git"
-    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/featuresextraction.git")
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/featuresextraction.git"
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/learning.git")
 
 list(APPEND otb_internal_modules_git_tag
-    "main"
-    "main"
+    "main" # Miscellaneous
+    "main" # FeaturesExtraction
+    "init_P0_module" # Learning
     )
 
 list(APPEND otb_internal_modules_get_submodules
-     "OFF"
-     "OFF")
+     "OFF" # Miscellaneous 
+     "OFF" # FeaturesExtraction
+     "OFF" # Learning
+    )
 
 list(APPEND otb_internal_modules_desc
 "This module deals with image simulation algorithm. Using
 objects transmittance and reflectance and sensor characteristics, it can be possible
 to generate realistic hyperspectral synthetic set of data. This module includes
 PROSPECT (leaf optical properties) and SAIL (canopy bidirectional reflectance)
-models, as well as PROSAIL, which is the combination of the two previous ones."
+models, as well as PROSAIL, which is the combination of the two previous ones." # Miscellaneous
 
-"This module contains classical filtering applications, such as texture extraction, edge extraction, smoothing, morphological operations. This module relies on external libraries (MuParser / MuParserX) contained in OTB-Dependencies. it can be installed along with the Core package with a simple tar extract command and directly available after sourcing the otbenv.profile"
+"This module contains classical filtering applications, such as texture extraction, edge extraction, smoothing, morphological operations. This module relies on external libraries (MuParser / MuParserX) contained in OTB-Dependencies. it can be installed along with the Core package with a simple tar extract command and directly available after sourcing the otbenv.profile." # FeaturesExtraction
+
+"This module contains Machine Learning applications based on classical supervised or unsupervised algorithms (SVM, Random Forest, K-Means, Multi-layer Perceptron Neural Network, etc.). Its applications handle the whole processing chain : sample selection, learning, prediction and finalization of a classification map. It also contains a regression framework." # Learning
 )
 
-set(i 0) # group index
-list(LENGTH otb_internal_modules nb_internal_modules)
+set(__i 0) # group index
+list(LENGTH otb_internal_modules __nb_internal_modules)
+
+# Check if arrays are coherents
+list(LENGTH otb_internal_modules_repos __nb_urls)
+list(LENGTH otb_internal_modules_git_tag __nb_branches)
+list(LENGTH otb_internal_modules_get_submodules __nb_submodule_settings)
+list(LENGTH otb_internal_modules_desc __nb_docs_desc)
+
+if (NOT (${__nb_internal_modules} EQUAL ${__nb_urls}))
+    message(FATAL_ERROR "There is one P0 remote module name or module url missings, aborting")
+endif()
+if (NOT (${__nb_internal_modules} EQUAL ${__nb_branches}))
+    message(FATAL_ERROR "There is one P0 remote module name or module branches missing, aborting")
+endif()
+if (NOT (${__nb_internal_modules} EQUAL ${__nb_submodule_settings}))
+    message(FATAL_ERROR "There is one P0 remote module name or submodule setting missing, aborting")
+endif()
+if (NOT (${__nb_internal_modules} EQUAL ${__nb_docs_desc}))
+    message(FATAL_ERROR "There is one P0 remote module name or module doc description missing, aborting. You can add an empty description with \"\"")
+endif()
+unset(__nb_urls)
+unset(__nb_branches)
+unset(__nb_submodule_settings)
+unset(__nb_docs_desc)
+
+# Now arrays are clean
 
 # for all enabled internal module, 
-while(${i} LESS ${nb_internal_modules})
-    list(GET otb_internal_modules "${i}" __otb_module_name)
+while(${__i} LESS ${__nb_internal_modules})
+    list(GET otb_internal_modules "${__i}" __otb_module_name)
     # download only enabled modules
     if (OTBGroup_${__otb_module_name} OR OTB_BUILD_${__otb_module_name})
         # Following variable is mandatory for otb_fetch compat
         set(Module_${__otb_module_name} ON)
         set(__location "${OTB_SOURCE_DIR}/Modules/${__otb_module_name}")
-        list(GET otb_internal_modules_repos "${i}" __otb_module_repo)
-        list(GET otb_internal_modules_git_tag "${i}" __otb_module_tag)
-        list(GET otb_internal_modules_desc "${i}" __otb_module_desc)
-        list(GET otb_internal_modules_get_submodules "${i}" __get_submodules)
+        list(GET otb_internal_modules_repos "${__i}" __otb_module_repo)
+        list(GET otb_internal_modules_git_tag "${__i}" __otb_module_tag)
+        list(GET otb_internal_modules_desc "${__i}" __otb_module_desc)
+        list(GET otb_internal_modules_get_submodules "${__i}" __get_submodules)
 
         message(STATUS "Downloading internal module ${__otb_module_name} at ${__location} with submodules at ${__get_submodules}")
         otb_fetch_module("${__otb_module_name}"
@@ -75,5 +107,5 @@ while(${i} LESS ${nb_internal_modules})
                          GIT_SUBMODULES "${__get_submodules}"
         )
     endif() # ${OTBGroup_${module_name}}
-    math(EXPR i "${i}+1")
-endwhile() # i LESS_EQUAL nb_internal_modules
+    math(EXPR __i "${__i}+1")
+endwhile() # i LESS_EQUAL __nb_internal_modules
