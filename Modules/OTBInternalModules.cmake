@@ -33,7 +33,7 @@ list(APPEND otb_internal_modules_repos
 
 list(APPEND otb_internal_modules_git_tag
     "main"
-    "init_P0_module"
+    "main"
     )
 
 list(APPEND otb_internal_modules_get_submodules
@@ -47,7 +47,7 @@ to generate realistic hyperspectral synthetic set of data. This module includes
 PROSPECT (leaf optical properties) and SAIL (canopy bidirectional reflectance)
 models, as well as PROSAIL, which is the combination of the two previous ones."
 
-"OTB Features Extraction Application" # TODO TLA: improve the doc
+"This module contains classical filtering applications, such as texture extraction, edge extraction, smoothing, morphological operations. This module relies on external libraries (MuParser / MuParserX) contained in OTB-Dependencies. it can be installed along with the Core package with a simple tar extract command and directly available after sourcing the otbenv.profile"
 )
 
 set(i 0) # group index
