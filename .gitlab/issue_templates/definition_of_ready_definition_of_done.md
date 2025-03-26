@@ -5,7 +5,7 @@
 
 ## Generic:
 
-* [ ] If this issue is consequent, it is splitted in subtask with priority and complexity evaluated. Theses subtasks should be linked to this issue.
+* [ ] If this issue is consequent, it is splitted in subtasks with priority and complexity evaluated. Theses subtasks should be linked to this issue. (To do on gitlab interface after writting this issue)
 * [ ] Issue complexity evaluated
 * [ ] Priority of issue evaluated
 * [ ] If there is specific test data needed, it should be detailled and available
