@@ -39,7 +39,7 @@ if [ "$ostype" != "RedHatEnterprise" ] ; then
   concatpyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
   # Compare the concat version with the version used to build this OTB package
   # The python build version is filled by cmake
-  if [ "$concatpyversion" -ne "@PYTHON_VERSION_DURING_BUILD@" ]; then
+  if [ "$concatpyversion" -ne "@__PYTHON_VERSION_MAJOR@@__PYTHON_VERSION_MINOR@" ]; then
     sh "$OTB_INSTALL_DIR"/recompile_bindings.sh
   fi
   # Check python version, if python 3.12 (ubuntu 24 and debian > 12) download

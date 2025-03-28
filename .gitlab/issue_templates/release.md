@@ -15,13 +15,12 @@ We are ready to release OTB version MAJOR.MINOR.PATCH. The following steps need 
 * [ ] Check [SonarQube](https://sonar.orfeo-toolbox.org/dashboard?id=orfeotoolbox-otb)
 * [ ] Run Debian [spelling](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#spelling-check) checker
 * [ ] Run shellcheck script from [OTB-Devutils/Scripts/](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils/blob/master/Scripts/run_shellcheck.sh)
-* [ ] [Update translation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#translation-for-monteverdi-mapla) for Monteverdi and Mapla
 * [ ] [Sanity check the binary packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#standalone-packages-sanity-check)
     * [ ] Windows
     * [ ] Linux
     * [ ] QGIS plugin
 
-### 3. Actual release
+### 3. Actual release candidate
 
 Once all blocking issues are closed, and the previous steps are done:
 * [ ] [Tag the release candidate](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#release-tag)
@@ -35,6 +34,7 @@ Once all blocking issues are closed, and the previous steps are done:
     * [ ] Doxygen
 * [ ] [Update the SuperBuild archive](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#superbuild-archive)
 * [ ] Release Candidate announcement on the forum
+* [ ] Add the new release to TRex https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/wikis/Help-for-release-actions#update-otb-on-trex-cluster
 
 ## Release
 
@@ -50,7 +50,6 @@ Once all blocking issues are closed, and the previous steps are done:
 * [ ] Check [SonarQube](https://sonar.orfeo-toolbox.org/dashboard?id=orfeotoolbox-otb)
 * [ ] Run Debian [spelling](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#spelling-check) checker
 * [ ] Run shellcheck script from [OTB-Devutils/Scripts/](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils/blob/master/Scripts/run_shellcheck.sh)
-* [ ] [Update translation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#translation-for-monteverdi-mapla) for Monteverdi and Mapla
 * [ ] [Sanity check the binary packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#standalone-packages-sanity-check)
     * [ ] Windows
     * [ ] Linux
@@ -71,7 +70,7 @@ Once all blocking issues are closed, and the previous steps are done:
 * [ ]   [Update documentation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#update-documentation)
     * [ ] Cookbook
     * [ ] Doxygen
-    * [ ] WordPress page "Home" and "Download" pages
+    * [ ] WordPress page ["Home"](https://www.orfeo-toolbox.org/) and ["Download"](https://www.orfeo-toolbox.org/download/) pages
 * [ ] Add the release to "Releases" page of the project
 * [ ] [Update the SuperBuild archive](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#superbuild-archive)
 * [ ] Upload OTB source archive to [Zenodo](https://zenodo.org/) to create a unique Digital Object Identifier (DOI)
@@ -81,5 +80,6 @@ Once all blocking issues are closed, and the previous steps are done:
 * [ ] Update the Wikipedia page with the version number and release date (https://en.wikipedia.org/wiki/Orfeo_toolbox)
 * [ ] Forward announcement to news_item@osgeo.org ([OSGeo news](https://www.osgeo.org/foundation-news/))
 * [ ] Remove public branches related to MR or bugfix merged before the release
+* [ ] Add the new release to TRex https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/wikis/Help-for-release-actions#update-otb-on-trex-cluster
 
 /label ~story
