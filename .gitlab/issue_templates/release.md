@@ -30,7 +30,7 @@ Once all blocking issues are closed, and the previous steps are done:
 * [ ]   [Prepare and upload source packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#prepare-and-upload-source-packages)
 * [ ]   [Promote staging packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#promote-staging-packages)
 * [ ]   [Update documentation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#update-documentation)
-    * [ ] Cookbook
+    * [ ] Cookbook. If it is a patch version, overwrite in [version.html file](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/Documentation/Cookbook/_static/html/versions.html) the previous minor version to only keep one minor version. This will be updated when merged in develop.
     * [ ] Doxygen
 * [ ] [Update the SuperBuild archive](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#superbuild-archive)
 * [ ] Release Candidate announcement on the forum
