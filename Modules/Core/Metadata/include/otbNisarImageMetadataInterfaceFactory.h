@@ -59,7 +59,7 @@ public:
 
 protected:
   NisarImageMetadataInterfaceFactory();
-  ~NisarImageMetadataInterfaceFactory() override;
+  ~NisarImageMetadataInterfaceFactory() override = default;
 
 private:
   NisarImageMetadataInterfaceFactory(const Self&) = delete;

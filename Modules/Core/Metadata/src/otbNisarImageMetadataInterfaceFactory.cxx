@@ -18,10 +18,6 @@
  * limitations under the License.
  */
 
-
-#include <typeinfo>
-#include <cassert>
-
 #include "otbNisarImageMetadataInterfaceFactory.h"
 #include "otbSentinel1ImageMetadataInterface.h"
 
@@ -36,10 +32,6 @@ NisarImageMetadataInterfaceFactory::NisarImageMetadataInterfaceFactory()
                          itk::CreateObjectFunction<Sentinel1ImageMetadataInterface>::New());
 }
 
-NisarImageMetadataInterfaceFactory::~NisarImageMetadataInterfaceFactory()
-{
-}
-
 const char* NisarImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
@@ -47,7 +39,7 @@ const char* NisarImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 
 const char* NisarImageMetadataInterfaceFactory::GetDescription() const
 {
-  return "Sentinel1 Metadata Interface Factory, handle Sentinel1 metadata in OTB";
+  return "Nisar Metadata Interface Factory, handle Nisar metadata in OTB";
 }
 
 } // end namespace otb
