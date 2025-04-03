@@ -19,7 +19,7 @@
  */
 
 #include "otbNisarImageMetadataInterfaceFactory.h"
-#include "otbSentinel1ImageMetadataInterface.h"
+#include "otbNisarImageMetadataInterface.h"
 
 #include "itkCreateObjectFunction.h"
 #include "itkVersion.h"
@@ -29,7 +29,7 @@ namespace otb
 NisarImageMetadataInterfaceFactory::NisarImageMetadataInterfaceFactory()
 {
   this->RegisterOverride("SarImageMetadataInterface", "otbNisarImageMetadataInterface", "NISAR Metadata Interface", 1,
-                         itk::CreateObjectFunction<Sentinel1ImageMetadataInterface>::New());
+                         itk::CreateObjectFunction<NisarImageMetadataInterface>::New());
 }
 
 const char* NisarImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
