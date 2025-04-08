@@ -162,16 +162,14 @@ Create an healthy Python environment for OTB
 We strongly recommend to use a virtual env to **avoid conflicts between OTB and other python packages based on GDAL (e.g. rasterio and geopandas)**
 
 .. code-block:: bash
-
-   # Go to your OTB directory and set environment
-   source otbenv.profile
-   # Create a virtual env, it can be located in any directory
+   # Go to you OTB install directory
+   # Create a virtual env (it can be located in any directory)
    python -m venv ./venv
    source venv/bin/activate
    # Install mandatory python requirements
    pip install --upgrade pip "numpy<2"
-   # Recompile python bindings with the right python executable
-   ./recompile_bindings.sh
+   # Set environment and trigger python bindings compilation
+   source otbenv.profile
    # Compile rasterio and geopandas dependencies using OTB's GEOS, PROJ and GDAL libraries
    pip install rasterio pyogrio pyproj shapely --no-binary :all:
    # Install normally any pip package that isn't built against OTB dependencies
