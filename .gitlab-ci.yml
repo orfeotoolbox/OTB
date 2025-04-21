@@ -298,7 +298,7 @@ ubuntu-qa-code-coverage:
     - ctest -V -S CI/main_qa.cmake
             -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
             -DQA:BOOL=ON
-            --output-junit ctest_report.xml
+            --output-junit build/ctest_report.xml
     - ./CI/otb_coverage.sh
   needs:
     - job: ubuntu-22-prepare
