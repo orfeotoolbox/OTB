@@ -207,7 +207,7 @@ python3.12-gdal-bindings:
   needs:
     - job: ubuntu-24-prepare
       artifacts: true
- 
+
 ## RedHat superbuild
 redhat-prepare:
   extends: .common-prepare
@@ -298,7 +298,6 @@ ubuntu-qa-code-coverage:
     - ctest -V -S CI/main_qa.cmake
             -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
             -DQA:BOOL=ON
-            --output-junit build/ctest_report.xml
     - ./CI/otb_coverage.sh
   needs:
     - job: ubuntu-22-prepare
@@ -444,4 +443,4 @@ release-docker:
                        --context $CI_PROJECT_DIR
                        --build-arg "OTB_RELEASE=$PACKAGE_OTB_VERSION"
                        --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile_CI
-                       --destination orfeotoolbox/otb:$CI_COMMIT_TAG  
+                       --destination orfeotoolbox/otb:$CI_COMMIT_TAG

@@ -164,6 +164,7 @@ else()
   endif()
 
   ctest_test(PARALLEL_LEVEL 8
+             OUTPUT_JUNIT ctest_report.xml
              RETURN_VALUE _test_rv
              CAPTURE_CMAKE_ERROR _test_error
              )
