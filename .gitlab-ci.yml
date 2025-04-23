@@ -95,6 +95,9 @@ stages:
       - build/Testing/Temporary/*.txt #DEBUG
       - Docker/Dockerfile_CI
       - Docker/system-dependencies.txt
+    reports:
+      junit:
+        - build/ctest_report.xml
 
 .common-prepare:
   extends: .general
@@ -299,10 +302,6 @@ ubuntu-qa-code-coverage:
             -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
             -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
-  artifacts:
-    reports:
-      junit:
-        - build/ctest_report.xml
   needs:
     - job: ubuntu-22-prepare
       artifacts: true
