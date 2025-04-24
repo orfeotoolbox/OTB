@@ -178,7 +178,7 @@ We strongly recommend to use a virtual env to **avoid conflicts between OTB and 
    python -c "import rasterio ; import geopandas ; import otbApplication as otb"
    # Auto run OTB env script next time you activate
    echo "source $OTB_INSTALL_DIR/otbenv.profile" >> venv/bin/activate
-
+   # Keep in mind that the `deactivate` command will not reverse this or clean up the OTB environment variables
 
 Notes:
 ```````
