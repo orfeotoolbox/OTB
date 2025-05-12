@@ -43,7 +43,7 @@ void PleiadesNeoImageMetadataInterface::FetchSatAngles(const std::vector<double>
                                                        const std::vector<double>& acrossTrackIncidenceAngles, const std::vector<double>& sceneOrientation,
                                                        ImageMetadata& imd)
 {
-  if (incidenceAngles.size() != 3 || sceneOrientation.size() != 3)
+  if (incidenceAngles.size() <= 3 || sceneOrientation.size() <= 3)
   {
     otbGenericExceptionMacro(MissingMetadataException, << "Missing satellite angles in Dimap")
   }
@@ -256,8 +256,8 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata& imd)
     imd.Add(MetaData::PleiadesNeoUtils::TIME_RANGE_START_KEY, dimapData.TimeRangeStart);
     imd.Add(MetaData::PleiadesNeoUtils::TIME_RANGE_END_KEY, dimapData.TimeRangeEnd);
     imd.Add(MetaData::PleiadesNeoUtils::LINE_PERIOD_KEY, dimapData.LinePeriod);
-    imd.Add(MetaData::PleiadesNeoUtils::SWATH_FIRST_COL_KEY, dimapData.SwathFirstCol);
-    imd.Add(MetaData::PleiadesNeoUtils::SWATH_LAST_COL_KEY, dimapData.SwathLastCol);
+   // imd.Add(MetaData::PleiadesNeoUtils::SWATH_FIRST_COL_KEY, dimapData.SwathFirstCol);
+   // imd.Add(MetaData::PleiadesNeoUtils::SWATH_LAST_COL_KEY, dimapData.SwathLastCol);
   }
 
   // Default display

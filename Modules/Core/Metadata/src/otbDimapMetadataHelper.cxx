@@ -564,14 +564,14 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
     m_Data.TimeRangeStart = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.START");
     m_Data.TimeRangeEnd = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.END");
     m_Data.LinePeriod = mds.GetAs<std::string>(prefix +"Geometric_Data.Refined_Model.Time.Time_Stamp.LINE_PERIOD");
-    std::vector<std::string> swathRangeLastCol={};
-    ParseVector(mds, prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration",
-                     "Swath_Range.LAST_COL", swathRangeLastCol);
-    m_Data.SwathLastCol = swathRangeLastCol[0];
-    std::vector<std::string> swathRangeFirstCol={};
-    ParseVector(mds, prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration",
-                     "Swath_Range.FIRST_COL", swathRangeFirstCol);
-    m_Data.SwathFirstCol = swathRangeFirstCol[0];
+    // std::vector<std::string> swathRangeLastCol={};
+    // ParseVector(mds, prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration",
+    //                  "Swath_Range.LAST_COL", swathRangeLastCol);
+    // m_Data.SwathLastCol = swathRangeLastCol[0];
+    // std::vector<std::string> swathRangeFirstCol={};
+    // ParseVector(mds, prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration",
+    //                  "Swath_Range.FIRST_COL", swathRangeFirstCol);
+    // m_Data.SwathFirstCol = swathRangeFirstCol[0];
 
   }
 
