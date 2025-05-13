@@ -205,13 +205,13 @@ python3.12-gdal-bindings:
 ## RedHat superbuild
 redhat-prepare:
   extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
+  image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base-py312:8
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc -DOTB_FULL_BUILD:BOOL=ON
 
 redhat-build:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
+  image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base-py312:8
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=ON
