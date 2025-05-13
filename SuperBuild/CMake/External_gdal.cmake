@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(GDAL)
 
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT HDF5 NETCDF HDF4 PROJ)
 
-set(GDAL_URL "https://github.com/OSGeo/gdal/releases/download/v3.10.2/gdal-3.10.2.tar.gz")
-set(GDAL_MD5 882761659217c593a4a8028111b15a2a)
+set(GDAL_URL "https://github.com/OSGeo/gdal/releases/download/v3.11.0/gdal-3.11.0.tar.gz")
+set(GDAL_MD5 dbc8e9395b8859fed3baf08e7d8e9ed3)
 
 # avoid use of system SPATIALITE which can use other libproj which cause conflict
 list(APPEND GDAL_CONFIG_LIBS
