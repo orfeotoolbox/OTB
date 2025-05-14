@@ -158,7 +158,7 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
   hemKey << mapKey << ".utm.northhem";
 
   // Compute the zone and the hemisphere if not UserValue defined
-  if (!app->HasValue(zoneKey.str()) && app->HasValue(imageKey))
+  if (!app->HasUserValue(zoneKey.str()) && app->HasValue(imageKey))
   {
     // Compute the Origin lat/long coordinate
     typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
