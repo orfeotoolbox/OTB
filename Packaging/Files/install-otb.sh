@@ -32,8 +32,25 @@ if [ ! -z "$2" ]:
     INSTALL_FOLDER="$2"
 fi
 
+ostype="$(lsb_release -is)"
+LINUX_TYPE="Linux"
+if [ "$ostype" == "RedHatEnterprise" ] ; then
+    LINUX_TYPE="Linux_RedHat"
+fi
+echo "This script will download OTB $OTB_VERSION and install it to $INSTALL_FOLDER"
 # Download and install
-curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_VERSION-Linux.tar.gz -o /tmp/OTB-$OTB_VERSION-Linux.tar.gz
+curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_VERSION-$LINUX_TYPE.tar.gz -o /tmp/OTB-$OTB_VERSION-Linux.tar.gz
 tar xf /tmp/OTB-$OTB_VERSION-Linux.tar.gz --one-top-level=$INSTALL_FOLDER
 # Source the environment
 . $INSTALL_FOLDER/otbenv.profile
+cmakepresent="$(which cmake)"
+swigpresent="$(which swig)"
+if [ "$cmakepresent" != "" ] && [ "$swigpresent" != "" ]; then
+        concatpyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
+        if [ "$concatpyversion" -ne "38" ]; then
+                echo "*** Recompiling OTB Python bindings to be ready to use with your Python version ***"
+                ctest -S "$INSTALL_FOLDER/share/otb/swig/build_wrapping.cmake"
+        fi
+fi
+
+echo -e "\nOTB is ready to be used, in a terminal type : \n\nsource $INSTALL_FOLDER/otbenv.profile\notbcli_AppName to launch an otb application"
