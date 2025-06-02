@@ -162,6 +162,7 @@ Create an healthy Python environment for OTB
 We strongly recommend to use a virtual env to **avoid conflicts between OTB and other python packages based on GDAL (e.g. rasterio and geopandas)**
 
 .. code-block:: bash
+
    # Go to you OTB install directory
    # Create a virtual env (it can be located in any directory)
    python -m venv ./venv
