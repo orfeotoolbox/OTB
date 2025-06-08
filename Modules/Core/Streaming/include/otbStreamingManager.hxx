@@ -89,17 +89,24 @@ unsigned int StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::Dat
     // Define a small region to run the memory footprint estimation,
     // around the image center, 100 pixels wide in each dimension
     SizeType smallSize;
-    smallSize.Fill(100);
     IndexType index;
-    index[0] = region.GetIndex()[0] + region.GetSize()[0] / 2 - 50;
-    index[1] = region.GetIndex()[1] + region.GetSize()[1] / 2 - 50;
+    for (int d=0; d < ImageDimension; ++d)
+    {
+        if (region.GetSize()[d] < 100)
+        {
+            index[d] = 0;
+            smallSize[d] = region.GetSize()[d];
+        }
+        else
+        {
+            index[d] = region.GetIndex()[d] + region.GetSize()[d] / 2 - 50;
+            smallSize[d] = 100;
+        }
+    }
 
     RegionType smallRegion;
     smallRegion.SetSize(smallSize);
     smallRegion.SetIndex(index);
-
-    // In case the image is smaller than 100 pixels in a direction
-    smallRegion.Crop(region);
 
     extractFilter->SetExtractionRegion(smallRegion);
 
