@@ -231,6 +231,59 @@ private:
   vnl_matrix<double> D2;
 };
 
+/**
+ * \class IsNodata Functor
+ * \brief Functor that returns 255 for each no-data pixel, 0 else.
+ *
+ * TInput is a pixel type, TOutput is a simple type. Intended 
+ * usage: TInput=FloatVectorImage::PixelType and TOutput=uint8.
+ * 
+ * \ingroup OTBMosaic
+ */
+template <class TInput, class TOutput>
+class IsNoData
+{
+public:
+  IsNoData()
+  {
+    nodata = 0;
+  }
+
+  ~IsNoData()
+  {
+  }
+
+  void SetNoData(const typename TInput::ValueType input_nodata)
+  {
+    nodata = input_nodata;
+  }
+
+  bool operator!=(const IsNoData&) const
+  {
+    return false;
+  }
+
+  bool operator==(const IsNoData& other) const
+  {
+    return !(*this != other);
+  }
+
+  inline TOutput operator()(const TInput& A) const
+  {
+    for (unsigned int i = 0; i < A.Size(); i++)
+    {
+      if (A[i] != nodata)
+      {
+        return 0;
+      }
+    }
+    return 255;
+  }
+
+private:
+  typename TInput::ValueType nodata;
+};
+
 } // namespace functor
 } // namespace otb
 #endif /* MODULES_REMOTE_MOSAIC_INCLUDE_OTBMOSAICFUNCTORS_H_ */
