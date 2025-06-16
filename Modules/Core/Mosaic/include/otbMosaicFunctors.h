@@ -244,14 +244,9 @@ template <class TInput, class TOutput>
 class IsNoData
 {
 public:
-  IsNoData()
-  {
-    nodata = 0;
-  }
+  IsNoData() = default;
 
-  ~IsNoData()
-  {
-  }
+  ~IsNoData() = default;
 
   void SetNoData(const typename TInput::ValueType input_nodata)
   {
@@ -268,7 +263,7 @@ public:
     return !(*this != other);
   }
 
-  inline TOutput operator()(const TInput& A) const
+  TOutput operator()(const TInput& A) const
   {
     for (unsigned int i = 0; i < A.Size(); i++)
     {
@@ -281,7 +276,7 @@ public:
   }
 
 private:
-  typename TInput::ValueType nodata;
+  typename TInput::ValueType nodata = 0;
 };
 
 } // namespace functor
