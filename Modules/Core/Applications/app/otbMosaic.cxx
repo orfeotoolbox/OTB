@@ -502,9 +502,9 @@ private:
   void WriteBinaryMask(FloatVectorImageType* referenceImage, string outputFileName, double spacingRatio = 1.0)
   {
     // No-data image
-    IsNoDataFilterType::Pointer isNoDataFilter = IsNoDataFilterType::New();
+    IsNoDataFunctor nodata_functor(GetParameterFloat("nodata"));
+    IsNoDataFilterType::Pointer isNoDataFilter = NewFunctorFilter(nodata_functor, {{0, 0}});
     isNoDataFilter->SetInput(referenceImage);
-    isNoDataFilter->GetModifiableFunctor().SetNoData(GetParameterFloat("nodata"));
     isNoDataFilter->UpdateOutputInformation();
 
     // Resample image

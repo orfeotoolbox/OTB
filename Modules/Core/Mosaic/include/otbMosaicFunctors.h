@@ -245,24 +245,9 @@ template <class TInput, class TOutput>
 class IsNoData
 {
 public:
-  IsNoData() = default;
+  IsNoData(const typename TInput::ValueType input_nodata = 0): nodata(input_nodata){};
 
   ~IsNoData() = default;
-
-  void SetNoData(const typename TInput::ValueType input_nodata)
-  {
-    nodata = input_nodata;
-  }
-
-  bool operator!=(const IsNoData&) const
-  {
-    return false;
-  }
-
-  bool operator==(const IsNoData& other) const
-  {
-    return !(*this != other);
-  }
 
   TOutput operator()(const TInput& A) const
   {
