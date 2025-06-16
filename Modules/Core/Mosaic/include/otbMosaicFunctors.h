@@ -23,6 +23,7 @@
 #ifndef MODULES_REMOTE_MOSAIC_INCLUDE_OTBMOSAICFUNCTORS_H_
 #define MODULES_REMOTE_MOSAIC_INCLUDE_OTBMOSAICFUNCTORS_H_
 
+#include <cmath>
 #include <array>
 #include "vnl/vnl_matrix.h"
 #include "vcl_legacy_aliases.h"
@@ -267,7 +268,7 @@ public:
   {
     for (unsigned int i = 0; i < A.Size(); i++)
     {
-      if (A[i] != nodata)
+      if (!std::isnan(A[i]) and A[i] != nodata)
       {
         return 0;
       }
