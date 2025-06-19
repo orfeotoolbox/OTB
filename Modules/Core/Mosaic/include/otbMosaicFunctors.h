@@ -253,7 +253,7 @@ public:
   {
     for (unsigned int i = 0; i < A.Size(); i++)
     {
-      if (!std::isnan(A[i]) and A[i] != nodata)
+      if (!std::isnan(A[i]) && A[i] != nodata)
       {
         return 0;
       }
