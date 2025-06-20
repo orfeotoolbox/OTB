@@ -39,8 +39,8 @@
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_WARNING_FLAGS}")
 
 
-include(OTB_CheckCCompilerFlag)
-include(OTB_CheckCXXCompilerFlag)
+include(CheckCXXCompilerFlag)
+include(CheckCCompilerFlag)
 
 macro( set_debug_flags )
   string( TOUPPER "${CMAKE_BUILD_TYPE}" MODE )
@@ -57,11 +57,11 @@ function(check_c_compiler_warning_flags c_flag_var)
   set(local_c_flags "")
   set(flag_list "${ARGN}")
   foreach(flag IN LISTS flag_list)
-# This could be replaced by a simple check_c_compiler_flag(<flag> <var>)
-# https://cmake.org/cmake/help/v3.10/module/CheckCCompilerFlag.html?highlight=flags
-    OTB_CHECK_C_COMPILER_FLAG(${flag} C_HAS_WARNING${flag})
-    if(${C_HAS_WARNING${flag}})
+    check_c_compiler_flag(${flag} C_HAS_WARNING_${flag})
+    if(${C_HAS_WARNING_${flag}})
       set(local_c_flags "${local_c_flags} ${flag}")
+    else()
+      message(AUTHOR_WARNING "Compiler ${CMAKE_C_COMPILER_ID} version ${CMAKE_C_COMPILER_VERSION} does not support C warning \"${flag}\"")
     endif()
   endforeach()
   set(${c_flag_var} "${local_c_flags}" PARENT_SCOPE)
@@ -72,11 +72,11 @@ function(check_cxx_compiler_warning_flags cxx_flag_var)
   set(local_cxx_flags "")
   set(flag_list "${ARGN}")
   foreach(flag IN LISTS flag_list)
-# This could be replaced by a simple check_cxx_compiler_flag(<flag> <var>)
-# https://cmake.org/cmake/help/v3.10/module/CheckCXXCompilerFlag.html?highlight=checkcxxcompilerflag
-    OTB_CHECK_CXX_COMPILER_FLAG(${flag} CXX_HAS_WARNING${flag})
-    if(${CXX_HAS_WARNING${flag}})
+    check_cxx_compiler_flag(${flag} CXX_HAS_WARNING_${flag})
+    if(${CXX_HAS_WARNING_${flag}})
       set(local_cxx_flags "${local_cxx_flags} ${flag}")
+    else()
+      message(AUTHOR_WARNING "Compiler ${CMAKE_CXX_COMPILER_ID} version ${CMAKE_CXX_COMPILER_VERSION} does not support CXX warning \"${flag}\"")
     endif()
   endforeach()
   set(${cxx_flag_var} "${local_cxx_flags}" PARENT_SCOPE)
@@ -132,7 +132,6 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
   # Check this list on both C and C++ compilers
   set(c_and_cxx_flags
     ${VerboseWarningsFlag}
-    -Wno-long-double        #Needed on APPLE
     -Wcast-align
     -Wdisabled-optimization
     -Wextra
@@ -142,7 +141,6 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
     -Wpointer-arith
     -Wunused
     -Wwrite-strings
-    -funit-at-a-time
     -Wno-strict-overflow
   )
 
