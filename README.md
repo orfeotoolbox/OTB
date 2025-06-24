@@ -12,14 +12,12 @@ process high resolution optical, multispectral and radar images at the terabyte
 scale. A wide variety of applications are available: from ortho-rectification
 or pansharpening, all the way to classification, SAR processing, and much more!
 
-All of OTB's algorithms are accessible from Monteverdi, QGIS, Python, the
-command line or C++. Monteverdi is an easy to use visualization tool with an
-emphasis on hardware accelerated rendering for high resolution imagery (optical
-and SAR).  With it, end-users can visualize huge raw imagery products and
-access all of the applications in the toolbox. From resource limited laptops
-to high performance MPI clusters, OTB is available on Windows, Linux and Mac.
-It is community driven, extensible and heavily documented.  Orfeo ToolBox is
-not a black box!
+All of OTB's algorithms are accessible from QGIS, Python, the
+command line or C++. QGIS is an easy to use visualization tool for high resolution imagery (optical
+and SAR). With it, end-users can visualize huge raw imagery products and
+access all of the applications in the toolbox (see plugin installation instruction on [Cookbook](https://www.orfeo-toolbox.org/CookBook/QGISInterface.html)).
+From resource limited laptops to high performance MPI clusters, OTB is available on Windows, Linux and Docker.
+It is community driven, extensible and heavily documented. Orfeo ToolBox is not a black box!
 
 ### Resources
 * [OTB's website](https://www.orfeo-toolbox.org/)
@@ -33,7 +31,7 @@ not a black box!
 
 ### Installation
 
-We provide ready-to-use packages for Windows, Mac and Linux. [Download them here](https://www.orfeo-toolbox.org/download/) on our website, and see instructions for your platform [here in the Cookbook](https://www.orfeo-toolbox.org/CookBook/Installation.html).
+We provide ready-to-use packages for Windows, Docker and Linux. [Download them here](https://www.orfeo-toolbox.org/download/) on our website, and see instructions for your platform [here in the Cookbook](https://www.orfeo-toolbox.org/CookBook/Installation.html).
 
 If you're interested, you can also [compile from source](https://www.orfeo-toolbox.org/SoftwareGuide/SoftwareGuidech2.html#x16-190002).
 
