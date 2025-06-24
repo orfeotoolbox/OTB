@@ -18,7 +18,7 @@ The procedure is simple, once you have the following prerequisite:
       or just the MSVC Build Tools.
 * CMake >= 3.16
 * Python library and headers for your Python version
-    * On macos and Windows: they are usually supplied with installers from
+    * On Windows: they are usually supplied with installers from
       official website
     * On Linux packages: you should look for a `python-dev` package matching
       your Python interpreter version.

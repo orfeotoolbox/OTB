@@ -15,3 +15,8 @@ Follow up of sprint number **sprint nb** began the **XX/XX/XXXX** that ends the 
     * split them if necessary into smaller units, but not in child issues as it will generate "task" that can not be displayed in issues boards.
     * check that each of them respect their definition of ready
     * check that milestone is correctly updated
+* [ ] Write in comment or editing this issue a conclusion/snapshot of this sprint:
+  * what as been done/close
+  * The difficulties encountered
+  * Part not planned but done (like gitlab maintenance, urgent bug-fix...)
+  * The improvments to think about: was the velocity correctly evaluated, task correctly written...

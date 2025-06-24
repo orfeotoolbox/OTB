@@ -453,9 +453,7 @@ Use Python OTB & GDAL dependency in your module
 
 If your module have a Python part, which is using OTB python bindings, you should encounter some troubles with the binary version, here is how to fix it:
 
-First install OTB on your platform. See the `related documentation
-<https://www.orfeo-toolbox.org/CookBook-7.4/Installation.html>`_ to install OTB
-on your system..
+First, install OTB on your platform. See the :doc:`Installation` page for specific instructions adapted to your system.
 
 Then, you'll need a version of GDAL which is compatible with your OTB
 version.
