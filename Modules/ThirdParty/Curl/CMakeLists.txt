@@ -33,6 +33,8 @@ set(OTBCurl_LIBRARIES ${CURL_LIBRARY_RELEASE})
 set(OTBCurl_INCLUDE_DIRS
   ${OTBCurl_BINARY_DIR}/src
   )
+set(OTBCurl_EXPORT_CODE_BUILD "find_package(CURL REQUIRED)")
+set(OTBCurl_EXPORT_CODE_INSTALL ${OTBCurl_EXPORT_CODE_BUILD})
 
 otb_module_impl()
 
