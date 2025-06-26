@@ -261,8 +261,11 @@ set(OTB_MODULES_DISABLED "")
 foreach(otb-module ${OTB_MODULES_ALL})
   if(${otb-module}_ENABLED)
     list(APPEND OTB_MODULES_ENABLED ${otb-module})
-    # add the module in the list of enabled module per component. This will be used later in Config.cmake files
-    list(APPEND OTB_${OTB_MODULE_${otb-module}_COMPONENT}_MODULES_ENABLED ${otb-module})
+    # add the module in the list of enabled module per component. This will be used later in <Component>Config.cmake files
+    # Do not add test modules because they are not packaged
+    if(NOT ${otb-module}_IS_TEST)
+      list(APPEND OTB_${OTB_MODULE_${otb-module}_COMPONENT}_MODULES_ENABLED ${otb-module})
+    endif()
     # We will sort modules according to their dependency graph,
     # to enable them in order. To solve the modules dependency graph,
     # we join both DEPENDS and OPTIONAL_DEPENDS (if enabled)
