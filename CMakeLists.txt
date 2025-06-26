@@ -296,7 +296,7 @@ set(OTB_CONFIG_CMAKE_DIR "${OTB_SOURCE_DIR}/CMake")
 set(OTB_USE_FILE "${OTB_CONFIG_CMAKE_DIR}/UseOTB.cmake")
 
 if(OTB_WRAP_PYTHON)
-set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
+  set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_PYTHONPATH \"${OTB_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}\")")
 endif()
 
@@ -666,6 +666,8 @@ message("======================= End of OTB cmake summary ======================
 get_property(GROUPS_ENABLED GLOBAL PROPERTY OTB_GROUPS_ENABLED)
 foreach(otb-group IN LISTS GROUPS_ENABLED)
   get_property(GROUP_DEPS GLOBAL PROPERTY ${otb-group}_MOD_DEPS)
+  # Get the list of enabled modules for this component. This list is created
+  # in OTBModuleEnablement.cmake
   set(__ENABLED_MODULES ${OTB_${otb-group}_MODULES_ENABLED})
   configure_file(CMake/GenericGroupConfig.cmake.in CMakeFiles/${otb-group}Config.cmake @ONLY)
   install(FILES ${OTB_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
