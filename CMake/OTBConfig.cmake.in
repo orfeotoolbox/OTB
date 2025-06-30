@@ -133,9 +133,6 @@ set(OTB_BUILD_SHARED "@BUILD_SHARED_LIBS@")
 # Default value for WINDOWS_EXPORT_ALL_SYMBOLS target property
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "@OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS@")
 
-# List of available OTB modules.
-set(OTB_MODULES_ENABLED "@OTB_CONFIG_MODULES_ENABLED@")
-
 set(OTB_APPLICATION_PATH "@OTB_CONFIG_APPLICATION_PATH@")
 
 # Load module interface macros.
@@ -164,7 +161,8 @@ if("ALL" IN_LIST OTB_FIND_COMPONENTS)
   otb_find_all_components()
 
   foreach(__otb_comp IN LISTS OTB_VALID_COMPONENTS)
-    list(APPEND OTB_MODULES_REQUESTED "${OTB_${__otb_comp}_MODULES_ENABLED}")
+    string(TOUPPER "${__otb_comp}" __UPPER_COMP_NAME)
+    list(APPEND OTB_MODULES_REQUESTED "${OTB_${__UPPER_COMP_NAME}_MODULES_ENABLED}")
   endforeach()
 else()
   # variables OTB_FIND_COMPONENTS and OTB_FIND_REQUIRED_${__otb_comp} are
@@ -172,9 +170,13 @@ else()
   foreach(__otb_comp IN LISTS OTB_FIND_COMPONENTS)
     otb_find_component(${__otb_comp} ${OTB_FIND_REQUIRED_${__otb_comp}})
     # add list of the modules of the required component
-    list(APPEND OTB_MODULES_REQUESTED "${OTB_${__otb_comp}_MODULES_ENABLED}")
+    string(TOUPPER "${__otb_comp}" __UPPER_COMP_NAME)
+    list(APPEND OTB_MODULES_REQUESTED "${OTB_${__UPPER_COMP_NAME}_MODULES_ENABLED}")
   endforeach()
 endif()
+
+# List of available OTB modules.
+set(OTB_MODULES_ENABLED "${OTB_MODULES_REQUESTED}")
 
 # Load requested modules and their dependencies into variables:
 #  OTB_LIBRARIES       = Libraries to link

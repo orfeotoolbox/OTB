@@ -36,15 +36,20 @@ if (DEFINED @otb-group@_FOUND)
 endif()
 
 set(GROUP_DEPENDENCIES "@GROUP_DEPS@")
+string(TOUPPER "@otb-group@" UPPER_GROUP_NAME)
 
 # until all the process of this file is successfull, group is considerate as
 # unfound
 set(@otb-group@_FOUND 0)
 
-set(OTB_@otb-group@_MODULES_ENABLED "@__ENABLED_MODULES@")
+# As in OTBConfig we look for variables depending of the component
+# name, stick the variable uppercase to avoid "not found variable"
+# when user fill the component with the wrong case
+# (during the find_package(OTB COMPONENTS suPerRAndOMCase))
+set(OTB_${UPPER_GROUP_NAME}_MODULES_ENABLED "@__ENABLED_MODULES@")
 
-foreach(__group IN LISTS GROUP_DEPENDENCIES)
-  message(STATUS "[@otb-group@Config] Try to find needed ${__group} dependency")
+foreach(__group_dependency IN LISTS GROUP_DEPENDENCIES)
+  message(STATUS "[@otb-group@Config] Try to find needed ${__group_dependency} dependency")
   # When using find_package, cmake will look for directories using the name of
   # the package provided (the first arg).
   # It will look in the following directories https://cmake.org/cmake/help/v3.29/command/find_package.html#config-mode-search-procedure
@@ -54,9 +59,15 @@ foreach(__group IN LISTS GROUP_DEPENDENCIES)
   # The PATH_SUFFIXES option help to find it
 
   # Force the REQUIRED there as we are trying to find a dependency
-  find_package(${__group} CONFIG REQUIRED PATH_SUFFIXES "lib/cmake/OTB-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@")
-  #list(APPEND OTB_@otb-group@_MODULES_ENABLED "${OTB_${__group}_MODULES_ENABLED}")
+  find_package(${__group_dependency} CONFIG REQUIRED PATH_SUFFIXES "lib/cmake/OTB-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@")
+  # Add the enabled modules list of dependency to the actual component list
+  # to activate them later in OTBConfig
+  string(TOUPPER "${__group}" __upper_group_dependency)
+  list(APPEND OTB_${UPPER_GROUP_NAME}_MODULES_ENABLED "${OTB_${__upper_group_dependency}_MODULES_ENABLED}")
 endforeach()
+
+# In case there is a common dependency between this component or its dependencies
+list(REMOVE_DUPLICATES OTB_${UPPER_GROUP_NAME}_MODULES_ENABLED)
 
 # if we are here in the process as all dependency has been found, otherwise
 # the find_package emit a FATAL_ERROR
@@ -88,7 +99,6 @@ else()
 endif()
 
 # set an all capitals FOUND var to stick to standart
-string(TOUPPER "@otb-group@" UPPER_GROUP_NAME)
 set(${UPPER_GROUP_NAME}_FOUND ${@otb-group@_FOUND})
 
 unset(GROUP_DEPENDENCIES)
