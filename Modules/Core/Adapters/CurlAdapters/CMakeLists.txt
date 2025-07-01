@@ -18,8 +18,8 @@
 # limitations under the License.
 #
 if(OTBCurl_ENABLED)
-project(OTBCurlAdapters)
+  project(OTBCurlAdapters)
 
-set(OTBCurlAdapters_LIBRARIES OTBCurlAdapters)
-otb_module_impl()
+  set(OTBCurlAdapters_LIBRARIES OTBCurlAdapters)
+  otb_module_impl()
 endif()

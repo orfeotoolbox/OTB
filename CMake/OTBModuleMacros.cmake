@@ -104,6 +104,8 @@ endmacro()
 
 set(OTB_MODULE_ACTIVATION_OPTION_LIST "")
 macro(otb_module_activation_option _option_desc _default)
+  # Remove OTB prefix from ${otb-module} and create a string
+  # OTB_USE_${otb-module}
   string(REGEX REPLACE "OTB(.*)" "OTB_USE_\\1" _option_name ${otb-module})
   string(TOUPPER ${_option_name} _option_name)
   option(${_option_name} ${_option_desc} ${_default})
