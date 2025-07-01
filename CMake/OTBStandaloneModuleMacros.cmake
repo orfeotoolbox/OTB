@@ -341,8 +341,11 @@ macro(otb_module _name)
   list(SORT OTB_MODULE_${otb-module-test}_DEPENDS) # Deterministic order.
 endmacro()
 
+# NOTE TLA: same code here and in OTBModuleMacros.cmake
 set(OTB_MODULE_ACTIVATION_OPTION_LIST "")
 macro(otb_module_activation_option _option_desc _default)
+  # Remove OTB prefix from ${otb-module} and create a string
+  # OTB_USE_${otb-module}
   string(REGEX REPLACE "OTB(.*)" "OTB_USE_\\1" _option_name ${otb-module})
   string(TOUPPER ${_option_name} _option_name)
   option(${_option_name} ${_option_desc} ${_default})
@@ -433,7 +436,10 @@ macro(otb_module_impl)
 
   # same for optionnal
   foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
-    if (${dep}_ENABLED)
+    # here use DECLARED instead of ENABLED as we are not using
+    # OTBModuleEnablement
+    # NOTE TLA: even with this instead of ${dep}_ENABLED it's still not work...
+    if (${dep}_DECLARED)
       otb_module_use(${dep})
     endif()
   endforeach()
@@ -597,10 +603,5 @@ macro(otb_module_impl)
     add_subdirectory(test)
   endif()
 
-  # read test CMakeLists AFTER writing <otb-module>.cmake as test needs this
-  # file
-  if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
-    add_subdirectory(test)
-  endif()
   unset(__current_component)
 endmacro() # otb_module_impl
