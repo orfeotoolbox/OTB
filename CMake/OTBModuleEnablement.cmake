@@ -226,7 +226,7 @@ foreach(otb-module ${OTB_MODULES_ALL})
 endforeach()
 
 # Mark modules enabled if:
-# - Module_<module-name> option is ON
+# - Module_<module-name> option is ON (like in remotes modules)
 # - OTB_BUILD_DEFAULT_MODULES is ON and module not excluded from default
 # - the module is requested by a specific group
 foreach(otb-module ${OTB_MODULES_ALL})
@@ -245,6 +245,8 @@ foreach(otb-module ${OTB_MODULES_ALL})
 endforeach()
 
 # Disable module having activation option to OFF
+# the ACTIVATION_OPTION var is managed by otb_module_activation_option
+# in OTBModuleMacros.cmake
 foreach(otb-module ${OTB_MODULES_ALL})
   if(OTB_MODULE_${otb-module}_ACTIVATION_OPTION
      AND NOT ${OTB_MODULE_${otb-module}_ACTIVATION_OPTION})
