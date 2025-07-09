@@ -222,7 +222,7 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
       options.push_back("ALL_TOUCHED=TRUE");
     }
 
-    GDALRasterizeLayers(dataset, nbBands, &m_BandsToBurn[0], m_SrcDataSetLayers.size(), &(m_SrcDataSetLayers[0]), nullptr, nullptr, &foreground[0],
+    GDALRasterizeLayers(dataset->GetDataSet(), nbBands, &m_BandsToBurn[0], m_SrcDataSetLayers.size(), &(m_SrcDataSetLayers[0]), nullptr, nullptr, &foreground[0],
                         ogr::StringListConverter(options).to_ogr(), nullptr, nullptr);
   }
 }
