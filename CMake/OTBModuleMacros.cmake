@@ -336,19 +336,6 @@ macro(otb_module_test)
   endforeach()
 endmacro()
 
-macro(otb_module_warnings_disable)
-  foreach(lang ${ARGN})
-    if(MSVC)
-      string(REGEX REPLACE "(^| )[/-]W[0-4]( |$)" " "
-        CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w")
-    elseif(BORLAND)
-      set(CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w-")
-    else()
-      set(CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w")
-    endif()
-  endforeach()
-endmacro()
-
 # Set the "LABELS" target property to $otb-module if it exists. Otherwise
 # to ${_OTBModuleMacros_DEFAULT_LABEL} (which is OTBModular)
 # Also if ${otb-module}-all target exists, add "_target_name" module as a dependency

@@ -251,3 +251,17 @@ macro(otb_module_use)
     _otb_module_use_recurse("${mod}")
   endforeach()
 endmacro()
+
+macro(otb_module_warnings_disable)
+  foreach(lang ${ARGN})
+    if(MSVC)
+      string(REGEX REPLACE "(^| )[/-]W[0-4]( |$)" " "
+        CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w")
+    elseif(BORLAND)
+      set(CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w-")
+    else()
+      # disable all GCC warnings https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#Options-to-Request-or-Suppress-Warnings
+      set(CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w")
+    endif()
+  endforeach()
+endmacro()
