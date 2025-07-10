@@ -81,7 +81,7 @@ process:
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `SPTW <https://github.com/remicres/sptw.git>`_                    | No                    |                            |                          |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `SWIG <https://www.swig.org/>`_                                   | No                    |                            | 4.1.1                    |
+    | `SWIG <https://www.swig.org/>`_                                   | No                    |                            | 4.3.1                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
 
 GNU/Linux
@@ -387,8 +387,8 @@ the tests. Just using ``ctest`` will run all the tests. To select a
 subset, you can do ``ctest -R Kml`` to run all tests related to kml
 files or ``ctest -I 1,10`` to run tests from 1 to 10.
 
-Compiling documentation
------------------------
+Compiling user documentation (this cookbook)
+--------------------------------------------
 
 Enable Python bindings and set ``BUILD_COOKBOOK`` option to ON:
 
@@ -401,4 +401,19 @@ Then, build the target:
 ::
 
     make CookbookHTML
+
+Compiling developer documentation (doxygen)
+-------------------------------------------
+
+You need Doxygen installed on your computer (see `Common dependencies`_) and turn the CMake ``BUILD_DOCUMENTATION`` option to ON:
+
+::
+
+    cmake -DBUILD_DOCUMENTATION=ON .
+
+Then, build the target:
+
+::
+
+    make Documentation
 

@@ -24,7 +24,7 @@ OTB 10.x is known to work on:
     +--------------------------------------------+-------------------------------+--------------------+
     | RedHat 8                                   | GCC 8                         | Python >= 3.8      |
     +--------------------------------------------+-------------------------------+--------------------+
-    | Windows 10                                 | MSVC 2019                     | Python 3.10        |
+    | Windows 10 / 11                            | MSVC 2019                     | Python 3.10        |
     +--------------------------------------------+-------------------------------+--------------------+
 
 If you want to use another version of python you will need to recompile python bindings as explained in `"Recompiling Python Bindings" <#recompiling-python-bindings>`__.
@@ -60,22 +60,28 @@ The following docker images are availables on `DockerHub <https://hub.docker.com
 It can be used on any device running Docker with the following instruction:
 
 ::
-   
+
    # you can adapt the version you want using different tag like orfeotoolbox/otb:10.0.0
    docker pull orfeotoolbox/otb
 
 To run CLI tools, you can launch the docker image with:
 
 ::
-   
+
    docker run -it orfeotoolbox/otb
 
 
 If you are planning on using the image on MacOS with an Apple Silicon chip (M1,M2,M3) :
 
 ::
-   
+
    docker run -it --platform=linux/amd64 orfeotoolbox/otb:10.0.0
+
+
+Nix
+---
+
+.. include:: Installation_Nix.rst
 
 
 Distribution packages

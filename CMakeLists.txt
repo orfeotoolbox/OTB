@@ -358,6 +358,28 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
         DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
         COMPONENT Core)
 
+set(__PYTHON_VERSION_MAJOR "3")
+set(__PYTHON_VERSION_MINOR "10")
+
+if (UNIX)
+  # output of python3 --version is "Python XX.XX.XX", notice the space that
+  # is used in regex
+  execute_process(
+    COMMAND python3 --version
+    RESULT_VARIABLE CMD_RES
+    OUTPUT_VARIABLE __PYTHON_VERSION_DURING_BUILD
+  )
+  # Get the first two digit and concatenate them
+  string(REGEX MATCH " ([0-9]+)\.([0-9]+)" TMP_VAR "${__PYTHON_VERSION_DURING_BUILD}")
+
+  if (${CMAKE_MATCH_COUNT} EQUAL 2)
+    # CMAKE_MATCH_0 is the entire match
+    # See https://cmake.org/cmake/help/latest/variable/CMAKE_MATCH_n.html
+    set(__PYTHON_VERSION_MAJOR "${CMAKE_MATCH_1}")
+    set(__PYTHON_VERSION_MINOR "${CMAKE_MATCH_2}")
+  endif()
+endif()
+
 if(XDK_INSTALL_PATH)
     # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell
     # Cmake it is here
@@ -368,7 +390,7 @@ if(XDK_INSTALL_PATH)
             COMPONENT Dependencies)
     # Redhat8 case : the bindings are installed by default in lib64/python3.12
     if( EXISTS ${XDK_INSTALL_PATH}/lib64)
-      install(DIRECTORY ${XDK_INSTALL_PATH}/lib64/python3.12
+      install(DIRECTORY "${XDK_INSTALL_PATH}/lib64/python${__PYTHON_VERSION_MAJOR}.${__PYTHON_VERSION_MINOR}"
               DESTINATION ./lib
               USE_SOURCE_PERMISSIONS
               COMPONENT Dependencies)
@@ -436,6 +458,8 @@ if(UNIX)
     DESTINATION .
     COMPONENT Core
     )
+
+  # the file need __PYTHON_VERSION_MAJOR and __PYTHON_VERSION_MINOR vars
   configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
                  ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
   install( PROGRAMS

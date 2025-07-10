@@ -1,5 +1,35 @@
-Recommended Installation : One package containing all the modules 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+One line installation
+~~~~~~~~~~~~~~~~~~~~~
+For a ready to use installation, we provide a script that installs and set the environment for you :
+
+.. code-block:: bash
+
+   bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)"
+
+This script without arguments downloads the latest version of OTB and installs it in your "$HOME/otb-OTB_VERSION".
+Then, it initializes the necessary environment variables and paths and downloads the GDAL python bindings corresponding to your Python version.
+
+After the installation, you are ready to use OTB by calling :
+
+.. code-block:: bash
+
+   source $HOME/otb/otbenv.profile
+
+You can customize the command by adding parameters to the one line installer :
+
+.. code-block:: bash
+
+   bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)" -s OTB_VERSION OTB_INSTALL_DIRECTORY
+
+**Example**
+I want to download the 9.1.0 version and install it to /home/user/apps/otb :
+
+.. code-block:: bash
+
+   bash -c "$(curl -fsSL https://orfeo-toolbox.org/packages/install-otb.sh)" -s "9.1.0" "/home/user/apps/otb"
+
+Manual Installation : One package containing all the modules 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 With OTB 9 the packaging is made by CMake to deliver a unique self extractible tar.gz to users. All you have to do is downloading the **OTB-10.0.0-Linux.tar.gz** package.
 
 **Important note for RedHat / Fedora / Rocky users**
@@ -15,8 +45,8 @@ You can download the package from the website and extract it in your file manage
    tar xf /Path/To/Downloads/OTB-10.0.0-Linux.tar.gz --one-top-level=/Path/To/OTB_install
    source /Path/To/OTB_install/otbenv.profile
 
-Advanced Installation : Modular installation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Advanced Manual Installation : Modular installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. They include
 all of the OTB applications along with command line launchers.
@@ -29,7 +59,7 @@ Because OTB is a quite big software, the modular installation helps you to have 
 Download
 ````````
 
-In order to run OTB you will need the **OTB-Dependencies-9.0.tar.gz** package to run the Core **AND** optional packages that you can install afterwards.
+In order to run OTB you will need the **OTB-Dependencies.tar.gz** package to run the Core **AND** optional packages that you can install afterwards.
 
 Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning.
 In that case you will just need to download the OTB-Learning package and its dependencies.
@@ -120,32 +150,36 @@ At the root of the OTB installation run :
 
 .. code-block:: bash
 
-    source otbenv.profile 
-    sh recompile_bindings.sh
+    source otbenv.profile
+    ./recompile_bindings.sh
 
-You should now be able to import ``otbApplication`` through Python !
+You should now be able to import ``otbApplication`` through your system's Python !
+To use another Python version and isolated venv, see the next section.
 
 Create an healthy Python environment for OTB
 ````````````````````````````````````````````
 
-We strongly recommend to use a virtual env to **avoid conflicts between OTB and GDAL when you develop python scripts that uses other dependencies like rasterio, scikit...**
+We strongly recommend to use a virtual env to **avoid conflicts between OTB and other python packages based on GDAL (e.g. rasterio and geopandas)**
 
 .. code-block:: bash
 
-   # Source your OTB environment
-   . <your installation directory>/otbenv.profile
-   # Create a virtual env and install some libraries
-   python -m venv otb_venv
-   . otb_venv/bin/activate
-   pip install --upgrade pip
-   pip install scikit-image scikit-learn geopandas 
-   # Rastero depends on GDAL and need to be compiled on the flight with current OTB's own GDAL
-   pip install rasterio --no-binary :all:
-   # Use your libraries within Python
-   python
-   > import rasterio
-   > import otbApplication as otb
-
+   # Go to you OTB install directory
+   # Create a virtual env (it can be located in any directory)
+   python -m venv ./venv
+   source venv/bin/activate
+   # Install mandatory python requirements
+   pip install --upgrade pip "numpy<2"
+   # Set environment and trigger python bindings compilation
+   source otbenv.profile
+   # Compile rasterio and geopandas dependencies using OTB's GEOS, PROJ and GDAL libraries
+   pip install rasterio pyogrio pyproj shapely --no-binary :all:
+   # Install normally any pip package that isn't built against OTB dependencies
+   pip install geopandas scikit-image scikit-learn
+   # Test imports
+   python -c "import rasterio ; import geopandas ; import otbApplication as otb"
+   # Auto run OTB env script next time you activate
+   echo "source $OTB_INSTALL_DIR/otbenv.profile" >> venv/bin/activate
+   # Keep in mind that the `deactivate` command will not reverse this or clean up the OTB environment variables
 
 Notes:
 ```````
@@ -158,6 +192,6 @@ With OTB 9 one can move the installation folder, but once it is done, there is a
 
 .. code-block:: bash
 
-   rm /Path/To/Moved/OTB/tools/install_done.txt
-   source /Path/To/Moved/OTB/otbenv.profile
+   rm tools/install_done.txt
+   source otbenv.profile
    # At this time a message will be displayed showing that this is a new installation, this is normal

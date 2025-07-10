@@ -1,5 +1,6 @@
+#!/bin/bash
 #
-# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,13 +19,19 @@
 # limitations under the License.
 #
 
-project(OTBConvolution)
+# Change the copyright date of all files (recursively) where this script is executed
 
-option(OTB_USE_FFTW "Download and compile FFTW third party (license change to GPLv2)" OFF)
-if (OTB_USE_FFTW)
-  message(AUTHOR_WARNING "/!\\ /!\\ /!\\ You are actually compiling OTB with FFTW. As FFTW is distributed under GNU GPLv2, OTB is now provided with GNU GPLv2 license /!\\ /!\\ /!\\ ")
-else()
-  message(STATUS "Compiling with FFTW disabled, otbOverlapSaveConvolutionImageFilter will not be available")
-endif()
+tmp_file_name="_tmp_file_list.txt"
+# get all files
+find . -type f > $tmp_file_name
+current_year=$(date -u | egrep -o "[0-9]{4}")
 
-otb_module_impl()
+# for all files, update the year to current
+while IFS= read -r f_path; do
+  # except for this current script
+  if [ "$f_path" != $0 ]; then
+    sed -i "s/Copyright (C) 2005-20../Copyright (C) 2005-$current_year/g" "$line"
+  fi
+done < "$tmp_file_name"
+
+rm $tmp_file_name

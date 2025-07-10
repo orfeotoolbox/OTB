@@ -22,7 +22,18 @@
 # Build the documentation
 #
 # This file provides the advanced variable BUILD_DOCUMENTATION
-include (${CMAKE_ROOT}/Modules/Documentation.cmake)
+
+# Do not use the old Documentation.cmake that is VTK specific.
+# the actual behavior is conform to CMP0106 policy
+option(BUILD_DOCUMENTATION "Build the documentation (Doxygen)." OFF)
+mark_as_advanced(BUILD_DOCUMENTATION)
+
+if (BUILD_DOCUMENTATION)
+  find_package(Doxygen)
+  if (DOXYGEN_FOUND)
+    message("Found doxygen")
+  endif()
+endif()
 
 # -------------------------------------------------------------
 #

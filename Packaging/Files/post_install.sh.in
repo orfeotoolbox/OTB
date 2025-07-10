@@ -25,35 +25,50 @@ OTB_SHORT_VERSION=@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@
 echo "***** First time launching OTB after installation, doing some post installation steps before use *****"
 # Apply necessary patches for a modular install because cmake generates these file at configure time, not at packaging time
 CMAKE_DIRS="$OTB_INSTALL_DIR/lib/cmake"
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/OTB-"$OTB_SHORT_VERSION"/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/OTB-"$OTB_SHORT_VERSION"/Modules/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/ITK-5.3/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" "$CMAKE_DIRS"/ITK-5.3/Modules/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/gdal-config
-sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/curl-config
+# beware when using sed and regular expression: regular expression can not be between ""
+# here use \$ to escape bash resolution and add {} as it will be CMake variables
+sed -i 's#/builds/otb/xdk#\${OTB_INSTALL_PREFIX}#g' "${CMAKE_DIRS}/OTB-${OTB_SHORT_VERSION}/"*.cmake
+sed -i 's#/builds/otb/xdk#\${OTB_INSTALL_PREFIX}#g' "${CMAKE_DIRS}/OTB-${OTB_SHORT_VERSION}/Modules/"*.cmake
+sed -i 's#/builds/otb/xdk#\${OTB_INSTALL_PREFIX}#g' "${CMAKE_DIRS}"/ITK-*/*.cmake
+sed -i 's#/builds/otb/xdk#\${OTB_INSTALL_PREFIX}#g' "${CMAKE_DIRS}"/ITK-*/Modules/*.cmake
+# here use \$ to escape shell variable but do not add {} as they are used as shell variable
+# in config scripts
+sed -i 's#/builds/otb/xdk#\$OTB_INSTALL_DIR#g'    "${OTB_INSTALL_DIR}/bin/gdal-config"
+sed -i 's#/builds/otb/xdk#\$OTB_INSTALL_DIR#g'    "${OTB_INSTALL_DIR}/bin/geos-config"
+sed -i 's#/builds/otb/xdk#\$OTB_INSTALL_DIR#g'    "${OTB_INSTALL_DIR}/bin/curl-config"
+
 sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 
-pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
 ostype="$(lsb_release -is)"
-# Recompile OTB Python bindings
-if [ "$pyversion" -ne "310" ] && [ $ostype != "RedHatEnterprise" ] ; then
+
+if [ "$ostype" != "RedHatEnterprise" ] ; then
+  concatpyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
+  # Compare the concat version with the version used to build this OTB package
+  # The python build version is filled by cmake
+  if [ "$concatpyversion" -ne "@__PYTHON_VERSION_MAJOR@@__PYTHON_VERSION_MINOR@" ]; then
     sh "$OTB_INSTALL_DIR"/recompile_bindings.sh
-fi
-# Check python version, if python 3.12 (ubuntu 24 and debian > 12) download and extract the gdal bindings for python 3.12
-# In case your install is from compiled code, the gdal bindings will be already there in the installation
-python_distpackage_path="$OTB_INSTALL_DIR/lib/python3/dist-packages/osgeo/"
-gdal_python_found="$(find $python_distpackage_path -name "*$pyversion-x86_64-linux*")"
-if [ -z "$gdal_python_found" ]; then
-    echo "***** Python $pyversion detected, downloading gdal bindings compiled for this Python version *****"
-    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/gdal-py$pyversion.tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz)
-    if [ $HTTP_STATUS -eq 200 ]; then
-        tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py$pyversion.tar.gz -C $python_distpackage_path
-        rm "$OTB_INSTALL_DIR"/tools/gdal-py$pyversion.tar.gz
-        echo "***** GDAL bindings for python $pyversion successfully installed *****"
+  fi
+  # Check python version, if python 3.12 (ubuntu 24 and debian > 12) download
+  # and extract the gdal bindings for python 3.12
+  # In case your install is from compiled code, the gdal bindings will be
+  # already there in the installation
+  # Note that the install path differs from OS. To handle it,
+  # check before the folder name (always prefixed of python3)
+  osgeo_pkg_path=$(find "$OTB_INSTALL_DIR/lib" -mindepth 3 -maxdepth 3 -type d -name "osgeo")
+  gdal_python_found="$(find "$osgeo_pkg_path" -name "*$concatpyversion-x86_64-linux*")"
+  if [ -z "$gdal_python_found" ]; then
+    echo "***** Python $concatpyversion detected, downloading gdal bindings compiled for this Python version *****"
+    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-"$OTB_SHORT_VERSION"-GDAL-bindings-py"$concatpyversion".tar.gz)
+    if [ "$HTTP_STATUS" -eq 200 ]; then
+      tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz -C "$osgeo_pkg_path"
+      rm "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz
+      echo "***** GDAL bindings for python $concatpyversion successfully installed *****"
     else
-        echo "Can not find GDAL bindings at https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz"
-        return -1
+      echo "Can not find GDAL bindings at https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$concatpyversion.tar.gz"
+      return 255
     fi
+  fi
 fi
+
 echo "***** OTB Environment and Python bindings setup complete *****"
 echo "OK" > "$OTB_INSTALL_DIR"/tools/install_done.txt

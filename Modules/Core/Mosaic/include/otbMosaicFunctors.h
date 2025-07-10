@@ -25,6 +25,7 @@
 
 #include <array>
 #include "vnl/vnl_matrix.h"
+#include "vcl_legacy_aliases.h"
 #include "vcl_compiler.h"
 
 namespace otb
