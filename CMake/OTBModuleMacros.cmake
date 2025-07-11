@@ -113,12 +113,6 @@ macro(otb_module_activation_option _option_desc _default)
   list(APPEND OTB_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
 endmacro()
 
-macro(otb_module_check_name _name)
-  if( NOT "${_name}" MATCHES "^[a-zA-Z][a-zA-Z0-9]*$")
-    message(FATAL_ERROR "Invalid module name: ${_name}")
-  endif()
-endmacro()
-
 macro(otb_module_impl)
   # Load module meta-data, this declare all needed vars with otb_module macro
   include(otb-module.cmake)
