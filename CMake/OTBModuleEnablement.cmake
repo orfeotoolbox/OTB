@@ -142,6 +142,10 @@ foreach( _group ${enabled_groups_list} )
     include(${OTB_SOURCE_DIR}/${_module_file})
     list(APPEND OTB_MODULES_ALL ${otb-module})
     get_filename_component(${otb-module}_BASE ${_module_file} DIRECTORY)
+    # NOTE TLA: "dangerous" behavior here are we are using variables here
+    # but declared by the "project()" command. Thus if we read the CMakeLists
+    # of module, these variables will be overriten (if the project name)
+    # have the same name as otb-module
     set(${otb-module}_SOURCE_DIR ${OTB_SOURCE_DIR}/${${otb-module}_BASE})
     set(${otb-module}_BINARY_DIR ${OTB_BINARY_DIR}/${${otb-module}_BASE})
 
