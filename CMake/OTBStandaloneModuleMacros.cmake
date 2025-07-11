@@ -353,12 +353,6 @@ macro(otb_module_activation_option _option_desc _default)
   list(APPEND OTB_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
 endmacro()
 
-macro(otb_module_check_name _name)
-  if( NOT "${_name}" MATCHES "^[a-zA-Z][a-zA-Z0-9]*$")
-    message(FATAL_ERROR "Invalid module name: ${_name}")
-  endif()
-endmacro()
-
 # This macro expect:
 # - OTB_DATA_ROOT to be set as env variable or OTB installation to be ${CMAKE_CURRENT_SOURCE_DIR}/../OTB/Data
 # - An otb_module.cmake file next to the file using this macro
