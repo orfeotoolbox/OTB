@@ -23,6 +23,7 @@
 #ifndef MODULES_REMOTE_MOSAIC_INCLUDE_OTBMOSAICFUNCTORS_H_
 #define MODULES_REMOTE_MOSAIC_INCLUDE_OTBMOSAICFUNCTORS_H_
 
+#include <cmath>
 #include <array>
 #include "vnl/vnl_matrix.h"
 #include "vcl_legacy_aliases.h"
@@ -229,6 +230,39 @@ private:
   vnl_matrix<double> M;
   vnl_matrix<double> D1;
   vnl_matrix<double> D2;
+};
+
+/**
+ * \class IsNodata Functor
+ * \brief Functor that returns 255 for each no-data pixel, 0 else.
+ *
+ * TInput is a pixel type, TOutput is a simple type. Intended 
+ * usage: TInput=FloatVectorImage::PixelType and TOutput=uint8.
+ * 
+ * \ingroup OTBMosaic
+ */
+template <class TInput, class TOutput>
+class IsNoData
+{
+public:
+  IsNoData(const typename TInput::ValueType input_nodata = 0): nodata(input_nodata){};
+
+  ~IsNoData() = default;
+
+  TOutput operator()(const TInput& A) const
+  {
+    for (unsigned int i = 0; i < A.Size(); i++)
+    {
+      if (!std::isnan(A[i]) && A[i] != nodata)
+      {
+        return 0;
+      }
+    }
+    return 255;
+  }
+
+private:
+  typename TInput::ValueType nodata = 0;
 };
 
 } // namespace functor

@@ -377,13 +377,14 @@ void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::G
 template <class TInputImage, class TOutputImage, class TInternalValueType>
 bool StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::IsPixelNotEmpty(InputImagePixelType& pixelValue)
 {
-  bool isDataInCurrentInputPixel = false;
-
   for (unsigned int band = 0; band < nbOfBands; band++)
   {
-    isDataInCurrentInputPixel = isDataInCurrentInputPixel || (pixelValue[band] != m_NoDataInputPixel[band]);
+    if (pixelValue[band] != m_NoDataInputPixel[band] && !std::isnan(pixelValue[band]))
+    {
+      return true;
+    }
   }
-  return isDataInCurrentInputPixel;
+  return false;
 }
 
 /*
