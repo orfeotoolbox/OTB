@@ -27,6 +27,7 @@
 #include "otbVectorDataToLabelImageFilter.h"
 #include "otbOGRIOHelper.h"
 #include "otbGdalDataTypeBridge.h"
+#include "otbGDALDriverManagerWrapper.h"
 #include "otbImage.h"
 
 namespace otb
@@ -228,24 +229,17 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   // nb bands
   unsigned int nbBands = this->GetOutput()->GetNumberOfComponentsPerPixel();
 
-  // register drivers
-  GDALAllRegister();
-
-  std::ostringstream stream;
-  stream << "MEM:::"
-         << "DATAPOINTER=" << (uintptr_t)(this->GetOutput()->GetBufferPointer()) << ","
-         << "PIXELS=" << bufferedRegion.GetSize()[0] << ","
-         << "LINES=" << bufferedRegion.GetSize()[1] << ","
-         << "BANDS=" << nbBands << ","
-         << "DATATYPE=" << GDALGetDataTypeName(GdalDataTypeBridge::GetGDALDataType<OutputImageInternalPixelType>()) << ","
-         << "PIXELOFFSET=" << sizeof(OutputImageInternalPixelType) * nbBands << ","
-         << "LINEOFFSET=" << sizeof(OutputImageInternalPixelType) * nbBands * bufferedRegion.GetSize()[0] << ","
-         << "BANDOFFSET=" << sizeof(OutputImageInternalPixelType);
-
-  GDALDatasetH dataset = GDALOpen(stream.str().c_str(), GA_Update);
+  GDALDatasetWrapper::Pointer dataset =
+      GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
+        this->GetOutput()->GetBufferPointer(),
+        bufferedRegion.GetSize()[0],
+        bufferedRegion.GetSize()[1],
+        GdalDataTypeBridge::GetGDALDataType<OutputImageInternalPixelType>(), sizeof(OutputImageInternalPixelType), nbBands,
+        sizeof(OutputImageInternalPixelType)
+      );
 
   // Add the projection ref to the dataset
-  GDALSetProjection(dataset, this->GetOutput()->GetProjectionRef().c_str());
+  GDALSetProjection(dataset->GetDataSet(), this->GetOutput()->GetProjectionRef().c_str());
 
   // add the geoTransform to the dataset
   itk::VariableLengthVector<double> geoTransform(6);
@@ -263,7 +257,8 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;
   geoTransform[4] = 0.;
-  GDALSetGeoTransform(dataset, const_cast<double*>(geoTransform.GetDataPointer()));
+  GDALSetGeoTransform(dataset->GetDataSet(),
+                      const_cast<double*>(geoTransform.GetDataPointer()));
 
   char** options = nullptr;
   if (m_AllTouchedMode)
@@ -272,15 +267,15 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   }
 
   // Burn the geometries into the dataset
-  if (dataset != nullptr)
+  if (dataset->GetDataSet() != nullptr)
   {
-    GDALRasterizeGeometries(dataset, m_BandsToBurn.size(), &(m_BandsToBurn[0]), m_SrcDataSetGeometries.size(), &(m_SrcDataSetGeometries[0]), nullptr, nullptr,
-                            &(m_FullBurnValues[0]), options, GDALDummyProgress, nullptr);
+    GDALRasterizeGeometries(dataset->GetDataSet(), m_BandsToBurn.size(),
+                            &(m_BandsToBurn[0]), m_SrcDataSetGeometries.size(),
+                            &(m_SrcDataSetGeometries[0]), nullptr, nullptr,
+                            &(m_FullBurnValues[0]), options, GDALDummyProgress,
+                            nullptr);
 
     CSLDestroy(options);
-
-    // release the dataset
-    GDALClose(dataset);
   }
 }
 
