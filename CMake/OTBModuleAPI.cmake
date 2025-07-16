@@ -282,3 +282,18 @@ macro(otb_module_warnings_disable)
     endif()
   endforeach()
 endmacro()
+
+# Add a cmake option "OTB_USE_<otb-module>" to enable or disable
+# specific module compilation. Often used for otb thirdparties that can be
+# optional
+# Usage: otb_module_activation_option("Option description" ON/OFF)
+macro(otb_module_activation_option _option_desc _default)
+  # Remove OTB prefix from ${otb-module} and create a string
+  # OTB_USE_${otb-module}
+  string(REGEX REPLACE "OTB(.*)" "OTB_USE_\\1" _option_name ${otb-module})
+  string(TOUPPER ${_option_name} _option_name)
+  option(${_option_name} ${_option_desc} ${_default})
+  set(OTB_MODULE_${otb-module}_ACTIVATION_OPTION ${_option_name})
+  # this list is init in OTBConstants.cmake
+  list(APPEND OTB_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
+endmacro()
