@@ -36,8 +36,8 @@ list(APPEND __custom_sb_cmake_args "-DCMAKE_BUILD_TYPE:STRING=Release")
 
 ExternalProject_Add(HDF5
   PREFIX HDF5
-  URL "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.5/hdf5-1.14.5.tar.gz"
-  URL_MD5 600d29af6ccb7f1e3401560e1422ba5e
+  URL "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6.tar.gz"
+  URL_MD5 63426c8e24086634eaf9179a8c5fe9e5
   SOURCE_DIR ${HDF5_SB_SRC}
   BINARY_DIR ${HDF5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
