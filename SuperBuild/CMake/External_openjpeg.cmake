@@ -35,9 +35,9 @@ ADD_SUPERBUILD_CMAKE_VAR(OPENJPEG ZLIB_LIBRARY)
 
 ExternalProject_Add(OPENJPEG
   PREFIX OPENJPEG
-  URL "https://github.com/uclouvain/openjpeg/archive/v2.5.2.tar.gz"
-  URL_MD5 f9ee64845881a15109ed0aa73a12202f
-  DOWNLOAD_NAME openjpeg_v2.5.2.tar.gz
+  URL "https://github.com/uclouvain/openjpeg/archive/v2.5.3.tar.gz"
+  URL_MD5 12ae257cb21738c41b5f6ca977d01081
+  DOWNLOAD_NAME openjpeg_v2.5.3.tar.gz
   BINARY_DIR ${OPENJPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
