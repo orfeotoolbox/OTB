@@ -341,18 +341,6 @@ macro(otb_module _name)
   list(SORT OTB_MODULE_${otb-module-test}_DEPENDS) # Deterministic order.
 endmacro()
 
-# NOTE TLA: same code here and in OTBModuleMacros.cmake
-set(OTB_MODULE_ACTIVATION_OPTION_LIST "")
-macro(otb_module_activation_option _option_desc _default)
-  # Remove OTB prefix from ${otb-module} and create a string
-  # OTB_USE_${otb-module}
-  string(REGEX REPLACE "OTB(.*)" "OTB_USE_\\1" _option_name ${otb-module})
-  string(TOUPPER ${_option_name} _option_name)
-  option(${_option_name} ${_option_desc} ${_default})
-  set(OTB_MODULE_${otb-module}_ACTIVATION_OPTION ${_option_name})
-  list(APPEND OTB_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
-endmacro()
-
 # This macro expect:
 # - OTB_DATA_ROOT to be set as env variable or OTB installation to be ${CMAKE_CURRENT_SOURCE_DIR}/../OTB/Data
 # - An otb_module.cmake file next to the file using this macro
@@ -587,7 +575,6 @@ macro(otb_module_impl)
       EXPORT_CODE_BUILD "${${otb-module}_EXPORT_CODE_BUILD}"
       EXPORT_CODE_INSTALL "${${otb-module}_EXPORT_CODE_INSTALL}"
     )
-    # --------------------------------------------------------------------
 
   endif()
 

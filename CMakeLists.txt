@@ -127,9 +127,7 @@ string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
 # init all OTB_INSTALL const var
 get_install_const()
-if(NOT OTB_INSTALL_PYTHON_DIR)
-  set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python")
-endif()
+get_modules_const()
 
 #convert path to native for reconfiguring otbcli.ps1.in
 file(TO_NATIVE_PATH "${OTB_INSTALL_APP_DIR}" OTB_INSTALL_APP_DIR_NATIVE)

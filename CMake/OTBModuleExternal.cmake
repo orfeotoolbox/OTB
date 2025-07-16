@@ -68,6 +68,7 @@ else()
   # Retrieve all OTB_INSTALL_XXX consts
   include(OTBConstants)
   get_install_const()
+  get_modules_const()
 
   # Use OTB's flags.
   set(CMAKE_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_C_FLAGS}")
