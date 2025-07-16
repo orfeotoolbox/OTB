@@ -86,8 +86,8 @@ set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
 #NOTE: update _SB_Boost_INCLUDE_DIR below when you change version number
 ExternalProject_Add(BOOST
   PREFIX BOOST
-  URL "https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2"
-  URL_MD5 190701c5017cb9931f12da00db225423
+  URL "https://archives.boost.io/release/1.86.0/source/boost_1_86_0.tar.bz2"
+  URL_MD5 2d098ba2e1457708a02de996857c2b10
   BINARY_DIR ${BOOST_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -103,7 +103,7 @@ ExternalProject_Add(BOOST
 #HINT: avoid all uses of  _SB_* in External_<project>.cmake
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
 if(WIN32)
-  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_88)
+  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_86)
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()
