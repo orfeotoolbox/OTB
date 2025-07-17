@@ -36,7 +36,7 @@ list(APPEND otb_internal_modules_repos
 list(APPEND otb_internal_modules_git_tag
     "main" # Miscellaneous
     "main" # FeaturesExtraction
-    "init_P0_module" # Learning
+    "main" # Learning
     )
 
 list(APPEND otb_internal_modules_get_submodules
@@ -98,7 +98,7 @@ while(${__i} LESS ${__nb_internal_modules})
         list(GET otb_internal_modules_desc "${__i}" __otb_module_desc)
         list(GET otb_internal_modules_get_submodules "${__i}" __get_submodules)
 
-        message(STATUS "Downloading internal module ${__otb_module_name} at ${__location} with submodules at ${__get_submodules}")
+        message(STATUS "Downloading internal module ${__otb_module_name} at ${__location} with ref ${__otb_module_tag} and submodules at ${__get_submodules}")
         otb_fetch_module("${__otb_module_name}"
                          "${__otb_module_desc}"
                          ${__location}
