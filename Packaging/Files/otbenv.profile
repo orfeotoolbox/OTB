@@ -63,9 +63,9 @@ PATH=$(cat_path "$OTB_INSTALL_DIR/bin" "$PATH")
 # export PYTHONPATH to import otbApplication.py
 PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/python" "$PYTHONPATH")
 if [ "$OS" = "RedHatEnterprise" ] || [ "$OS" = "Fedora" ] || [ "$OS" = "RockyLinux" ]; then
-  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3.8/site-packages" "$PYTHONPATH")
+  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3.12/site-packages" "$PYTHONPATH")
 else
-  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3/dist-packages" "$PYTHONPATH")
+  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3.10/site-packages" "$PYTHONPATH")
 fi
 
 # set numeric locale to C
