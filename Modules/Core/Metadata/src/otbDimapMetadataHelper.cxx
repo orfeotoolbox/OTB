@@ -588,17 +588,24 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
   ParseVector(mds, prefix + "Dataset_Content.Dataset_Components.Component"
                   ,"COMPONENT_PATH.href", componentPath);
 
-  int i=0;
-  bool noLUT=true;//check if the LUT are available or not
-  for(std::string content:componentContent)
+  if (componentPath.size() != componentContent.size())
   {
-    if(content=="Look Up Table")
+    throw std::out_of_range("componentContent and componentContent vector"
+                            " must have the same size");
+  }
+
+  std::size_t i = 0;
+  bool noLUT = true;//check if the LUT are available or not*
+
+  for(std::string const& content:componentContent)
+  {
+    if(content == "Look Up Table")
     {
-      if(i<componentPath.size())
+      if( i < componentPath.size())
         m_Data.LUTFileNames.push_back(componentPath[i]);
       noLUT=false;
     }
-    i++;
+    ++i;
   }
   //get the bound range of the band to compute LUT if the LUTs are not available
   if(noLUT)
@@ -633,26 +640,39 @@ void DimapMetadataHelper::ParseLUT(const MetadataSupplierInterface & mds)
   std::vector<std::string> lutId;
   ParseVector(mds, "Dimap_Document.Raster_Data.Raster_Index_List.Raster_Index",
                      "BAND_ID",lutId);
-  for(int i=0;i<lutId.size();i++)
+
+  if (lutId.size() != lutData.size())
+    throw std::out_of_range("lutId and lutData vector must have the same size");
+
+  for(std::size_t i=0;i<lutId.size();i++)
   {
-    m_Data.LUTs.insert(std::make_pair(lutId[i], parseLUTStringToArrays(lutData[i])));
+    m_Data.LUTs.emplace(lutId[i], parseLUTStringToArrays(lutData[i]));
   }
 }
 
 void DimapMetadataHelper::createDefaultLUTs()
 {
-    for(int i=0;i<m_Data.BandIDs.size();i++)
+  if (m_Data.RangeMin.size() != m_Data.BandIDs.size())
+  {
+    throw std::length_error("m_Data.RangeMin and m_Data.BandIDs must have"
+                            " the same size. File is corrupted");
+  }
+  if (m_Data.RangeMax.size() != m_Data.BandIDs.size())
+  {
+    throw std::length_error("m_Data.RangeMax and m_Data.BandIDs must have"
+                            " the same size. File is corrupted");
+  }
+
+  for(std::size_t i = 0; i < m_Data.BandIDs.size(); ++i)
+  {
+    std::vector<double> vectLut(256, 0.0); // use default list initializer
+
+    for(std::size_t x = 0; x < 256 ; ++x)
     {
-      std::vector<double> vectLut(256,0.0);
-      if(m_Data.RangeMin.size() == m_Data.BandIDs.size() && m_Data.RangeMax.size() == m_Data.BandIDs.size())
-      {
-        for(int x=0;x<256;x++)
-        {
-          vectLut[x] = x * double(m_Data.RangeMax[i]- m_Data.RangeMin[i]) / 255.0 + m_Data.RangeMin[i];
-        }
-      }
-      m_Data.LUTs.emplace(m_Data.BandIDs[i], move(vectLut));
+      vectLut[x] = x * double(m_Data.RangeMax[i]- m_Data.RangeMin[i]) / 255.0 + m_Data.RangeMin[i];
     }
+    m_Data.LUTs.emplace(m_Data.BandIDs[i], move(vectLut));
+  }
 }
 
 } // end namespace otb

@@ -37,20 +37,20 @@ namespace otb
 class OTBMetadata_EXPORT PleiadesNeoImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-  typedef PleiadesNeoImageMetadataInterface Self;
-  typedef OpticalImageMetadataInterface  Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  using Self = PleiadesNeoImageMetadataInterface;
+  using Superclass = OpticalImageMetadataInterface;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
 itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PleiadesNeoImageMetadataInterface, OpticalImageMetadataInterface);
 
-  typedef Superclass::ImageType                ImageType;
-  typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
-  typedef Superclass::VectorType               VectorType;
-  typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
+  using ImageType = Superclass::ImageType;
+  using MetaDataDictionaryType = Superclass::MetaDataDictionaryType;
+  using VectorType = Superclass::VectorType;
+  using VariableLengthVectorType = Superclass::VariableLengthVectorType;
 
   void Parse(ImageMetadata &) override;
 
@@ -79,32 +79,32 @@ private:
 
 namespace MetaData
 {
-namespace PleiadesNeoUtils
-{
-  const std::string IMAGE_ID_KEY = "ImageID";
-  const std::string TIME_RANGE_START_KEY = "TimeRangeStart";
-  const std::string TIME_RANGE_END_KEY = "TimeRangeEnd";
-  const std::string LINE_PERIOD_KEY = "LinePeriod";
-  const std::string SWATH_FIRST_COL_KEY = "SwathFirstCol";
-  const std::string SWATH_LAST_COL_KEY = "SwathLastCol";
-
-  /** This struct defines additional metadata used to enhance pansharpening of phr products */
-  struct SensorModelCharacteristics
+  namespace PleiadesNeoUtils
   {
-    std::string imageID;
-    MetaData::TimePoint timeRangeStart;
-    MetaData::TimePoint timeRangeEnd;
-    double  linePeriod;
-    int     swathFirstCol;
-    int     swathLastCol;
-  };
+    const std::string IMAGE_ID_KEY = "ImageID";
+    const std::string TIME_RANGE_START_KEY = "TimeRangeStart";
+    const std::string TIME_RANGE_END_KEY = "TimeRangeEnd";
+    const std::string LINE_PERIOD_KEY = "LinePeriod";
+    const std::string SWATH_FIRST_COL_KEY = "SwathFirstCol";
+    const std::string SWATH_LAST_COL_KEY = "SwathLastCol";
 
-  bool HasSensorModelCharacteristics(const ImageMetadata &);
+    /** This struct defines additional metadata used to enhance pansharpening of phr products */
+    struct SensorModelCharacteristics
+    {
+      std::string imageID;
+      MetaData::TimePoint timeRangeStart;
+      MetaData::TimePoint timeRangeEnd;
+      double  linePeriod;
+      int     swathFirstCol;
+      int     swathLastCol;
+    };
 
-  /** extract sensor model characteristics from ImageMetadata */ 
-  SensorModelCharacteristics GetSensorModelCharacteristics(const ImageMetadata &);
+    bool HasSensorModelCharacteristics(const ImageMetadata &);
 
-} // end namespace PleiadesNeoUtils
+    /** extract sensor model characteristics from ImageMetadata */
+    SensorModelCharacteristics GetSensorModelCharacteristics(const ImageMetadata &);
+
+  } // end namespace PleiadesNeoUtils
 } // end namespace MetaData
 
 } // end namespace otb
