@@ -117,6 +117,21 @@ public:
 
   ~XMLMetadataSupplier() = default;
 protected:
+
+  char** AddXMLNameValueToList(char** papszList, const char *pszName,
+                                               const char *pszValue);
+
+  void ReadXMLToListFirstPass(const CPLXMLNode* psNode,
+                                              std::map<std::string, int>& oMapCountKeysFull,
+                                              const std::string& osPrefixFull);
+  virtual char** ReadXMLToList(const CPLXMLNode* psNode,
+                                       char** papszList,
+                                       const std::map<std::string, int>& oMapCountKeysFullRef,
+                                       std::map<std::string, int>& oMapCountKeysFull,
+                                       std::map<std::string, int>& oMapCountKeys,
+                                       const std::string& osPrefix,
+                                       const std::string& osPrefixFull);
+
   /**
   * @brief ReadXMLToList Transform xml to list of NULL terminated name=value
   *        strings

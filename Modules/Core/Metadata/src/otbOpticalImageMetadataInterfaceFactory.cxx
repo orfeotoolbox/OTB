@@ -29,6 +29,7 @@
 #include "otbQuickBirdImageMetadataInterfaceFactory.h"
 #include "otbWorldView2ImageMetadataInterfaceFactory.h"
 #include "otbPleiadesImageMetadataInterfaceFactory.h"
+#include "otbPleiadesNeoImageMetadataInterfaceFactory.h"
 #include "otbSpot6ImageMetadataInterfaceFactory.h"
 #include <mutex>
 
@@ -51,6 +52,7 @@ void OpticalImageMetadataInterfaceFactory::RegisterBuiltInFactories()
       itk::ObjectFactoryBase::RegisterFactory(FormosatImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(QuickBirdImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(WorldView2ImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(PleiadesNeoImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(PleiadesImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(Spot6ImageMetadataInterfaceFactory::New());
       firstTime = false;

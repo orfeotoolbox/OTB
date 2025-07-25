@@ -27,6 +27,7 @@
 #include "otbDateTime.h"
 
 
+#include <unordered_map>
 namespace otb
 {
 
@@ -72,7 +73,13 @@ struct DimapData
   std::string softwareVersion;
   double SatAzimuth;
 
-  // phr sensor characteristics
+  //specific pneo sensors features
+  std::vector<std::string> LUTFileNames;
+  std::unordered_map<std::string, std::vector<double>> LUTs;
+  std::vector<double>  RangeMin;
+  std::vector<double>  RangeMax;
+
+  // phr and pneo sensor characteristics
   std::string TimeRangeStart;
   std::string TimeRangeEnd;
   std::string LinePeriod;
@@ -109,6 +116,17 @@ public:
   void ParseDimapV2(const MetadataSupplierInterface & mds, const std::string & prefix = "Dimap_Document.");
 
   void ParseSpot5Model(const MetadataSupplierInterface & mds, Spot5Param& spot5Param, const std::string & prefix = "Dimap_Document.");
+   /** Parse Dimap data from a Dimap v3 product */
+  void ParseDimapV3(const MetadataSupplierInterface & mds, const std::string & prefix = "Dimap_Document.");
+
+  /** Parse string to array of double*/
+  std::vector<double> parseLUTStringToArrays(std::string const & s);
+
+  /** create default LUT data*/
+  void createDefaultLUTs();
+
+  /** Parse Dimap data from a LUT Dimap v1.1 product */
+  void ParseLUT(const MetadataSupplierInterface & mds);
 
 protected:
 

@@ -273,6 +273,7 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::RedDisplayChannel,"RedDisplayChannel"},
   {MDNum::GreenDisplayChannel,"GreenDisplayChannel"},
   {MDNum::BlueDisplayChannel,"BlueDisplayChannel"},
+  {MDNum::DeepBlueDisplayChannel,"DeepBlueDisplayChannel"},
 });
 
 MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
