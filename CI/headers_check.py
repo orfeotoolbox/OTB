@@ -2,7 +2,7 @@
 #
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -53,6 +53,7 @@ fileext = {
     '.bash': 'shell',
     '.profile': 'shell',
     '.ps1': 'shell',
+    '.ps1.in': 'shell',
     '.py': 'shell',
     '.py.in': 'shell',
     '.cmake': 'shell',

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -115,7 +115,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 # OTB version number.
 set(OTB_VERSION_MAJOR "9")
 set(OTB_VERSION_MINOR "1")
-set(OTB_VERSION_PATCH "0")
+set(OTB_VERSION_PATCH "1")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 get_package_name(${OTB_SOURCE_DIR} ${PROJECT_NAME} OTB_VERSION_STRING2)
@@ -152,7 +152,7 @@ if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 endif()
 
-#convert path to native for reconfiguring otbcli.bat.in
+#convert path to native for reconfiguring otbcli.ps1.in
 file(TO_NATIVE_PATH "${OTB_INSTALL_APP_DIR}" OTB_INSTALL_APP_DIR_NATIVE)
 
 #-----------------------------------------------------------------------------
@@ -473,6 +473,25 @@ if(UNIX)
     DESTINATION .
     COMPONENT Core
     )
+  # output of python3 --version is "Python XX.XX.XX", notice the space that
+  # is used
+  execute_process(
+    COMMAND python3 --version
+    RESULT_VARIABLE CMD_RES
+    OUTPUT_VARIABLE PYTHON_VERSION_DURING_BUILD
+  )
+  # Get the first two digit and concatenate them
+  string(REGEX MATCH " ([0-9]+)\.([0-9]+)" TMP_VAR "${PYTHON_VERSION_DURING_BUILD}")
+
+  if (${CMAKE_MATCH_COUNT} EQUAL 2)
+    # CMAKE_MATCH_0 is the entire match
+    # See https://cmake.org/cmake/help/latest/variable/CMAKE_MATCH_n.html
+    set(PYTHON_VERSION_DURING_BUILD "${CMAKE_MATCH_1}${CMAKE_MATCH_2}")
+  else()
+    # set default version
+    set(PYTHON_VERSION_DURING_BUILD "310")
+  endif()
+  
   configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
                  ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
   install( PROGRAMS
@@ -484,17 +503,11 @@ if(UNIX)
     )
 endif()
 
-#my_file_ext is required for otbcli files which has
-# no extension on linux. (hence we cannot use SCRIPT_EXT
-
-#For windows otbenv.bash and otbenv.bat is required.
+# For windows otbenv.bash and otbenv.ps1 is required.
 # Former is for windows shell users and latter is for other
 # linux emulator such as bash for windows or mobxterm
-set(my_file_ext "")
 if(WIN32)
-  set(my_file_ext ".bat")
   install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bat
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.ps1
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bash
     DESTINATION .

@@ -35,15 +35,36 @@ sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/gdal-co
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" "$OTB_INSTALL_DIR"/bin/curl-config
 sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 
-# Check python version, if python 3.10 (ubuntu 22 and debian 12) download and extract the gdal bindings for python 3.10
-complete_pyversion=$(python3 -V | cut -f2 -d' ')
-pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
-short_pyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1.\2/')"
-if [ $pyversion -ge 310 ]; then
-    echo "*** Python $complete_pyversion detected, downloading gdal bindings compiled for python $short_pyversion ***"
-    curl "https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$pyversion.tar.gz" -o "$OTB_INSTALL_DIR"/tools/py$pyversion.tar.gz
-    tar -xf "$OTB_INSTALL_DIR"/tools/py$pyversion.tar.gz -C "$OTB_INSTALL_DIR"/lib/python3/dist-packages/osgeo/
-    rm "$OTB_INSTALL_DIR"/tools/py$pyversion.tar.gz
-    echo "*** GDAL bindings for python $short_pyversion successfully installed ***"
+ostype="$(lsb_release -is)"
+
+if [ "$ostype" != "RedHatEnterprise" ] ; then
+  concatpyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
+  # Compare the concat version with the version used to build this OTB package
+  # The python build version is filled by cmake
+  if [ "$concatpyversion" -ne "@PYTHON_VERSION_DURING_BUILD@" ]; then
+    sh "$OTB_INSTALL_DIR"/recompile_bindings.sh
+  fi
+  # Check python version, if python 3.12 (ubuntu 24 and debian > 12) download
+  # and extract the gdal bindings for python 3.12
+  # In case your install is from compiled code, the gdal bindings will be
+  # already there in the installation
+  # Note that the install path differs from OS. To handle it,
+  # check before the folder name (always prefixed of python3)
+  osgeo_pkg_path=$(find "$OTB_INSTALL_DIR/lib" -mindepth 3 -maxdepth 3 -type d -name "osgeo")
+  gdal_python_found="$(find "$osgeo_pkg_path" -name "*$concatpyversion-x86_64-linux*")"
+  if [ -z "$gdal_python_found" ]; then
+    echo "***** Python $concatpyversion detected, downloading gdal bindings compiled for this Python version *****"
+    HTTP_STATUS=$(curl -s -o "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz -w "%{response_code}\n" https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-"$OTB_SHORT_VERSION"-GDAL-bindings-py"$concatpyversion".tar.gz)
+    if [ "$HTTP_STATUS" -eq 200 ]; then
+      tar -xf "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz -C "$osgeo_pkg_path"
+      rm "$OTB_INSTALL_DIR"/tools/gdal-py"$concatpyversion".tar.gz
+      echo "***** GDAL bindings for python $concatpyversion successfully installed *****"
+    else
+      echo "Can not find GDAL bindings at https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_SHORT_VERSION-GDAL-bindings-py$concatpyversion.tar.gz"
+      return 255
+    fi
+  fi
 fi
+
+echo "***** OTB Environment and Python bindings setup complete *****"
 echo "OK" > "$OTB_INSTALL_DIR"/tools/install_done.txt
