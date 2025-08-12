@@ -76,6 +76,7 @@ GDAL_DATA="$OTB_INSTALL_DIR/share/gdal"
 
 PROJ_LIB="$OTB_INSTALL_DIR/share/proj"
 
+# when otbcli is used the otbenv.profile can disable the variable GDAL_DRIVER_PATH
 export GDAL_DRIVER_PATH="disable"
 
 export LD_LIBRARY_PATH="$OTB_INSTALL_DIR/lib:$LD_LIBRARY_PATH"
