@@ -1690,6 +1690,9 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
     {
       gdalDriverShortName = "NOT-FOUND";
     }
+  }else if(extension == ".lum")
+  {
+     gdalDriverShortName = "LUM";
   }
 
   else
