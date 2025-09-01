@@ -26,23 +26,27 @@
 list(APPEND otb_internal_modules
     "Miscellaneous"
     "FeaturesExtraction"
-    "Learning")
+    "Learning"
+    "SAR")
 
 list(APPEND otb_internal_modules_repos
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/featuresextraction.git"
-    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/learning.git")
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/learning.git"
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/sar.git")
 
 list(APPEND otb_internal_modules_git_tag
     "main" # Miscellaneous
     "main" # FeaturesExtraction
     "main" # Learning
+    "init-P0-module" # SAR
     )
 
 list(APPEND otb_internal_modules_get_submodules
      "OFF" # Miscellaneous 
      "OFF" # FeaturesExtraction
      "OFF" # Learning
+     "OFF" # SAR
     )
 
 list(APPEND otb_internal_modules_desc
@@ -55,6 +59,8 @@ models, as well as PROSAIL, which is the combination of the two previous ones." 
 "This module contains classical filtering applications, such as texture extraction, edge extraction, smoothing, morphological operations. This module relies on external libraries (MuParser / MuParserX) contained in OTB-Dependencies. it can be installed along with the Core package with a simple tar extract command and directly available after sourcing the otbenv.profile." # FeaturesExtraction
 
 "This module contains Machine Learning applications based on classical supervised or unsupervised algorithms (SVM, Random Forest, K-Means, Multi-layer Perceptron Neural Network, etc.). Its applications handle the whole processing chain : sample selection, learning, prediction and finalization of a classification map. It also contains a regression framework." # Learning
+
+"This module contains SAR (Synthetic Aperture Radar) applications and covers all the scope of SAR imagery manipulation : SAR Calibration, Unspeckle with temporal filtering, Interferogram, etc." # SAR
 )
 
 set(__i 0) # group index
