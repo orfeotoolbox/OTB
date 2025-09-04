@@ -215,10 +215,6 @@ function(otb_module_target_install _name _component)
 
   if (${IS_P0_MODULE})
     set(${otb-module}_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-    # use the OTB_INSTALL_PACKAGE_DIR instead of
-    # CMake_Install_LIBDIR/cmake/OTB because it will be installed on lib64
-    # on RHEL
-    set(target_file_dir "${OTB_INSTALL_PACKAGE_DIR}")
   endif()
 
   # Same note here, avoid using CMAKE_INSTALL_LIBDIR as it will be installed
@@ -239,24 +235,6 @@ function(otb_module_target_install _name _component)
             ARCHIVE DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
             INCLUDES DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
     )
-  endif()
-
-  get_property(is_target_exported GLOBAL PROPERTY ${__export_name}_EXPORTED DEFINED)
-  if (NOT ${is_target_exported})
-    if (CMAKE_DEBUG)
-      message(STATUS "[CMAKE_DEBUG] Exporting target ${__export_name} part of component ${_component} in file ${__export_name}.cmake located at ${target_file_dir}")
-    endif()
-    if (_component)
-      install(EXPORT ${__export_name}
-              FILE ${__export_name}.cmake
-              DESTINATION ${target_file_dir}
-              COMPONENT ${_component})
-    else()
-      install(EXPORT ${__export_name}
-              FILE ${__export_name}.cmake
-              DESTINATION ${target_file_dir})
-    endif()
-    set_property(GLOBAL PROPERTY ${__export_name}_EXPORTED TRUE)
   endif()
   unset(__export_name)
 endfunction()
@@ -368,6 +346,7 @@ macro(otb_module_impl)
   HINTS $ENV{OTB_DATA_ROOT} ${CMAKE_CURRENT_SOURCE_DIR}/../OTB/Data)
   mark_as_advanced(OTB_DATA_ROOT)
 
+  # NOTE TLA: OTB_DATA_ROOT is a global option, why define all these here
   set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
   set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
   set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
@@ -557,7 +536,8 @@ macro(otb_module_impl)
     endif()
   endif()
 
-
+  # By default set the install path of target file to lib/cmake/<project_name>
+  set(__target_cmake_file_dir ${OTB_INSTALL_LIBRARY_DIR}/cmake/${PROJECT_NAME})
   if (${IS_P0_MODULE})
     # DO NOT QUOTE LISTS as they already are interpreted as multi var args
     # quoting them will "cancel" the list effect and malform the generated
@@ -575,7 +555,10 @@ macro(otb_module_impl)
       EXPORT_CODE_BUILD "${${otb-module}_EXPORT_CODE_BUILD}"
       EXPORT_CODE_INSTALL "${${otb-module}_EXPORT_CODE_INSTALL}"
     )
-
+    # use the OTB_INSTALL_PACKAGE_DIR instead of
+    # CMake_Install_LIBDIR/cmake/OTB because it will be installed on lib64
+    # on RHEL
+    set(__target_cmake_file_dir "${OTB_INSTALL_PACKAGE_DIR}")
   endif()
 
   # read test CMakeLists AFTER writing <otb-module>.cmake as test needs this
@@ -584,5 +567,33 @@ macro(otb_module_impl)
     add_subdirectory(test)
   endif()
 
+  # Check if an file exporting targets has been created, if not create it
+  set(__export_name ${PROJECT_NAME}Targets)
+  if (__current_component)
+    set(__export_name ${__current_component}Targets)
+  endif()
+
+  get_property(_is_target_exported GLOBAL PROPERTY ${__export_name}_EXPORTED)
+  # check if _is_target_exported is unset or FALSE
+  if (NOT DEFINED _is_target_exported OR NOT _is_target_exported)
+    if (CMAKE_DEBUG)
+      message(STATUS "[CMAKE_DEBUG] Creating target export ${__export_name} for target ${otb-module} part of component ${__current_component} in file ${__export_name}.cmake located at ${__target_cmake_file_dir}")
+    endif()
+    if (__current_component)
+      install(EXPORT ${__export_name}
+              FILE ${__export_name}.cmake
+              DESTINATION ${__target_cmake_file_dir}
+              COMPONENT ${__current_component})
+    else()
+        install(EXPORT ${__export_name}
+                FILE ${__export_name}.cmake
+                DESTINATION ${__target_cmake_file_dir})
+    endif()
+    # set the property to not create the target export file twice
+    set_property(GLOBAL PROPERTY ${__export_name}_EXPORTED TRUE)
+  endif() # NOT DEFINED ${${otb-module}-targets}_EXPORTED
+
+  unset(__target_cmake_file_dir)
+  unset(__export_name)
   unset(__current_component)
 endmacro() # otb_module_impl
