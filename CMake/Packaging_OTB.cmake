@@ -32,7 +32,11 @@ set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 # and CPACK_DEB_COMPONENT_INSTALL is set to YES
 set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
-set(CPACK_COMPONENTS_ALL Core FeaturesExtraction Hyperspectral Miscellaneous Learning Segmentation Sar StereoProcessing Miscellaneous Dependencies)
+
+# NOTE TLA: we could set the list depending of enabled component.
+# Actually, even if we enable only Core and FeaturesExtraction (for instance)
+# we also generate empty packages for other components
+set(CPACK_COMPONENTS_ALL Core FeaturesExtraction Hyperspectral Learning Segmentation SAR StereoProcessing Miscellaneous Dependencies)
 if(WIN32)
     set(CPACK_GENERATOR "ZIP")
 else()
@@ -73,8 +77,8 @@ cpack_add_component(Segmentation
                     [DESCRIPTION "Contains all Segmentation libraries and applications for OTB" ]
                     [OPTIONAL])
 
-cpack_add_component(Sar
-                    [DISPLAY_NAME Sar]
+cpack_add_component(SAR
+                    [DISPLAY_NAME SAR]
                     [DESCRIPTION "Contains all SAR libraries and applications for OTB" ]
                     [OPTIONAL])
 
