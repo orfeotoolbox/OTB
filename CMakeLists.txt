@@ -671,6 +671,11 @@ foreach(otb-group IN LISTS GROUPS_ENABLED)
   install(FILES ${OTB_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
           DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
           COMPONENT ${otb-group})
+
+  if (CMAKE_DEBUG)
+    message(STATUS "[CMAKE_DEBUG] Generating ${otb-group}Config.cmake for component \"${otb-group}\" that will be installed in \"${OTB_INSTALL_PACKAGE_DIR}\"")
+  endif()
+
   unset(__ENABLED_MODULES)
 endforeach() # otb-group IN GROUPS_ENABLED
 
