@@ -39,7 +39,7 @@ list(APPEND otb_internal_modules_git_tag
     "main" # Miscellaneous
     "main" # FeaturesExtraction
     "main" # Learning
-    "init-P0-module" # SAR
+    "main" # SAR
     )
 
 list(APPEND otb_internal_modules_get_submodules
