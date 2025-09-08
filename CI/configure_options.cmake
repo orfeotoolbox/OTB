@@ -54,18 +54,19 @@ set (otb_wrap_option
 
 set (cmake_configure_option
 "CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
-CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
+CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}
+CMAKE_DEBUG:BOOL=ON")
 
 # extra options for XDK builds
 if(XDK_INSTALL_PATH)
-set(cmake_configure_option
-"${cmake_configure_option}
-CMAKE_PREFIX_PATH=${XDK_INSTALL_PATH}")
-foreach(remote_module OTBTemporalGapFilling SertitObject otbGRM S1TilingSupportApplications) #DiapOTBModule
   set(cmake_configure_option
-"${cmake_configure_option}
-Module_${remote_module}:BOOL=ON")
-endforeach()
+      "${cmake_configure_option}
+      CMAKE_PREFIX_PATH=${XDK_INSTALL_PATH}")
+  foreach(remote_module OTBTemporalGapFilling SertitObject otbGRM S1TilingSupportApplications) #DiapOTBModule
+    set(cmake_configure_option
+        "${cmake_configure_option}
+        Module_${remote_module}:BOOL=ON")
+  endforeach()
 endif()
 
 if((CTEST_SITE) AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/${CTEST_SITE}.cmake")
