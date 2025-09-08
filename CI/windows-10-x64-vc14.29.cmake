@@ -21,28 +21,28 @@
 # Configuration options for windows-10-x64-vc14.0.cmake
 
 set(site_option
-"CMAKE_CXX_FLAGS:STRING=/DTHROW_QCRITICAL=0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc /D_ENABLE_EXTENDED_ALIGNED_STORAGE
-OTB_BUILD_FeaturesExtraction:BOOL=ON
-OTB_BUILD_Hyperspectral:BOOL=ON
-OTB_BUILD_Learning:BOOL=ON
-OTB_BUILD_Miscellaneous:BOOL=ON
-OTB_BUILD_Remote:BOOL=ON
-OTB_BUILD_SAR:BOOL=ON
-OTB_BUILD_Segmentation:BOOL=ON 
-OTB_BUILD_StereoProcessing:BOOL=ON
-OTB_USE_LIBSVM:BOOL=ON
-OTB_USE_MUPARSER:BOOL=ON
-OTB_USE_MUPARSERX:BOOL=ON
-OTB_USE_OPENCV:BOOL=ON
-OTB_USE_OPENMP:BOOL=OFF
-OTB_USE_SHARK:BOOL=ON
-")
+    "CMAKE_CXX_FLAGS:STRING=/DTHROW_QCRITICAL=0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc /D_ENABLE_EXTENDED_ALIGNED_STORAGE"
+    "OTB_BUILD_FeaturesExtraction:BOOL=ON"
+    "OTB_BUILD_Hyperspectral:BOOL=ON"
+    "OTB_BUILD_Learning:BOOL=ON"
+    "OTB_BUILD_Miscellaneous:BOOL=ON"
+    "OTB_BUILD_Remote:BOOL=ON"
+    "OTB_BUILD_SAR:BOOL=ON"
+    "OTB_BUILD_Segmentation:BOOL=ON "
+    "OTB_BUILD_StereoProcessing:BOOL=ON"
+    "OTB_USE_LIBSVM:BOOL=ON"
+    "OTB_USE_MUPARSER:BOOL=ON"
+    "OTB_USE_MUPARSERX:BOOL=ON"
+    "OTB_USE_OPENCV:BOOL=ON"
+    "OTB_USE_OPENMP:BOOL=OFF"
+    "OTB_USE_SHARK:BOOL=ON"
+)
 
 # As windows have a dumb dynamic linkage system, we need to use
 # the XDK_INSTALL_PATH option to ensure dlls are copied from xdk to otb bin
 # folder 
 if(XDK_INSTALL_PATH)
   set(site_option
-"XDK_INSTALL_PATH=${XDK_INSTALL_PATH}
-${site_option}")
+      "XDK_INSTALL_PATH=${XDK_INSTALL_PATH}"
+      "${site_option}")
 endif()

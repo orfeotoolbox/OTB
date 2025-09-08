@@ -26,46 +26,39 @@
 # * CONFIGURE_OPTIONS
 
 set (otb_build_project_option
-"BUILD_COOKBOOK:BOOL=OFF
-BUILD_EXAMPLES:BOOL=OFF
-BUILD_SHARED_LIBS:BOOL=ON
-BUILD_TESTING:BOOL=ON")
+    "BUILD_COOKBOOK:BOOL=OFF"
+    "BUILD_EXAMPLES:BOOL=OFF"
+    "BUILD_SHARED_LIBS:BOOL=ON"
+    "BUILD_TESTING:BOOL=ON")
 
 if(WIN32)
-  set(otb_build_project_option
-"${otb_build_project_option}
-CMAKE_C_COMPILER_LAUNCHER=buildcache
-CMAKE_CXX_COMPILER_LAUNCHER=buildcache")
+    list(APPEND otb_build_project_option
+        "CMAKE_C_COMPILER_LAUNCHER=buildcache"
+        "CMAKE_CXX_COMPILER_LAUNCHER=buildcache")
 endif()
 
-set (otb_qa_option
-"CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON")
+set (otb_qa_option "CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON")
 
 set (otb_use_option
-"OTB_USE_6S:BOOL=ON
-OTB_USE_CURL:BOOL=ON
-OTB_USE_GSL:BOOL=ON
-OTB_USE_LIBKML:BOOL=OFF
-OTB_USE_SIFTFAST:BOOL=ON
-OTB_USE_SSE_FLAGS:BOOL=ON")
+    "OTB_USE_6S:BOOL=ON"
+    "OTB_USE_CURL:BOOL=ON"
+    "OTB_USE_GSL:BOOL=ON"
+    "OTB_USE_LIBKML:BOOL=OFF"
+    "OTB_USE_SIFTFAST:BOOL=ON"
+    "OTB_USE_SSE_FLAGS:BOOL=ON")
 
-set (otb_wrap_option
-"OTB_WRAP_PYTHON:BOOL=ON")
+set (otb_wrap_option "OTB_WRAP_PYTHON:BOOL=ON")
 
 set (cmake_configure_option
-"CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
-CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}
-CMAKE_DEBUG:BOOL=ON")
+    "CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}"
+    "CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}"
+    "CMAKE_DEBUG:BOOL=ON")
 
 # extra options for XDK builds
 if(XDK_INSTALL_PATH)
-  set(cmake_configure_option
-      "${cmake_configure_option}
-      CMAKE_PREFIX_PATH=${XDK_INSTALL_PATH}")
+  list(APPEND cmake_configure_option "CMAKE_PREFIX_PATH=${XDK_INSTALL_PATH}")
   foreach(remote_module OTBTemporalGapFilling SertitObject otbGRM S1TilingSupportApplications) #DiapOTBModule
-    set(cmake_configure_option
-        "${cmake_configure_option}
-        Module_${remote_module}:BOOL=ON")
+    list(APPEND cmake_configure_option "Module_${remote_module}:BOOL=ON")
   endforeach()
 endif()
 
@@ -75,24 +68,20 @@ if((CTEST_SITE) AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/${CTEST_SITE}.cmake")
 endif()
 
 set(concat_options
-"${otb_build_project_option}
-${otb_use_option}
-${otb_wrap_option}
-${otb_data_option}
-${cmake_configure_option}
-${site_option}
-")
+    "${otb_build_project_option}"
+    "${otb_use_option}"
+    "${otb_wrap_option}"
+    "${otb_data_option}"
+    "${cmake_configure_option}"
+    "${site_option}"
+)
 
 if (QA)
-  set(concat_options
-"${concat_options}
-${otb_qa_option}
-")
+  list(APPEND concat_options "${otb_qa_option}"
+)
 endif()
 
-#Transform the previous string in list
-string (REPLACE "\n" ";" otb_options ${concat_options})
-
-foreach(item ${otb_options})
-  set( CONFIGURE_OPTIONS "${CONFIGURE_OPTIONS}-D${item};")
+set(CONFIGURE_OPTIONS "")
+foreach(item ${concat_options})
+  list(APPEND CONFIGURE_OPTIONS "-D${item}")
 endforeach(item)

@@ -20,5 +20,4 @@
 
 # Configuration options for ubuntu-22.04-gcc
 
-set(site_option
-"OTB_USE_SHARK:BOOL=OFF")
+set(site_option "OTB_USE_SHARK:BOOL=OFF")
