@@ -19,6 +19,7 @@ build
 install
 xdk
 log
+superbuild-artifact
 #P0Modules to ignore now
 Modules/Miscellaneous
 Modules/FeaturesExtraction
