@@ -23,6 +23,18 @@ SETUP_SUPERBUILD(PATCHELF)
 
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PATCHELF ZLIB)
 
+set(PATCHELF_BUILD_CMD "\$(MAKE)")
+set(PATCHELF_INSTALL_CMD "\$(MAKE)" "install")
+# get the cmake generator variable, to transform configure command if ninja
+# is used
+# As CMAKE_GENERATOR is an environment variable, the variable reference is
+# different from normally
+# https://cmake.org/cmake/help/latest/manual/cmake-language.7.html#cmake-language-environment-variables
+if (${CMAKE_GENERATOR} STREQUAL "Ninja")
+  set(PATCHELF_BUILD_CMD make)
+  set(PATCHELF_INSTALL_CMD make install)
+endif()
+
 ExternalProject_Add(PATCHELF
   PREFIX PATCHELF
   URL                 "https://github.com/NixOS/patchelf/releases/download/0.14.3/patchelf-0.14.3.tar.gz"
@@ -33,8 +45,8 @@ ExternalProject_Add(PATCHELF
   DEPENDS             ${PATCHELF_DEPENDENCIES}
   CONFIGURE_COMMAND
   ${PATCHELF_SB_SRC}/configure --prefix=${SB_INSTALL_PREFIX}
-  BUILD_COMMAND $(MAKE)
-  INSTALL_COMMAND $(MAKE) install
+  BUILD_COMMAND ${PATCHELF_BUILD_CMD}
+  INSTALL_COMMAND ${PATCHELF_INSTALL_CMD}
   LOG_DOWNLOAD 1
   LOG_CONFIGURE 1
   LOG_BUILD 1

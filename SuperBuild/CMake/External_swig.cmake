@@ -46,6 +46,18 @@ if(MSVC)
     )
 
 else()
+  set(SWIG_BUILD_CMD "\$(MAKE)")
+  set(SWIG_INSTALL_CMD "\$(MAKE)" "install")
+  # get the cmake generator variable, to transform configure command if ninja
+  # is used
+  # As CMAKE_GENERATOR is an environment variable, the variable reference is
+  # different from normally
+  # https://cmake.org/cmake/help/latest/manual/cmake-language.7.html#cmake-language-environment-variables
+  if (${CMAKE_GENERATOR} STREQUAL "Ninja")
+    set(SWIG_BUILD_CMD make)
+    set(SWIG_INSTALL_CMD make install)
+  endif()
+
   # declare dependencies
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(SWIG PCRE2 BOOST)
 
@@ -60,12 +72,13 @@ else()
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     CONFIGURE_COMMAND
+    ${SB_ENV_CONFIGURE_CMD}
     ${SWIG_SB_BUILD_DIR}/configure
     --prefix=${SB_INSTALL_PREFIX}
     ${SWIG_SB_PYTHON_CONFIG}
     ${SWIG_SB_CONFIG}
-    BUILD_COMMAND $(MAKE)
-    INSTALL_COMMAND $(MAKE) install
+    BUILD_COMMAND ${SWIG_BUILD_CMD}
+    INSTALL_COMMAND ${SWIG_INSTALL_CMD}
     DEPENDS ${SWIG_DEPENDENCIES}
     LOG_DOWNLOAD 1
     LOG_CONFIGURE 1

@@ -22,6 +22,11 @@ option ( OTB_WRAP_PYTHON "Wrap Python" OFF )
 
 if ( OTB_WRAP_PYTHON )
   find_package ( SWIG 3.0.12 REQUIRED )
+  # in cmake 3.19 we can do
+  # On redhat we use cmake 3.26
+  # ubuntu 24 3.28
+  # And ubuntu 22 3.22
+  # find_package ( SWIG 3.0.12...4.3.1 REQUIRED )
   mark_as_advanced(SWIG_DIR)
   mark_as_advanced(SWIG_EXECUTABLE)
   mark_as_advanced(SWIG_VERSION)

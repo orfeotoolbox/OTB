@@ -18,6 +18,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+# NOTE TLA: as we are setting LD_LIBRARY_PATH, does we really need
+# to use and compile patchelf ?
+
 BINARY_FILES=$(find "$OTB_INSTALL_DIR/lib" "$OTB_INSTALL_DIR/bin" -type f -exec file {} \; | grep -i ': elf ' | cut -f1 -d':')
 # run patchelf
 for bin_file in $BINARY_FILES; do

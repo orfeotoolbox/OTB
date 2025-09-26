@@ -67,6 +67,19 @@ if(MSVC)
     LOG_INSTALL 1
     )
 else()
+
+  set(OPENSSL_BUILD_CMD "\$(MAKE)")
+  set(OPENSSL_INSTALL_CMD "\$(MAKE)" "install")
+  # get the cmake generator variable, to transform configure command if ninja
+  # is used
+  # As CMAKE_GENERATOR is an environment variable, the variable reference is
+  # different from normally
+  # https://cmake.org/cmake/help/latest/manual/cmake-language.7.html#cmake-language-environment-variables
+  if (${CMAKE_GENERATOR} STREQUAL "Ninja")
+    set(OPENSSL_BUILD_CMD make)
+    set(OPENSSL_INSTALL_CMD make install)
+  endif()
+
   ExternalProject_Add(OPENSSL
     PREFIX OPENSSL
     DEPENDS ${OPENSSL_DEPENDENCIES}
@@ -85,8 +98,8 @@ else()
     zlib-dynamic
     "-I${SB_INSTALL_PREFIX}/include"
     "-L${SB_INSTALL_PREFIX}/lib"
-    BUILD_COMMAND $(MAKE)
-    INSTALL_COMMAND $(MAKE) install
+    BUILD_COMMAND ${OPENSSL_BUILD_CMD}
+    INSTALL_COMMAND ${OPENSSL_INSTALL_CMD}
     LOG_DOWNLOAD 1
     LOG_CONFIGURE 1
     LOG_BUILD 1
