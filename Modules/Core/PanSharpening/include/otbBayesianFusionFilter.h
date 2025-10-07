@@ -206,8 +206,10 @@ public:
 
   /** "typedef" for standard classes. */
   typedef BayesianFusionFilter Self;
-  using BayesianFunctorType = Functor::BayesianFunctor<typename TInputMultiSpectralImage::PixelType, typename TInputMultiSpectralInterpImage::PixelType,
-                                                       typename TInputPanchroImage::PixelType, typename TOutputImage::PixelType>;
+  using BayesianFunctorType = Functor::BayesianFunctor<typename TInputMultiSpectralImage::PixelType,
+                                                       typename TInputMultiSpectralInterpImage::PixelType,
+                                                       typename TInputPanchroImage::PixelType,
+                                                       typename TOutputImage::PixelType>;
   typedef FunctorImageFilter<BayesianFunctorType> Superclass;
   typedef itk::SmartPointer<Self>                 Pointer;
   typedef itk::SmartPointer<const Self>           ConstPointer;
