@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
+# NOTE TLA: this module is not needed anymore, remove it ?
 project(OTBTIFF)
 
 set(OTBTIFF_SYSTEM_INCLUDE_DIRS ${TIFF_INCLUDE_DIRS})

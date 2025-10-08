@@ -27,19 +27,22 @@ list(APPEND otb_internal_modules
     "Miscellaneous"
     "FeaturesExtraction"
     "Learning"
-    "SAR")
+    "SAR"
+    "Segmentation")
 
 list(APPEND otb_internal_modules_repos
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/featuresextraction.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/learning.git"
-    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/sar.git")
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/sar.git"
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/segmentation.git")
 
 list(APPEND otb_internal_modules_git_tag
     "main" # Miscellaneous
     "main" # FeaturesExtraction
     "main" # Learning
     "main" # SAR
+    "main" # Segmentation
     )
 
 list(APPEND otb_internal_modules_get_submodules
@@ -47,6 +50,7 @@ list(APPEND otb_internal_modules_get_submodules
      "OFF" # FeaturesExtraction
      "OFF" # Learning
      "OFF" # SAR
+     "OFF" # Segmentation
     )
 
 list(APPEND otb_internal_modules_desc
@@ -61,6 +65,8 @@ models, as well as PROSAIL, which is the combination of the two previous ones." 
 "This module contains Machine Learning applications based on classical supervised or unsupervised algorithms (SVM, Random Forest, K-Means, Multi-layer Perceptron Neural Network, etc.). Its applications handle the whole processing chain : sample selection, learning, prediction and finalization of a classification map. It also contains a regression framework." # Learning
 
 "This module contains SAR (Synthetic Aperture Radar) applications and covers all the scope of SAR imagery manipulation : SAR Calibration, Unspeckle with temporal filtering, Interferogram, etc." # SAR
+
+"This group contains algorithms related to image segmentation" # Segmentation
 )
 
 set(__i 0) # group index

@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
+# NOTE TLA: this lib is not used in other cmake, do we still need it?
 project(OTBGeoTIFF)
 
 set(OTBGeoTIFF_SYSTEM_INCLUDE_DIRS ${GEOTIFF_INCLUDE_DIRS})
