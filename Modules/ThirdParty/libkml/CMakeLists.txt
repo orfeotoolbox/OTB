@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
+# Used by Core/IO/IOKML and KMZWriter modules
 project(OTBlibkml)
 
 set(OTBlibkml_SYSTEM_INCLUDE_DIRS ${LIBKML_INCLUDE_DIRS})
