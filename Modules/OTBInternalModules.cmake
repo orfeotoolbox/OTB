@@ -28,14 +28,16 @@ list(APPEND otb_internal_modules
     "FeaturesExtraction"
     "Learning"
     "SAR"
-    "Segmentation")
+    "Segmentation"
+    "Hyperspectral")
 
 list(APPEND otb_internal_modules_repos
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/featuresextraction.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/learning.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/sar.git"
-    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/segmentation.git")
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/segmentation.git"
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/hyperspectral.git")
 
 list(APPEND otb_internal_modules_git_tag
     "main" # Miscellaneous
@@ -43,6 +45,7 @@ list(APPEND otb_internal_modules_git_tag
     "main" # Learning
     "main" # SAR
     "main" # Segmentation
+    "init_P0_module" # Hyperspectral
     )
 
 list(APPEND otb_internal_modules_get_submodules
@@ -51,6 +54,7 @@ list(APPEND otb_internal_modules_get_submodules
      "OFF" # Learning
      "OFF" # SAR
      "OFF" # Segmentation
+     "OFF" # Hyperspectral
     )
 
 list(APPEND otb_internal_modules_desc
@@ -67,6 +71,8 @@ models, as well as PROSAIL, which is the combination of the two previous ones." 
 "This module contains SAR (Synthetic Aperture Radar) applications and covers all the scope of SAR imagery manipulation : SAR Calibration, Unspeckle with temporal filtering, Interferogram, etc." # SAR
 
 "This group contains algorithms related to image segmentation" # Segmentation
+
+"This module contains specific applications to handle hyperspectral images : spectral angle classification, end member number estimation or unmixing." # Hyperspectral
 )
 
 set(__i 0) # group index
