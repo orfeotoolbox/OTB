@@ -45,7 +45,7 @@ list(APPEND otb_internal_modules_git_tag
     "main" # Learning
     "main" # SAR
     "main" # Segmentation
-    "init_P0_module" # Hyperspectral
+    "main" # Hyperspectral
     )
 
 list(APPEND otb_internal_modules_get_submodules
