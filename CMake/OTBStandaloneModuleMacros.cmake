@@ -525,9 +525,18 @@ macro(otb_module_impl)
       install(FILES ${_export_header_file}
               DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR})
     endif()
-    if (BUILD_SHARED_LIBS)
+    # Do not export this shared lib ELF symbols if USE_COMPILER_HIDDEN_VISIBILITY
+    # is true.
+    # Doing this will affect projects linking to this library that need to know
+    # symbols.
+    # If you do this, ensure the C++ symbols is set in the code
+    # (See https://gcc.gnu.org/wiki/Visibility)
+    if (BUILD_SHARED_LIBS AND USE_COMPILER_HIDDEN_VISIBILITY)
       # export flags are only added when building shared libs, they cause
       # mismatched visibility warnings when building statically.
+      if (CMAKE_DEBUG)
+        message(STATUS "[CMAKE_DEBUG] ${otb-module} will have CXX_VISIBILITY_PRESET and VISIBILITY_INLINES_HIDDEN Properties to hidden")
+      endif()
       set_target_properties(${otb-module} PROPERTIES CXX_VISIBILITY_PRESET "hidden")
       set_target_properties(${otb-module} PROPERTIES VISIBILITY_INLINES_HIDDEN "hidden")
     endif()
