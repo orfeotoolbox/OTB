@@ -29,7 +29,8 @@ list(APPEND otb_internal_modules
     "Learning"
     "SAR"
     "Segmentation"
-    "Hyperspectral")
+    "Hyperspectral"
+    "StereoProcessing")
 
 list(APPEND otb_internal_modules_repos
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git"
@@ -37,7 +38,8 @@ list(APPEND otb_internal_modules_repos
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/learning.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/sar.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/segmentation.git"
-    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/hyperspectral.git")
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/hyperspectral.git"
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/stereoprocessing.git")
 
 list(APPEND otb_internal_modules_git_tag
     "main" # Miscellaneous
@@ -46,6 +48,7 @@ list(APPEND otb_internal_modules_git_tag
     "main" # SAR
     "main" # Segmentation
     "main" # Hyperspectral
+    "main" # StereoProcessing
     )
 
 list(APPEND otb_internal_modules_get_submodules
@@ -55,6 +58,7 @@ list(APPEND otb_internal_modules_get_submodules
      "OFF" # SAR
      "OFF" # Segmentation
      "OFF" # Hyperspectral
+     "OFF" # StereoProcessing
     )
 
 list(APPEND otb_internal_modules_desc
@@ -73,6 +77,8 @@ models, as well as PROSAIL, which is the combination of the two previous ones." 
 "This group contains algorithms related to image segmentation" # Segmentation
 
 "This module contains specific applications to handle hyperspectral images : spectral angle classification, end member number estimation or unmixing." # Hyperspectral
+
+"This module allows to register stereoscopic images and compute disparity in order to build a 3D model from a couple of satellite images in raw / sensor geometry." #StereoProcessing
 )
 
 set(__i 0) # group index
