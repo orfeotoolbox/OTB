@@ -24,3 +24,5 @@ superbuild-artifact
 Modules/Miscellaneous
 Modules/FeaturesExtraction
 Modules/Learning
+Modules/SAR
+Modules/Hyperspectral
