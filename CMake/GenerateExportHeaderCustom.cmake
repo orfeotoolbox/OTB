@@ -210,6 +210,12 @@ macro(_check_c_compiler_attribute _ATTRIBUTE _RESULT)
   )
 endmacro()
 
+# Check if used compiler is able to hide symbols
+# The variables:
+# * COMPILER_HAS_HIDDEN_VISIBILITY
+# * COMPILER_HAS_HIDDEN_INLINE_VISIBILITY
+# Are declared and hold a positive value if the compiler is able
+# to remove symbols from shared library
 macro(_test_compiler_hidden_visibility)
 
   if(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.2")
@@ -241,6 +247,9 @@ macro(_test_compiler_hidden_visibility)
   endif()
 endmacro()
 
+# Check if the current compiler supports the "deprecated" attribute
+# and put the results in COMPILER_HAS_DEPRECATED_ATTR if it support Linux style
+# and COMPILER_HAS_DEPRECATED if it is Windows style
 macro(_test_compiler_has_deprecated)
   # NOTE:  Some Embarcadero compilers silently compile __declspec(deprecated)
   # without error, but this is not a documented feature and the attribute does
@@ -282,6 +291,11 @@ endmacro()
 get_filename_component(_GENERATE_EXPORT_HEADER_MODULE_DIR
   "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
+# Set correct variable for export and deprecated attributes to apply in C/C++
+# - DEFINE_DEPRECATED handle the deprecation declaration
+# - DEFINE_EXPORT handle the export symbol visibility (see linker ELF symbol)
+# - DEFINE_IMPORT same for import
+# - DEFINE_NO_EXPORT will define the macro to hide symbols
 macro(_DO_SET_MACRO_VALUES TARGET_LIBRARY)
   set(DEFINE_DEPRECATED)
   set(DEFINE_EXPORT)
@@ -422,6 +436,9 @@ macro(_OTB_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
   endif()
 endmacro()
 
+# Generate header with C++ macro "<TARGET_LIBRARY>_EXPORT" able to change
+# symbol visibility used during link.
+# For futher information see ELF Symbols and https://gcc.gnu.org/wiki/Visibility
 function(OTB_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
   get_property(type TARGET ${TARGET_LIBRARY} PROPERTY TYPE)
   if(NOT ${type} STREQUAL "STATIC_LIBRARY"
@@ -431,6 +448,8 @@ function(OTB_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
     message(WARNING "This macro can only be used with libraries")
     return()
   endif()
+  # NOTE TLA: as the compiler does not change during build, we could use
+  # property instead of this test every time, same for "deprecated"
   _test_compiler_hidden_visibility()
   _test_compiler_has_deprecated()
   _do_set_macro_values(${TARGET_LIBRARY})
