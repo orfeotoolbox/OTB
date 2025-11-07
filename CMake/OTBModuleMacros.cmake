@@ -238,16 +238,22 @@ macro(otb_module_impl)
     # symbols.
     # If you do this, ensure the C++ symbols is set in the code
     # (See https://gcc.gnu.org/wiki/Visibility)
-    if (BUILD_SHARED_LIBS AND USE_COMPILER_HIDDEN_VISIBILITY)
+    if (BUILD_SHARED_LIBS)
       # export flags are only added when building shared libs, they cause
       # mismatched visibility warnings when building statically.
-      if (CMAKE_DEBUG)
-        message(STATUS "[CMAKE_DEBUG] ${otb-module} will have CXX_VISIBILITY_PRESET and VISIBILITY_INLINES_HIDDEN Properties to hidden")
+      if (USE_COMPILER_HIDDEN_VISIBILITY)
+        if (CMAKE_DEBUG)
+          message(STATUS "[CMAKE_DEBUG] ${otb-module} will have CXX_VISIBILITY_PRESET and VISIBILITY_INLINES_HIDDEN Properties to hidden")
+        endif()
+        # Prefer to use target properties supported by newer cmake
+        set_target_properties(${otb-module} PROPERTIES CXX_VISIBILITY_PRESET hidden)
+        set_target_properties(${otb-module} PROPERTIES C_VISIBILITY_PRESET hidden)
+        set_target_properties(${otb-module} PROPERTIES VISIBILITY_INLINES_HIDDEN 1)
       endif()
-      # Prefer to use target properties supported by newer cmake
-      set_target_properties(${otb-module} PROPERTIES CXX_VISIBILITY_PRESET hidden)
-      set_target_properties(${otb-module} PROPERTIES C_VISIBILITY_PRESET hidden)
-      set_target_properties(${otb-module} PROPERTIES VISIBILITY_INLINES_HIDDEN 1)
+    endif()
+    # just to test on Windobe
+    if (BUILD_SHARED_LIBS AND USE_COMPILER_HIDDEN_VISIBILITY)
+      message(WARNING "YOLOOOOOO")
     endif()
   endif()
 
