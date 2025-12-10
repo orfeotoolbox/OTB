@@ -93,13 +93,24 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
 
     unsigned int nbClasses = m_MapOfLabels.size();
 
+    /**
+     Create a matrix of float instead of TargetValueType.
+     As target value type is sometimes not an OPENCV compatible type...
+     Already try to use:
+     - cv::traits::Type<TargetValueType>::value, but it fails to deduce type
+       sometimes as the type is not an opencv type
+     - use "make signed" if type is unsigned but still got issues as type like
+       double does not have "std::make_signed"...
+     - also try to use cv::traits::SafeType to avoid compiler error, but
+       got problems later
+    */
     m_MatrixOfLabels = cv::Mat(1,nbClasses, CV_32FC1);
     unsigned int itLabel = 0;
     for (auto& kv : m_MapOfLabels)
     {
       classLabel = kv.first;
       kv.second = itLabel;
-      m_MatrixOfLabels.at<float>(0,itLabel) = classLabel;
+      m_MatrixOfLabels.at<float>(0,itLabel) = static_cast<float>(classLabel);
       ++itLabel;
     }
 
@@ -113,8 +124,8 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
     {
       // Retrieve labelSample
       typename TargetListSampleType::MeasurementVectorType labelSample = labelSampleIt.GetMeasurementVector();
-      classLabel                                                       = labelSample[0];
-      unsigned int indexLabel                                          = m_MapOfLabels[classLabel];
+      classLabel = labelSample[0];
+      unsigned int indexLabel = m_MapOfLabels[classLabel];
       output.at<float>(sampleIdx, indexLabel) = m_Beta;
     }
   }
@@ -206,7 +217,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const In
   // MODE CLASSIFICATION : find the highest response
   float secondResponse = -1e10;
 
-  target[0] = m_MatrixOfLabels.at<TOutputValue>(0);
+  target[0] = static_cast<TOutputValue>(m_MatrixOfLabels.at<float>(0));
   unsigned int nbClasses = m_MatrixOfLabels.size[1];
 
   for (unsigned itLabel = 1; itLabel < nbClasses; ++itLabel)
@@ -217,7 +228,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const In
       secondResponse = maxResponse;
 
       maxResponse = currentResponse;
-      target[0] = m_MatrixOfLabels.at<TOutputValue>(itLabel);
+      target[0] = static_cast<TOutputValue>(m_MatrixOfLabels.at<float>(itLabel));
     }
     else
     {
@@ -259,6 +270,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
   cv::FileStorage fs(filename, cv::FileStorage::READ);
   cv::FileNode    model_node(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
   m_ANNModel->read(model_node);
+  // fill mat from "class_labels"
   model_node["class_labels"] >> m_MatrixOfLabels;
   fs.release();
 }

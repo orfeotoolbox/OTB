@@ -43,6 +43,9 @@ public:
   typedef typename Superclass::InputValueType       InputValueType;
   typedef typename Superclass::InputSampleType      InputSampleType;
   typedef typename Superclass::InputListSampleType  InputListSampleType;
+  // Superclass::TargetValueType == typedef typename MLMTargetTraits<TTargetValue>::ValueType  TargetValueType;
+  // MLMTargetTraits<TTargetValue>::ValueType == TTargetValue if this type is numeric
+  // TTargetValue::ValueType if this type is a number
   typedef typename Superclass::TargetValueType      TargetValueType;
   typedef typename Superclass::TargetSampleType     TargetSampleType;
   typedef typename Superclass::TargetListSampleType TargetListSampleType;
