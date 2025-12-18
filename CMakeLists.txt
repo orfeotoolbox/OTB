@@ -86,6 +86,7 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
+include(OTBOptions)
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -284,7 +285,7 @@ add_subdirectory(Modules)
 add_subdirectory(Modules/Remote)
 
 # Enable modules according to user inputs and the module dependency DAG.
-include(OTBModuleEnablement)
+#include(OTBModuleEnablement)
 
 #----------------------------------------------------------------------
 # Generate OTBConfig.cmake for the build tree.
@@ -659,25 +660,6 @@ endforeach()
 message("\nCMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator\n")
 
 message("======================= End of OTB cmake summary =======================")
-
-# create all needed config files here
-get_property(GROUPS_ENABLED GLOBAL PROPERTY OTB_GROUPS_ENABLED)
-foreach(otb-group IN LISTS GROUPS_ENABLED)
-  get_property(GROUP_DEPS GLOBAL PROPERTY ${otb-group}_MOD_DEPS)
-  # Get the list of enabled modules for this component. This list is created
-  # in OTBModuleEnablement.cmake
-  set(__ENABLED_MODULES ${OTB_${otb-group}_MODULES_ENABLED})
-  configure_file(CMake/GenericGroupConfig.cmake.in CMakeFiles/${otb-group}Config.cmake @ONLY)
-  install(FILES ${OTB_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
-          DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-          COMPONENT ${otb-group})
-
-  if (CMAKE_DEBUG)
-    message(STATUS "[CMAKE_DEBUG] Generating ${otb-group}Config.cmake for component \"${otb-group}\" that will be installed in \"${OTB_INSTALL_PACKAGE_DIR}\"")
-  endif()
-
-  unset(__ENABLED_MODULES)
-endforeach() # otb-group IN GROUPS_ENABLED
 
 
 #don't need this one anymore. so unset it.

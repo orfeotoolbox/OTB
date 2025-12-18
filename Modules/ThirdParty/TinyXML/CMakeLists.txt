@@ -20,6 +20,8 @@
 
 project(OTBTinyXML)
 
+# the find package TinyXML is already done in OTBOptions.cmake
+
 # Check if we need to define TIXML_USE_STL
 try_compile( TIXML_TEST_STL
              ${CMAKE_CURRENT_BINARY_DIR}/CMake

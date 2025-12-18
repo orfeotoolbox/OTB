@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-find_package ( GDAL REQUIRED )
+# the find_package ( GDAL REQUIRED ) is already done in OTBOptions.cmake
 mark_as_advanced(GDAL_INCLUDE_DIR)
 mark_as_advanced(GDAL_LIBRARY)
 mark_as_advanced(GDAL_CONFIG)

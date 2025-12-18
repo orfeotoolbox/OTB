@@ -21,6 +21,8 @@
 # Used by Core/IO/IOKML and KMZWriter modules
 project(OTBlibkml)
 
+# the find package LibKML is already done in OTBOptions.cmake
+
 set(OTBlibkml_SYSTEM_INCLUDE_DIRS ${LIBKML_INCLUDE_DIRS})
 set(OTBlibkml_LIBRARIES "${LIBKML_LIBRARIES}")
 

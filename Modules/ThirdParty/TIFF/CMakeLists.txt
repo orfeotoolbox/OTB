@@ -21,6 +21,8 @@
 # NOTE TLA: this module is not needed anymore, remove it ?
 project(OTBTIFF)
 
+# the find package TIFF is already done in OTBOptions.cmake
+
 set(OTBTIFF_SYSTEM_INCLUDE_DIRS ${TIFF_INCLUDE_DIRS})
 set(OTBTIFF_LIBRARIES "${TIFF_LIBRARIES}")
 

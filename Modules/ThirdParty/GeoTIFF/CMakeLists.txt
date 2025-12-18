@@ -21,6 +21,8 @@
 # NOTE TLA: this lib is not used in other cmake, do we still need it?
 project(OTBGeoTIFF)
 
+# the find package GeoTiff is already done in OTBOptions.cmake
+
 set(OTBGeoTIFF_SYSTEM_INCLUDE_DIRS ${GEOTIFF_INCLUDE_DIRS})
 set(OTBGeoTIFF_LIBRARIES "${GEOTIFF_LIBRARIES}")
 

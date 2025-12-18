@@ -20,6 +20,8 @@
 
 project(OTBBoost)
 
+include(otb-module-init.cmake)
+
 set(OTBBoost_SYSTEM_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
 set(OTBBoost_INCLUDE_DIRS ${OTBBoost_SOURCE_DIR}/src)
 

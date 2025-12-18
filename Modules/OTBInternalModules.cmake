@@ -107,6 +107,9 @@ unset(__nb_branches)
 unset(__nb_submodule_settings)
 unset(__nb_docs_desc)
 
+# NOTE TLA: a list of module dependency should be described here.
+# to avoid cmake problems
+
 # Now arrays are clean
 
 # for all enabled internal module, 
@@ -130,6 +133,20 @@ while(${__i} LESS ${__nb_internal_modules})
                          GIT_TAG "${__otb_module_tag}"
                          GIT_SUBMODULES "${__get_submodules}"
         )
+    endif() # ${OTBGroup_${module_name}}
+    math(EXPR __i "${__i}+1")
+endwhile() # i LESS_EQUAL __nb_internal_modules
+
+set(__i 0) # reset index
+# as dependency system is not already made, read the Cmakelists here
+while(${__i} LESS ${__nb_internal_modules})
+    list(GET otb_internal_modules "${__i}" __otb_module_name)
+    # download only enabled modules
+    if (OTBGroup_${__otb_module_name} OR OTB_BUILD_${__otb_module_name})
+        # Following variable is mandatory for otb_fetch compat
+        set(Module_${__otb_module_name} ON)
+        set(__location "${OTB_SOURCE_DIR}/Modules/${__otb_module_name}")
+        add_subdirectory("${__location}")
     endif() # ${OTBGroup_${module_name}}
     math(EXPR __i "${__i}+1")
 endwhile() # i LESS_EQUAL __nb_internal_modules

@@ -18,4 +18,6 @@
 # limitations under the License.
 #
 
-include("OTBInternalModules.cmake")
+add_subdirectory(ThirdParty)
+add_subdirectory(Core)
+# include("OTBInternalModules.cmake")

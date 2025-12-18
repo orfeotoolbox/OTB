@@ -20,6 +20,8 @@
 
 project(OTBGDAL)
 
+include(otb-module-init.cmake)
+
 set(OTBGDAL_SYSTEM_INCLUDE_DIRS ${GDAL_INCLUDE_DIRS})
 set(OTBGDAL_LIBRARIES "${GDAL_LIBRARIES}")
 

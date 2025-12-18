@@ -21,6 +21,7 @@
 # NOTE TLA: GSL seams to only be used by temporal gap filling
 # remote module.
 # It will be a good idea to move this code in the temporal gap filling code.
+# the find package GeoTiff is already done in OTBOptions.cmake
 find_package(GSL REQUIRED)
 
 # On Windows system, if you will be using one of the dynamic libraries, add GSL_DLL to the list of predefined macros

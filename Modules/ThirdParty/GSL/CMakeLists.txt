@@ -19,6 +19,9 @@
 #
 
 project(OTBGSL)
+
+include(otb-module-init.cmake)
+
 set(OTBGSL_THIRD_PARTY 1)
 
 set(OTBGSL_SYSTEM_INCLUDE_DIRS ${GSL_INCLUDE_DIR})

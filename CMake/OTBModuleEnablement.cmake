@@ -194,6 +194,7 @@ endforeach()
 
 #----------------------------------------------------------------------
 # Construct direct dependees (first-level) of each module
+# For each module, build the list of module depending of it
 foreach(potential_dependency ${OTB_MODULES_ALL})
   foreach(otb-module ${OTB_MODULES_ALL})
     list(FIND OTB_MODULE_${otb-module}_DEPENDS ${potential_dependency} _find_output)
@@ -299,13 +300,13 @@ list(SORT _enabled_modules)
 foreach(otb-module ${_enabled_modules})
   if(NOT ${otb-module}_IS_TEST)
     if(Module_${otb-module})
-      set(_reason ", requested by Module_${otb-module}")
+      set(_reason "requested by Module_${otb-module}")
     elseif(OTB_MODULE_${otb-module}_IN_DEFAULT)
-      set(_reason ", requested by OTB_BUILD_DEFAULT_MODULES")
+      set(_reason "requested by OTB_BUILD_DEFAULT_MODULES")
     else()
-      set(_reason ", needed by [${OTB_MODULE_${otb-module}_NEEDED_BY}]")
+      set(_reason "needed by [${OTB_MODULE_${otb-module}_NEEDED_BY}]")
     endif()
-    message(STATUS "Enabled ${otb-module}${_reason}.")
+    message(STATUS "Enabled ${otb-module}, ${_reason}.")
   endif()
 endforeach()
 
