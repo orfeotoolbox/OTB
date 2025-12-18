@@ -207,7 +207,7 @@ void MNFImageFilter<TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTr
 
     m_IsTransformationMatrixForward = false;
     if (m_TransformationMatrix.Rows() == m_TransformationMatrix.Cols())
-      m_TransformationMatrix = vnl_matrix_inverse<MatrixElementType>(m_TransformationMatrix.GetVnlMatrix());
+      m_TransformationMatrix = vnl_matrix_inverse<MatrixElementType>(m_TransformationMatrix.GetVnlMatrix()).as_matrix();
     else
     {
       vnl_svd<MatrixElementType> invertor(m_TransformationMatrix.GetVnlMatrix());
@@ -220,7 +220,7 @@ void MNFImageFilter<TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTr
     m_IsTransformationMatrixForward = false;
     if (m_TransformationMatrix.Rows() == m_TransformationMatrix.Cols())
     {
-      m_TransformationMatrix = vnl_matrix_inverse<MatrixElementType>(m_TransformationMatrix.GetVnlMatrix());
+      m_TransformationMatrix = vnl_matrix_inverse<MatrixElementType>(m_TransformationMatrix.GetVnlMatrix()).as_matrix();
     }
     else
     {
@@ -306,12 +306,12 @@ void MNFImageFilter<TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTr
 {
   vnl_cholesky       choleskySolver(m_NoiseCovarianceMatrix.GetVnlMatrix(), vnl_cholesky::estimate_condition);
   InternalMatrixType Rn     = choleskySolver.lower_triangle();
-  InternalMatrixType Rn_inv = vnl_matrix_inverse<MatrixElementType>(Rn.transpose());
+  InternalMatrixType Rn_inv = vnl_matrix_inverse<MatrixElementType>(Rn.transpose()).as_matrix();
   InternalMatrixType C      = Rn_inv.transpose() * m_CovarianceMatrix.GetVnlMatrix() * Rn_inv;
 
   vnl_svd<MatrixElementType> solver(C);
   InternalMatrixType         U    = solver.U();
-  InternalMatrixType         valP = solver.W();
+  InternalMatrixType         valP = solver.W().as_matrix();
 
   InternalMatrixType transf = Rn_inv * U;
 

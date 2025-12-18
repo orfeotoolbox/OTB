@@ -215,12 +215,12 @@ The two principal DEMs that are available free of charges, and with worldwide co
 both delivered as 1 degree by 1 degree tiles. They are:
 
 -  `The Shuttle Radar topographic Mission
-   (SRTM) <http://www2.jpl.nasa.gov/srtm/>`_  is a DEM with a resolution of 90 metres,
+   (SRTM) <https://www.earthdata.nasa.gov/data/instruments/srtm>`_  is a DEM with a resolution of 90 metres,
    obtained by radar interferometry during a campaign of the
    Endeavour space shuttle from NASA in 2000.
 
 -  The `Advanced Spaceborne Thermal Emission and Reflection Radiometer
-   (ASTER) <http://www.ersdac.or.jp/GDEM/E/2.html>`_  is a DEM with a resolution of 
+   (ASTER) <https://asterweb.jpl.nasa.gov/gdem.aspl>`_ is a DEM with a resolution of
    30 metres obtained by stereoscopic processing of the archive of
    the ASTER instrument.
 
@@ -240,7 +240,7 @@ path to a file which contains the geoid. `Geoid <http://en.wikipedia.org/wiki/Ge
 corresponds to the equipotential surface that would coincide with the mean ocean surface of
 the Earth.
 
-We provide one geoid in the `OTB-Data <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/tree/develop/Data/Input/DEM>`_ repository.
+We provide one geoid in the `OTB-Data <https://gitlab.orfeo-toolbox.org/orfeotoolbox/data/-/tree/main/Input/DEM>`_ repository.
 
 In all applications, the option **elev.geoid** manages the path
 to the geoid. Finally, it is also possible to use an average elevation

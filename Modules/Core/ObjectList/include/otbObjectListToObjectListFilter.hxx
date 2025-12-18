@@ -86,10 +86,10 @@ void ObjectListToObjectListFilter<TInputList, TOutputList>::GenerateData(void)
 
   // Initializing object per thread
   OutputListPointer defaultList;
-  this->m_ObjectListPerThread = OutputListForThreadType(this->GetNumberOfThreads(), defaultList);
+  this->m_ObjectListPerThread = OutputListForThreadType(this->GetNumberOfWorkUnits(), defaultList);
 
   // Setting up multithreader
-  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
 
   // multithread the execution
@@ -122,16 +122,18 @@ void ObjectListToObjectListFilter<TInputList, TOutputList>::ThreadedGenerateData
 }
 
 template <class TInputList, class TOutputList>
-ITK_THREAD_RETURN_TYPE ObjectListToObjectListFilter<TInputList, TOutputList>::ThreaderCallback(void* arg)
+itk::ITK_THREAD_RETURN_TYPE
+ObjectListToObjectListFilter<TInputList, TOutputList>
+::ThreaderCallback(void *arg)
 {
   ThreadStruct*     str;
   itk::ThreadIdType threadId, threadCount;
   unsigned int      total, start, stop;
   unsigned int      requestedElements;
 
-  threadId    = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->ThreadID;
-  threadCount = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->NumberOfThreads;
-  str         = (ThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct*)(arg))->UserData);
+  threadId = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->WorkUnitID;
+  threadCount = ((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->NumberOfWorkUnits;
+  str = (ThreadStruct *) (((itk::MultiThreaderBase::WorkUnitInfo *) (arg))->UserData);
 
   requestedElements = str->Filter->GetInput()->Size();
   total             = str->Filter->SplitRequestedRegion(threadId, threadCount, requestedElements, start, stop);
@@ -153,7 +155,7 @@ ITK_THREAD_RETURN_TYPE ObjectListToObjectListFilter<TInputList, TOutputList>::Th
   //   few threads idle.
   //   }
 
-  return ITK_THREAD_RETURN_VALUE;
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 /**

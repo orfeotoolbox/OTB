@@ -1,3 +1,0 @@
-OrthoRectification
-Output Cartographic Map Projection
-12

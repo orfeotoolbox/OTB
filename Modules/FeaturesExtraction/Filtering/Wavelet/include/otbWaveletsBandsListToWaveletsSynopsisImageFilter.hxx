@@ -24,8 +24,6 @@
 #include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
-#include "otbMacro.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -95,15 +93,11 @@ void WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList, TImage>::Generat
  * Main computation method
  */
 template <class TImageList, class TImage>
-void WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList, TImage>::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                                                                                              itk::ThreadIdType threadId)
+void WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList, TImage>::DynamicThreadedGenerateData(const RegionType& outputRegionForThread)
 {
   // Retrieve input and output pointers
   typename InputImageListType::Pointer inputPtr  = this->GetInput();
   typename OutputImageType::Pointer    outputPtr = this->GetOutput();
-
-  // Set up progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // defines input and output iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
@@ -197,7 +191,6 @@ void WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList, TImage>::Threade
         // Step forward
         ++inIt;
         ++outIt;
-        progress.CompletedPixel();
       }
     }
   }

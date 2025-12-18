@@ -100,12 +100,11 @@ Now, create a ``Pipeline.cxx`` file: :ref:`Pipeline.cxx`.
 Once this file is written you just have to run ``make``. The ``ccmake``
 call is not required anymore.
 
-Get one image from the ``OTB-Data/Examples`` directory from the OTB-Data
-repository. You can get it either by cloning the OTB data repository
-(``git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git``),
+Get one image from the ``OTB-Data/Examples`` that you can download at https://www.orfeo-toolbox.org/packages/archives/OTB-Data-Examples.tgz. You can get it either by cloning the git LFS OTB data repository
+(``git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/data``),
 but that might be quite long as this also gets the data to run the
 tests. Alternatively, you can get it from
-http://www.orfeo-toolbox.org/packages/OTB-Data-Examples.tgz. Take for
+https://www.orfeo-toolbox.org/packages/archives/OTB-Data-Examples.tgz. Take for
 example get ``QB_Suburb.png``.
 
 Now, run your new program as ``Pipeline QB_Suburb.png output.png``. You

@@ -78,7 +78,7 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
   /** Threaded Generate data */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
   /** Constructor */
   VectorImageTo3DScalarImageFilter();

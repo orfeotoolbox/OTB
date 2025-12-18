@@ -27,7 +27,7 @@
 #include "otbImageFileReader.h"
 #include "otbWrapperTypes.h"
 #include "otbWrapperApplicationRegistry.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <boost/test/unit_test.hpp>
 #include <vector>
 

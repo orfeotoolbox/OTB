@@ -22,13 +22,18 @@ INCLUDE_ONCE_MACRO(MUPARSER)
 
 SETUP_SUPERBUILD(MUPARSER)
 
+set(__MUPARSER_VERSION "2.3.4")
+
 ExternalProject_Add(MUPARSER
   PREFIX MUPARSER
-  URL "https://github.com/beltoforion/muparser/archive/v2.3.2.tar.gz"
-  URL_MD5 cbc1b284e03abc7081b3c30997959893
+  URL "https://github.com/beltoforion/muparser/archive/v${__MUPARSER_VERSION}.tar.gz"
+  URL_MD5 b92180a648be88238008ea01a597ccb9
   BINARY_DIR ${MUPARSER_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
+  # change download name as the file notation vx.x.x is used everywhere
+  # and can be in conflict with other package
+  DOWNLOAD_NAME "muparser-${__MUPARSER_VERSION}.tar.gz"
   CMAKE_CACHE_ARGS 
   ${SB_CMAKE_CACHE_ARGS}
   -DCMAKE_INSTALL_LIBDIR:PATH=lib

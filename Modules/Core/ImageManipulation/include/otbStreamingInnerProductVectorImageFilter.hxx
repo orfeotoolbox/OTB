@@ -35,6 +35,7 @@ namespace otb
 template <class TInputImage>
 PersistentInnerProductVectorImageFilter<TInputImage>::PersistentInnerProductVectorImageFilter()
 {
+  this->DynamicMultiThreadingOff();
   // first output is a copy of the image, DataObject created by
   // superclass
   //
@@ -119,7 +120,7 @@ void PersistentInnerProductVectorImageFilter<TInputImage>::Reset()
     this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
   }
 
-  unsigned int numberOfThreads        = this->GetNumberOfThreads();
+  unsigned int numberOfThreads        = this->GetNumberOfWorkUnits();
   unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
   // Set the number of training image
   MatrixType tempMatrix;
@@ -139,7 +140,7 @@ void PersistentInnerProductVectorImageFilter<TInputImage>::Synthetize()
   // Compute Inner product Matrix
   TInputImage* inputPtr               = const_cast<TInputImage*>(this->GetInput());
   unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
-  unsigned int numberOfThreads        = this->GetNumberOfThreads();
+  unsigned int numberOfThreads        = this->GetNumberOfWorkUnits();
   MatrixType   innerProduct;
   innerProduct.set_size(numberOfTrainingImages, numberOfTrainingImages);
   innerProduct.fill(0);

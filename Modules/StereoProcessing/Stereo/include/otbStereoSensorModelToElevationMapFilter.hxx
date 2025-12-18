@@ -294,8 +294,7 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::BeforeThrea
 }
 
 template <class TInputImage, class TOutputHeight>
-void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                                                                                          itk::ThreadIdType threadId)
+void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::DynamicThreadedGenerateData(const OutputRegionType& outputRegionForThread)
 {
   // Retrieve pointers
   const InputImageType* masterPtr = this->GetMasterInput();
@@ -351,9 +350,6 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::ThreadedGen
   //   transform->OptimizeOutputTransformOn();
   //   }
 
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define an iterator on the output elevation map
   itk::ConstNeighborhoodIterator<InputImageType>     inputIt(m_Radius, masterPtr, outputRegionForThread);
@@ -490,9 +486,6 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::ThreadedGen
       outputIt.Set(initHeight - finalOffset);
       correlIt.Set(0);
     }
-
-    // Update progress
-    progress.CompletedPixel();
 
     // And iterators
     ++inputIt;

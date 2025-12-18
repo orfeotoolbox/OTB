@@ -455,12 +455,11 @@ private:
    * For .shp file, this method also removes .shx, .dbf and .prj associated files.*/
   bool ClearFileHandler()
   {
-    bool res = true;
+    itksys::Status res;
     for (const auto& fileNameList : m_FileHandler)
     {
       for (const auto& filename : fileNameList.second)
       {
-        res = true;
         if (itksys::SystemTools::FileExists(filename))
         {
           size_t posExt = filename.rfind('.');
@@ -478,7 +477,8 @@ private:
       }
     }
     m_FileHandler.clear();
-    return res;
+    bool status = res.GetKind() == itksys::Status::Kind::Success;
+    return status;
   }
 
   void PerformSampling(const SamplingParameters& params)

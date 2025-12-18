@@ -30,7 +30,7 @@ namespace otb
 
 template <class TImage>
 MultiImageFileWriter::Sink<TImage>::Sink(typename TImage::ConstPointer inputImage, const std::string& fileName)
-  : SinkBase(dynamic_cast<const ImageBaseType*>(inputImage.GetPointer())), m_Writer(otb::ImageFileWriter<TImage>::New()), m_ImageIO(NULL)
+  : SinkBase(dynamic_cast<const ImageBaseType*>(inputImage.GetPointer())), m_Writer(otb::ImageFileWriter<TImage>::New()), m_ImageIO(nullptr)
 {
   m_Writer->SetFileName(fileName);
   m_Writer->SetInput(inputImage);
@@ -38,7 +38,7 @@ MultiImageFileWriter::Sink<TImage>::Sink(typename TImage::ConstPointer inputImag
 
 template <class TImage>
 MultiImageFileWriter::Sink<TImage>::Sink(typename otb::ImageFileWriter<TImage>::Pointer writer)
-  : SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput())), m_Writer(writer), m_ImageIO(NULL)
+  : SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput())), m_Writer(writer), m_ImageIO(nullptr)
 {
 }
 

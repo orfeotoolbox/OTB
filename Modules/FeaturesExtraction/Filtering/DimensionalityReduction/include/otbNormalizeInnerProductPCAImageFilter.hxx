@@ -23,7 +23,6 @@
 
 #include "otbNormalizeInnerProductPCAImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkProgressReporter.h"
 #include "itkNumericTraits.h"
 
 namespace otb
@@ -38,7 +37,7 @@ NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>::NormalizeInnerPr
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
   this->InPlaceOff();
-
+  this->DynamicMultiThreadingOn();
   m_UseUnbiasedEstimator = true;
 }
 
@@ -81,8 +80,7 @@ void NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>::BeforeThrea
  * ThreadedGenerateData Performs the pixel-wise addition
  */
 template <class TInputImage, class TOutputImage>
-void NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                          itk::ThreadIdType threadId)
+void NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
   typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
@@ -90,8 +88,6 @@ void NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>::ThreadedGen
   // Define the iterators
   itk::ImageRegionConstIterator<InputImageType> inputIt(inputPtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>     outputIt(outputPtr, outputRegionForThread);
-
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
@@ -115,7 +111,6 @@ void NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>::ThreadedGen
     outputIt.Set(outPixel);
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
   }
 }
 

@@ -1,0 +1,11 @@
+diff -burN netcdf-4.9.3-orig/libhdf4/CMakeLists.txt netcdf-4.9.3/libhdf4/CMakeLists.txt
+--- netcdf-4.9.3-orig/libhdf4/CMakeLists.txt  2025-11-19 14:55:33.412367507 +0100
++++ netcdf-4.9.3/libhdf4/CMakeLists.txt       2025-11-19 14:55:16.276183495 +0100
+@@ -9,6 +9,7 @@
+ # Build the HDF4 dispatch layer as a library that will be included in
+ # the netCDF library.
+ add_library(netcdfhdf4 OBJECT ${libhdf4_SOURCES})
++target_include_directories(netcdfhdf4 PUBLIC ${MFHDF_H_INCLUDE_DIR})
+ 
+ target_sources(netcdfhdf4
+     PRIVATE

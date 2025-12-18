@@ -71,7 +71,13 @@ int SetInputRequestedRegion(const T* img, const itk::ImageRegion<2>& region, con
 template <typename HasNeighborhood, class Tuple, size_t... Is>
 auto SetInputRequestedRegionsImpl(Tuple& t, const itk::ImageRegion<2>& region, std::index_sequence<Is...>, const itk::Size<2>& radius)
 {
-  return std::make_tuple(SetInputRequestedRegion(std::get<Is>(t), region, radius, typename std::tuple_element<Is, HasNeighborhood>::type::value_type())...);
+  return std::make_tuple(
+    SetInputRequestedRegion(
+      std::get<Is>(t),
+      region,
+      radius,
+      std::tuple_element<Is, HasNeighborhood>::type::value)...
+  );
 }
 
 // Will be easier to write in c++17 with std::apply and fold expressions
@@ -318,7 +324,7 @@ void FunctorImageFilter<TFunction, TNameMap>::GenerateOutputInformation()
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TFunction, class TNameMap>
-void FunctorImageFilter<TFunction, TNameMap>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void FunctorImageFilter<TFunction, TNameMap>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   const auto& regionSize = outputRegionForThread.GetSize();
 
@@ -326,8 +332,6 @@ void FunctorImageFilter<TFunction, TNameMap>::ThreadedGenerateData(const OutputI
   {
     return;
   }
-  const auto            numberOfLinesToProcess = outputRegionForThread.GetNumberOfPixels() / regionSize[0];
-  itk::ProgressReporter p(this, threadId, numberOfLinesToProcess);
 
   // Build output iterator
   itk::ImageScanlineIterator<OutputImageType> outIt(this->GetOutput(), outputRegionForThread);
@@ -350,7 +354,6 @@ void FunctorImageFilter<TFunction, TNameMap>::ThreadedGenerateData(const OutputI
       outIt.Set(outputValueHolder);
     }
     outIt.NextLine();
-    p.CompletedPixel(); // may throw
   }
 }
 

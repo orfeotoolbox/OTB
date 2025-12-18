@@ -25,6 +25,7 @@
 #include "itkProgressReporter.h"
 #include <itkContinuousIndex.h>
 #include "otbStopwatch.h"
+#include "vcl_legacy_aliases.h"
 
 namespace otb
 {
@@ -141,22 +142,16 @@ void VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::GenerateDat
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
   outputPtr->SetProjectionRef(inputPtr->GetProjectionRef());
-  OutputDataTreePointerType tree = outputPtr->GetDataTree();
 
-  // Get the input tree root
-  InputInternalTreeNodeType* inputRoot = const_cast<InputInternalTreeNodeType*>(inputPtr->GetDataTree()->GetRoot());
-
-  // Create the output tree root
-  OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
-  newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
-  newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
-  typename OutputInternalTreeNodeType::Pointer outputRoot = OutputInternalTreeNodeType::New();
-  outputRoot->Set(newDataNode);
-  tree->SetRoot(outputRoot);
+  // // Create the output tree root
+  // OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
+  // newDataNode->SetNodeType(inputPtr->GetRoot()->GetNodeType());
+  // newDataNode->SetNodeId(inputPtr->GetRoot()->GetNodeId());
+  // outputPtr->SetRoot(newDataNode);
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  this->ProcessNode(inputRoot, outputRoot);
+  this->ProcessNode(inputPtr,inputPtr->GetRoot(),outputPtr,outputPtr->GetRoot());
   chrono.Stop();
   otbMsgDevMacro(<< "VectorDataTransformFilter: features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }

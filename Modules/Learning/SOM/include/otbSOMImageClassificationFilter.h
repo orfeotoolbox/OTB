@@ -108,7 +108,7 @@ protected:
   }
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
   /** Before threaded generate data */
   void BeforeThreadedGenerateData() override;
   /**PrintSelf method */

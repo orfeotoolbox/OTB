@@ -31,35 +31,6 @@
 namespace otb
 {
 
-/*template <class TVectorData>
-void printVectorData(TVectorData * vectorData, string msg = "")
-{
-  typedef TVectorData VectorDataType;
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
-
-  TreeIteratorType itVector(vectorData->GetDataTree());
-  itVector.GoToBegin();
-
-  if (!msg.empty())
-  {
-    std::cout<< msg << std::endl;
-  }
-
-  while (!itVector.IsAtEnd())
-    {
-    if (itVector.Get()->IsPolygonFeature())
-      {
-      std::cout << itVector.Get()->GetNodeTypeAsString() << std::endl;
-      for (unsigned int itPoints = 0; itPoints < itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->Size(); itPoints++)
-        {
-        std::cout << "vertex[" << itPoints << "]: " << itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->GetElement(itPoints) <<std::endl;
-        }
-      std::cout << "Polygon bounding region:\n" << itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion() <<  std::endl;
-      }
-    ++itVector;
-    }
-}*/
-
 template <class TImage, class TVectorData>
 ListSampleGenerator<TImage, TVectorData>::ListSampleGenerator()
   : m_MaxTrainingSize(-1),
@@ -229,12 +200,13 @@ void ListSampleGenerator<TImage, TVectorData>::GenerateData()
 
   typename ImageType::RegionType imageLargestRegion = image->GetLargestPossibleRegion();
 
-  TreeIteratorType itVector(vectorData->GetDataTree());
-  for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
+  auto itVectorPair = vectorData->GetIteratorPair();
+  auto currentIt = itVectorPair.first;
+  for (; currentIt != itVectorPair.second; ++currentIt)
   {
-    if (itVector.Get()->IsPolygonFeature())
+    if (vectorData->Get(currentIt)->IsPolygonFeature())
     {
-      PolygonPointerType exteriorRing = itVector.Get()->GetPolygonExteriorRing();
+      PolygonPointerType exteriorRing = vectorData->Get(currentIt)->GetPolygonExteriorRing();
 
       typename ImageType::RegionType polygonRegion = otb::TransformPhysicalRegionToIndexRegion(exteriorRing->GetBoundingRegion(), image.GetPointer());
 
@@ -258,7 +230,7 @@ void ListSampleGenerator<TImage, TVectorData>::GenerateData()
 
         if (exteriorRing->IsInside(point) || (this->GetPolygonEdgeInclusion() && exteriorRing->IsOnEdge(point)))
         {
-          PolygonListPointerType interiorRings = itVector.Get()->GetPolygonInteriorRings();
+          PolygonListPointerType interiorRings = vectorData->Get(currentIt)->GetPolygonInteriorRings();
 
           bool isInsideInteriorRing = false;
           for (typename PolygonListType::Iterator interiorRing = interiorRings->Begin(); interiorRing != interiorRings->End(); ++interiorRing)
@@ -275,20 +247,20 @@ void ListSampleGenerator<TImage, TVectorData>::GenerateData()
           }
 
           double randomValue = m_RandomGenerator->GetUniformVariate(0.0, 1.0);
-          if (randomValue < m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)])
+          if (randomValue < m_ClassesProbTraining[vectorData->Get(currentIt)->GetFieldAsInt(m_ClassKey)])
           {
             // Add the sample to the training list
             trainingListSample->PushBack(it.Get());
-            trainingListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
-            m_ClassesSamplesNumberTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
+            trainingListLabel->PushBack(vectorData->Get(currentIt)->GetFieldAsInt(m_ClassKey));
+            m_ClassesSamplesNumberTraining[vectorData->Get(currentIt)->GetFieldAsInt(m_ClassKey)] += 1;
           }
           else if (randomValue <
-                   m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)] + m_ClassesProbValidation[itVector.Get()->GetFieldAsInt(m_ClassKey)])
+                   m_ClassesProbTraining[vectorData->Get(currentIt)->GetFieldAsInt(m_ClassKey)] + m_ClassesProbValidation[vectorData->Get(currentIt)->GetFieldAsInt(m_ClassKey)])
           {
             // Add the sample to the validation list
             validationListSample->PushBack(it.Get());
-            validationListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
-            m_ClassesSamplesNumberValidation[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
+            validationListLabel->PushBack(vectorData->Get(currentIt)->GetFieldAsInt(m_ClassKey));
+            m_ClassesSamplesNumberValidation[vectorData->Get(currentIt)->GetFieldAsInt(m_ClassKey)] += 1;
           }
           // Note: some samples may not be used at all
         }
@@ -310,10 +282,11 @@ void ListSampleGenerator<TImage, TVectorData>::GenerateClassStatistics()
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
 
   // Compute cumulative area of all polygons of each class
-  TreeIteratorType itVector(vectorData->GetDataTree());
-  for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
+  auto itVectorPair = vectorData->GetIteratorPair();
+  auto currentIt = itVectorPair.first;
+  for (; currentIt != itVectorPair.second; ++currentIt)
   {
-    DataNodeType* datanode = itVector.Get();
+    typename DataNodeType::Pointer datanode = vectorData->Get(currentIt);
     if (datanode->IsPolygonFeature())
     {
       double area = GetPolygonAreaInPixelsUnits(datanode, image);

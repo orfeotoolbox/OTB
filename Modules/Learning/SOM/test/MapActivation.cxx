@@ -33,7 +33,6 @@
 #include "otbSOMMap.h"
 #include "otbSOM.h"
 #include "otbSOMActivationBuilder.h"
-#include "itkVectorExpandImageFilter.h"
 #include "itkVectorNearestNeighborInterpolateImageFunction.h"
 
 #include "itkExpandImageFilter.h"

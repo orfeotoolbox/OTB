@@ -111,9 +111,9 @@ protected:
    * portion of the output image specified by the parameter
    * "outputRegionForThread"
    *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   * \sa ImageToImageFilter::DynamicThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

@@ -31,8 +31,10 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>::VectorImageTo3DScalarImageFilter()
+VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
+::VectorImageTo3DScalarImageFilter()
 {
+  this->DynamicMultiThreadingOn();
 }
 /** Generate output information */
 template <class TInputImage, class TOutputImage>
@@ -80,8 +82,7 @@ void VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>::GenerateInputR
   inputPtr->SetRequestedRegion(inputRequestedRegion);
 }
 template <class TInputImage, class TOutputImage>
-void VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                       itk::ThreadIdType itkNotUsed(threadId))
+void VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   const InputImageType* inputPtr  = this->GetInput();
   OutputImageType*      outputPtr = this->GetOutput();

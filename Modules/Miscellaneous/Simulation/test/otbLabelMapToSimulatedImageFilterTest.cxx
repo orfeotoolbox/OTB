@@ -68,7 +68,7 @@ int otbLabelMapToSimulatedImageFilterTest(int itkNotUsed(argc), char* argv[])
   labelMapToImageFilter->SetInput(vectorDataToLabelMap->GetOutput());
   labelMapToImageFilter->SetNumberOfComponentsPerPixel(nbBands);
   labelMapToImageFilter->SetSatRSRFilename(satRSRFilename);
-  labelMapToImageFilter->SetNumberOfThreads(1); // must be set to 1
+  labelMapToImageFilter->SetNumberOfWorkUnits(1); // must be set to 1
   labelMapToImageFilter->SetPathRoot(rootPath);
 
   // Write the result to an image file

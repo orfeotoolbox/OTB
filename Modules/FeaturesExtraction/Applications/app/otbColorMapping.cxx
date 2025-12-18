@@ -810,7 +810,7 @@ private:
   ChangeLabelFilterType::Pointer m_CustomMapper;
   ColorMapFilterType::Pointer    m_ContinuousColorMapper;
   LabelToRGBFilterType::Pointer  m_SegmentationColorMapper;
-  std::map<std::string, unsigned int> m_LutMap;
+  std::map<std::string, itk::ScalarToRGBColormapImageFilterEnums::RGBColormapFilter> m_LutMap;
   ChangeLabelFilterType::Pointer                          m_RBGFromImageMapper;
   StreamingStatisticsMapFromLabelImageFilterType::Pointer m_StatisticsMapFromLabelImageFilter;
 

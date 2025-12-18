@@ -143,17 +143,13 @@ protected:
    * \param[in] outputRegionForThread  Specified output region to compute
    * \param[in] threadId               Id of the computing threads
    */
-  void ThreadedGenerateData(
-      OutputImageRegionType const& outputRegionForThread,
-      itk::ThreadIdType            threadId) override
+  void DynamicThreadedGenerateData(
+      OutputImageRegionType const& outputRegionForThread) override
   {
     using ImageScanlineConstIteratorType = itk::ImageScanlineConstIterator<InputImageType const>;
     // using OutImageScanlineConstIteratorType = itk::ImageScanlineIterator<OutputImageType>;
     using OutputIterator  = itk::ImageScanlineIterator<OutputImageType>;
     using InputIterator   = ZipConstIterator<ImageScanlineConstIteratorType>;
-
-    auto const regSizeY = outputRegionForThread.GetSize()[1];
-    itk::ProgressReporter progress( this, threadId, outputRegionForThread.GetNumberOfPixels() / regSizeY );
 
     InputIterator  inputIterator(this->GetInputs(), outputRegionForThread);
     OutputIterator outputIterator(this->GetOutput(), outputRegionForThread);
@@ -175,7 +171,6 @@ protected:
 
         outputIterator.Set(m_functor(inputIterator.Get()));
       }
-      progress.CompletedPixel(); // Completed...Line()
     }
   }
 

@@ -25,6 +25,7 @@ different subdataset or resolution (for multi-resolution data), or manage ortho-
 product by skipping either geographic or sensor-model information.")
 
 otb_module(OTBExtendedFilename
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBIOGDAL

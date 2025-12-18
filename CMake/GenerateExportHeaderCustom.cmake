@@ -316,7 +316,7 @@ macro(_DO_SET_MACRO_VALUES TARGET_LIBRARY)
   endif()
 endmacro()
 
-macro(_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
+macro(_OTB_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
   # Option overrides
   set(options DEFINE_NO_DEPRECATED)
   set(oneValueArgs PREFIX_NAME BASE_NAME EXPORT_MACRO_NAME EXPORT_FILE_NAME
@@ -411,11 +411,11 @@ macro(_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
     endif()
   endif()
 
-  configure_file("${_GENERATE_EXPORT_HEADER_MODULE_DIR}/exportheader.cmake.in"
+  configure_file("${CMAKE_SOURCE_DIR}/CMake/exportheader.cmake.in"
     "${EXPORT_FILE_NAME}" @ONLY)
 endmacro()
 
-function(GENERATE_EXPORT_HEADER TARGET_LIBRARY)
+function(OTB_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
   get_property(type TARGET ${TARGET_LIBRARY} PROPERTY TYPE)
   if(NOT ${type} STREQUAL "STATIC_LIBRARY"
       AND NOT ${type} STREQUAL "SHARED_LIBRARY"
@@ -427,7 +427,7 @@ function(GENERATE_EXPORT_HEADER TARGET_LIBRARY)
   _test_compiler_hidden_visibility()
   _test_compiler_has_deprecated()
   _do_set_macro_values(${TARGET_LIBRARY})
-  _do_generate_export_header(${TARGET_LIBRARY} ${ARGN})
+  _otb_do_generate_export_header(${TARGET_LIBRARY} ${ARGN})
 endfunction()
 
 function(add_compiler_export_flags)

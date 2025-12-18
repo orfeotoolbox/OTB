@@ -21,11 +21,16 @@
 INCLUDE_ONCE_MACRO(LIBSVM)
 
 SETUP_SUPERBUILD(LIBSVM)
+set(__LIBSVM_VERSION "336")
+set(__LIBSVM_DL_NAME "libsvm-v${__LIBSVM_VERSION}.tar.gz")
 
 ExternalProject_Add(LIBSVM
   PREFIX LIBSVM
-  URL "https://github.com/cjlin1/libsvm/archive/v325.tar.gz"
-  URL_MD5 1d28a30dded4e5c0c857abe431418198
+  URL "https://github.com/cjlin1/libsvm/archive/refs/tags/v${__LIBSVM_VERSION}.tar.gz"
+  URL_MD5 a93de5a77a453c1ea1b99269473eb71e
+  # change download name as the file notation vx.x.x is used everywhere
+  # and can be in conflict with other package
+  DOWNLOAD_NAME ${__LIBSVM_DL_NAME}
   BINARY_DIR ${LIBSVM_SB_BUILD_DIR}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

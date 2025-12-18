@@ -38,18 +38,16 @@ template <class TFilter>
 class CommandProgressUpdate : public itk::Command
 {
 public:
-  typedef CommandProgressUpdate   Self;
-  typedef itk::Command            Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  using Self       = CommandProgressUpdate;
+  using Superclass = itk::Command;
+  using Pointer    = itk::SmartPointer<Self>;
   itkNewMacro(Self);
 
 protected:
-  CommandProgressUpdate()
-  {
-  }
+  CommandProgressUpdate() = default;
 
 public:
-  typedef const TFilter* FilterPointer;
+  using FilterPointer = const TFilter*;
 
   void Execute(itk::Object* caller, const itk::EventObject& event) override;
 

@@ -40,6 +40,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
 LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>::LineCorrelationDetectorImageFilter()
 {
+  
   this->m_Radius.Fill(1);
   this->m_LengthLine = 1;
   this->m_WidthLine  = 0;

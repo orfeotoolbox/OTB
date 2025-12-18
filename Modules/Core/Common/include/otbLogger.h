@@ -72,7 +72,7 @@ public:
   void LogSetupInformationDone();
 
   // Overwrite this to provide custom formatting of log entries
-  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) override;
+  std::string BuildFormattedEntry(itk::LoggerBaseEnums::PriorityLevel, std::string const&) override;
 
 protected:
   Logger();

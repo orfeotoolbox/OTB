@@ -203,8 +203,8 @@ void DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, T
 }
 
 template <class TDisparityImage, class TOutputImage, class TEpipolarGridImage, class TMaskImage>
-void DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, TMaskImage>::ThreadedGenerateData(
-    const RegionType& itkNotUsed(outputRegionForThread), itk::ThreadIdType itkNotUsed(threadId))
+void DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, TMaskImage>::DynamicThreadedGenerateData(
+    const RegionType& itkNotUsed(outputRegionForThread))
 {
   const TDisparityImage* horizDisp = this->GetHorizontalDisparityMapInput();
   const TDisparityImage* vertiDisp = this->GetVerticalDisparityMapInput();

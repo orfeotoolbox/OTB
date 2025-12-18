@@ -23,7 +23,6 @@
 
 
 #include "otbVectorDataToVectorDataFilter.h"
-#include "itkPreOrderTreeIterator.h"
 #include "otbMath.h"
 
 namespace otb
@@ -70,8 +69,6 @@ public:
   typedef typename VectorDataType::PointType    PointType;
   typedef typename LineType::VertexType         VertexType;
   typedef typename LineType::VertexListType     VertexListType;
-
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
 
   /** Set/Get the thresholds*/
   itkGetMacro(DistanceThreshold, double);

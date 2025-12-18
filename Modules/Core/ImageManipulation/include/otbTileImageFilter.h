@@ -85,22 +85,13 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
   /** Generate input requested region method */
   void GenerateInputRequestedRegion() override;
 
   /** Generate input requested region method */
   void GenerateOutputInformation() override;
-
-  /** Override VerifyInputInformation() since this filter's inputs do
-     * not need to occupy the same physical space.
-     *
-     * \sa ProcessObject::VerifyInputInformation
-     */
-  void VerifyInputInformation() override
-  {
-  }
 
 
 private:

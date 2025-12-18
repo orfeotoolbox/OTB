@@ -5,7 +5,7 @@ Image Data Representation
 -------------------------
 
 The :doxygen:`Image` class follows the spirit of `Generic
-Programming <http://www.boost.org/more/generic_programming.html>`__,
+Programming <https://www.boost.org/doc/user-guide/generic-programming.html>`__,
 where types are separated from the algorithmic behavior of the class.
 OTB supports images with any pixel type and any spatial dimension.
 
@@ -1202,8 +1202,8 @@ Mathematical formulation of the combination algorithm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A description of the mathematical formulation of the Dempster Shafer
-combination algorithm is available in the following OTB Wiki page:
-http://wiki.orfeo-toolbox.org/index.php/Information_fusion_framework.
+combination algorithm is available in the following archived OTB Wiki page:
+https://web.archive.org/web/20230929181459/https://wiki.orfeo-toolbox.org/index.php/Information_fusion_framework .
 
 * An example of Dempster Shafer fusion. See example :ref:`DempsterShaferFusionOfClassificationMapsExample.cxx`.
 

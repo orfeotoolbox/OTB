@@ -112,7 +112,7 @@ inline void otb::ogr::Feature::SetFID(long fid)
   UncheckedSetFID(fid);
 }
 
-inline OGRFeatureDefn& otb::ogr::Feature::GetDefn() const
+inline const OGRFeatureDefn& otb::ogr::Feature::GetDefn() const
 {
   CheckInvariants();
   return UncheckedGetDefn();

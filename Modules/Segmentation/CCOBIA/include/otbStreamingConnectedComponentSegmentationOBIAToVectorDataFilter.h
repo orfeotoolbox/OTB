@@ -43,9 +43,6 @@ namespace otb
 *   \brief [internal] Helper class to perform connected component segmentation on an input image,
 *   apply OBIA filtering and output a VectorData
 *
-*  The whole chain is described in :
-*  http://wiki.orfeo-toolbox.org/index.php/Connected_component_segmentation_module
-*
 *  This class wraps a whole processing chain based on connected component segmentation,
 *  OBIA filtering and conversion to VectorData.
 *  An optional mask can be applied to segment only the pixels inside the mask.

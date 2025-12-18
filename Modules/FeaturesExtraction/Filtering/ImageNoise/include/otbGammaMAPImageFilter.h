@@ -98,7 +98,7 @@ protected:
   /** GammaMAPImageFilter can be multithreaded.
    */
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   GammaMAPImageFilter(const Self&) = delete;

@@ -49,7 +49,7 @@ void PersistentOGRDataToClassStatisticsFilter<TInputImage, TMaskImage>::Syntheti
   classCount.clear();
   polygonSize.clear();
   // Copy temporary stats to outputs
-  for (unsigned int k = 0; k < this->GetNumberOfThreads(); k++)
+  for (unsigned int k = 0; k < this->GetNumberOfWorkUnits(); k++)
   {
     ClassCountMapType::iterator itClass = m_ElmtsInClassThread[k].begin();
     for (; itClass != m_ElmtsInClassThread[k].end(); ++itClass)
@@ -89,11 +89,11 @@ void PersistentOGRDataToClassStatisticsFilter<TInputImage, TMaskImage>::Reset(vo
   m_PolygonThread.clear();
   m_NbPixelsThread.clear();
 
-  m_ElmtsInClassThread.resize(this->GetNumberOfThreads());
-  m_PolygonThread.resize(this->GetNumberOfThreads());
-  m_NbPixelsThread.resize(this->GetNumberOfThreads());
-  m_CurrentClass.resize(this->GetNumberOfThreads());
-  m_CurrentFID.resize(this->GetNumberOfThreads());
+  m_ElmtsInClassThread.resize(this->GetNumberOfWorkUnits());
+  m_PolygonThread.resize(this->GetNumberOfWorkUnits());
+  m_NbPixelsThread.resize(this->GetNumberOfWorkUnits());
+  m_CurrentClass.resize(this->GetNumberOfWorkUnits());
+  m_CurrentFID.resize(this->GetNumberOfWorkUnits());
 }
 
 template <class TInputImage, class TMaskImage>

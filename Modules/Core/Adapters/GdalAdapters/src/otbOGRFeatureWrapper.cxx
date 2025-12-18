@@ -132,7 +132,7 @@ otb::ogr::Field otb::ogr::Feature::UncheckedGetElement(std::string const& name)
 
 otb::ogr::FieldDefn otb::ogr::Feature::UncheckedGetFieldDefn(int index) const
 {
-  return FieldDefn(*m_Feature->GetFieldDefnRef(index));
+  return FieldDefn(const_cast<OGRFieldDefn&>(*m_Feature->GetFieldDefnRef(index)));
 }
 
 otb::ogr::FieldDefn otb::ogr::Feature::UncheckedGetFieldDefn(std::string const& name) const
@@ -172,7 +172,7 @@ void otb::ogr::Feature::UncheckedSetFID(long fid)
   }
 }
 
-OGRFeatureDefn& otb::ogr::Feature::UncheckedGetDefn() const
+const OGRFeatureDefn& otb::ogr::Feature::UncheckedGetDefn() const
 {
   return *m_Feature->GetDefnRef();
 }

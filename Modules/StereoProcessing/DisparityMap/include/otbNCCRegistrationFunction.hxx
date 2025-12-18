@@ -27,6 +27,7 @@
 
 #include "otbMacro.h"
 #include "otbNCCRegistrationFunction.h"
+#include "vcl_legacy_aliases.h"
 
 namespace otb
 {

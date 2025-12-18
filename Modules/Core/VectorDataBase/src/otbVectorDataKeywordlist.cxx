@@ -51,16 +51,14 @@ VectorDataKeywordlist::~VectorDataKeywordlist()
   }
 }
 
-void VectorDataKeywordlist::AddField(OGRFieldDefn* fieldDefn, OGRField* field)
+void VectorDataKeywordlist::AddField(const OGRFieldDefn* fieldDefn, OGRField* field)
 {
-  FieldType newField;
-  newField.first  = fieldDefn;
-  newField.second = *field;
   // TODO: evaluate performance impact of fieldDefn copy
   // the object itself could be handled at the VectorData level
   // keeping only pointer here. (but it does not seem
   // necessary so far...)
-  m_FieldList.push_back(CopyOgrField(newField));
+
+  m_FieldList.push_back(CreateOgrField(fieldDefn, field));
 }
 
 void VectorDataKeywordlist::AddField(const std::string& key, const std::string& value)
@@ -344,11 +342,12 @@ std::vector<std::string> VectorDataKeywordlist::GetFieldList() const
 
 void VectorDataKeywordlist::operator=(const Self& p)
 {
-  for (unsigned int i = 0; i < p.m_FieldList.size(); ++i)
+  for (auto& field : p.m_FieldList)
   {
-    m_FieldList.push_back(CopyOgrField(p.m_FieldList[i]));
+    m_FieldList.push_back(CreateOgrField(field.first, &(field.second)));
   }
 }
+
 
 void VectorDataKeywordlist::Print(std::ostream& os, itk::Indent indent) const
 {
@@ -450,58 +449,58 @@ std::string VectorDataKeywordlist::PrintField(FieldType field) const
   return output.str();
 }
 
-VectorDataKeywordlist::FieldType VectorDataKeywordlist::CopyOgrField(FieldType field)
+VectorDataKeywordlist::FieldType VectorDataKeywordlist::CreateOgrField(const OGRFieldDefn* fieldDefn, const OGRField* field)
 {
   FieldType outField;
-  outField.first = new OGRFieldDefn(field.first);
-  switch (field.first->GetType())
+  outField.first = new OGRFieldDefn(fieldDefn);
+  switch (fieldDefn->GetType())
   {
   case OFTInteger:
   {
-    outField.second.Integer = field.second.Integer;
+    outField.second.Integer = field->Integer;
     break;
   }
   case OFTInteger64:
   {
-    outField.second.Integer64 = field.second.Integer64;
+    outField.second.Integer64 = field->Integer64;
     break;
   }
   case OFTReal:
   {
-    outField.second.Real = field.second.Real;
+    outField.second.Real = field->Real;
     break;
   }
   case OFTString:
   {
-    if (field.second.String != nullptr)
+    if (field->String != nullptr)
     {
       CPLFree(outField.second.String);
-      outField.second.String = CPLStrdup(field.second.String);
+      outField.second.String = CPLStrdup(field->String);
     }
     break;
   }
   case OFTDate:
   {
-    outField.second.Date.Year  = field.second.Date.Year;
-    outField.second.Date.Month = field.second.Date.Month;
-    outField.second.Date.Day   = field.second.Date.Day;
+    outField.second.Date.Year  = field->Date.Year;
+    outField.second.Date.Month = field->Date.Month;
+    outField.second.Date.Day   = field->Date.Day;
     break;
   }
   case OFTTime:
   {
-    outField.second.Date.Hour   = field.second.Date.Hour;
-    outField.second.Date.Minute = field.second.Date.Minute;
-    outField.second.Date.Second = field.second.Date.Second;
+    outField.second.Date.Hour   = field->Date.Hour;
+    outField.second.Date.Minute = field->Date.Minute;
+    outField.second.Date.Second = field->Date.Second;
     break;
   }
   case OFTDateTime:
   {
-    outField.second.Date.Year   = field.second.Date.Year;
-    outField.second.Date.Month  = field.second.Date.Month;
-    outField.second.Date.Day    = field.second.Date.Day;
-    outField.second.Date.Hour   = field.second.Date.Hour;
-    outField.second.Date.Minute = field.second.Date.Minute;
-    outField.second.Date.Second = field.second.Date.Second;
+    outField.second.Date.Year   = field->Date.Year;
+    outField.second.Date.Month  = field->Date.Month;
+    outField.second.Date.Day    = field->Date.Day;
+    outField.second.Date.Hour   = field->Date.Hour;
+    outField.second.Date.Minute = field->Date.Minute;
+    outField.second.Date.Second = field->Date.Second;
     break;
   }
   default:

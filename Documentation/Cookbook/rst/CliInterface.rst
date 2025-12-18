@@ -196,7 +196,7 @@ parallel to a single Tiff file using SPTW (Simple Parallel Tiff Writer).
 If the output filename extension is ``.vrt``, each tile will be
 written to a separate Tiff file, and a global VRT_ file will be written.
 
-.. _VRT: http://gdal.org/gdal_vrttut.html
+.. _VRT: https://gdal.org/en/stable/drivers/raster/vrt.html
 
 Here is an example of MPI call on a cluster::
 

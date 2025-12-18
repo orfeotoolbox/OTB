@@ -24,6 +24,7 @@
 #include "otbRasterizeVectorDataFilter.h"
 #include "otbOGRIOHelper.h"
 #include "otbGdalDataTypeBridge.h"
+#include "otbGDALDriverManagerWrapper.h"
 
 namespace otb
 {
@@ -74,11 +75,8 @@ void RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::Generate
       otbMsgDevMacro(<< "Projection information unavailable");
     }
 
-    // Retrieving root node
-    DataTreeConstPointerType tree = vd->GetDataTree();
-
     // Get the input tree root
-    InternalTreeNodeType* inputRoot = const_cast<InternalTreeNodeType*>(tree->GetRoot());
+    DataNodePointerType root = vd->GetRoot();
 
     // Iterative method to build the layers from a VectorData
     OGRRegisterAll();
@@ -90,7 +88,7 @@ void RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::Generate
     // OGRDataSource but don t release it. Destruction is done in the
     // destructor
     m_OGRDataSourcePointer = nullptr;
-    ogrLayerVector         = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot, m_OGRDataSourcePointer, ogrCurrentLayer, oSRS);
+    ogrLayerVector         = IOConversion->ConvertDataTreeNodeToOGRLayers(vd,root, m_OGRDataSourcePointer, ogrCurrentLayer, oSRS);
 
     // Cast OGRLayer* to OGRLayerH
     for (unsigned int idx2 = 0; idx2 < ogrLayerVector.size(); ++idx2)
@@ -140,24 +138,17 @@ void RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::Generate
   // nb bands
   unsigned int nbBands = this->GetOutput()->GetNumberOfComponentsPerPixel();
 
-  // register drivers
-  GDALAllRegister();
-
-  std::ostringstream stream;
-  stream << "MEM:::"
-         << "DATAPOINTER=" << (uintptr_t)(this->GetOutput()->GetBufferPointer()) << ","
-         << "PIXELS=" << bufferedRegion.GetSize()[0] << ","
-         << "LINES=" << bufferedRegion.GetSize()[1] << ","
-         << "BANDS=" << nbBands << ","
-         << "DATATYPE=" << GDALGetDataTypeName(GdalDataTypeBridge::GetGDALDataType<OutputImageInternalPixelType>()) << ","
-         << "PIXELOFFSET=" << sizeof(OutputImageInternalPixelType) * nbBands << ","
-         << "LINEOFFSET=" << sizeof(OutputImageInternalPixelType) * nbBands * bufferedRegion.GetSize()[0] << ","
-         << "BANDOFFSET=" << sizeof(OutputImageInternalPixelType);
-
-  GDALDatasetH dataset = GDALOpen(stream.str().c_str(), GA_Update);
+  GDALDatasetWrapper::Pointer dataset = 
+      GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
+        this->GetOutput()->GetBufferPointer(),
+        bufferedRegion.GetSize()[0],
+        bufferedRegion.GetSize()[1], GdalDataTypeBridge::GetGDALDataType<OutputImageInternalPixelType>(),
+        sizeof(OutputImageInternalPixelType), nbBands,
+        sizeof(OutputImageInternalPixelType)
+      );
 
   // Add the projection ref to the dataset
-  GDALSetProjection(dataset, this->GetOutput()->GetProjectionRef().c_str());
+  GDALSetProjection(dataset->GetDataSet(), this->GetOutput()->GetProjectionRef().c_str());
 
   // add the geoTransform to the dataset
   itk::VariableLengthVector<double> geoTransform(6);
@@ -175,7 +166,8 @@ void RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::Generate
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;
   geoTransform[4] = 0.;
-  GDALSetGeoTransform(dataset, const_cast<double*>(geoTransform.GetDataPointer()));
+  GDALSetGeoTransform(dataset->GetDataSet(),
+                      const_cast<double*>(geoTransform.GetDataPointer()));
 
   char** options = nullptr;
   if (m_AllTouchedMode)
@@ -184,15 +176,16 @@ void RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::Generate
   }
 
   // Burn the geometries into the dataset
-  if (dataset != nullptr)
+  if (dataset->GetDataSet() != nullptr)
   {
-    GDALRasterizeLayers(dataset, m_BandsToBurn.size(), &(m_BandsToBurn[0]), m_SrcDataSetLayers.size(), &(m_SrcDataSetLayers[0]), nullptr, nullptr,
-                        &(m_FullBurnValues[0]), options, GDALDummyProgress, nullptr);
+    GDALRasterizeLayers(dataset->GetDataSet(), m_BandsToBurn.size(),
+                        &(m_BandsToBurn[0]), m_SrcDataSetLayers.size(),
+                        &(m_SrcDataSetLayers[0]), nullptr, nullptr,
+                        &(m_FullBurnValues[0]), options, GDALDummyProgress,
+                        nullptr);
 
     CSLDestroy(options);
-
     // release the dataset
-    GDALClose(dataset);
   }
 }
 

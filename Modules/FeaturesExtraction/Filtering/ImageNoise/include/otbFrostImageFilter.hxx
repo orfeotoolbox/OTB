@@ -29,7 +29,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -42,6 +41,7 @@ FrostImageFilter<TInputImage, TOutputImage>::FrostImageFilter()
 {
   m_Radius.Fill(1);
   m_Deramp = 2;
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -93,7 +93,7 @@ void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 }
 
 template <class TInputImage, class TOutputImage>
-void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void FrostImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   unsigned int                                                        i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType>               nbc;
@@ -111,9 +111,6 @@ void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const Out
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_Radius);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   InputRealType sum;
   InputRealType sum2;
@@ -198,7 +195,6 @@ void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const Out
 
       ++bit;
       ++it;
-      progress.CompletedPixel();
     }
   }
 }

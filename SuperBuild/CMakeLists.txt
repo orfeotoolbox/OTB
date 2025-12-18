@@ -22,12 +22,18 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project(OTB-SuperBuild)
 
+if(POLICY CMP0135)
+  # avoid cmake warnings about missing DOWNLOAD_EXTRACT_TIMESTAMP
+  # when using ExternalProject_Add in External_<dep>.cmake files.
+  # As we also build on rhel and cmake version < 3.24 here,
+  # we need to use policy settings
+  cmake_policy(SET CMP0135 NEW)
+endif()
+
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Path to additional CMake modules
-#MESSAGE(INFO "${CMAKE_SOURCE_DIR}")
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_SOURCE_DIR}/../CMake
@@ -82,6 +88,10 @@ find_path(DOWNLOAD_LOCATION
   NAMES OTBSuperBuild.readme
   HINTS $ENV{DOWNLOAD_LOCATION} "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
   )
+
+if(NOT DOWNLOAD_LOCATION)
+  set(DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads")
+endif()
 
 # General options
 option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
@@ -254,8 +264,8 @@ endif()
 
 set(FROM_SYSTEM_LIST)
 set(FROM_SUPERBUILD_LIST)
-set(USE_SYSTEM_PCRE ON)
-set(USE_SYSTEM_SWIG ON)
+option(USE_SYSTEM_PCRE2 ON)
+option(USE_SYSTEM_SWIG ON)
 option(USE_SYSTEM_OPENSSL OFF)
 
 # Modular building options
@@ -275,6 +285,7 @@ option(OTB_USE_CURL "Enable module Curl in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 option(OTB_USE_GSL "Enable module GSL in OTB" ON)
 option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
+option(OTB_USE_FFTW "Download and compile FFTW third party (license change to GPLv2)" OFF)
 #option() does not change the value in cache so we have to set the option via the set CACHE FORCE method
 if(OTB_BUILD_Learning MATCHES ON)
   set(OTB_USE_LIBSVM ON CACHE BOOL "Enable module LibSVM in OTB" FORCE)
@@ -329,15 +340,8 @@ if(FROM_SUPERBUILD_LIST)
   endforeach()
 endif()
 
-message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
-message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
-
-if(DOWNLOAD_LOCATION)
-  message(STATUS "DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION}")
-  message(STATUS "Source archives for dependencies will be taken from '${DOWNLOAD_LOCATION}'")
-else()
-  message(STATUS "DOWNLOAD_LOCATION is not set. We will download all source archives during build!")
-endif()
-
-message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
+message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64  = ${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
+message(STATUS "DOWNLOAD_LOCATION              = ${DOWNLOAD_LOCATION}")
+message(STATUS "CMAKE_INSTALL_PREFIX           = ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "SUPERBUILD_OTB_VERSION         = ${SUPERBUILD_OTB_VERSION}")
+message("\nCMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator\n")

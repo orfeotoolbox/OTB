@@ -31,6 +31,7 @@ template <class TInputImage, class TOutputMetricImage, class TOutputDisparityIma
 PixelWiseBlockMatchingImageFilter<TInputImage, TOutputMetricImage, TOutputDisparityImage, TMaskImage,
                                   TBlockMatchingFunctor>::PixelWiseBlockMatchingImageFilter()
 {
+  this->DynamicMultiThreadingOff();
   // Set the number of inputs
   this->SetNumberOfRequiredInputs(6);
   this->SetNumberOfRequiredInputs(2);

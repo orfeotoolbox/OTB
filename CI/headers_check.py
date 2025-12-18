@@ -2,7 +2,7 @@
 #
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -53,6 +53,7 @@ fileext = {
     '.bash': 'shell',
     '.profile': 'shell',
     '.ps1': 'shell',
+    '.ps1.in': 'shell',
     '.py': 'shell',
     '.py.in': 'shell',
     '.cmake': 'shell',
@@ -107,6 +108,7 @@ excludedfiles = set([
     './.clang-format',
     './.editorconfig',
     './.gitattributes',
+    './.gitmodules',
     './.gitignore',
     './.mailmap',
     './sonar-project.properties',
@@ -140,6 +142,12 @@ excludedfiles = set([
     './Modules/Visualization/Ice/README',
     './Modules/Core/Wrappers/SWIG/src/numpy.i',
     './Modules/Core/Wrappers/SWIG/src/python/__init__.py',
+    './Modules/Core/Common/include/otbCastImageFilter.h',
+    './Modules/Core/Common/include/otbCastImageFilter.hxx',
+    './CI/Invoke-CmdScript.ps1',
+    './CI/copy_boost_dlls.ps1',
+    './CI/dev_env.ps1',
+    './CI/setup_python.ps1',
     './Packaging/Files/OTB Project.zip',
     './Packaging/Files/template.app/Contents/Info.plist',
     './Packaging/LICENSE',

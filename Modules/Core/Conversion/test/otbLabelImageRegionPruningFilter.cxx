@@ -70,7 +70,7 @@ int otbLabelImageRegionPruningFilter(int argc, char* argv[])
   filter->SetThreshold(threshold);
   filter->SetMaxIterationNumber(maxiterationnumber);
   filter->SetInput(reader->GetOutput());
-  // filter->SetNumberOfThreads(1);
+  // filter->SetNumberOfWorkUnits(1);
   WriterType::Pointer      writer2 = WriterType::New();
   LabelWriterType::Pointer writer5 = LabelWriterType::New();
 

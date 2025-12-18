@@ -2,7 +2,7 @@ Contributors
 ============
 
 The ORFEO Toolbox is a project conducted by CNES and developed in
-cooperation with CS (Communication Systèmes) (http://www.c-s.fr).
+cooperation with CS (Communication Systèmes) (https://www.cs-soprasteria.com/fr/).
 
 This OTB project is based on ITK. The build
 process, many examples and even the documentation sources
@@ -76,8 +76,10 @@ importance of contribution:
     Sébastien Harasse (CS)
     Stéphane Albert (CS)
     Stephane May (CNES)
+    Thibaut Romain (CS)
     Thomas Feuvrier (CS)
     Tishampati Dhar
+    Tristan Laurent (CS)
     Victor Poughon (CNES)
     Vincent Poulain (CNES)
     Vincent Schut (Sarvision)

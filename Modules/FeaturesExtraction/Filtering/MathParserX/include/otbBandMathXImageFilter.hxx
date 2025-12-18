@@ -47,7 +47,7 @@ BandMathXImageFilter<TImage>::BandMathXImageFilter()
   // This number will be incremented each time an image
   // is added over the one minimumrequired
   this->SetNumberOfRequiredInputs(1);
-
+  this->DynamicMultiThreadingOff();
   m_UnderflowCount = 0;
   m_OverflowCount  = 0;
   m_ThreadUnderflow.SetSize(1);
@@ -596,7 +596,7 @@ void BandMathXImageFilter<TImage>::PrepareParsers()
 
   // Register variables for each parser (important : one parser per thread and per expression)
   m_VParser.clear();
-  unsigned int nbThreads = this->GetNumberOfThreads();
+  unsigned int nbThreads = this->GetNumberOfWorkUnits();
   for (unsigned int k = 0; k < nbThreads; k++)
   {
     std::vector<ParserType::Pointer> parserList;
@@ -963,7 +963,7 @@ template <typename TImage>
 void BandMathXImageFilter<TImage>::BeforeThreadedGenerateData()
 {
 
-  unsigned int nbThreads = this->GetNumberOfThreads();
+  unsigned int nbThreads = this->GetNumberOfWorkUnits();
   // Allocate and initialize the thread temporaries
   m_ThreadUnderflow.SetSize(nbThreads);
   m_ThreadUnderflow.Fill(0);
@@ -975,7 +975,7 @@ void BandMathXImageFilter<TImage>::BeforeThreadedGenerateData()
 template <typename TImage>
 void BandMathXImageFilter<TImage>::AfterThreadedGenerateData()
 {
-  unsigned int nbThreads = this->GetNumberOfThreads();
+  unsigned int nbThreads = this->GetNumberOfWorkUnits();
   unsigned int i;
 
   m_UnderflowCount = 0;

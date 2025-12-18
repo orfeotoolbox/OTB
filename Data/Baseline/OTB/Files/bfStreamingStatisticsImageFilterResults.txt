@@ -1,6 +1,0 @@
-Minimum: 0
-Maximum: 254.856
-Sum: 29864790.19680
-Mean: 113.92513
-Sigma: 76.60511
-Variance: 5868.34332

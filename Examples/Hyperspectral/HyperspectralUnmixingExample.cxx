@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
   unmixer->SetInput(rescaler->GetOutput());
   unmixer->GetModifiableFunctor().SetMatrix(endMember2Matrix->GetMatrix());
 
-  unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
+  unmixer->SetNumberOfWorkUnits(1); // FIXME : currently buggy
 
   // We now instantiate the writer and set the file name for the
   // output image and trigger the unmixing computation with the \code{Update()} of the writer.

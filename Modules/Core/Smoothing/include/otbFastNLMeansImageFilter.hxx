@@ -120,9 +120,8 @@ namespace otb
 
   template<class TInputImage, class TOutputImage>
   void 
-  NLMeansFilter<TInputImage, TOutputImage>::ThreadedGenerateData
-  (const OutRegionType& outputRegionForThread, 
-   itk::ThreadIdType itkNotUsed(threadId))
+  NLMeansFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData
+  (const OutRegionType& outputRegionForThread)
   {
     InImageConstPointerType inputPtr = this->GetInput();
     auto regionAndMirror = OutputRegionToInputRegion(outputRegionForThread);

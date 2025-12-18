@@ -33,7 +33,7 @@ LabelMapClassifier<TInputImage>::LabelMapClassifier()
   // Force to single-threaded in case the learning model is not thread safe
   // This way, we benefit of the LabelMapFilter design and only need
   // to implement ThreadedProcessLabelObject
-  this->SetNumberOfThreads(1); // TODO : check if still needed
+  this->SetNumberOfWorkUnits(1); // TODO : check if still needed
 }
 
 template <class TInputImage>

@@ -95,6 +95,10 @@ protected:
   /** Generate input requested region method */
   void GenerateOutputInformation() override;
 
+  void VerifyInputInformation() const override
+  {
+    
+  }
 
 private:
   SarConcatenateBurstsImageFilter(const Self&) = delete;

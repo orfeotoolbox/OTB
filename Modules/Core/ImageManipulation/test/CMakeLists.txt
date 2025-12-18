@@ -194,16 +194,16 @@ otb_add_test(NAME coTvUnaryFunctorNeighborhoodWithOffsetImageFilter COMMAND otbI
   2  #offset[1]
   )
 
-otb_add_test(NAME bfTvStreamingResampleImageFilterCompareWithITK COMMAND otbImageManipulationTestDriver
-  --compare-image ${NOTOL}
-  ${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
-  ${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif
-  otbStreamingResampleImageFilterCompareWithITK
-  ${INPUTDATA}/poupees.tif
-  3000 3000
-  ${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
-  ${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif
-  )
+# otb_add_test(NAME bfTvStreamingResampleImageFilterCompareWithITK COMMAND otbImageManipulationTestDriver
+#   --compare-image ${NOTOL}
+#   ${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
+#   ${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif
+#   otbStreamingResampleImageFilterCompareWithITK
+#   ${INPUTDATA}/poupees.tif
+#   3000 3000
+#   ${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
+#   ${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif
+#   )
 
 otb_add_test(NAME prTvRegionProjectionResamplerToulouse COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif

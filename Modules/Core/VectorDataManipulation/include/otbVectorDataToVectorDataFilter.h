@@ -58,13 +58,15 @@ public:
   /** Some typedefs. */
   typedef TInputVectorData                        InputVectorDataType;
   typedef TOutputVectorData                       OutputVectorDataType;
-  typedef typename TInputVectorData::ConstPointer InputVectorDataPointer;
+  typedef typename TInputVectorData::ConstPointer      InputVectorDataPointer;
   typedef typename TOutputVectorData::Pointer     OutputVectorDataPointer;
 
-  typedef typename InputVectorDataType::DataNodeType                InputDataNodeType;
-  typedef typename OutputVectorDataType::DataNodeType               OutputDataNodeType;
-  typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
+  typedef typename InputVectorDataType::DataNodeType        InputDataNodeType;
+  typedef typename itk::SmartPointer<InputDataNodeType>     InputDataNodePointerType;
+  typedef typename OutputVectorDataType::DataNodeType       OutputDataNodeType;
+  typedef typename itk::SmartPointer<OutputDataNodeType>    OutputDataNodePointerType;
+  typedef typename InputVectorDataType::TreeNodeType  InputInternalTreeNodeType;
+  typedef typename OutputVectorDataType::TreeNodeType OutputInternalTreeNodeType;
 
   typedef typename InputDataNodeType::PointType       InputPointType;
   typedef typename InputDataNodeType::LineType        InputLineType;
@@ -88,7 +90,7 @@ public:
 
   using Superclass::SetInput;
   virtual void SetInput(const InputVectorDataType* input);
-  const InputVectorDataType* GetInput(void);
+  InputVectorDataType* GetInput(void);
 
 protected:
   /** Constructor */
@@ -119,7 +121,7 @@ protected:
   void GenerateData(void) override;
 
   /** Go through the vector data tree and process the nodes */
-  virtual void ProcessNode(InputInternalTreeNodeType* source, OutputInternalTreeNodeType* destination) const;
+  virtual void ProcessNode(InputVectorDataPointer inputVdata,InputDataNodePointerType source, OutputVectorDataPointer outputVdata, OutputDataNodePointerType destination) const;
 
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

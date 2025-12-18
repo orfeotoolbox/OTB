@@ -25,6 +25,7 @@
 #include "otbMRFEnergy.h"
 
 #include "otbMath.h"
+#include "vcl_legacy_aliases.h"
 
 namespace otb
 {

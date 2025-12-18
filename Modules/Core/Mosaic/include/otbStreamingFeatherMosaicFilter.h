@@ -127,7 +127,7 @@ protected:
   }
 
   /** Overridden methods */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   InternalValueType m_FeatheringTransitionDistance; // feathering transition

@@ -260,7 +260,7 @@ protected:
   private:
     bool RemoveFile(std::string& filePath)
     {
-      bool res = true;
+      itksys::Status res;
       if (itksys::SystemTools::FileExists(filePath))
       {
         size_t posExt = filePath.rfind('.');
@@ -274,12 +274,9 @@ protected:
           RemoveFile(prjPath);
         }
         res = itksys::SystemTools::RemoveFile(filePath);
-        if (!res)
-        {
-          // otbAppLogINFO( <<"Unable to remove file  "<<filePath );
-        }
       }
-      return res;
+      bool status = res.GetKind() == itksys::Status::Kind::Success;
+      return status;
     }
   };
 };

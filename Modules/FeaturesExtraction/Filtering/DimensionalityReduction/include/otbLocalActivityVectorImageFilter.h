@@ -108,12 +108,8 @@ public:
   itkTypeMacro(LocalActivityVectorImageFilter, ImageToImageFilter);
 
 protected:
-  LocalActivityVectorImageFilter()
-  {
-  }
-  ~LocalActivityVectorImageFilter() override
-  {
-  }
+  LocalActivityVectorImageFilter() = default;
+  ~LocalActivityVectorImageFilter() = default;
 
 private:
   LocalActivityVectorImageFilter(const Self&); // Not implemented

@@ -75,7 +75,7 @@ public:
   }
 
   /** Main computation method */
-  void ThreadedGenerateData(const InputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const InputImageRegionType& outputRegionForThread) override;
   void BeforeThreadedGenerateData() override;
   void GenerateInputRequestedRegion() override;
 

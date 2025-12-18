@@ -42,17 +42,27 @@ set(generate_descriptor_cmd "$<TARGET_FILE:otbQgisDescriptor>")
 if(CMAKE_SKIP_RPATH AND "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
   set(generate_descriptor_cmd "env;LD_LIBRARY_PATH=${OTB_BINARY_DIR}/lib;$<TARGET_FILE:otbQgisDescriptor>")
 endif()
+# generate dependency list
+# put all app into a file
+# same for dfiles
+set(QGIS_APP_LIST_FILE "${CMAKE_CURRENT_BINARY_DIR}/qgis_apps_list.txt")
+# if file does not exists it does not emit an error
+file(REMOVE "${QGIS_APP_LIST_FILE}")
+file(TOUCH "${QGIS_APP_LIST_FILE}")
+set(QGIS_APP_DESCRIPTOR_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description")
+
 foreach(app_name ${app_names})
   add_dependencies(otbQgisDescriptor otbapp_${app_name})
-  set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/${app_name}.txt")
-  add_custom_command(OUTPUT "${dfile}"
-    COMMAND ${generate_descriptor_cmd}
-    "${app_name}" "${app_location}" "./${OTB_INSTALL_DATA_DIR}/description/"
-    WORKING_DIRECTORY ${OTB_BINARY_DIR}
-    COMMENT "./bin/otbQgisDescriptor ${app_name} ${app_location} ./${OTB_INSTALL_DATA_DIR}/description/"
-    VERBATIM)
-  list(APPEND dfiles "${dfile}")
+  file(APPEND "${QGIS_APP_LIST_FILE}" "${app_name}\n")
 endforeach()
 
-add_custom_target(generate_descriptors DEPENDS ${dfiles} )
+# call otbQgisDescriptor with the app list, the location to create the files 
+add_custom_command(OUTPUT "${QGIS_APP_DESCRIPTOR_PATH}/algs.txt"
+  COMMAND ${generate_descriptor_cmd}
+  "${QGIS_APP_LIST_FILE}" "${app_location}" "./${OTB_INSTALL_DATA_DIR}/description/"
+  WORKING_DIRECTORY ${OTB_BINARY_DIR}
+  COMMENT "Generate gqis descriptor files"
+  VERBATIM)
+
+add_custom_target(generate_descriptors DEPENDS "${QGIS_APP_DESCRIPTOR_PATH}/algs.txt")
 add_dependencies(${otb-module}-all generate_descriptors)

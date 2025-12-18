@@ -35,6 +35,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TDisplacementField>
 StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>::StreamingWarpImageFilter()
 {
+  this->DynamicMultiThreadingOn();
   // Fill the default maximum displacement
   m_MaximumDisplacement.Fill(1);
   m_OutputSignedSpacing = this->Superclass::GetOutputSpacing();
@@ -284,11 +285,10 @@ void StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>::Ge
 }
 
 template <class TInputImage, class TOutputImage, class TDisplacementField>
-void StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                   itk::ThreadIdType threadId)
+void StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // the superclass itk::WarpImageFilter is doing the actual warping
-  Superclass::ThreadedGenerateData(outputRegionForThread, threadId);
+  Superclass::DynamicThreadedGenerateData(outputRegionForThread);
 
   // second pass on the thread region to mask pixels outside the displacement grid
   const PixelType        paddingValue = this->GetEdgePaddingValue();

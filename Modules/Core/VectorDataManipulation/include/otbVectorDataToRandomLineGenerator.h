@@ -23,7 +23,6 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
-#include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include <string>
 
@@ -69,8 +68,6 @@ public:
   typedef typename DataNodeType::LineType                LineType;
   typedef typename DataNodeType::LineType::VertexType    VertexType;
   typedef typename std::vector<PointType>                PointVectorType;
-
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
 
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
 

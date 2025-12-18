@@ -117,7 +117,7 @@ protected:
   /** Generate the input requested region */
   void GenerateInputRequestedRegion() override;
   /** Parallel textures extraction */
-  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputRegionType& outputRegion) override;
 
 private:
   ScalarImageToPanTexTextureFilter(const Self&) = delete;

@@ -30,17 +30,25 @@ set(HDF4_SB_CONFIG)
 set(HDF4_SB_DF_LIB dfalt)
 set(HDF4_SB_MF_LIB mfhdfalt)
 
+# When building HDF4 in debug, the lib names are suffixed with "_debug.so"
+# and with this name, NETCDF can not find it. Thus compil this lib
+# in release
+set(__custom_sb_cmake_args ${SB_CMAKE_CACHE_ARGS})
+list(REMOVE_ITEM __custom_sb_cmake_args "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
+list(APPEND __custom_sb_cmake_args "-DCMAKE_BUILD_TYPE:STRING=Release")
+
+
 ExternalProject_Add(HDF4
   PREFIX HDF4
-  URL "https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.15/src/hdf-4.2.15.tar.gz"
-  URL_MD5 0f3ef23a9a0c7b1cbdc8091a5b90d56e
+  URL "https://github.com/HDFGroup/hdf4/archive/refs/tags/hdf4.3.1.tar.gz"
+  URL_MD5 90106abf6d5bd6dcc3649cdfa1c8fad4
   SOURCE_DIR ${HDF4_SB_SRC}
   BINARY_DIR ${HDF4_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   DEPENDS ${HDF4_DEPENDENCIES}
   CMAKE_CACHE_ARGS
-  ${SB_CMAKE_CACHE_ARGS}
+  ${__custom_sb_cmake_args}
     -DBUILD_TESTING:BOOL=OFF
     -DHDF4_ALLOW_EXTERNAL_SUPPORT:BOOL=OFF
     -DHDF4_BUILD_EXAMPLES:BOOL=OFF

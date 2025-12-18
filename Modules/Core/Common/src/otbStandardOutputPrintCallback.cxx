@@ -19,6 +19,7 @@
  */
 
 #include "otbStandardOutputPrintCallback.h"
+#include <iostream>
 
 namespace otb
 {

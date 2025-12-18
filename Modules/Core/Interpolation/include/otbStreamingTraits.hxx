@@ -51,42 +51,42 @@ unsigned int StreamingTraits<TImage>::CalculateNeededRadiusForInterpolator(const
   else if (className == "ProlateInterpolateImageFunction")
   {
     otbMsgDevMacro(<< "Prolate Interpolator");
-    neededRadius = dynamic_cast<const ProlateInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const ProlateInterpolationType*>(interpolator)->GetRadius().at(0);;
   }
   else if (className == "WindowedSincInterpolateImageGaussianFunction")
   {
     otbMsgDevMacro(<< "Gaussian Windowed Interpolator");
-    neededRadius = dynamic_cast<const GaussianInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const GaussianInterpolationType*>(interpolator)->GetRadius().at(0);;
   }
   else if (className == "WindowedSincInterpolateImageHammingFunction")
   {
     otbMsgDevMacro(<< "Hamming Windowed Interpolator");
-    neededRadius = dynamic_cast<const HammingInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const HammingInterpolationType*>(interpolator)->GetRadius().at(0);;
   }
   else if (className == "WindowedSincInterpolateImageCosineFunction")
   {
     otbMsgDevMacro(<< "Cosine Windowed Interpolator");
-    neededRadius = dynamic_cast<const CosineInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const CosineInterpolationType*>(interpolator)->GetRadius().at(0);;
   }
   else if (className == "WindowedSincInterpolateImageWelchFunction")
   {
     otbMsgDevMacro(<< "Welch Windowed Interpolator");
-    neededRadius = dynamic_cast<const WelchInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const WelchInterpolationType*>(interpolator)->GetRadius().at(0);;
   }
   else if (className == "WindowedSincInterpolateImageLanczosFunction")
   {
     otbMsgDevMacro(<< "Lanczos Windowed Interpolator");
-    neededRadius = dynamic_cast<const LanczosInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const LanczosInterpolationType*>(interpolator)->GetRadius().at(0);;
   }
   else if (className == "WindowedSincInterpolateImageBlackmanFunction")
   {
     otbMsgDevMacro(<< "Blackman Windowed Interpolator");
-    neededRadius = dynamic_cast<const BlackmanInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const BlackmanInterpolationType*>(interpolator)->GetRadius().at(0);;
   }
   else if (className == "BCOInterpolateImageFunction")
   {
     otbMsgDevMacro(<< "BCO Interpolator");
-    neededRadius = dynamic_cast<const BCOInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const BCOInterpolationType*>(interpolator)->GetRadius().at(0);;
   }
   return neededRadius;
 }
@@ -117,12 +117,12 @@ unsigned int StreamingTraits<otb::VectorImage<TPixel, VImageDimension>>::Calcula
   else if (className == "WindowedSincInterpolateImageGaussianFunction")
   {
     otbMsgDevMacro(<< "Gaussian Windowed Interpolator");
-    neededRadius = dynamic_cast<const GaussianInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const GaussianInterpolationType*>(interpolator)->GetRadius().at(0);
   }
   else if (className == "BCOInterpolateImageFunction")
   {
     otbMsgDevMacro(<< "BCO Interpolator");
-    neededRadius = dynamic_cast<const BCOInterpolationType*>(interpolator)->GetRadius();
+    neededRadius = dynamic_cast<const BCOInterpolationType*>(interpolator)->GetRadius().at(0);
   }
 
   return neededRadius;

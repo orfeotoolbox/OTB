@@ -22,6 +22,7 @@
 
 #include "OTBGdalAdaptersExport.h"
 
+#include <cassert>
 #include <memory>
 #include <string>
 

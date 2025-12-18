@@ -20,7 +20,7 @@ RPC sensor model
 
 The structure ``otb::Projection::RPCParam`` is used to store the
 parameters of the RPC model. It is based on `GDAL's RPC structure
-<https://gdal.org/development/rfc/rfc22_rpc.html>`_.
+<https://gdal.org/en/stable/development/rfc/rfc22_rpc.html>`_.
 
 The RPC model is stored in the ``otb::ImageMetadata`` object, using
 the key ``MDGeom::RPC``. The classes ``otb::RPCTransformBase``,

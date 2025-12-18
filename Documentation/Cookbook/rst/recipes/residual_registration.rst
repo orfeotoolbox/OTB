@@ -74,7 +74,7 @@ the input images are then matched against each other. The homologous points
 derive from the features that have matched.
 
 `SIFT <http://en.wikipedia.org/wiki/Scale-invariant_feature_transform>`__
-or `SURF <http://en.wikipedia.org/wiki/SURF>`__ keypoints can be
+or `SURF <https://en.wikipedia.org/wiki/Speeded_up_robust_features>`__ keypoints can be
 computed in the application. The band on which keypoints are computed
 can be set independently for both images.
 
@@ -167,7 +167,7 @@ Orthorectify image using the affine geometry
 Now we will show how we can use this new sensor model. In our case we’ll
 use this sensor model to orthorectify the image over the Pléiades
 reference. **Orfeo ToolBox** offers since version 3.16 the possibility
-to use `extended filename <https://wiki.orfeo-toolbox.org/index.php/ExtendedFileName>`__
+to use :ref:`extended filenames<extended-filenames>`
 in image path to use different metadata file as input. That’s what we are going
 to use to orthorectify the QuickBird image using the *.geom* file
 obtained by the **RefineSensorModel** applications. over the first one

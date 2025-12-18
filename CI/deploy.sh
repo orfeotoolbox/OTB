@@ -30,21 +30,21 @@ echo "jobs_directory=${jobs_directory}"
 
 # Create today's directory on serveur otb5-vm2
 echo "Creating today's directory"
-ssh otbpush@otb5-vm2.orfeo-toolbox.org mkdir -p ${jobs_directory}
+ssh otbpush@otb5-vm2.orfeo-toolbox.org mkdir -p "${jobs_directory}"
 # Delete latest
 echo "Deleting latest directory"
 if [ "$CI_COMMIT_REF_NAME" = "develop" ]
 then # On develop
   ssh otbpush@otb5-vm2.orfeo-toolbox.org rm -rf /home/otbpush/test/latest
   # Create symilink
-  ssh otbpush@otb5-vm2.orfeo-toolbox.org ln -s ${jobs_directory} /home/otbpush/test/latest
+  ssh otbpush@otb5-vm2.orfeo-toolbox.org ln -s "${jobs_directory}" /home/otbpush/test/latest
   # Cleaning old directory
   matching_dirs=$(ls -1 | grep -oE '^20[0-9]{2}-[0-9]{2}-[0-9]{2}$' | sort)
   history_length=11
   rm -rf "$(echo "$matching_dirs" | tr ' ' '\n' | head -n -${history_length})"
 else # On release
   # Remove what is inside staging area
-  ssh otbpush@otb5-vm2.orfeo-toolbox.org rm -rf ${jobs_directory}/*
+  ssh otbpush@otb5-vm2.orfeo-toolbox.org rm -rf "${jobs_directory}"/*
 fi
 
 
@@ -53,24 +53,24 @@ fi
 # Remove old package and source file
 echo "Removing old package and sources"
 ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-rm ${jobs_directory}/OTB-*.zip \
-${jobs_directory}/OTB-*.tar.*
+rm "${jobs_directory}"/OTB-*.zip \
+"${jobs_directory}"/OTB-*.tar.*
 # Push package
 echo "Pushing new binary and sources packages"
-scp OTB-*.{tar.gz,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp OTB-*.{tar.gz,zip} otbpush@otb5-vm2.orfeo-toolbox.org:"${jobs_directory}"/.
 
 
 echo "Removing old CookBook"
 ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-rm ${jobs_directory}/CookBook-*-html.tar.gz 
+rm "${jobs_directory}"/CookBook-*-html.tar.gz
 
 echo "Removing old Doxygen"
 ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-rm ${jobs_directory}/OTB-Doxygen-*.tar.bz2
+rm "${jobs_directory}"/OTB-Doxygen-*.tar.bz2
 
 # Push doc
 echo "Pushing new documentation"
-scp {CookBook-*-html.tar.gz,OTB-Doxygen-*.tar.bz2} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp {CookBook-*-html.tar.gz,OTB-Doxygen-*.tar.bz2} otbpush@otb5-vm2.orfeo-toolbox.org:"${jobs_directory}"/.
 
 # Create zip, tar.gz and tar.xy source
 echo "Creating source tarball and zip"
@@ -81,33 +81,33 @@ git archive --format=tar.xz -o OTB-sources-"$CI_COMMIT_SHORT_SHA".tar.xz HEAD
 # Remove old source file
 #echo "Removing old sources"
 #ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-#rm ${jobs_directory}/OTB-sources-*.zip \
-#${jobs_directory}/OTB-sources-*.tar.*
+#rm "${jobs_directory}"/OTB-sources-*.zip \
+#"${jobs_directory}"/OTB-sources-*.tar.*
 
 # Push new source file
 echo "Pushing new sources"
 scp OTB-sources-"$CI_COMMIT_SHORT_SHA".* \
-otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/
+otbpush@otb5-vm2.orfeo-toolbox.org:"${jobs_directory}"/
 
 echo "${CI_COMMIT_SHA}" > ref.sha
 echo "Pushing ref.sha"
-scp ref.sha otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/
+scp ref.sha otbpush@otb5-vm2.orfeo-toolbox.org:"${jobs_directory}"/
 
 #Untar doc
 if [ "$CI_COMMIT_REF_NAME" = "develop" ]
 then
   #Cookbook
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-    tar -xf ${jobs_directory}/CookBook-*-html.tar.gz -C ${jobs_directory}/
+    tar -xf "${jobs_directory}"/CookBook-*-html.tar.gz -C "${jobs_directory}"/
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
     rm -rf /home/otbpush/test/CookBook/*
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-    mv ${jobs_directory}/CookBook-*/* /home/otbpush/test/CookBook/.
+    mv "${jobs_directory}"/CookBook-*/* /home/otbpush/test/CookBook/.
 
   # Doxygen
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
     rm -rf /home/otbpush/test/Doxygen/*
   # Strip first component of the tar (Doxygen/html/...)
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-    tar -xf ${jobs_directory}/OTB-Doxygen-*.tar.bz2 -C /home/otbpush/test/Doxygen/ --strip-components=1
+    tar -xf "${jobs_directory}"/OTB-Doxygen-*.tar.bz2 -C /home/otbpush/test/Doxygen/ --strip-components=1
 fi

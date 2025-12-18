@@ -76,12 +76,8 @@ public:
   itkTypeMacro(MeanDifferenceImageFilter, SuperClass);
 
 protected:
-  MeanDifferenceImageFilter()
-  {
-  }
-  ~MeanDifferenceImageFilter() override
-  {
-  }
+  MeanDifferenceImageFilter() = default;
+  ~MeanDifferenceImageFilter() = default;
 
 private:
   MeanDifferenceImageFilter(const Self&) = delete;

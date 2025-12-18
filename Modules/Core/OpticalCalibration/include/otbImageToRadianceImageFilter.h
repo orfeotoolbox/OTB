@@ -158,7 +158,8 @@ public:
 protected:
   /** Constructor */
   ImageToRadianceImageFilter()
-  {
+    {
+    
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
   };

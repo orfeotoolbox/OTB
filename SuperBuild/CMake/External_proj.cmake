@@ -25,8 +25,10 @@ SETUP_SUPERBUILD(PROJ)
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PROJ SQLITE TIFF CURL)
 
-set(PROJ_URL "https://download.osgeo.org/proj/proj-9.3.1.tar.gz")
-set(PROJ_MD5 b5c3f36fdca3bc425aca09d77c4ec25a)
+set(__PROJ_VERSION "9.7.0")
+
+set(PROJ_URL "https://github.com/OSGeo/PROJ/archive/${__PROJ_VERSION}.tar.gz")
+set(PROJ_MD5 165b002024234253316c2640c59435b6)
 set(PROJ_FLAGS -DBUILD_SHARED_LIBS:BOOL=TRUE -DBUILD_TESTING:BOOL=OFF -DENABLE_TIFF:BOOL=ON -DENABLE_CURL:BOOL=ON)
 
 ExternalProject_Add(PROJ
@@ -34,6 +36,9 @@ ExternalProject_Add(PROJ
   PREFIX PROJ
   URL ${PROJ_URL}
   URL_MD5 ${PROJ_MD5}
+  # change download name as the file notation vx.x.x is used everywhere
+  # and can conflict with other package
+  DOWNLOAD_NAME "proj-v${__PROJ_VERSION}.tar.gz"
   BINARY_DIR ${PROJ_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -50,8 +55,6 @@ ExternalProject_Add(PROJ
   LOG_BUILD 1
   LOG_INSTALL 1
   )
-
-SUPERBUILD_PATCH_SOURCE(PROJ)
 
 set(_SB_PROJ_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)

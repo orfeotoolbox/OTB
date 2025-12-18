@@ -86,11 +86,7 @@ does not cope well with traditional segmentation algorithms. Second, the
 result of the segmentation process itself is difficult to represent and
 manipulate efficiently.
 
-The experience of segmenting large remote sensing images is packed into
-a single *Segmentation* in **OTB Applications** .
-
-You can find more information about this application
-`here <http://blog.orfeo-toolbox.org/preview/coming-next-large-scale-segmentation>`__.
+The experience of segmenting large remote sensing images is packed into `the Large Scale Mean Shift Segmentation <https://www.orfeo-toolbox.org/CookBook/Applications/app_LSMSSegmentation.html> `__ **OTB Applications**.
 
 Large-Scale Mean-Shift (LSMS) segmentation
 ------------------------------------------

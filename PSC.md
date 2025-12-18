@@ -82,10 +82,9 @@ taking preventive actions about those issues.
 This section describes how the PSC works. It is inspired by existing
 governance statuses in other open source community projects related to
 OTB like
-[GDAL](https://trac.osgeo.org/gdal/wiki/GovernanceAndCommunity),
-[Quantum
-GIS](http://www2.qgis.org/en/site/getinvolved/governance/index.html) or
-[GRASS](http://trac.osgeo.org/grass/wiki/PSC).
+[GDAL](https://gdal.org/en/stable/community/index.html),
+[QGIS](https://www.qgis.org/community/organisation/) or
+[GRASS](https://grasswiki.osgeo.org/wiki/PSCC).
 
 ### PSC members
 
@@ -201,9 +200,6 @@ submits to vote the following release decisions:
     those who actively vote.
 -   The Chair adjudicates in cases of disputes about voting.
 
-A summary of discussions is published in a dedicated section of the wiki
-[Requests for Changes](https://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes).
-
 ## Current members and roles
 
 In March 2015, CNES nominated 3 persons deeply involved in OTB as
@@ -247,9 +243,9 @@ The **release manager** is in charge of :
     in next release, and ensuring they will be included (see
     [Contributors guidelines](CONTRIBUTING.md))
 6.  Submitting the start of the [release
-    process](https://wiki.orfeo-toolbox.org/index.php/How_to_Release) to PSC vote
+    process](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/wikis/Help-for-release-actions) to PSC vote
 7.  Ensuring proper execution of [release
-    process](https://wiki.orfeo-toolbox.org/index.php/How_to_Release)
+    process](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/wikis/Help-for-release-actions)
 
 **Feature freeze:** Starting the release process is also called *feature
 freeze* which describes the period between the creation of the release

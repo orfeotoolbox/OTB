@@ -29,15 +29,15 @@ to see if it has already been reported.
 
 If it's a new bug, please [open a new issue on
 GitLab](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/new).  The
-'Bug' issue template will help you provide all important information and help
+['Bug' issue template](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/new?description_template=bugs) will help you provide all important information and help
 fixing the bug quicker. Remember to add as much information as possible!
 
 ## Feature requests and discussions
 
 Feature requests are welcome! Generally you are welcome to simply [open an
 issue](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues) and discuss
-your idea there. For more complex requests there is an issue template for in
-depth description called 'Request for Comments'.
+your idea there. For more complex requests [there is an issue template for in
+depth description called 'Request for Comments'](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/new?description_template=request_for_comments).
 
 
 ## Documentation improvements
@@ -47,7 +47,7 @@ The main OTB documentation is the
 the main OTB repository in the `Documentation/` directory. Then, to contribute
 documentation use the same workflow as for code contributions (see below).
 
-See also the "Compiling documentation" section of the CookBook for help on
+See also the ["Compiling documentation" section of the CookBook](https://www.orfeo-toolbox.org/CookBook/CompilingOTBFromSource.html#compiling-documentation) for help on
 building the Sphinx source.
 
 ## Code contribution
@@ -61,7 +61,7 @@ then send a merge request.
 Note that we also accept PRs on our [GitHub
 mirror](https://github.com/orfeotoolbox/OTB) which we will manually merge.
 
-Feature branches are tested on multiple platforms on the OTB [CI
+Feature branches are tested on Ubuntu, RedHat and Windows by the OTB [CI
 infrastructure](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/pipelines).
 
 Caveat: even if the CI build on develop branch is broken, it is not allowed to
@@ -75,18 +75,18 @@ On your feature branch, write a good [commit message](https://xkcd.com/1296/):
 short and descriptive. If fixing an issue or bug, put the issue number in the
 commit message so that GitLab can [cross-link
 it](https://docs.gitlab.com/ce/user/project/issues/crosslinking_issues.html).
-You can prefix your commit message with an indicating flag (DOC, BUG, PKG, TEST,
-SuperBuild, etc.).
+You are encouraged to prefix your commit message with an indicating flag (DOC, BUG, PKG, TEST,
+SuperBuild, etc.). It does not fully respect the [Conventional Commit messages](https://www.conventionalcommits.org/en/v1.0.0/#summary), but is inspired by it:
 
 Standard prefixes for OTB commit messages:
 
-    BUG: Fix for runtime crash or incorrect result
-    COMP: Compiler error or warning fix
-    DOC: Documentation change
-    ENH: New functionality
-    PERF: Performance improvement
-    STYLE: No logic impact (indentation, comments)
-    WIP: Work In Progress not ready for merge
+    *BUG*: Fix for runtime crash or incorrect result
+    *COMP*: Compiler error or warning fix
+    *DOC*: Documentation change
+    *ENH*: New functionality
+    *PERF*: Performance improvement
+    *STYLE*: No logic impact (indentation, comments)
+    *WIP*: Work In Progress not ready for merge. This commit should be squash with interactive rebase before merge in develop
 
 For example, here are some good commit messages:
 
@@ -96,9 +96,9 @@ For example, here are some good commit messages:
 
 ### Merge request
 
-Your contribution is ready to be added to the main OTB repository? Send a Merge
-Request against the `develop` branch on GitLab using the merge request
-template. The merge request will then be discussed by the community and the core
+Your contribution is ready to be added to the main OTB repository? Create a Merge
+Request against the `develop` branch on GitLab using [the merge request
+template](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/merge_requests/new). The merge request will then be discussed by the community and the core
 OTB team.
 
 * Merge requests can not be merged until all discussions have been resolved
@@ -124,7 +124,7 @@ CI admins will assign the runners to your fork.
 
 When your pipeline ends, there are two cases:
 
-* if all the jobs succeed, you see a green pipeline, which means no problem was
+* if all jobs succeed, you see a green pipeline, which means no problem was
   found on your commit.
 * if one job fails, you see a red pipeline, which means something is broken in
   your commit. The pipeline widget on GitLab will tell you which job failed, so
@@ -153,7 +153,7 @@ for your contribution.
 
 The copyright owner (or owner's agent) must be mentioned in headers of all
 modified source files and also added to the [NOTICE
-file](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/develop/NOTICE).
+file](NOTICE).
 
 ## Remote modules
 
@@ -161,7 +161,7 @@ Remote Modules are the preferred way if you wish to make your apps and filters
 available to the community while keeping control and maintenance of their
 sources. Those modules are just like regular modules, except they are not
 distributed inside OTB source code. For more information, see [the
-CookBook](https://www.orfeo-toolbox.org/CookBook-develop/RemoteModules.html)
+CookBook](https://www.orfeo-toolbox.org/CookBook/RemoteModules.html)
 
 ## GitLab guidelines
 
@@ -172,7 +172,7 @@ The [milestones](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/milestones)
 should be used to track in which release a feature is merged.  GitLab can then
 provide a summary of all features and bugs added to a given release version.
 
-Regarding labels, we use the following set:
+All labels availables are on the [label page](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/labels), the following list may not be up-to-date:
 
 | Label                                              | Description                                                                                                                                            |
 |----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -182,15 +182,17 @@ Regarding labels, we use the following set:
 | ~usage                                             | Question related to OTB's usage                                                                                                                        |
 | ~patch                                             | A small patch fixing build warnings, compilation errors, typos in logs or documentation                                                                |
 | ~"to investigate"                                  | This issue needs a complete analysis                                                                                                                   |
-| ~"CNES backlog"                                    | The CNES could fund this issue but it has not been assigned to a milestone yet                                                                            |
-| ~"To Do"                                           | Action is planned                                                                                                                                      |
+| ~Backlog                                    | The CNES could fund this issue but it has not been assigned to a milestone yet                                                                            |
+| ~"To Do"                                           | Action is planned   in current sprint                                                                                                                           |
 | ~Doing                                             | Work in progress                                                                                                                                       |
-| ~"Waiting for answer"                              | Waiting for an answer or for a detailed context                                                                                                        |
+| ~"Waiting for answer"                              | Waiting for an answer or for a detailed context. A to old                                                                                                         |
 | ~breaking                                          | Changes introduced by this issue will break the API                                                                                                    |
 | ~refactoring                                       | Issue related to improvements like refactoring, tests, maintenance, etc                                                                                |
 | ~documentation                                     | Documentation improvements|
 | ~ci                                                | Issue related to the continuous integration platform                                                                                                  |
-| ~api ~app ~legal ~monteverdi <br> ~packaging ~qgis | Optional context information                                                                                                                           |
+| ~api ~app ~legal <br> ~packaging ~qgis | Optional context information                                                                                                                           |
+
+~Backlog ~"To Do" ~Doing ~Blocked ~"Ready for review" and ~Done are reserved for sprint usage.
   
 ## Issue life cycle
 

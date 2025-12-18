@@ -35,9 +35,9 @@
 
 #include "otbMacro.h"
 #include <deque>
+#include "vcl_legacy_aliases.h"
 
-namespace otb
-{
+namespace otb {
 
 namespace Functor
 {
@@ -396,18 +396,18 @@ void ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>::operator()(La
 
   // Compute principal moments and axes
   itk::Vector<double, LabelObjectType::ImageDimension> principalMoments;
-  vnl_symmetric_eigensystem<double> eigen(centralMoments.GetVnlMatrix());
+  vnl_symmetric_eigensystem<double> eigen(centralMoments.GetVnlMatrix().as_ref());
   vnl_diag_matrix<double>           pm = eigen.D;
   for (unsigned int i = 0; i < LabelObjectType::ImageDimension; ++i)
   {
     //    principalMoments[i] = 4 * std::sqrt( pm(i, i) );
     principalMoments[i] = pm(i, i);
   }
-  itk::Matrix<double, LabelObjectType::ImageDimension, LabelObjectType::ImageDimension> principalAxes = eigen.V.transpose();
+  itk::Matrix<double, LabelObjectType::ImageDimension, LabelObjectType::ImageDimension> principalAxes(eigen.V.transpose().as_ref());
 
   // Add a final reflection if needed for a proper rotation,
   // by multiplying the last row by the determinant
-  vnl_real_eigensystem                  eigenrot(principalAxes.GetVnlMatrix());
+  vnl_real_eigensystem                  eigenrot(principalAxes.GetVnlMatrix().as_ref());
   vnl_diag_matrix<std::complex<double>> eigenval = eigenrot.D;
   std::complex<double>                  det(1.0, 0.0);
 
@@ -695,7 +695,7 @@ double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>::ComputePeri
   }
 
   // a data structure to store the number of intercepts on each direction
-  typedef typename std::map<OffsetType, itk::SizeValueType, typename OffsetType::LexicographicCompare> MapInterceptType;
+  typedef typename std::map<OffsetType, itk::SizeValueType, OffsetLexicographicCompare> MapInterceptType;
   MapInterceptType intercepts;
   // int nbOfDirections = (int)std::pow( 2.0, (int)ImageDimension ) - 1;
   // intecepts.resize(nbOfDirections + 1);  // code begins at position 1
@@ -1138,7 +1138,7 @@ void ShapeAttributesLabelMapFilter<TImage, TLabelImage>::BeforeThreadedGenerateD
     typename LCI2IType::Pointer lci2i = LCI2IType::New();
     lci2i->SetInput(this->GetInput());
     // respect the number of threads of the filter
-    lci2i->SetNumberOfThreads(this->GetNumberOfThreads());
+    lci2i->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
     lci2i->Update();
     this->GetFunctor().SetLabelImage(lci2i->GetOutput());
   }

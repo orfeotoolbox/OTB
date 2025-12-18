@@ -22,6 +22,7 @@
 #ifndef otbThresholdVectorImageFilter_hxx
 #define otbThresholdVectorImageFilter_hxx
 
+#include "otbMacro.h" //for 
 #include "otbThresholdVectorImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
@@ -40,7 +41,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdVectorImageFilte
   m_OutsideValue(itk::NumericTraits<OutputImageInternalPixelType>::Zero),
   m_Lower(itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin()),
   m_Upper(itk::NumericTraits<InputImageInternalPixelType>::max())
-{}
+{this->DynamicMultiThreadingOn();}
 
 
 /**
@@ -110,7 +111,7 @@ void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdOutside(con
  *
  */
 template <class TInputImage, class TOutputImage>
-void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ThresholdVectorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   itkDebugMacro(<< "Actually executing");
 
@@ -125,9 +126,6 @@ void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData
 
   InputIterator  inIt(inputPtr, outputRegionForThread);
   OutputIterator outIt(outputPtr, outputRegionForThread);
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // walk the regions, threshold each pixel
   while (!outIt.IsAtEnd() && !inIt.IsAtEnd())
@@ -156,7 +154,6 @@ void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData
 
     ++inIt;
     ++outIt;
-    progress.CompletedPixel();
   }
 }
 

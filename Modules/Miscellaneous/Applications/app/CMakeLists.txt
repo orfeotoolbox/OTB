@@ -26,7 +26,7 @@ otb_create_application(
 otb_create_application(
 NAME           DomainTransform
 SOURCES        otbDomainTransform.cxx
-LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBITK_LIBRARIES})
 
 OTB_CREATE_APPLICATION(
 NAME TrainDimensionalityReduction

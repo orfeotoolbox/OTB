@@ -1,3 +1,0 @@
-The point [1, 1] Is Outside the rectangle
-region Size[11, 3]
-region Origin[1, 0]

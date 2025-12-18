@@ -24,7 +24,7 @@
 
 #include <vector>
 #include <algorithm>
-
+#include "otbMacro.h" //for 
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
@@ -48,7 +48,7 @@ BoxAndWhiskerImageFilter<TInputImage>::BoxAndWhiskerImageFilter()
 }
 
 template <class TInputImage>
-void BoxAndWhiskerImageFilter<TInputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void BoxAndWhiskerImageFilter<TInputImage>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   const TInputImage* inputPtr  = this->GetInput();
   OutputImageType*   outputPtr = this->GetOutput();
@@ -65,9 +65,6 @@ void BoxAndWhiskerImageFilter<TInputImage>::ThreadedGenerateData(const OutputIma
   // local iterators
   itk::ImageRegionConstIterator<InputImageType> inputIter;
   itk::ImageRegionIterator<OutputImageType>     outputIter;
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   /**
    *  Process each of the boundary faces.
@@ -88,7 +85,6 @@ void BoxAndWhiskerImageFilter<TInputImage>::ThreadedGenerateData(const OutputIma
       ++inputIter;
       ++outputIter;
 
-      progress.CompletedPixel();
     }
   }
 }

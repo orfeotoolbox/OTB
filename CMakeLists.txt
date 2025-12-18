@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -37,9 +37,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check compiler versions
-set(OTB_MIN_GNU_VER 5)
+set(OTB_MIN_GNU_VER 8)
 set(OTB_MIN_MSVC_VER 19)
-set(OTB_MIN_Clang_VER 3.4)
+set(OTB_MIN_Clang_VER 10)
 if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
   if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
     message(FATAL_ERROR "The version of your ${CMAKE_CXX_COMPILER_ID} "
@@ -113,8 +113,8 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
-set(OTB_VERSION_MAJOR "9")
-set(OTB_VERSION_MINOR "1")
+set(OTB_VERSION_MAJOR "10")
+set(OTB_VERSION_MINOR "0")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -131,7 +131,7 @@ if(NOT OTB_INSTALL_PYTHON_DIR)
   set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python")
 endif()
 
-#convert path to native for reconfiguring otbcli.bat.in
+#convert path to native for reconfiguring otbcli.ps1.in
 file(TO_NATIVE_PATH "${OTB_INSTALL_APP_DIR}" OTB_INSTALL_APP_DIR_NATIVE)
 
 #-----------------------------------------------------------------------------
@@ -358,6 +358,28 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
         DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
         COMPONENT Core)
 
+set(__PYTHON_VERSION_MAJOR "3")
+set(__PYTHON_VERSION_MINOR "10")
+
+if (UNIX)
+  # output of python3 --version is "Python XX.XX.XX", notice the space that
+  # is used in regex
+  execute_process(
+    COMMAND python3 --version
+    RESULT_VARIABLE CMD_RES
+    OUTPUT_VARIABLE __PYTHON_VERSION_DURING_BUILD
+  )
+  # Get the first two digit and concatenate them
+  string(REGEX MATCH " ([0-9]+)\.([0-9]+)" TMP_VAR "${__PYTHON_VERSION_DURING_BUILD}")
+
+  if (${CMAKE_MATCH_COUNT} EQUAL 2)
+    # CMAKE_MATCH_0 is the entire match
+    # See https://cmake.org/cmake/help/latest/variable/CMAKE_MATCH_n.html
+    set(__PYTHON_VERSION_MAJOR "${CMAKE_MATCH_1}")
+    set(__PYTHON_VERSION_MINOR "${CMAKE_MATCH_2}")
+  endif()
+endif()
+
 if(XDK_INSTALL_PATH)
     # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell
     # Cmake it is here
@@ -366,9 +388,9 @@ if(XDK_INSTALL_PATH)
             DESTINATION .
             USE_SOURCE_PERMISSIONS
             COMPONENT Dependencies)
-    # Redhat8 case : the bindings are installed by default in lib64/python3.8
+    # Redhat8 case : the bindings are installed by default in lib64/python3.12
     if( EXISTS ${XDK_INSTALL_PATH}/lib64)
-      install(DIRECTORY ${XDK_INSTALL_PATH}/lib64/python3.8
+      install(DIRECTORY "${XDK_INSTALL_PATH}/lib64/python${__PYTHON_VERSION_MAJOR}.${__PYTHON_VERSION_MINOR}"
               DESTINATION ./lib
               USE_SOURCE_PERMISSIONS
               COMPONENT Dependencies)
@@ -376,7 +398,16 @@ if(XDK_INSTALL_PATH)
     install(DIRECTORY ${XDK_INSTALL_PATH}/share
             DESTINATION .
             USE_SOURCE_PERMISSIONS
-            COMPONENT Core)
+            COMPONENT Core
+            PATTERN "cmake" EXCLUDE
+            )
+    # On Windows this folder does not exist
+    if( EXISTS ${XDK_INSTALL_PATH}/share/cmake)
+      install(DIRECTORY ${XDK_INSTALL_PATH}/share/cmake
+              DESTINATION ./lib
+              USE_SOURCE_PERMISSIONS
+              COMPONENT Core)
+    endif()
     install(DIRECTORY ${XDK_INSTALL_PATH}/include
             DESTINATION .
             USE_SOURCE_PERMISSIONS
@@ -427,10 +458,12 @@ if(UNIX)
     DESTINATION .
     COMPONENT Core
     )
+
+  # the file need __PYTHON_VERSION_MAJOR and __PYTHON_VERSION_MINOR vars
   configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
                  ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
   install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/build_gdal_bindings.sh
     ${CMAKE_BINARY_DIR}/post_install.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/sanitize_rpath.sh
     DESTINATION ./tools
@@ -438,17 +471,11 @@ if(UNIX)
     )
 endif()
 
-#my_file_ext is required for otbcli files which has
-# no extension on linux. (hence we cannot use SCRIPT_EXT
-
-#For windows otbenv.bash and otbenv.bat is required.
+# For windows otbenv.bash and otbenv.ps1 is required.
 # Former is for windows shell users and latter is for other
 # linux emulator such as bash for windows or mobxterm
-set(my_file_ext "")
 if(WIN32)
-  set(my_file_ext ".bat")
   install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bat
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.ps1
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bash
     DESTINATION .

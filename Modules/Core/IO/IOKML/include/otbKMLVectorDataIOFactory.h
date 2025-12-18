@@ -21,6 +21,7 @@
 #ifndef otbKMLVectorDataIOFactory_h
 #define otbKMLVectorDataIOFactory_h
 
+#include "OTBIORADExport.h"
 #include "itkObjectFactoryBase.h"
 
 namespace otb

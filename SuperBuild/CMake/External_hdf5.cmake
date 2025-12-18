@@ -27,17 +27,24 @@ ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(HDF5 ZLIB)
 
 set(HDF5_SB_CONFIG)
 
+# When building HDF4 in debug, the lib names are suffixed with "_debug.so"
+# and with this name, NETCDF can not find it. Thus compil this lib
+# in release
+set(__custom_sb_cmake_args ${SB_CMAKE_CACHE_ARGS})
+list(REMOVE_ITEM __custom_sb_cmake_args "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
+list(APPEND __custom_sb_cmake_args "-DCMAKE_BUILD_TYPE:STRING=Release")
+
 ExternalProject_Add(HDF5
   PREFIX HDF5
-  URL "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.3/src/hdf5-1.12.3.tar.gz"
-  URL_MD5 4da24fcd281b9eeb05dae9b258f72a72
+  URL "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6.tar.gz"
+  URL_MD5 63426c8e24086634eaf9179a8c5fe9e5
   SOURCE_DIR ${HDF5_SB_SRC}
   BINARY_DIR ${HDF5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   DEPENDS ${HDF5_DEPENDENCIES}
   CMAKE_CACHE_ARGS
-  ${SB_CMAKE_CACHE_ARGS}
+  ${__custom_sb_cmake_args}
     -DBUILD_TESTING:BOOL=OFF
     -DHDF5_BUILD_CPP_LIB:BOOL=ON
     -DHDF5_BUILD_EXAMPLES:BOOL=OFF

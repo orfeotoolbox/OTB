@@ -278,8 +278,7 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
 }
 
 template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
-void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                                                                                                                 itk::ThreadIdType itkNotUsed(threadId))
+void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::DynamicThreadedGenerateData(const RegionType& outputRegionForThread)
 {  // Instantiate all transforms
   auto referenceToGroundTransform = RSTransformType::New();
 

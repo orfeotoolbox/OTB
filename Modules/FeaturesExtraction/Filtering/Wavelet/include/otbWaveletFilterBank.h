@@ -100,7 +100,10 @@ public:
   itkTypeMacro(WaveletFilterBank, ImageToImageFilter);
 
 protected:
-  WaveletFilterBank();
+  WaveletFilterBank()
+  {
+    this->DynamicMultiThreadingOff();
+  }
   virtual ~WaveletFilterBank();
 
 private:
@@ -393,7 +396,7 @@ protected:
   {
   }
 
-  void VerifyInputInformation() override
+  void VerifyInputInformation() const override
   {
   }
 

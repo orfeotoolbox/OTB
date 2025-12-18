@@ -92,8 +92,8 @@ public:
   typedef typename OutputVectorDataType::DataNodeType OutputDataNodeType;
   typedef typename InputVectorDataType::DataNodeType  InputDataNodeType;
 
-  typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
+  typedef typename InputVectorDataType::TreeNodeType  InputInternalTreeNodeType;
+  typedef typename OutputVectorDataType::TreeNodeType OutputInternalTreeNodeType;
 
   typedef typename InputDataNodeType::PointType       InputPointType;
   typedef typename InputDataNodeType::LineType        InputLineType;

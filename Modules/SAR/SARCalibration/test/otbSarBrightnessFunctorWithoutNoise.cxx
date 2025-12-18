@@ -21,6 +21,7 @@
 #include "itkMacro.h"
 #include "otbSarBrightnessFunctor.h"
 #include "otbMath.h"
+#include <iostream>
 
 int otbSarBrightnessFunctorWithoutNoise(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {

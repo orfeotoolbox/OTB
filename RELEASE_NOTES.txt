@@ -1,3 +1,12 @@
+OTB-v 9.1.1 - Changes since version 9.1.0 (March 19th, 2024)
+-------------------------------------------------------------
+Bugs fixed:
+  * !1065: otbQGisDescriptor now read a list of module, not just one module by Tristan Laurent
+  * !1060: COMP: compile without FFTW to avoid GPL contamination by Tristan Laurent
+  * !1058: BUG: correct SetInputRequestedRegionsImpl to propagate correct neighborhood type by Tristan Laurent
+  * !1054: BUG: fix empty OS variable, fix osgeo finding on rhel-based OS by Tristan Laurent
+  * !1053: Remove/update old windows files and remove travis ones by Tristan Laurent
+
 OTB-v 9.1.0 - Changes since version 9.0.0 (September 27th, 2024)
 -------------------------------------------------------------
 

@@ -24,7 +24,6 @@
 
 #include "otbFunctionToImageFilter.h"
 #include "itkImageRegionConstIterator.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -37,6 +36,7 @@ FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::FunctionToImageFilt
 {
   this->InPlaceOff();
   m_PixelFunction = FunctionType::New();
+  this->DynamicMultiThreadingOn();
 }
 
 /**
@@ -70,8 +70,7 @@ void FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::BeforeThreaded
  * ThreadedGenerateData function. Performs the pixel-wise addition
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                       itk::ThreadIdType threadId)
+void FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
 
   // We use dynamic_cast since inputs are stored as DataObjects.
@@ -82,8 +81,6 @@ void FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenera
   itk::ImageRegionConstIterator<TInputImage> inputIt(inputPtr, outputRegionForThread);
   itk::ImageRegionIterator<TOutputImage>     outputIt(outputPtr, outputRegionForThread);
 
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
@@ -93,7 +90,6 @@ void FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenera
     outputIt.Set(static_cast<OutputImagePixelType>(m_PixelFunction->EvaluateAtIndex(inputIt.GetIndex())));
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
   }
 }
 } // end namespace otb

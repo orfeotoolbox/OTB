@@ -17,8 +17,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+if(OTBCurl_ENABLED)
 project(OTBCurlAdapters)
 
 set(OTBCurlAdapters_LIBRARIES OTBCurlAdapters)
 otb_module_impl()
+endif()

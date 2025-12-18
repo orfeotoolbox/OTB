@@ -25,8 +25,8 @@ SETUP_SUPERBUILD(TIFF)
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(TIFF ZLIB JPEG LERC)
 
-set(TIFF_URL "https://download.osgeo.org/libtiff/tiff-4.6.0.tar.gz")
-set(TIFF_MD5 fc7d49a9348b890b29f91a4ecadd5b49)
+set(TIFF_URL "https://download.osgeo.org/libtiff/tiff-4.7.1.tar.gz")
+set(TIFF_MD5 f1044dd3b4466cc53464210148e08146)
 
 if(MSVC)
   set(TIFF_C_FLAGS "/D_CRT_SECURE_NO_WARNINGS /DWIN32")

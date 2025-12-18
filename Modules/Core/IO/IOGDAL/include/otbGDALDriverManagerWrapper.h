@@ -80,6 +80,14 @@ public:
   GDALDatasetWrapper::Pointer Create(std::string& driverShortName, std::string filename, int nXSize, int nYSize, int nBands, GDALDataType eType,
                                      char** papszOptions) const;
 
+  GDALDatasetWrapper::Pointer OpenFromMemory(
+                                void* mem_ptr,
+                                const uint64_t& width,
+                                const uint64_t& height,
+                                const GDALDataType pix_type,
+                                const uint32_t byte_per_pixel,
+                                const uint16_t nb_bands = 1,
+                                const uint64_t& band_offset = 1) const;
 
   GDALDriver* GetDriverByName(std::string driverShortName) const;
 

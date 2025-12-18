@@ -27,7 +27,6 @@
 #include "otbMacro.h"
 #include "otbSubsampledImageRegionIterator.h"
 #include "itkImageRegionIterator.h"
-#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -128,8 +127,7 @@ void SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 }
 
 template <class TInputImage, class TOutputImage, Wavelet::WaveletDirection TDirectionOfTransformation>
-void SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                       itk::ThreadIdType itkNotUsed(threadId))
+void SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   OutputImagePointerType output = this->GetOutput();
 

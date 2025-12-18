@@ -25,63 +25,63 @@ process:
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | **Library**                                                       | **Mandatory**         | **Minimum version**        | **Superbuild Version**   |
     +===================================================================+=======================+============================+==========================+
-    | `Boost <http://www.boost.org>`_                                   | Yes                   | 1.73.0                     | 1.82.0                   |
+    | `Boost <http://www.boost.org>`_                                   | Yes                   | 1.73.0                     | 1.86.0                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Expat <https://sourceforge.net/projects/expat/>`_                | Yes                   |                            | 2.5.0                    |
+    | `Expat <https://github.com/libexpat/libexpat>`_                   | Yes                   |                            | 2.7.3                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Geos <https://libgeos.org/>`_                                    | Yes                   |                            | 3.12.1                   |
+    | `Geos <https://libgeos.org/>`_                                    | Yes                   |                            | 3.14.1                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `ITK <http://www.itk.org>`_                                       | Yes                   | 4.6.0                      | 4.13.3                   |
+    | `ITK <http://www.itk.org>`_                                       | Yes                   | 5.0.0                      | 5.3.0                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `GDAL <http://www.gdal.org>`_                                     | Yes                   | 2.4.1                      | 3.8.3                    |
+    | `GDAL <http://www.gdal.org>`_                                     | Yes                   | 3.0.0                      | 3.12.3                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `HDF4 <https://www.hdfgroup.org/solutions/hdf4/>`_                | Yes                   |                            | 4.2.13                   |
+    | `HDF4 <https://www.hdfgroup.org/solutions/hdf4/>`_                | Yes                   |                            | 4.3.1                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_                | Yes                   |                            | 1.12.3                   |
+    | `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_                | Yes                   |                            | 1.14.6                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `libgeotiff <http://trac.osgeo.org/geotiff/>`_                    | Yes                   |                            | 1.7.1                    |
+    | `libgeotiff <https://github.com/OSGeo/libgeotiff>`_               | Yes                   |                            | 1.7.4                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `libjpeg-turbo <https://github.com/libjpeg-turbo/libjpeg-turbo>`_ | Yes                   |                            | 3.0.3                    |
+    | `libjpeg-turbo <https://github.com/libjpeg-turbo/libjpeg-turbo>`_ | Yes                   |                            | 3.1.2                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `libpng <https://downloads.sourceforge.net/project/libpng>`_      | Yes                   |                            | 1.6.37                   |
+    | `libpng <https://downloads.sourceforge.net/project/libpng>`_      | Yes                   |                            | 1.6.50                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `libtiff <http://www.libtiff.org/>`_                              | Yes                   |                            | 4.6.0                    |
+    | `libtiff <http://www.libtiff.org/>`_                              | Yes                   |                            | 4.7.1                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `NetCDF <https://github.com/Unidata/netcdf-c>`_                   | Yes                   |                            | 4.9.2                    |
+    | `NetCDF <https://github.com/Unidata/netcdf-c>`_                   | Yes                   |                            | 4.9.3                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `OpenJPEG <https://github.com/uclouvain/openjpeg>`_               | Yes                   |                            | 2.5.0                    |
+    | `OpenJPEG <https://github.com/uclouvain/openjpeg>`_               | Yes                   |                            | 2.5.4                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `PROJ <https://proj.org/>`_                                       | Yes                   |                            | 9.3.1                    |
+    | `PROJ <https://proj.org/>`_                                       | Yes                   |                            | 9.7.0                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `SQLITE <https://www.sqlite.org>`_                                | Yes                   |                            | 3.42.0                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `tinyXML <http://www.grinninglizard.com/tinyxml>`_                | Yes                   |                            | 2.6.2                    |
+    | `tinyXML <https://sourceforge.net/projects/tinyxml/>`_            | Yes                   |                            | 2.6.2                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `ZLIB <https://zlib.net>`_                                        | Yes                   |                            | 1.3.1                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `6S <http://6s.ltdri.org>`_                                       | No                    |                            |                          |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Curl <http://www.curl.haxx.se>`_                                 | No                    |                            | 8.2.1                    |
+    | `Curl <https://github.com/curl/curl>`_                            | No                    |                            | 8.17.0                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `FFTW <http://www.fftw.org>`_                                     | No                    |                            | 3.3.10                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `libSVM <http://www.csie.ntu.edu.tw/~cjlin/libsvm>`_              | No                    | 2.0                        | 3.25                     |
+    | `libSVM <http://www.csie.ntu.edu.tw/~cjlin/libsvm>`_              | No                    | 2.0                        | 336                      |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `MPI <https://www.open-mpi.org/>`_                                | No                    |                            |                          |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `MuParser <http://www.muparser.sourceforge.net>`_                 | No                    |                            | 2.3.2                    |
+    | `MuParser <"https://github.com/beltoforion/muparser>`_            | No                    |                            | 2.3.4                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `MuParserX <http://muparserx.beltoforion.de>`_                    | No                    | 4.0.7                      | 4.0.8                    |
+    | `MuParserX <https://github.com/beltoforion/muparserx>`_           | No                    | 4.0.7                      | 4.0.12                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `OpenCV <http://opencv.org>`_                                     | No                    | 3.0.0                      | 4.6.0                    |
+    | `OpenCV <http://opencv.org>`_                                     | No                    | 3.0.0                      | 4.10.0                   |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Shark <http://image.diku.dk/shark/>`_                            | No                    | 4                          | 4.0                      |
+    | `Shark <https://github.com/Shark-ML/Shark>`_                      | No                    | 4                          | 4.0                      |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `SiftFast <http://libsift.sourceforge.net>`_                      | No                    |                            |                          |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `SPTW <https://github.com/remicres/sptw.git>`_                    | No                    |                            |                          |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `SWIG <https://www.swig.org/>`_                                   | No                    |                            | 4.1.1                    |
+    | `SWIG <https://www.swig.org/>`_                                   | No                    |                            | 4.4.0                    |
     +-------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
 
 GNU/Linux
@@ -371,15 +371,33 @@ To run the tests, first make sure to set the option
 python API, you will also need to install the python module `pytest`.
 
 For some of the tests, you also need the test data and the baselines (~1GB). These files are stored
-using `git-lfs` in the `Data` folder at the root of otb sources. To download them, you have to make
-sure `git-lfs` is installed before cloning otb (binaries for `git lfs` are available for different
+in a `git submodule <https://git-scm.com/book/en/v2/Git-Tools-Submodules>`_ and large data are available using `git-lfs` in the `Data` folder at the root of otb sources.
+To download them, you need `git-lfs` is installed (binaries for `git lfs` are available for different
 OS `here <https://github.com/git-lfs/git-lfs/releases>`_).
+After downloading git lfs, add the binary to $PATH and run `git lfs install`. You can then clone Data sources.
 
-After downloading, add the binary to $PATH and run `git lfs install`. You can then clone otb sources :
+Either you choose to use the Data git submodule present in OTB repo that you previously cloned, so you will need
+the following commands
 
 ::
+    # We assume that you already have cloned OTB with
+    # git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git
+    # and you are in OTB source dir
+    git submodule init
+    git submodule update
+    # to ensure you have all Data stored with git lfs
+    git submodule foreach "git lfs pull"
 
-    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git
+Or you can choose to install test data in another directory using the Data git repo.
+If you do that, ensure that the OTB cmake configuration variable ``OTB_DATA_ROOT`` point
+to that repository:
+
+::
+    # Here you are not in OTB source folder
+    git clone git@gitlab.orfeo-toolbox.org:orfeotoolbox/data.git Data
+    cd Data
+    git lfs pull
+    # Then configure OTB with OTB_DATA_ROOT cmake option that point to that folder
 
 Once OTB is built with the tests, you just have to go to the binary
 directory where you built OTB and run ``ctest -N`` to have a list of all
@@ -387,8 +405,8 @@ the tests. Just using ``ctest`` will run all the tests. To select a
 subset, you can do ``ctest -R Kml`` to run all tests related to kml
 files or ``ctest -I 1,10`` to run tests from 1 to 10.
 
-Compiling documentation
------------------------
+Compiling user documentation (this cookbook)
+--------------------------------------------
 
 Enable Python bindings and set ``BUILD_COOKBOOK`` option to ON:
 
@@ -401,4 +419,19 @@ Then, build the target:
 ::
 
     make CookbookHTML
+
+Compiling developer documentation (doxygen)
+-------------------------------------------
+
+You need Doxygen installed on your computer (see `Common dependencies`_) and turn the CMake ``BUILD_DOCUMENTATION`` option to ON:
+
+::
+
+    cmake -DBUILD_DOCUMENTATION=ON .
+
+Then, build the target:
+
+::
+
+    make Documentation
 

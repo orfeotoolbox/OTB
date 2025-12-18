@@ -137,6 +137,7 @@ enum class MDNum
   RedDisplayChannel,
   GreenDisplayChannel,
   BlueDisplayChannel,
+  DeepBlueDisplayChannel,
 // optical section
   PhysicalGain,
   PhysicalBias,

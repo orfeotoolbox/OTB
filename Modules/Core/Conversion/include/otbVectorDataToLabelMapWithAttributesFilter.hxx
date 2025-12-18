@@ -235,8 +235,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>::GenerateD
     if (this->GetInput(idx))
     {
 
-      InputVectorDataConstPointer input     = this->GetInput(idx);
-      InternalTreeNodeType*       inputRoot = const_cast<InternalTreeNodeType*>(input->GetDataTree()->GetRoot());
+      InputVectorDataConstPointer input = this->GetInput(idx);
       // Use our own value for the background
       output->SetBackgroundValue(m_BackgroundValue);
       // Set the value of the first label
@@ -245,39 +244,39 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>::GenerateD
 
       // The projection information
       output->SetMetaDataDictionary(input->GetMetaDataDictionary());
-      ProcessNode(inputRoot);
+      ProcessNode(input,input->GetRoot());
     }
   }
 }
 
 template <class TVectorData, class TLabelMap>
-void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>::ProcessNode(InternalTreeNodeType* source)
+void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>::ProcessNode(InputVectorDataConstPointer inputVdata,DataNodePointerType source)
 {
 
   // Get the children list from the input node
-  ChildrenListType children = source->GetChildrenList();
+  ChildrenListType children = inputVdata->GetChildrenList(source);
 
   // For each child
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
   {
     // Copy input DataNode info
-    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType dataNode = (*it);
     otbGenericMsgDebugMacro(<< "Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
     switch (dataNode->GetNodeType())
     {
     case otb::ROOT:
     {
-      ProcessNode((*it));
+      //ProcessNode(inputVdata,(*it));
       break;
     }
     case otb::DOCUMENT:
     {
-      ProcessNode((*it));
+      ProcessNode(inputVdata,(*it));
       break;
     }
     case otb::FOLDER:
     {
-      ProcessNode((*it));
+      ProcessNode(inputVdata,(*it));
       break;
     }
     case FEATURE_POINT:

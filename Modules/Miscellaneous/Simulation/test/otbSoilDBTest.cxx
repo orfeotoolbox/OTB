@@ -23,7 +23,9 @@
 #include "otbSoilDataBase.h"
 #include <iostream>
 
-int otbSoilDataBaseParseFile(int argc, char* argv[])
+#include <math.h>       /* fabs */
+
+int otbSoilDataBaseParseFile(int argc, char * argv[])
 {
   if (argc < 5)
   {

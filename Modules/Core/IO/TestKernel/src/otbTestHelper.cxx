@@ -2002,7 +2002,7 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
   {
     for (int iField = 0; iField < feature->GetFieldCount(); iField++)
     {
-      OGRFieldDefn* poFDefn = feature->GetDefnRef()->GetFieldDefn(iField);
+      const OGRFieldDefn* poFDefn = feature->GetDefnRef()->GetFieldDefn(iField);
 
       fprintf(fpOut, "  %s (%s) = ", poFDefn->GetNameRef(), OGRFieldDefn::GetFieldTypeName(poFDefn->GetType()));
 

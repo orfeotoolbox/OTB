@@ -22,9 +22,12 @@
 #define otbCoordinateToName_h
 
 #include "itkPoint.h"
-#include "itkMultiThreader.h"
+#include "itkPlatformMultiThreader.h"
+
+#include "itkConfigure.h"
 #include "otbCurlHelperInterface.h"
 #include "OTBCartoExport.h"
+#include "otbMacro.h" //for ITK_THREAD_RETURN_TYPE in ITK5
 #include <string>
 
 namespace otb
@@ -62,6 +65,8 @@ public:
 
   itkSetMacro(Lon, double);
   itkSetMacro(Lat, double);
+
+  using PlatformMultiThreader = itk::PlatformMultiThreader;
 
   /**
    * Set the lon/lat only if they are far enough from the current point to
@@ -127,7 +132,7 @@ protected:
 
   virtual void DoEvaluate();
 
-  static ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
+  static itk::ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
 
 private:
   CoordinateToName(const Self&) = delete;
@@ -149,7 +154,7 @@ private:
 
   CurlHelperInterface::Pointer m_Curl;
 
-  itk::MultiThreader::Pointer m_Threader;
+  PlatformMultiThreader::Pointer m_Threader;
 };
 
 } // namespace otb

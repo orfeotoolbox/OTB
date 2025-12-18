@@ -172,7 +172,7 @@ Writer options
 
 -  To specify a GDAL creation option
 
--  For GDAL creation option information, see the dedicated GDAL documentation for each driver. For example, you can find `here <http://www.gdal.org/frmt_gtiff.html>`_ the information about the GeoTiff create options
+-  For GDAL creation option information, see the dedicated GDAL documentation for each driver. For example, you can find `here <https://gdal.org/en/stable/drivers/raster/gtiff.html>`_ the information about the GeoTiff create options
 
 -  None by default
 

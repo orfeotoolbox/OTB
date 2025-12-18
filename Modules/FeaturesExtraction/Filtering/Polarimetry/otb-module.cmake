@@ -26,6 +26,7 @@ representations of a polarisation state, to perform polarimetry synthesis, and s
 on.")
 
 otb_module(OTBPolarimetry
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBITK

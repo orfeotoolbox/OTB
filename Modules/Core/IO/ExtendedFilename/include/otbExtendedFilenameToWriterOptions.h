@@ -42,7 +42,7 @@ namespace otb
  * - &multiwrite=<(bool)false> : to deactivate multi-writing
  * - &epsg=<VALUE> : to set the spatial reference system
  *
- * See http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for
+ * See https://www.orfeo-toolbox.org/CookBook/ExtendedFilenames.html for
  * more information
  *
  *  \sa ImageFileWriter

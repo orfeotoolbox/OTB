@@ -107,7 +107,7 @@ protected:
   }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   PixelSuppressionByDirectionImageFilter(const Self&) = delete;

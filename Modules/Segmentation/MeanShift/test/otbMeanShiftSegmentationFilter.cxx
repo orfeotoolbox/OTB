@@ -71,7 +71,7 @@ int otbMeanShiftSegmentationFilter(int argc, char* argv[])
   filter->SetMinRegionSize(minregionsize);
   filter->SetInput(reader->GetOutput());
 
-  // filter->SetNumberOfThreads(1);
+  // filter->SetNumberOfWorkUnits(1);
   ClusteredWriterType::Pointer writerClustered = ClusteredWriterType::New();
   LabelWriterType::Pointer     writerLabel     = LabelWriterType::New();
 

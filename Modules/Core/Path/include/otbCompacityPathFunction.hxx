@@ -40,7 +40,6 @@ typename CompacityPathFunction<TInputPath, TOutput>::OutputType CompacityPathFun
 {
   VertexListPointer vertexList;
   VertexType        cindex;
-  VertexType        IndexOut;
   int               nbPath;
   RealType          Surface   = 0.0;
   RealType          Perimeter = 0.0;

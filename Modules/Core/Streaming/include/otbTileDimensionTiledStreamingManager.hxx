@@ -43,7 +43,8 @@ void TileDimensionTiledStreamingManager<TImage>::PrepareStreaming(itk::DataObjec
 {
   if (m_TileDimension < 16)
   {
-    itkWarningMacro(<< "TileDimension inferior to 16 : using 16 as tile dimension") m_TileDimension = 16;
+    itkWarningMacro(<< "TileDimension inferior to 16 : using 16 as tile dimension");
+     m_TileDimension = 16;
   }
 
   // Calculate number of split

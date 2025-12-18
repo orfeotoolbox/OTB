@@ -80,6 +80,7 @@ public:
 protected:
   SummingFilter()
   {
+    this->DynamicMultiThreadingOn();
   }
 
   virtual ~SummingFilter()
@@ -94,11 +95,11 @@ protected:
    * portion of the output image specified by the parameter
    * "outputRegionForThread"
    *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   * \sa ImageToImageFilter::DynamicThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
 
   /** Overridden methods */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  virtual void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread);
 
   virtual void GenerateOutputInformation(void);
 

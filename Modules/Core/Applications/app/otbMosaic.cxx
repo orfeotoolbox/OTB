@@ -60,7 +60,6 @@
 // Masks
 #include "itkMaskImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
-#include "otbVectorImageToAmplitudeImageFilter.h"
 
 // Solver for mosaic harmonization
 #include "otbQuadraticallyConstrainedSimpleSolver.h"
@@ -131,9 +130,9 @@ public:
   typedef otb::Image<unsigned char>                UInt8MaskImageType;
   typedef otb::ImageFileWriter<UInt8MaskImageType> UInt8MaskWriterType;
   typedef otb::ImageFileReader<UInt8MaskImageType> UInt8MaskReaderType;
-  typedef itk::BinaryThresholdImageFilter<LabelImageType, UInt8MaskImageType>          LabelImageThresholdFilterType;
-  typedef otb::VectorImageToAmplitudeImageFilter<FloatVectorImageType, FloatImageType> VectorImageToAmplitudeFilterType;
-  typedef itk::BinaryThresholdImageFilter<FloatImageType, UInt8MaskImageType>          ImageThresholdFilterType;
+  typedef itk::BinaryThresholdImageFilter<LabelImageType, UInt8MaskImageType>    LabelImageThresholdFilterType;
+  typedef otb::Functor::IsNoData<FloatVectorImageType::PixelType, unsigned char> IsNoDataFunctor;
+  typedef otb::FunctorImageFilter<IsNoDataFunctor>                               IsNoDataFilterType;
 
   /* Distance map image writer typedef */
   typedef otb::ImageFileReader<DoubleImageType> DistanceMapImageReaderType;
@@ -502,32 +501,24 @@ private:
    */
   void WriteBinaryMask(FloatVectorImageType* referenceImage, string outputFileName, double spacingRatio = 1.0)
   {
-    // Vector image to amplitude image
-    VectorImageToAmplitudeFilterType::Pointer ampFilter = VectorImageToAmplitudeFilterType::New();
-
-    ampFilter->SetInput(referenceImage);
-
-    // Threshold image
-    ImageThresholdFilterType::Pointer thresholdFilter = ImageThresholdFilterType::New();
-    thresholdFilter->SetInput(ampFilter->GetOutput());
-    thresholdFilter->SetOutsideValue(itk::NumericTraits<UInt8MaskImageType::InternalPixelType>::Zero);
-    thresholdFilter->SetInsideValue(itk::NumericTraits<UInt8MaskImageType::InternalPixelType>::max());
-    thresholdFilter->SetLowerThreshold(GetParameterFloat("nodata"));
-    thresholdFilter->SetUpperThreshold(GetParameterFloat("nodata"));
-    thresholdFilter->UpdateOutputInformation();
+    // No-data image
+    IsNoDataFunctor nodata_functor(GetParameterFloat("nodata"));
+    IsNoDataFilterType::Pointer isNoDataFilter = NewFunctorFilter(nodata_functor, {{0, 0}});
+    isNoDataFilter->SetInput(referenceImage);
+    isNoDataFilter->UpdateOutputInformation();
 
     // Resample image
     UInt8ResampleImageFilterType::Pointer resampler = UInt8ResampleImageFilterType::New();
-    resampler->SetInput(thresholdFilter->GetOutput());
-    LabelImageType::SizeType outputSize = thresholdFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
+    resampler->SetInput(isNoDataFilter->GetOutput());
+    LabelImageType::SizeType outputSize = isNoDataFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
     outputSize[0]                       = outputSize[0] / spacingRatio + 1;
     outputSize[1]                       = outputSize[1] / spacingRatio + 1;
     resampler->SetOutputSize(outputSize);
-    LabelImageType::SpacingType outputSpacing = thresholdFilter->GetOutput()->GetSignedSpacing();
+    LabelImageType::SpacingType outputSpacing = isNoDataFilter->GetOutput()->GetSignedSpacing();
     outputSpacing[0] *= spacingRatio;
     outputSpacing[1] *= spacingRatio;
     resampler->SetOutputSpacing(outputSpacing);
-    resampler->SetOutputOrigin(thresholdFilter->GetOutput()->GetOrigin());
+    resampler->SetOutputOrigin(isNoDataFilter->GetOutput()->GetOrigin());
 
     // Write image
     UInt8MaskWriterType::Pointer writer = UInt8MaskWriterType::New();

@@ -70,7 +70,7 @@ protected:
   {
   }
 
-  void ThreadedGenerateData(const typename InputImageType::RegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId)) override
+  void DynamicThreadedGenerateData(const typename InputImageType::RegionType& outputRegionForThread) override
   {
     typename InputImageType::ConstPointer         input(this->GetInput());
     typename InputImageType::Pointer              output(this->GetOutput());

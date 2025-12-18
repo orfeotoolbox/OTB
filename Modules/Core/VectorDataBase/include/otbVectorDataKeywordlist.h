@@ -68,7 +68,7 @@ public:
     return "VectorDataKeywordlist";
   }
 
-  void AddField(OGRFieldDefn* fieldDefn, OGRField* field);
+  void AddField(const OGRFieldDefn* fieldDefn, OGRField* field);
 
   /**
     * \param key The name of the field.
@@ -160,12 +160,32 @@ public:
   /** Deep copy operator*/
   void operator=(const Self&);
 
+  friend bool operator==(const Self &lhs, const Self &rhs)
+  {
+    unsigned int equalfields = 0;
+    if(lhs.GetNumberOfFields()==rhs.GetNumberOfFields())
+    {
+      for(unsigned int i = 0; i < lhs.m_FieldList.size(); ++i)
+      {
+        if(lhs.HasField((rhs.m_FieldList[i].first)->GetNameRef()))
+        {
+          equalfields++;
+        }
+      }
+    }
+    if (equalfields == lhs.GetNumberOfFields())
+    {
+      return true;
+    }
+    return false;
+  };
+
 protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   std::string PrintField(FieldType field) const;
-  FieldType CopyOgrField(FieldType field);
+  FieldType CreateOgrField(const OGRFieldDefn* fieldDefn, const OGRField* field);
   FieldListType m_FieldList;
 };
 OTBVectorDataBase_EXPORT extern std::ostream& operator<<(std::ostream& os, const VectorDataKeywordlist& kwl);

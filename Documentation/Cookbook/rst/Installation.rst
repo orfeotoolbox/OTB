@@ -13,18 +13,18 @@ Orfeo Toolbox installation is straightforward:
 
 If you want the latests features, you might be interested to compile from source. Detailled steps at :doc:`CompilingOTBFromSource`.
 
-OTB 9.x is known to work on:
+OTB 10.x is known to work on:
 
 .. table:: OTB compat list
 
     +--------------------------------------------+-------------------------------+--------------------+
     | **Operating System**                       | **Minimum compiler required** | **Python version** |
     +============================================+===============================+====================+
-    | Debian 11 and more & Ubuntu 20.04 and more | GCC 8                         | Python >= 3.8      |
+    | Debian 12 and more & Ubuntu 22.04 and more | GCC 8                         | Python >= 3.10     |
     +--------------------------------------------+-------------------------------+--------------------+
     | RedHat 8                                   | GCC 8                         | Python >= 3.8      |
     +--------------------------------------------+-------------------------------+--------------------+
-    | Windows 10                                 | MSVC 2019                     | Python 3.10        |
+    | Windows 10 / 11                            | MSVC 2019                     | Python 3.10        |
     +--------------------------------------------+-------------------------------+--------------------+
 
 If you want to use another version of python you will need to recompile python bindings as explained in `"Recompiling Python Bindings" <#recompiling-python-bindings>`__.
@@ -47,38 +47,41 @@ Docker image
 The following docker images are availables on `DockerHub <https://hub.docker.com/r/orfeotoolbox/otb>`__.
 **It is the only way to run OTB for MacOS since the Intel architecture is no more in the Mac ecosystem.**:
 
-.. table:: Docker list for version 9.1
+.. table:: Docker list for version 10.0
 
-    +----------------+--------------+--------------------+
-    | **Tag**        | **OS base**  | **Python version** |
-    +================+==============+====================+
-    | 9.1.0          | ubuntu 20.04 | Python 3.8         |
-    +----------------+--------------+--------------------+
-    | 9.1.0_ubuntu22 | ubuntu 22.04 | Python 3.10        |
-    +----------------+--------------+--------------------+
-    | 9.1.0_ubuntu24 | ubuntu 24.04 | Python 3.12        |
-    +----------------+--------------+--------------------+
-
+    +-----------------+--------------+--------------------+
+    | **Tag**         | **OS base**  | **Python version** |
+    +=================+==============+====================+
+    | 10.0.0          | ubuntu 22.04 | Python 3.10        |
+    +-----------------+--------------+--------------------+
+    | 10.0.0_ubuntu24 | ubuntu 24.04 | Python 3.12        |
+    +-----------------+--------------+--------------------+
 
 It can be used on any device running Docker with the following instruction:
 
 ::
-   
-   # you can adapt the version you want using different tag like orfeotoolbox/otb:9.1.0
+
+   # you can adapt the version you want using different tag like orfeotoolbox/otb:10.0.0
    docker pull orfeotoolbox/otb
 
 To run CLI tools, you can launch the docker image with:
 
 ::
-   
+
    docker run -it orfeotoolbox/otb
 
 
 If you are planning on using the image on MacOS with an Apple Silicon chip (M1,M2,M3) :
 
 ::
-   
-   docker run -it --platform=linux/amd64 orfeotoolbox/otb:9.0.0
+
+   docker run -it --platform=linux/amd64 orfeotoolbox/otb:10.0.0
+
+
+Nix
+---
+
+.. include:: Installation_Nix.rst
 
 
 Distribution packages
@@ -91,7 +94,7 @@ want to get involved in the packaging of OTB for your favourite
 platform, please contact us through the developer’s mailing list:
 otb-developers@googlegroups.com.
 
-There are OTB packages for Debian (unstable) since version 5.2.0. OTB
+There are OTB packages for Debian since version 5.2.0. OTB
 Applications packages may be available as Debian packages through APT
 repositories:
 

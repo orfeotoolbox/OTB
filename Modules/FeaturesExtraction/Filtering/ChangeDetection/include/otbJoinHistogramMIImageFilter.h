@@ -23,6 +23,7 @@
 
 #include "otbBinaryFunctorNeighborhoodJoinHistogramImageFilter.h"
 #include "otbJoinHistogramMI.h"
+#include "otbMacro.h" //for 
 
 namespace otb
 {
@@ -79,12 +80,8 @@ public:
   itkTypeMacro(JoinHistogramMIImageFilter, SuperClass);
 
 protected:
-  JoinHistogramMIImageFilter()
-  {
-  }
-  ~JoinHistogramMIImageFilter() override
-  {
-  }
+  JoinHistogramMIImageFilter() = default;
+  ~JoinHistogramMIImageFilter() = default;
 
 private:
   JoinHistogramMIImageFilter(const Self&) = delete;

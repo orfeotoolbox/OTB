@@ -53,6 +53,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       , m_BucketOptimization(false)
 #endif
 {
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredOutputs(4);
   this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, OutputSpatialImageType::New());
@@ -326,7 +327,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     // Id.
     unsigned int numThreads;
 
-    numThreads             = this->GetNumberOfThreads();
+    numThreads             = this->GetNumberOfWorkUnits();
     m_ThreadIdNumberOfBits = -1;
     unsigned int n         = numThreads;
     while (n != 0)
@@ -781,9 +782,9 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     // New labels will be consecutive. The following vector contains the new
     // start label for each thread.
     itk::VariableLengthVector<LabelType> newLabelOffset;
-    newLabelOffset.SetSize(this->GetNumberOfThreads());
+    newLabelOffset.SetSize(this->GetNumberOfWorkUnits());
     newLabelOffset[0] = 0;
-    for (itk::ThreadIdType i = 1; i < this->GetNumberOfThreads(); i++)
+    for (itk::ThreadIdType i = 1; i < this->GetNumberOfWorkUnits(); i++)
     {
       // Retrieve the number of labels in the thread by removing the threadId
       // from the most significant bits

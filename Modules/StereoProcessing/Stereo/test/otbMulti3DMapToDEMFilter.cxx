@@ -125,7 +125,7 @@ int otbMulti3DMapToDEMFilterEPSG(int argc, char* argv[])
   multiFilter->SetProjectionRef(projectionRef);
   WriterType::Pointer writer = WriterType::New();
 
-  multiFilter->SetNumberOfThreads(atoi(argv[argc - 11]));
+  multiFilter->SetNumberOfWorkUnits(atoi(argv[argc - 11]));
 
   writer->SetInput(multiFilter->GetOutput());
 
@@ -227,7 +227,7 @@ int otbMulti3DMapToDEMFilterManual(int argc, char* argv[])
 
   WriterType::Pointer writer = WriterType::New();
 
-  multiFilter->SetNumberOfThreads(atoi(argv[argc - 10]));
+  multiFilter->SetNumberOfWorkUnits(atoi(argv[argc - 10]));
 
   writer->SetInput(multiFilter->GetOutput());
 
@@ -303,7 +303,7 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
 
   WriterType::Pointer writer = WriterType::New();
 
-  multiFilter->SetNumberOfThreads(atoi(argv[argc - 2]));
+  multiFilter->SetNumberOfWorkUnits(atoi(argv[argc - 2]));
 
   writer->SetInput(multiFilter->GetOutput());
 

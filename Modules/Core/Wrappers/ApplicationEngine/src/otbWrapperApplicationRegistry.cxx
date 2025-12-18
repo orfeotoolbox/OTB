@@ -24,8 +24,7 @@
 #include "itksys/SystemTools.hxx"
 #include "itkDynamicLoader.h"
 #include "itkDirectory.h"
-#include "itkMutexLock.h"
-#include "itkMutexLockHolder.h"
+#include <mutex>
 
 #include <iterator>
 
@@ -50,8 +49,8 @@ public:
     if (app && handle)
     {
       // mutex lock to ensure thread safety
-      itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
-      pair.first  = app;
+      std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+      pair.first = app;
       pair.second = handle;
       m_Container.push_back(pair);
       return true;
@@ -65,8 +64,8 @@ public:
     if (app)
     {
       // mutex lock to ensure thread safety
-      itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
-      AppHandleContainerType::iterator           it = m_Container.begin();
+      std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+      AppHandleContainerType::iterator it = m_Container.begin();
       while (it != m_Container.end())
       {
         if ((*it).first == app)
@@ -80,11 +79,11 @@ public:
 
   /** Release the library handles from applications already deleted */
   void ReleaseUnusedHandle()
-  {
-    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
-    AppHandleContainerType::iterator           it;
-    for (it = m_Container.begin(); it != m_Container.end(); ++it)
     {
+    std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+    AppHandleContainerType::iterator it;
+    for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
+      {
       if ((*it).first == nullptr)
       {
         itk::DynamicLoader::CloseLibrary(static_cast<itk::LibHandle>((*it).second));
@@ -111,8 +110,9 @@ public:
 
 private:
   AppHandleContainerType m_Container;
+  
+  std::mutex m_Mutex;
 
-  itk::SimpleMutexLock m_Mutex;
 };
 // static finalizer to close opened libraries
 static ApplicationPrivateRegistry m_ApplicationPrivateRegistryGlobal;
@@ -239,7 +239,7 @@ Application::Pointer ApplicationRegistry::CreateApplicationFaster(const std::str
 #endif
 
   std::string                 otbAppPath = GetApplicationPath();
-  std::vector<itksys::String> pathList;
+  std::vector<std::string> pathList;
   if (!otbAppPath.empty())
   {
     pathList = itksys::SystemTools::SplitString(otbAppPath, pathSeparator, false);
@@ -287,7 +287,7 @@ std::vector<std::string> ApplicationRegistry::GetAvailableApplications(bool useF
 #endif
 
   std::string                 otbAppPath = GetApplicationPath();
-  std::vector<itksys::String> pathList;
+  std::vector<std::string> pathList;
   if (!otbAppPath.empty())
   {
     pathList = itksys::SystemTools::SplitString(otbAppPath, pathSeparator, false);

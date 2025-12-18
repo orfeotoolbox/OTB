@@ -259,7 +259,7 @@ void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::BeforeThreadedGener
 }
 
 template <class TInputImage, class TOutputImage>
-void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const OutputRegionType& outputRegionForThread)
 {
   // Retrieve the input and output pointers
   InputImagePointerType  inputPtr             = const_cast<InputImageType*>(this->GetInput());
@@ -295,9 +295,6 @@ void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::ThreadedGenerateDat
   const double log2 = std::log(2.0);
 
   InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
-
-  // Set-up progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Iterate on outputs to compute textures
   while (!energyIt.IsAtEnd() && !entropyIt.IsAtEnd() && !correlationIt.IsAtEnd() && !invDiffMomentIt.IsAtEnd() && !inertiaIt.IsAtEnd() &&
@@ -450,9 +447,6 @@ void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::ThreadedGenerateDat
     clusterShadeIt.Set(clusterShade);
     clusterProminenceIt.Set(clusterProminence);
     haralickCorIt.Set(haralickCorrelation);
-
-    // Update progress
-    progress.CompletedPixel();
 
     // Increment iterators
     ++energyIt;

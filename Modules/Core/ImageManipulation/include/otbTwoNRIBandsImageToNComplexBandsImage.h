@@ -75,7 +75,7 @@ protected:
 
   void GenerateOutputInformation(void) override;
   void BeforeThreadedGenerateData(void) override;
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   TwoNRIBandsImageToNComplexBandsImage(const Self&) = delete;

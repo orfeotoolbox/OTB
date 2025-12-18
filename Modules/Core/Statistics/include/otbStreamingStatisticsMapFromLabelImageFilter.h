@@ -53,9 +53,9 @@ template <class TRealVectorPixelType>
 class StatisticsAccumulator
 {
 public:
-  typedef typename TRealVectorPixelType::ValueType  RealValueType;
-  typedef uint64_t                                  PixelCountType;
-  typedef itk::VariableLengthVector<PixelCountType> PixelCountVectorType;
+  using RealValueType        = typename TRealVectorPixelType::ValueType;
+  using PixelCountType       = std::uint64_t;
+  using PixelCountVectorType = itk::VariableLengthVector<PixelCountType>;
 
   // Constructor (default)
   StatisticsAccumulator() : m_Count(), m_NoDataValue(), m_UseNoDataValue()

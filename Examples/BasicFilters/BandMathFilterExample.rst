@@ -1,6 +1,6 @@
 The :doxygen:`BandMathImageFilter` is based on the mathematical parser library muParser.
 The built in functions and operators list is available at:
-http://muparser.sourceforge.net/mup_features.html.
+https://beltoforion.de/en/muparser/features.php.
 
 In order to use this filter, at least one input image should be
 set. An associated variable name can be specified or not by using

@@ -66,8 +66,7 @@ public:
   typedef typename InternalTransformType::Pointer                   InternalTransformPointerType;
   typedef typename OutputVectorDataType::DataNodeType               OutputDataNodeType;
   typedef typename OutputVectorDataType::DataNodePointerType        OutputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataTreePointerType        OutputDataTreePointerType;
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
+  typedef typename OutputVectorDataType::TreeNodeType               OutputInternalTreeNodeType;
   typedef typename OutputDataNodeType::PolygonType                  PolygonType;
 
   /** Set input image */

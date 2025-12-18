@@ -238,7 +238,7 @@ macro(otb_module_impl)
     # Generate the export macro header for symbol visibility/Windows DLL declspec
     # This header is called *Modulename*Export.h in the build directory,
     # and contains defines for _EXPORT macros such as OTBApplicationEngine_EXPORT
-    generate_export_header(${otb-module}
+    otb_generate_export_header(${otb-module}
       EXPORT_FILE_NAME ${_export_header_file}
       EXPORT_MACRO_NAME ${otb-module}_EXPORT
       DEPRECATED_MACRO_NAME ${otb-module}_DEPRECATED
@@ -283,10 +283,10 @@ macro(otb_module_impl)
     list(APPEND otb-module-INCLUDE_DIRS-build "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
     list(APPEND otb-module-INCLUDE_DIRS-install "${${otb-module}_SYSTEM_INCLUDE_DIRS}")
   endif()
-  set(otb-module-LIBRARY_DIRS "\${GROUP_${__current_component}_LOCATION}/lib")
+  set(otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
   # add system lib dir if it exists
-  if (${${otb-module}_SYSTEM_LIBRARY_DIRS})
-    list(APPEND otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
+  if (${GROUP_${__current_component}_LOCATION})
+    list(APPEND otb-module-LIBRARY_DIRS "\${GROUP_${__current_component}_LOCATION}/lib")
   endif()
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-build}")

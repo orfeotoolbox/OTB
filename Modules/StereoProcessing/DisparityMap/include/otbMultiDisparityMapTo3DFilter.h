@@ -157,7 +157,7 @@ protected:
   void GenerateInputRequestedRegion() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
 private:
   MultiDisparityMapTo3DFilter(const Self&) = delete;

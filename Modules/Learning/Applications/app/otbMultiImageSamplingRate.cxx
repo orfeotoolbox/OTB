@@ -245,7 +245,7 @@ private:
     // constant
     case 1:
     {
-      std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.constant.nb"), ' ');
+      std::vector<std::string> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.constant.nb"), ' ');
       std::vector<unsigned long>  countList;
       for (unsigned int i = 0; i < parts.size(); i++)
       {
@@ -275,7 +275,7 @@ private:
     // percent
     case 3:
     {
-      std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.percent.p"), ' ');
+      std::vector<std::string> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.percent.p"), ' ');
       std::vector<double>         percentList;
       for (unsigned int i = 0; i < parts.size(); i++)
       {
@@ -304,7 +304,7 @@ private:
     // total
     case 4:
     {
-      std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.total.v"), ' ');
+      auto parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.total.v"), ' ');
       std::vector<unsigned long>  totalList;
       for (unsigned int i = 0; i < parts.size(); i++)
       {

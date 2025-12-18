@@ -1,1 +1,0 @@
-GetSimngleValue(10, 50): 0.999375

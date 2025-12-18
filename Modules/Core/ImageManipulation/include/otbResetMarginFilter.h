@@ -108,7 +108,10 @@ public:
 
 protected:
   /// Hidden constructor
-  ResetMarginFilter() = default;
+  ResetMarginFilter()
+  {
+    this->DynamicMultiThreadingOff();
+  }
 
   InputImageType      * GetInputImage()       { return const_cast<InputImageType*>(this->GetInput()); }
   InputImageType const* GetInputImage() const { return this->GetInput(); }

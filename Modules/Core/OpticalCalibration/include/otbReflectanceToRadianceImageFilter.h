@@ -223,15 +223,16 @@ public:
 
 protected:
   /** Constructor */
-  ReflectanceToRadianceImageFilter()
-    : m_ZenithalSolarAngle(120.0), // invalid value which will lead to negative radiometry
-      m_FluxNormalizationCoefficient(1.),
-      m_Day(0),
-      m_Month(0),
-      m_SolarDistance(1.0),
-      m_IsSetFluxNormalizationCoefficient(false),
-      m_IsSetSolarDistance(false)
-  {
+  ReflectanceToRadianceImageFilter() :
+    m_ZenithalSolarAngle(120.0), //invalid value which will lead to negative radiometry
+    m_FluxNormalizationCoefficient(1.),
+    m_Day(0),
+    m_Month(0),
+    m_SolarDistance(1.0),
+    m_IsSetFluxNormalizationCoefficient(false),
+    m_IsSetSolarDistance(false)
+    {
+    
     m_SolarIllumination.SetSize(0);
   };
 

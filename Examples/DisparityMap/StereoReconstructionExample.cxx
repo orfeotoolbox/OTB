@@ -48,7 +48,9 @@
 #include "otbImageFileWriter.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkVectorCastImageFilter.h"
+
+#include "otbCastImageFilter.h"
+
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -93,7 +95,7 @@ int main(int argc, char* argv[])
   using DisplacementType      = itk::Vector<double, 2>;
   using DisplacementFieldType = otb::Image<DisplacementType>;
 
-  using DisplacementFieldCastFilterType = itk::VectorCastImageFilter<FloatVectorImageType, DisplacementFieldType>;
+  using DisplacementFieldCastFilterType = otb::CastImageFilter<FloatVectorImageType, DisplacementFieldType>;
 
   using WarpFilterType = otb::StreamingWarpImageFilter<FloatImageType, FloatImageType, DisplacementFieldType>;
 

@@ -112,14 +112,14 @@ void GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition,
 {
   // Initialize the neighborhood
   SizeType radius;
-  radius.Fill(this->GetRadius());
+  radius.Fill(this->GetRadius().front());
   if (this->GetInputImage() != nullptr)
   {
     IteratorType it = IteratorType(radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
     // Compute the offset tables (we ignore all the zero indices
     // in the neighborhood)
     unsigned int iOffset = 0;
-    int          empty   = static_cast<int>(this->GetRadius());
+    int          empty   = static_cast<int>(this->GetRadius().front());
 
     for (unsigned int iPos = 0; iPos < it.Size(); ++iPos)
     {
@@ -145,7 +145,7 @@ void GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition,
         // Set the weight table indices
         for (unsigned int dim = 0; dim < ImageDimension; ++dim)
         {
-          m_WeightOffsetTable[iOffset][dim] = off[dim] + this->GetRadius() - 1;
+          m_WeightOffsetTable[iOffset][dim] = off[dim] + this->GetRadius().front() - 1;
         }
         // Increment the index
         iOffset++;
@@ -210,11 +210,11 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 
   // Position the neighborhood at the index of interest
   SizeType radius;
-  radius.Fill(this->GetRadius());
+  radius.Fill(this->GetRadius().front());
   IteratorType nit = IteratorType(radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
   nit.SetLocation(baseIndex);
 
-  const unsigned int twiceRadius = static_cast<const unsigned int>(2 * this->GetRadius());
+  const unsigned int twiceRadius = static_cast<const unsigned int>(2 * this->GetRadius().front());
   /*  double xWeight[ImageDimension][ twiceRadius]; */
   std::vector<std::vector<double>> xWeight;
   xWeight.resize(ImageDimension);
@@ -226,7 +226,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   for (unsigned int dim = 0; dim < ImageDimension; ++dim)
   {
     // x is the offset, hence the parameter of the kernel
-    double x = distance[dim] + this->GetRadius();
+    double x = distance[dim] + this->GetRadius().front();
 
     // If distance is zero, i.e. the index falls precisely on the
     // pixel boundary, the weights form a delta function.

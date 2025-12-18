@@ -27,7 +27,7 @@
 #include "otbImage.h"
 #include "otbBandMathImageFilter.h"
 #include "otbImageFileWriter.h"
-
+#include "vcl_legacy_aliases.h"
 
 int otbBandMathImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
@@ -85,7 +85,7 @@ int otbBandMathImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
 
   FilterType::Pointer filter = FilterType::New();
-  std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
+  std::cout << "Number Of Threads  :  " << filter->GetNumberOfWorkUnits() << std::endl;
 
 
   filter->SetNthInput(0, image1);
@@ -243,7 +243,7 @@ int otbBandMathImageFilterWithIdx(int itkNotUsed(argc), char* argv[])
 
 
   FilterType::Pointer filter = FilterType::New();
-  std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
+  std::cout << "Number Of Threads  :  " << filter->GetNumberOfWorkUnits() << std::endl;
 
 
   filter->SetNthInput(0, image1);

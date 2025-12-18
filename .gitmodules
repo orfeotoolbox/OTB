@@ -1,0 +1,3 @@
+[submodule "Data"]
+	path = Data
+	url = https://gitlab.orfeo-toolbox.org/orfeotoolbox/data.git

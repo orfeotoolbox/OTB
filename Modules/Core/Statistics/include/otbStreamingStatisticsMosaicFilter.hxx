@@ -30,7 +30,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TInternalValueType>
 PersistentStatisticsMosaicFilter<TInputImage, TOutputImage, TInternalValueType>::PersistentStatisticsMosaicFilter()
 {
-
+  this->DynamicMultiThreadingOff();
   // allocate the data objects for the outputs which are
   // just decorators around pixel types
   // 1: means
@@ -166,7 +166,7 @@ void PersistentStatisticsMosaicFilter<TInputImage, TOutputImage, TInternalValueT
   Superclass::GenerateOutputInformation();
 
   // Prepare threads result
-  const unsigned int numberOfThreads = this->GetNumberOfThreads();
+  const unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
   const unsigned int nBands          = this->GetNumberOfBands();
   const unsigned int nbImages        = this->GetNumberOfInputImages();
 

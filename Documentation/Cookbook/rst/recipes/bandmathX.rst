@@ -20,7 +20,7 @@ The naming convention “im[x]b[y]” designates the yth band of the xth
 input image.
 
 The *BandMath* application embeds built-in operators and functions
-listed in `muparser documentation <https://beltoforion.de/article.php?a=muparser&p=features&s=idDef1#idDef1>`_ thus
+listed in `muparser documentation <https://beltoforion.de/en/muparser/features.php>`_ thus
 allowing a vast choice of possible operations.
 
 
@@ -199,7 +199,7 @@ Example:
 New operators and functions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In addition to the operators and functions available in *muParserX* (https://beltoforion.de/article.php?a=muparserx),
+In addition to the operators and functions available in *muParserX* (https://beltoforion.de/en/muparserx/index.php),
 new ones have been implemented within OTB. These ones can be divided into two categories:
 
 -  adaptation of existing operators/functions, that were not originally

@@ -223,21 +223,14 @@ void ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>::GenerateDa
       edgeIndex[1] -= m_SamplingRate;
     }
   }
-
-  // Add polygon to the VectorData tree
-  OutputDataTreePointerType tree = outputPtr->GetDataTree();
-
-  // Create the output tree root
-  OutputDataNodePointerType root = tree->GetRoot()->Get();
-
   OutputDataNodePointerType document = OutputDataNodeType::New();
   document->SetNodeType(DOCUMENT);
-  tree->Add(document, root);
+  outputPtr->Add(document, outputPtr->GetRoot());
 
   OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
   newDataNode->SetPolygonExteriorRing(envelope);
 
-  tree->Add(newDataNode, document);
+  outputPtr->Add(newDataNode, document);
 }
 
 } // end namespace otb

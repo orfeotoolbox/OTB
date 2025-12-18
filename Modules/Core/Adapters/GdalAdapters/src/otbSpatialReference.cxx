@@ -27,6 +27,7 @@
 // For boost/lexical_cast.hpp
 #endif
 #include "boost/lexical_cast.hpp"
+#include <cassert>
 
 #include <sstream>
 #include <stdexcept>

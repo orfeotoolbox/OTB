@@ -184,7 +184,7 @@ public:
    * \invariant <tt>m_Feature != 0</tt>
    * \sa \c OGRFeature::GetDefnRef()
    */
-  OGRFeatureDefn& GetDefn() const;
+  const OGRFeatureDefn& GetDefn() const;
 
   /**\name Fields
    * Fields access.
@@ -342,7 +342,7 @@ private:
   int UncheckedGetFieldIndex(std::string const& name) const;
   long UncheckedGetFID() const;
   void UncheckedSetFID(long fid);
-  OGRFeatureDefn& UncheckedGetDefn() const;
+  const OGRFeatureDefn& UncheckedGetDefn() const;
   void UncheckedSetGeometryDirectly(UniqueGeometryPtr geometry);
   UniqueGeometryPtr  UncheckedStealGeometry();
   OGRGeometry const* UncheckedGetGeometry() const;

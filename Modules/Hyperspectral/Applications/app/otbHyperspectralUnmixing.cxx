@@ -187,7 +187,7 @@ private:
 
       unmixer->SetInput(inputImage);
       unmixer->GetModifiableFunctor().SetMatrix(endMembersMatrix);
-      unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
+      unmixer->SetNumberOfWorkUnits(1); // FIXME : currently buggy
 
       abundanceMap = unmixer->GetOutput();
       m_ProcessObjects.push_back(unmixer.GetPointer());

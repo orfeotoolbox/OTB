@@ -196,25 +196,6 @@ void VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>::Generat
 
   m_VdProjFilter->Update();
 
-  /*
-  TreeIteratorType itVector(m_VdProjFilter->GetOutput()->GetDataTree());
-  itVector.GoToBegin();
-  while (!itVector.IsAtEnd())
-    {
-    if (itVector.Get()->IsPolygonFeature())
-      {
-      std::cout << "----------\n" <<itVector.Get()->GetNodeTypeAsString() << std::endl;
-      std::cout << "List of vertices: " << ": " <<std::endl;
-      for (unsigned int itPoints = 0; itPoints < itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->Size(); itPoints++)
-        {
-        std::cout << "vertex[" << itPoints << "]: " << itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->GetElement(itPoints) <<std::endl;
-        }
-      std::cout << "Polygon region: " << itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion() <<  std::endl;
-      }
-    ++itVector;
-    }
-  */
-
   if (m_UseOutputSpacingAndOriginFromImage)
   {
     m_VdProjFilter->GetOutput()->SetProjectionRef("");

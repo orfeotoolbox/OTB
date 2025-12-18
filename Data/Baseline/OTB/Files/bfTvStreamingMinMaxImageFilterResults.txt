@@ -1,2 +1,0 @@
-Minimum: 8.8683
-Maximum: 254.002

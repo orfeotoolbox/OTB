@@ -50,6 +50,7 @@
 
 #include "otbStringUtils.h"
 #include "otbUtils.h"
+#include "itkProgressTransformer.h"
 
 namespace otb
 {
@@ -579,12 +580,13 @@ void ImageFileWriter<TInputImage>::Update()
   this->SetAbortGenerateData(0);
   this->SetProgress(0.0);
 
+  itk::ProgressTransformer pt( 0.0f, 1.0f, this );
   /**
    * Tell all Observers that the filter is starting
    */
   this->InvokeEvent(itk::StartEvent());
 
-  this->UpdateProgress(0);
+  pt.GetProcessObject();
   m_CurrentDivision  = 0;
   m_DivisionProgress = 0;
 
@@ -618,7 +620,7 @@ void ImageFileWriter<TInputImage>::Update()
   InputImageRegionType streamRegion;
 
   for (m_CurrentDivision = 0; m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
-       m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
+       m_CurrentDivision++, m_DivisionProgress = 0, pt.GetProcessObject())
   {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
 
@@ -812,10 +814,9 @@ const char* ImageFileWriter<TInputImage>::GetFileName() const
 template <class TInputImage>
 const bool& ImageFileWriter<TInputImage>::GetAbortGenerateData() const
 {
-  m_Lock.Lock();
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
   // protected read here
   bool ret = Superclass::GetAbortGenerateData();
-  m_Lock.Unlock();
   if (ret)
     return otb::Utils::TrueConstant;
   return otb::Utils::FalseConstant;
@@ -824,9 +825,8 @@ const bool& ImageFileWriter<TInputImage>::GetAbortGenerateData() const
 template <class TInputImage>
 void ImageFileWriter<TInputImage>::SetAbortGenerateData(bool val)
 {
-  m_Lock.Lock();
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
   Superclass::SetAbortGenerateData(val);
-  m_Lock.Unlock();
 }
 
 } // end namespace otb

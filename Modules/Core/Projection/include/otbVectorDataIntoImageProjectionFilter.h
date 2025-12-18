@@ -64,9 +64,6 @@ public:
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2>  OriginType;
 
-  // use to display vectordata
-  typedef itk::PreOrderTreeIterator<typename InputVectorDataType::DataTreeType> TreeIteratorType;
-
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 

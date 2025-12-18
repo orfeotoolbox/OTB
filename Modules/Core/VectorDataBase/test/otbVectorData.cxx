@@ -63,13 +63,13 @@ int otbVectorData(int argc, char* argv[])
   PolygonType::Pointer pol = PolygonType::New();
   polygon->SetPolygonExteriorRing(pol);
 
-  DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
+  DataNodeType::Pointer root = data->GetRoot();
 
-  data->GetDataTree()->Add(document, root);
-  data->GetDataTree()->Add(folder, document);
-  data->GetDataTree()->Add(point, folder);
-  data->GetDataTree()->Add(line, folder);
-  data->GetDataTree()->Add(polygon, folder);
+  data->Add(document, root);
+  data->Add(folder, document);
+  data->Add(point, folder);
+  data->Add(line, folder);
+  data->Add(polygon, folder);
 
   if (argc < 2)
   {

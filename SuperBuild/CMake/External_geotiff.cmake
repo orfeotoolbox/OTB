@@ -35,13 +35,20 @@ ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF ZLIB_LIBRARY)
 ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF JPEG_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF JPEG_LIBRARY)
 
+set(__LIBGEOTIFF_VERSION "1.7.4")
 # overwrite CMAKE_INSTALL_LIBDIR since when compiling with centos, it will be
 # installed in lib64 if left unchanged
 ExternalProject_Add(GEOTIFF
   PREFIX GEOTIFF
-  URL "https://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.7.3.tar.gz"
-  URL_MD5 cdca346d3b01d40418f4894c4beef8e9
+  URL "https://github.com/OSGeo/libgeotiff/archive/${__LIBGEOTIFF_VERSION}.tar.gz"
+  URL_MD5 700ac7f4519cb65e90f73c7ff8bb61db
+  # change download name as the file notation vx.x.x is used everywhere
+  # and can conflict with other package
+  DOWNLOAD_NAME "libgeotiff-v${__LIBGEOTIFF_VERSION}.tar.gz"
   SOURCE_DIR ${GEOTIFF_SB_SRC}
+  # As the package has two folder and no cmakelist on package root,
+  # specify a subdir
+  SOURCE_SUBDIR libgeotiff
   BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

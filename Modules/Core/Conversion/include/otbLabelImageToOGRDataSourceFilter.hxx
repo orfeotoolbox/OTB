@@ -23,6 +23,7 @@
 
 #include "otbLabelImageToOGRDataSourceFilter.h"
 #include "otbGdalDataTypeBridge.h"
+#include "otbGDALDriverManagerWrapper.h"
 
 // gdal libraries
 #include "gdal.h"
@@ -40,8 +41,6 @@ LabelImageToOGRDataSourceFilter<TInputImage>::LabelImageToOGRDataSourceFilter() 
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
-
-  GDALAllRegister();
 
   this->ProcessObject::SetNthOutput(0, this->MakeOutput(0));
 }
@@ -137,25 +136,15 @@ void LabelImageToOGRDataSourceFilter<TInputImage>::GenerateData(void)
   nbBands      = this->GetInput()->GetNumberOfComponentsPerPixel();
   bytePerPixel = sizeof(InputPixelType);
 
-  // buffer casted in unsigned long cause under Win32 the address
-  // don't begin with 0x, the address in not interpreted as
-  // hexadecimal but alpha numeric value, then the conversion to
-  // integer make us pointing to an non allowed memory block => Crash.
-  std::ostringstream stream;
-  stream << "MEM:::"
-         << "DATAPOINTER=" << (uintptr_t)(this->GetInput()->GetBufferPointer()) << ","
-         << "PIXELS=" << size[0] << ","
-         << "LINES=" << size[1] << ","
-         << "BANDS=" << nbBands << ","
-         << "DATATYPE=" << GDALGetDataTypeName(GdalDataTypeBridge::GetGDALDataType<InputPixelType>()) << ","
-         << "PIXELOFFSET=" << bytePerPixel * nbBands << ","
-         << "LINEOFFSET=" << bytePerPixel * nbBands * size[0] << ","
-         << "BANDOFFSET=" << bytePerPixel;
-
-  GDALDataset* dataset = static_cast<GDALDataset*>(GDALOpen(stream.str().c_str(), GA_ReadOnly));
+  GDALDatasetWrapper::Pointer dataset =
+          GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
+              const_cast<InputPixelType*>(this->GetInput()->GetBufferPointer()),
+              this->GetInput()->GetLargestPossibleRegion().GetSize()[0],
+              this->GetInput()->GetLargestPossibleRegion().GetSize()[1],
+              GdalDataTypeBridge::GetGDALDataType<InputPixelType>(), bytePerPixel, nbBands, bytePerPixel);
 
   // Set input Projection ref and Geo transform to the dataset.
-  dataset->SetProjection(this->GetInput()->GetProjectionRef().c_str());
+  dataset->GetDataSet()->SetProjection(this->GetInput()->GetProjectionRef().c_str());
 
   unsigned int projSize = this->GetInput()->GetGeoTransform().size();
   double       geoTransform[6];
@@ -181,7 +170,7 @@ void LabelImageToOGRDataSourceFilter<TInputImage>::GenerateData(void)
     geoTransform[2] = this->GetInput()->GetGeoTransform()[2];
     geoTransform[4] = this->GetInput()->GetGeoTransform()[4];
   }
-  dataset->SetGeoTransform(geoTransform);
+  dataset->GetDataSet()->SetGeoTransform(geoTransform);
 
   // Create the output layer for GDALPolygonize().
   ogr::DataSource::Pointer ogrDS = ogr::DataSource::New();
@@ -206,28 +195,18 @@ void LabelImageToOGRDataSourceFilter<TInputImage>::GenerateData(void)
   typename InputImageType::ConstPointer inputMask = this->GetInputMask();
   if (!inputMask.IsNull())
   {
-    size         = this->GetInputMask()->GetLargestPossibleRegion().GetSize();
     nbBands      = this->GetInputMask()->GetNumberOfComponentsPerPixel();
     bytePerPixel = sizeof(InputPixelType);
-    // buffer casted in unsigned long cause under Win32 the address
-    // don't begin with 0x, the address in not interpreted as
-    // hexadecimal but alpha numeric value, then the conversion to
-    // integer make us pointing to an non allowed memory block => Crash.
-    std::ostringstream maskstream;
-    maskstream << "MEM:::"
-               << "DATAPOINTER=" << (uintptr_t)(this->GetInputMask()->GetBufferPointer()) << ","
-               << "PIXELS=" << size[0] << ","
-               << "LINES=" << size[1] << ","
-               << "BANDS=" << nbBands << ","
-               << "DATATYPE=" << GDALGetDataTypeName(GdalDataTypeBridge::GetGDALDataType<InputPixelType>()) << ","
-               << "PIXELOFFSET=" << bytePerPixel * nbBands << ","
-               << "LINEOFFSET=" << bytePerPixel * nbBands * size[0] << ","
-               << "BANDOFFSET=" << bytePerPixel;
 
-    GDALDataset* maskDataset = static_cast<GDALDataset*>(GDALOpen(maskstream.str().c_str(), GA_ReadOnly));
+    GDALDatasetWrapper::Pointer maskDataset =
+            GDALDriverManagerWrapper::GetInstance().OpenFromMemory(
+                const_cast<InputPixelType*>(this->GetInputMask()->GetBufferPointer()),
+                this->GetInput()->GetLargestPossibleRegion().GetSize()[0],
+                this->GetInput()->GetLargestPossibleRegion().GetSize()[1],
+                GdalDataTypeBridge::GetGDALDataType<InputPixelType>(), bytePerPixel, nbBands, bytePerPixel);
 
     // Set input Projection ref and Geo transform to the dataset.
-    maskDataset->SetProjection(this->GetInputMask()->GetProjectionRef().c_str());
+    maskDataset->GetDataSet()->SetProjection(this->GetInputMask()->GetProjectionRef().c_str());
 
     projSize = this->GetInputMask()->GetGeoTransform().size();
 
@@ -251,20 +230,20 @@ void LabelImageToOGRDataSourceFilter<TInputImage>::GenerateData(void)
       geoTransform[2] = this->GetInputMask()->GetGeoTransform()[2];
       geoTransform[4] = this->GetInputMask()->GetGeoTransform()[4];
     }
-    maskDataset->SetGeoTransform(geoTransform);
+    maskDataset->GetDataSet()->SetGeoTransform(geoTransform);
 
-    GDALPolygonize(dataset->GetRasterBand(1), maskDataset->GetRasterBand(1), &outputLayer.ogr(), 0, options, nullptr, nullptr);
-    GDALClose(maskDataset);
+    GDALPolygonize(dataset->GetDataSet()->GetRasterBand(1),
+                   maskDataset->GetDataSet()->GetRasterBand(1),
+                   &outputLayer.ogr(), 0,
+                   options, nullptr, nullptr);
   }
   else
   {
-    GDALPolygonize(dataset->GetRasterBand(1), nullptr, &outputLayer.ogr(), 0, options, nullptr, nullptr);
+    GDALPolygonize(dataset->GetDataSet()->GetRasterBand(1), nullptr,
+                   &outputLayer.ogr(), 0, options, nullptr, nullptr);
   }
 
   this->SetNthOutput(0, ogrDS);
-
-  // Clear memory
-  GDALClose(dataset);
 }
 
 

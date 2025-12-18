@@ -89,7 +89,7 @@ scattering matrix yielding an eight dimensional measurement space
 space is compressed to five dimensions: three amplitudes (:math:`|HH|`,
 :math:`|HV|`, and :math:`|VV|`); and two phase measurements, (co-pol:
 HH-VV, and cross-pol: HH-HV). (see
-`grss-ieee <http://www.grss-ieee.org/technical-briefs/imaging-radar-polarimetry>`__).
+`Michael Collins article about Imaging Radar Polarimetry <https://ibank.tripod.com/lecture/Rs50.htm>`__).
 
 Matrix conversions
 ~~~~~~~~~~~~~~~~~~

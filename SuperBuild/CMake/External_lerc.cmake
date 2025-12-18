@@ -24,17 +24,23 @@ SETUP_SUPERBUILD(LERC)
 
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(LERC CURL)
 
-set(LERC_URL "https://github.com/Esri/lerc/archive/refs/tags/v4.0.0.tar.gz")
-set(LERC_MD5 f5b00e53bf507aba13ca3de02726e2ba)
+set(__LERC_VERSION "4.0.0")
+set(__LERC_URL "https://github.com/Esri/lerc/archive/refs/tags/v${__LERC_VERSION}.tar.gz")
+set(__LERC_MD5 f5b00e53bf507aba13ca3de02726e2ba)
 
 set(LERC_CONFIG_LIBS ""
 )
 
+set(__LERC_DL_NAME "lerc-${__LERC_VERSION}.tar.gz")
+
 ExternalProject_Add(LERC
    PREFIX LERC
    DEPENDS ${LERC_DEPENDENCIES}
-   URL ${LERC_URL}
-   URL_MD5 ${LERC_MD5}
+   URL ${__LERC_URL}
+   URL_MD5 ${__LERC_MD5}
+   # change download name as the file notation vx.x.x is used everywhere
+   # and can be in conflict with other package
+   DOWNLOAD_NAME ${__LERC_DL_NAME}
    SOURCE_DIR ${LERC_SB_SRC}
    BINARY_DIR ${LERC_SB_BUILD_DIR}
    INSTALL_DIR ${SB_INSTALL_PREFIX}

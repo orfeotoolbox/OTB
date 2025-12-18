@@ -33,6 +33,7 @@ namespace otb
 template <class T3DImage, class TMaskImage, class TOutputDEMImage>
 Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Multi3DMapToDEMFilter()
 {
+  this->DynamicMultiThreadingOff();
   // Set the number of inputs (1 image one optional mask)
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
@@ -484,7 +485,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
     unsigned int                regionsNumber = 0;
     if (requestedSize[0] * requestedSize[1] != 0)
     {
-      regionsNumber = m_MapSplitterList->GetNthElement(k)->GetNumberOfSplits(requestedRegion, this->GetNumberOfThreads());
+      regionsNumber = m_MapSplitterList->GetNthElement(k)->GetNumberOfSplits(requestedRegion, this->GetNumberOfWorkUnits());
     }
     m_NumberOfSplit[k] = regionsNumber;
     otbMsgDevMacro("map " << k << " will be split into " << regionsNumber << " regions");

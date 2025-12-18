@@ -62,7 +62,6 @@ public:
   typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, FloatVectorImageType> VectorDataReprojFilterType;
   typedef otb::VectorDataToLabelImageFilter<VectorDataType, LabelImageType>              RasterizeFilterType;
   typedef VectorDataType::DataTreeType            DataTreeType;
-  typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
   typedef VectorDataType::DataNodeType            DataNodeType;
   typedef DataNodeType::PolygonListPointerType    PolygonListPointerType;
   typedef otb::StreamingStatisticsMapFromLabelImageFilter<FloatVectorImageType, LabelImageType> StatsFilterType;
@@ -324,23 +323,23 @@ public:
     otbAppLogINFO("Writing output vector data");
     LabelValueType internalFID     = -1;
     m_NewVectorData                = VectorDataType::New();
-    DataNodeType::Pointer root     = m_NewVectorData->GetDataTree()->GetRoot()->Get();
+    DataNodeType::Pointer root     = m_NewVectorData->GetRoot();
     DataNodeType::Pointer document = DataNodeType::New();
     document->SetNodeType(otb::DOCUMENT);
-    m_NewVectorData->GetDataTree()->Add(document, root);
+    m_NewVectorData->Add(document, root);
     DataNodeType::Pointer folder = DataNodeType::New();
     folder->SetNodeType(otb::FOLDER);
-    m_NewVectorData->GetDataTree()->Add(folder, document);
+    m_NewVectorData->Add(folder, document);
     m_NewVectorData->SetProjectionRef(m_VectorDataSrc->GetProjectionRef());
-    TreeIteratorType itVector(m_VectorDataSrc->GetDataTree());
-    itVector.GoToBegin();
+    auto vDataIterators = m_VectorDataSrc->GetIteratorPair();
+    auto currentIter = vDataIterators.first;
 
-    while (!itVector.IsAtEnd())
+    while (currentIter != vDataIterators.second)
     {
-      if (!itVector.Get()->IsRoot() && !itVector.Get()->IsDocument() && !itVector.Get()->IsFolder())
+      DataNodeType::Pointer currentGeometry = m_VectorDataSrc->Get(currentIter);
+      if (!currentGeometry->IsRoot() && !currentGeometry->IsDocument() && !currentGeometry->IsFolder())
       {
 
-        DataNodeType::Pointer currentGeometry = itVector.Get();
         if (m_FromLabelImage)
           internalFID = currentGeometry->GetFieldAsInt("polygon_id");
         else
@@ -357,10 +356,10 @@ public:
             currentGeometry->SetFieldAsDouble(CreateFieldName("min", band), m_MinMap[internalFID][band]);
             currentGeometry->SetFieldAsDouble(CreateFieldName("max", band), m_MaxMap[internalFID][band]);
           }
-          m_NewVectorData->GetDataTree()->Add(currentGeometry, folder);
+          m_NewVectorData->Add(currentGeometry, folder);
         }
       }
-      ++itVector;
+      ++currentIter;
     } // next feature
 
     SetParameterOutputVectorData("out.vector.filename", m_NewVectorData);

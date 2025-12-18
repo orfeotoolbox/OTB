@@ -102,8 +102,8 @@ void QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInp
  * ThreadedGenerateData function. Performs the pixel-wise addition
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3, class TInputImage4, class TOutputImage, class TFunction>
-void QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
   // We use dynamic_cast since inputs are stored as DataObjects.  The
   // ImageToImageFilter::GetInput(int) always returns a pointer to a
@@ -120,7 +120,7 @@ void QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInp
   itk::ImageRegionConstIterator<TInputImage4> inputIt4(inputPtr4, outputRegionForThread);
   itk::ImageRegionIterator<TOutputImage>      outputIt(outputPtr, outputRegionForThread);
 
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  //itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inputIt1.GoToBegin();
   inputIt2.GoToBegin();
@@ -135,7 +135,7 @@ void QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInp
     ++inputIt3;
     ++inputIt4;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
+    //progress.CompletedPixel(); // potential exception thrown here
   }
 }
 } // end namespace otb

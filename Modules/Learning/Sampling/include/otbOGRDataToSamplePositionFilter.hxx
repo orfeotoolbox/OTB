@@ -205,7 +205,7 @@ void PersistentOGRDataToSamplePositionFilter<TInputImage, TMaskImage, TSampler>:
 
   inLayer.SetSpatialFilter(&tmpPolygon);
 
-  unsigned int            numberOfThreads = this->GetNumberOfThreads();
+  unsigned int            numberOfThreads = this->GetNumberOfWorkUnits();
   std::vector<ogr::Layer> tmpLayers;
   for (unsigned int i = 0; i < numberOfThreads; i++)
   {
@@ -238,7 +238,7 @@ void PersistentOGRDataToSamplePositionFilter<TInputImage, TMaskImage, TSampler>:
     classCounts[it->first] = it->second->GetTotalElements();
   }
 
-  int                                numberOfThreads = this->GetNumberOfThreads();
+  int                                numberOfThreads = this->GetNumberOfWorkUnits();
   typedef std::vector<unsigned long> LoadVectorType;
   LoadVectorType                     currentLoad;
   currentLoad.resize(numberOfThreads, 0UL);

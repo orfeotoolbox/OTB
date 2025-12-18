@@ -151,7 +151,7 @@ results container with respect to the number of threads is handled here.
       virtual void Reset()
       {
         // Retrieve the number of threads
-        unsigned int numberOfThreads = this->GetNumberOfThreads();
+        unsigned int numberOfThreads = this->GetNumberOfWorkUnits();
 
         // Reset the temporary results container
         m_TemporarySums = std::vector<PixelType>(numberOfThreads, itk::NumericTraits<PixelType>::Zero);
@@ -199,7 +199,7 @@ Last, we need to define the ``Synthetize()`` method (still in the
     virtual void Synthetize()
     {
       // For each thread
-      for(unsigned int threadId = 0; threadId <this->GetNumberOfThreads();++threadId)
+      for(unsigned int threadId = 0; threadId <this->GetNumberOfWorkUnits();++threadId)
       {
         // Update final result
         m_Mean+=m_TemporarySums[threadId];

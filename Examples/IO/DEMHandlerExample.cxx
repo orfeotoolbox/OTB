@@ -34,6 +34,7 @@
 // library.
 
 #include "otbDEMHandler.h"
+#include "vcl_legacy_aliases.h"
 
 int main(int argc, char* argv[])
 {

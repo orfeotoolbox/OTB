@@ -21,17 +21,16 @@
 #ifndef otbStreamingShrinkImageFilter_h
 #define otbStreamingShrinkImageFilter_h
 
-
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-
+#include "OTBImageManipulationExport.h"
 #include "otbStreamingManager.h"
 #include "otbMacro.h"
 
 namespace otb
 {
 
-class ITK_EXPORT StreamingShrinkImageRegionSplitter : public itk::ImageRegionSplitter<2>
+class OTBImageManipulation_EXPORT StreamingShrinkImageRegionSplitter : public itk::ImageRegionSplitter<2>
 {
 public:
   /** Standard class typedefs. */
@@ -221,7 +220,7 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Multi-thread version GenerateData. */
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const RegionType& outputRegionForThread) override;
 
   void AfterThreadedGenerateData() override;
 

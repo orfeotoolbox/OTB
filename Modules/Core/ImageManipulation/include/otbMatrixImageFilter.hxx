@@ -21,6 +21,7 @@
 #ifndef otbMatrixImageFilter_hxx
 #define otbMatrixImageFilter_hxx
 
+#include "otbMacro.h" //for 
 #include "otbMatrixImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
@@ -34,6 +35,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TMatrix>
 MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::MatrixImageFilter() : m_MatrixByVector(false)
 {
+  this->DynamicMultiThreadingOn();
 }
 
 template <class TInputImage, class TOutputImage, class TMatrix>
@@ -72,7 +74,7 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::GenerateOutputInform
 }
 
 template <class TInputImage, class TOutputImage, class TMatrix>
-void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   // images pointer
   typename OutputImageType::Pointer     outputPtr = this->GetOutput();
@@ -80,10 +82,6 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
 
   typename itk::ImageRegionConstIterator<InputImageType> inIt(inputPtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>              outIt(outputPtr, outputRegionForThread);
-
-
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inIt.GoToBegin();
   outIt.GoToBegin();
@@ -115,7 +113,6 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
 
     ++inIt;
     ++outIt;
-    progress.CompletedPixel();
   }
 }
 

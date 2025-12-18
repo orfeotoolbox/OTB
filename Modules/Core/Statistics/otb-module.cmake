@@ -26,6 +26,7 @@ of the input sample list, and so on. The other part works on images and labelMap
 and allows the calculation of classical statistics (min max mean histogram).")
 
 otb_module(OTBStatistics
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBITK

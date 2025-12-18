@@ -42,7 +42,7 @@ void NumberOfLinesStrippedStreamingManager<TImage>::PrepareStreaming(itk::DataOb
 {
   otbMsgDevMacro(<< "Activating STRIPPED_SET_NUMBEROFLINES streaming mode") if (m_NumberOfLinesPerStrip < 1)
   {
-    itkWarningMacro(<< "DesiredNumberOfLines set to 0 : streaming disabled")
+    itkWarningMacro(<< "DesiredNumberOfLines set to 0 : streaming disabled");
   }
 
   // Calculate number of splits

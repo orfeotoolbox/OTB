@@ -94,7 +94,7 @@ protected:
   }
 
   void GenerateOutputInformation() override;
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadID) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
 private:
   AngularProjectionBinaryImageFilter(const Self&); // not implemented

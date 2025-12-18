@@ -11,7 +11,7 @@ classification, SAR processing, and much more!
 All of OTB's algorithms are accessible from QGIS, Python, the command
 line or C++. A ready to use Docker container is also available. From
 resource limited laptops to high performance MPI clusters, OTB is
-available on Windows, Linux and Mac.  It is community driven,
+available on Windows, Linux.  It is community driven,
 extensible and heavily documented.  Orfeo ToolBox is not a black box!
 
 This is the CookBook documentation for users. If you are new to OTB,

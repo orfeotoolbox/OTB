@@ -1383,7 +1383,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       m_BytePerPixel = sizeof(long);
       if (m_BytePerPixel == 8)
       {
-        itkWarningMacro(<< "Cast a long (64 bits) image into an int (32 bits) one.")
+        itkWarningMacro(<< "Cast a long (64 bits) image into an int (32 bits) one.");
       }
       m_PxType->pixType = GDT_Int32;
     }
@@ -1392,7 +1392,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       m_BytePerPixel = sizeof(unsigned long);
       if (m_BytePerPixel == 8)
       {
-        itkWarningMacro(<< "Cast an unsigned long (64 bits) image into an unsigned int (32 bits) one.")
+        itkWarningMacro(<< "Cast an unsigned long (64 bits) image into an unsigned int (32 bits) one.");
       }
       m_PxType->pixType = GDT_UInt32;
     }
@@ -1431,24 +1431,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   }
   else
   {
-    // buffer casted in unsigned long cause under Win32 the address
-    // doesn't begin with 0x, the address in not interpreted as
-    // hexadecimal but alpha numeric value, then the conversion to
-    // integer make us pointing to an non allowed memory block => Crash.
-    // use intptr_t to cast void* to unsigned long. included stdint.h for
-    // uintptr_t typedef.
-    std::ostringstream stream;
-    stream << "MEM:::"
-           << "DATAPOINTER=" << (uintptr_t)(buffer) << ","
-           << "PIXELS=" << m_Dimensions[0] << ","
-           << "LINES=" << m_Dimensions[1] << ","
-           << "BANDS=" << m_NbBands << ","
-           << "DATATYPE=" << GDALGetDataTypeName(m_PxType->pixType) << ","
-           << "PIXELOFFSET=" << m_BytePerPixel * m_NbBands << ","
-           << "LINEOFFSET=" << m_BytePerPixel * m_NbBands * m_Dimensions[0] << ","
-           << "BANDOFFSET=" << m_BytePerPixel;
-
-    m_Dataset = GDALDriverManagerWrapper::GetInstance().Open(stream.str());
+    m_Dataset = GDALDriverManagerWrapper::GetInstance().OpenFromMemory(const_cast<void*>(buffer), m_Dimensions[0], m_Dimensions[1], m_PxType->pixType, m_BytePerPixel, m_NbBands, m_BytePerPixel);
   }
 
   if (m_Dataset.IsNull())
@@ -1707,6 +1690,9 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
     {
       gdalDriverShortName = "NOT-FOUND";
     }
+  }else if(extension == ".lum")
+  {
+     gdalDriverShortName = "LUM";
   }
 
   else
@@ -1751,8 +1737,7 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double>& origin)
     return false;
   }
 
-  std::vector<itksys::String> originValues;
-  originValues = itksys::SystemTools::SplitString(originTag->GetText(), ' ', false);
+  auto originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
 
   // Compute origin in GDAL convention (the half-pixel shift is applied later)
   std::istringstream ss0(originValues[0]);

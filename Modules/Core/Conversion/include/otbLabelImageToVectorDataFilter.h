@@ -70,8 +70,6 @@ public:
   typedef VectorData<TPrecision>                VectorDataType;
   typedef typename VectorDataType::Pointer      VectorDataPointerType;
   typedef typename VectorDataType::DataTreeType DataTreeType;
-  typedef typename DataTreeType::Pointer        DataTreePointerType;
-  typedef typename DataTreeType::TreeNodeType   InternalTreeNodeType;
   typedef typename VectorDataType::DataNodeType DataNodeType;
   typedef typename DataNodeType::Pointer        DataNodePointerType;
   typedef typename VectorDataType::LineType     LineType;

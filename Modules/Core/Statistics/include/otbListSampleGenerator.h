@@ -24,7 +24,6 @@
 
 #include "itkProcessObject.h"
 #include "itkListSample.h"
-#include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include <string>
 
@@ -174,7 +173,6 @@ private:
   typedef typename DataNodeType::PolygonPointerType                        PolygonPointerType;
   typedef typename DataNodeType::PolygonListType                           PolygonListType;
   typedef typename DataNodeType::PolygonListPointerType                    PolygonListPointerType;
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
 
   void ComputeClassSelectionProbability();
 

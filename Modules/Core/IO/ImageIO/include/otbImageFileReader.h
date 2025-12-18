@@ -30,7 +30,7 @@
 #include "itkImageSource.h"
 #endif
 #include "otbImageIOBase.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkImageRegion.h"
 #include "OTBImageIOExport.h"
 
@@ -52,7 +52,7 @@ namespace otb
  *
  * ImageFileReader supports extended filenames, which allow controlling
  * how the source dataset is read. See
- * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
+ * https://www.orfeo-toolbox.org/CookBook/ExtendedFilenames.html for more
  * information.
  *
  * \sa ExtendedFilenameToReaderOptions

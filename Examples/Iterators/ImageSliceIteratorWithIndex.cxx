@@ -101,6 +101,7 @@
 #include "itkImageLinearIteratorWithIndex.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "vcl_legacy_aliases.h"
 
 int main(int argc, char* argv[])
 {

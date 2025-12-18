@@ -25,6 +25,7 @@ membership value for each one of the qualitative values. it also contains classe
 to handle xml files where are stored several statistics.")
 
 otb_module(OTBFuzzy
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBTinyXML

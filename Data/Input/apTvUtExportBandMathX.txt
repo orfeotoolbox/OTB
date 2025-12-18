@@ -1,3 +1,0 @@
-#F val 1
-#E im1b1 + 2*val + im2b1
-

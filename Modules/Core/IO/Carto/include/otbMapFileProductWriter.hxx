@@ -152,7 +152,7 @@ void MapFileProductWriter<TInputImage>::InitializeVectorData()
   // Initialize the vectordata to build the indexTile
   m_VectorDataIndexTile = VectorDataType::New();
   m_VectorDataIndexTile->SetProjectionRef(otb::SpatialReference::FromEPSG(m_SRID).ToWkt());
-  DataNodeType::Pointer root     = m_VectorDataIndexTile->GetDataTree()->GetRoot()->Get();
+  DataNodeType::Pointer root     = m_VectorDataIndexTile->GetRoot();
   DataNodeType::Pointer document = DataNodeType::New();
   m_Folder                       = DataNodeType::New();
 
@@ -162,8 +162,8 @@ void MapFileProductWriter<TInputImage>::InitializeVectorData()
   document->SetNodeId("DOCUMENT");
   m_Folder->SetNodeId("FOLDER");
 
-  m_VectorDataIndexTile->GetDataTree()->Add(document, root);
-  m_VectorDataIndexTile->GetDataTree()->Add(m_Folder, document);
+  m_VectorDataIndexTile->Add(document, root);
+  m_VectorDataIndexTile->Add(m_Folder, document);
 }
 
 /**
@@ -449,7 +449,7 @@ void MapFileProductWriter<TInputImage>::AddBBoxToIndexTile(OutputPointType lower
   m_Polygon->SetFieldAsString("LOCATION", oss.str());
 
   // Add the to vectordata
-  m_VectorDataIndexTile->GetDataTree()->Add(m_Polygon, m_Folder);
+  m_VectorDataIndexTile->Add(m_Polygon, m_Folder);
 }
 
 /**

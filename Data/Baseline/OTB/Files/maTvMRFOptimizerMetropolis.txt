@@ -1,2 +1,0 @@
-Compute(0)                                       : 0
-Compute(-1.)                                     : 1

@@ -22,7 +22,7 @@
 #define otbComputeHistoFilter_hxx
 
 #include "otbComputeHistoFilter.h"
-
+#include "otbMacro.h"
 #include <limits>
 
 namespace otb
@@ -31,6 +31,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ComputeHistoFilter<TInputImage, TOutputImage>::ComputeHistoFilter()
 {
+  this->DynamicMultiThreadingOff();
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0, this->MakeOutput(0));
   this->SetNthOutput(1, this->MakeOutput(1));
@@ -149,11 +150,11 @@ void ComputeHistoFilter<TInputImage, TOutputImage>::GenerateData()
   // Get the output pointer
   const OutputImageType*              outputPtr(this->GetOutput());
   const itk::ImageRegionSplitterBase* splitter(this->GetImageRegionSplitter());
-  m_ValidThreads = splitter->GetNumberOfSplits(outputPtr->GetRequestedRegion(), this->GetNumberOfThreads());
+  m_ValidThreads = splitter->GetNumberOfSplits(outputPtr->GetRequestedRegion(), this->GetNumberOfWorkUnits());
 
   this->BeforeThreadedGenerateData();
 
-  this->GetMultiThreader()->SetNumberOfThreads(m_ValidThreads);
+  this->GetMultiThreader()->SetNumberOfWorkUnits(m_ValidThreads);
   this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
   // multithread the execution
   this->GetMultiThreader()->SingleMethodExecute();
@@ -183,10 +184,6 @@ template <class TInputImage, class TOutputImage>
 void ComputeHistoFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   assert(m_Step > 0);
-  // TODO throw error
-
-  // itk::ProgressReporter progress(this , threadId ,
-  //               outputRegionForThread.GetNumberOfPixels() );
   typename InputImageType::ConstPointer input(this->GetInput());
   typename OutputImageType::Pointer     output(this->GetHistoOutput());
 

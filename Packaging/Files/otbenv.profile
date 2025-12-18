@@ -42,7 +42,7 @@ OS="$(lsb_release -is)"
 # path may differ
 if [ -n "${BASH}" ]; then
   # dirname does not exists on RH-based OS
-  if [ $OS = "RedHatEnterprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
+  if [ "$OS" = "RedHatEnterprise" ] || [ "$OS" = "Fedora" ] || [ "$OS" = "RockyLinux" ]; then
     OTB_INSTALL_DIR="$(realpath $(dirname "${BASH_SOURCE[0]}"))"
   elif [ -n "${BASH}" ]; then
     OTB_INSTALL_DIR="$( dirname -- "$( readlink -f -- "${BASH_SOURCE[0]}"; )"; )"
@@ -51,7 +51,7 @@ else
   # non-bash shell
   OTB_INSTALL_DIR="$( dirname -- "$( readlink -f -- "$0"; )"; )"
 fi
-CMAKE_PREFIX_PATH=$OTB_INSTALL_DIR
+CMAKE_PREFIX_PATH="$OTB_INSTALL_DIR"
 export CMAKE_PREFIX_PATH
 
 # check and set OTB_APPLICATION_PATH
@@ -62,10 +62,12 @@ PATH=$(cat_path "$OTB_INSTALL_DIR/bin" "$PATH")
 
 # export PYTHONPATH to import otbApplication.py
 PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/python" "$PYTHONPATH")
-if [ $OS = "RedHatEnterprise" ] || [ $OS = "Fedora" ] || [ $OS = "RockyLinux" ]; then
-  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3.8/site-packages" "$PYTHONPATH")
-else
-  PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3/dist-packages" "$PYTHONPATH")
+# add path to internal gdal and python apps
+xdk_lib_python=$(find "$OTB_INSTALL_DIR/lib" -mindepth 2 -maxdepth 2 -type d -name "sites-packages")
+
+# if we found something
+if [ -n "$xdk_lib_python" ]; then
+  PYTHONPATH=$(cat_path "$xdk_lib_python" "$PYTHONPATH")
 fi
 
 # set numeric locale to C
@@ -76,7 +78,9 @@ GDAL_DATA="$OTB_INSTALL_DIR/share/gdal"
 
 PROJ_LIB="$OTB_INSTALL_DIR/share/proj"
 
-export GDAL_DRIVER_PATH=disable
+# when otbcli is used the otbenv.profile can disable the variable GDAL_DRIVER_PATH
+# You can override this variable and specify a path where your GDAL drivers libs are
+export GDAL_DRIVER_PATH="disable"
 
 export LD_LIBRARY_PATH="$OTB_INSTALL_DIR/lib:$LD_LIBRARY_PATH"
 

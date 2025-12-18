@@ -23,6 +23,7 @@
 #define otbMRFEnergyEdgeFidelity_h
 
 #include "otbMRFEnergy.h"
+#include "vcl_legacy_aliases.h"
 
 namespace otb
 {

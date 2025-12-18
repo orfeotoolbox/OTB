@@ -178,7 +178,7 @@ void SarBurstExtractionImageFilter<TImage>::GenerateInputRequestedRegion()
 
 // Actual processing
 template <class TImage>
-void SarBurstExtractionImageFilter<TImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
+void SarBurstExtractionImageFilter<TImage>::DynamicThreadedGenerateData(const RegionType& outputRegionForThread)
 {
   // Compute corresponding input region
   RegionType inputRegionForThread = OutputRegionToInputRegion(outputRegionForThread);

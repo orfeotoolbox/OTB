@@ -82,9 +82,9 @@ public:
   /** ImageRegion typedef needed by the GetImageRegion() method */
   typedef itk::ImageRegion<2> ImageRegionType;
 
-  typename Superclass::RegionType GetRegionType() const override
+  typename Superclass::RegionEnum GetRegionType() const override
   {
-    return Superclass::ITK_STRUCTURED_REGION;
+    return Superclass::RegionEnum::ITK_STRUCTURED_REGION;
   }
 
   /** Constructor. RemoteSensingRegion is a lightweight object that is not reference

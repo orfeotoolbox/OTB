@@ -25,6 +25,8 @@ SETUP_SUPERBUILD(GSL)
 ExternalProject_Add(GSL
   PREFIX GSL
   URL "https://github.com/ampl/gsl/archive/v2.7.0.tar.gz"
+  # change download name as the file notation vx.x.x is used everywhere
+  # and can be in conflict with other package
   DOWNLOAD_NAME gsl_v2.7.0.tar.gz
   URL_MD5 566ca5f5f08057aa6572aecf7fd67eb9
   BINARY_DIR ${GSL_SB_BUILD_DIR}

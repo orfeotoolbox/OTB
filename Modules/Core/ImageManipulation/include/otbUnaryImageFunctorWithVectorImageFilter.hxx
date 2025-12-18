@@ -36,6 +36,7 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>::Un
 {
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
+  this->DynamicMultiThreadingOn();
 }
 
 /**
@@ -76,8 +77,7 @@ void UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction
  * ThreadedGenerateData Performs the pixel-wise addition
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                                                                                        itk::ThreadIdType threadId)
+void UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>::DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread)
 {
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
   typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
@@ -85,8 +85,6 @@ void UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction
   // Define the iterators
   itk::ImageRegionConstIterator<InputImageType> inputIt(inputPtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>     outputIt(outputPtr, outputRegionForThread);
-
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
@@ -113,7 +111,6 @@ void UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction
     outputIt.Set(outPixel);
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel(); // potential exception thrown here
   }
 }
 

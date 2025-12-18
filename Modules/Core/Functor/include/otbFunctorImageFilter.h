@@ -396,7 +396,7 @@ public:
 
 protected:
   /// Constructor of functor filter, will copy the functor
-  FunctorImageFilter(const FunctorType& f, itk::Size<2> radius) : m_Functor(f), m_Radius(radius){};
+  FunctorImageFilter(const FunctorType& f, itk::Size<2> radius) : m_Functor(f), m_Radius(radius){this->DynamicMultiThreadingOn();};
   FunctorImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
   ~FunctorImageFilter()       = default;
@@ -406,7 +406,7 @@ private:
   friend auto NewFunctorFilter<TFunction, TNameMap>(TFunction f, itk::Size<2> radius);
 
   /** Overload of ThreadedGenerateData  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
   /**
    * Pad the input requested region by radius

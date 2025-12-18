@@ -70,6 +70,10 @@ public:
   void Print(std::ostream& os) const;
   std::string ToJSON(bool multiline=false) const;
 
+  friend bool operator==(const GCP& lhs,const GCP& rhs)
+  {
+    return (lhs.m_GCPCol == rhs.m_GCPCol) && (lhs.m_GCPRow == rhs.m_GCPRow);
+  }
   /** Keywordlist export */
   void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -358,7 +358,7 @@ std::string MakeCommandLine(Application::Pointer application)
 
     cmdLine << "otbcli_" << pName->GetText();
 #ifdef _WIN32
-    cmdLine << ".bat";
+    cmdLine << ".ps1";
 #endif
     cmdLine << " ";
 

@@ -60,7 +60,7 @@ private:
         "Generates a subsampled version of an extract of an image defined by ROIStart and ROISize.\n"
         "This extract is subsampled using the ratio OR the output image Size.");
     SetDocLimitations(
-        "This application does not provide yet the optimal way to decode coarser level of resolution from JPEG2000 images (like in Monteverdi).\n"
+        "This application does not provide yet the optimal way to decode coarser level of resolution from JPEG2000 images.\n"
         "Trying to subsampled huge JPEG200 image with the application will lead to poor performances for now.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

@@ -28,6 +28,7 @@ namespace otb
 template <class TInputImage, class TOutputMetricImage, class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityImage, TMaskImage, TBlockMatchingFunctor>::SubPixelDisparityImageFilter()
 {
+  this->DynamicMultiThreadingOff();
   // Set the number of required inputs
   this->SetNumberOfRequiredInputs(3);
 
@@ -283,7 +284,7 @@ void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityIma
 }
 
 template <class TInputImage, class TOutputMetricImage, class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
-void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityImage, TMaskImage, TBlockMatchingFunctor>::VerifyInputInformation()
+void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityImage, TMaskImage, TBlockMatchingFunctor>::VerifyInputInformation() const
 {
   // Retrieve input pointers
   const TInputImage*     inLeftPtr      = this->GetLeftInput();
@@ -503,7 +504,7 @@ void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityIma
   outHDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumHorizontalDisparity) / static_cast<DisparityPixelType>(this->m_Step));
   outVDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MinimumVerticalDisparity) / static_cast<DisparityPixelType>(this->m_Step));
 
-  m_WrongExtrema.resize(this->GetNumberOfThreads());
+  m_WrongExtrema.resize(this->GetNumberOfWorkUnits());
 }
 
 template <class TInputImage, class TOutputMetricImage, class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
@@ -906,7 +907,7 @@ void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityIma
         resampler = ResamplerFilterType::New();
         resampler->SetInput(fakeRightPtr);
         resampler->SetSize(windowSize);
-        resampler->SetNumberOfThreads(1);
+        resampler->SetNumberOfWorkUnits(1);
         resampler->SetTransform(transfo);
         resampler->SetOutputStartIndex(upleftCorner);
 
@@ -1344,7 +1345,7 @@ void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityIma
         resampler = ResamplerFilterType::New();
         resampler->SetInput(fakeRightPtr);
         resampler->SetSize(windowSize);
-        resampler->SetNumberOfThreads(1);
+        resampler->SetNumberOfWorkUnits(1);
         resampler->SetTransform(transfo);
         resampler->SetOutputStartIndex(upleftCorner);
 
@@ -1554,7 +1555,7 @@ void SubPixelDisparityImageFilter<TInputImage, TOutputMetricImage, TDisparityIma
       resampler = ResamplerFilterType::New();
       resampler->SetInput(fakeRightPtr);
       resampler->SetSize(windowSize);
-      resampler->SetNumberOfThreads(1);
+      resampler->SetNumberOfWorkUnits(1);
       resampler->SetTransform(transfo);
       resampler->SetOutputStartIndex(upleftCorner);
 

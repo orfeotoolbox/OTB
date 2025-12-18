@@ -263,8 +263,8 @@ void BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction>
-void BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::ThreadedGenerateData(
-    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::DynamicThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread)
 {
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage1> nbc1;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage2> nbc2;
@@ -298,9 +298,6 @@ void BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage1>::FaceListType::iterator fit1;
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage2>::FaceListType::iterator fit2;
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit1 = faceList1.begin(), fit2 = faceList2.begin(); fit1 != faceList1.end() && fit2 != faceList2.end(); ++fit1, ++fit2)
@@ -323,7 +320,6 @@ void BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage
       ++neighInputIt1;
       ++neighInputIt2;
       ++outputIt;
-      progress.CompletedPixel();
     }
   }
 }

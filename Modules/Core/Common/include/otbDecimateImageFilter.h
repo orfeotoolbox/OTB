@@ -45,10 +45,10 @@ class ITK_EXPORT DecimateImageFilter : public itk::ImageToImageFilter<TInputImag
 {
 public:
   /** Standard class typedefs. */
-  typedef DecimateImageFilter Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self = DecimateImageFilter;
+  using Superclass = itk::ImageToImageFilter<TInputImage, TOutputImage>;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -61,12 +61,12 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Image typedef support. */
-  typedef TInputImage                         InputImageType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  using InputImageType = TInputImage;
+  using InputImageRegionType = typename InputImageType::RegionType;
 
-  typedef TOutputImage                         OutputImageType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType  OutputPixelType;
+  using OutputImageType = TOutputImage;
+  using OutputImageRegionType = typename OutputImageType::RegionType;
+  using OutputPixelType = typename OutputImageType::PixelType;
 
   /** Set/Get the DecimateFactor */
   itkGetMacro(DecimationFactor, unsigned int);
@@ -76,26 +76,25 @@ protected:
   DecimateImageFilter()
   {
     m_DecimationFactor = 1;
+    this->DynamicMultiThreadingOn();
   }
-  virtual ~DecimateImageFilter()
-  {
-  }
+  virtual ~DecimateImageFilter() = default;
 
   /** Since input and output image are very likely to be of different size.
    * Region estimation functions has to be reimplemented
    */
-  virtual void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion);
-  virtual void CallCopyInputRegionToOutputRegion(OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion);
+  void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
+  void CallCopyInputRegionToOutputRegion(OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.
    */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() override;
 
   /** Allows multithreading */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void DynamicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread) override;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   DecimateImageFilter(const Self&) = delete;

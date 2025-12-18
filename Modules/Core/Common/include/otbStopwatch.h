@@ -42,10 +42,10 @@ class OTBCommon_EXPORT Stopwatch final
 {
 public:
   /** Standard class typedefs. */
-  typedef Stopwatch Self;
+  using Self = Stopwatch;
 
   /** Represents a duration measured in milliseconds */
-  typedef uint64_t DurationType;
+  using DurationType = std::uint64_t;
 
   /** Constructs a timer instance */
   Stopwatch();
@@ -79,7 +79,7 @@ public:
   static Stopwatch StartNew();
 
 private:
-  typedef uint64_t TimepointType;
+  using TimepointType = std::uint64_t;
 
   TimepointType GetTimestamp() const;
   DurationType  GetRunningElapsedTime() const;

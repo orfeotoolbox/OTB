@@ -33,39 +33,25 @@ int otbVectorDataKeywordlist(int itkNotUsed(argc), char* argv[])
   typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer                 reader = VectorDataFileReaderType::New();
-
-  typedef otb::DataNode<double, 2, double> DataNodeType;
-  typedef DataNodeType::Pointer                   DataNodePointerType;
-  typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
-
   itk::Indent indent;
 
   reader->SetFileName(argv[1]);
   reader->Update();
 
   VectorDataType::Pointer data     = reader->GetOutput();
-  DataTreeType::Pointer   dataTree = DataTreeType::New();
-  dataTree                         = data->GetDataTree();
 
   std::ofstream fout(argv[2]);
 
-  itk::PreOrderTreeIterator<DataTreeType> it(dataTree);
-  it.GoToBegin();
+  auto itPair = data->GetIteratorPair();
+  auto it = itPair.first;
 
-  while (!it.IsAtEnd())
+  while (it != itPair.second)
   {
-    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
-    bool                                    goesOn   = true;
-    while (itParent.HasParent() && goesOn)
-    {
-      fout << indent;
-      goesOn = itParent.GoToParent();
-    }
-    if (it.Get()->GetMetaDataDictionary().HasKey(otb::MetaDataKey::VectorDataKeywordlistKey))
+    if (data->Get(it)->GetMetaDataDictionary().HasKey(otb::MetaDataKey::VectorDataKeywordlistKey))
     {
       otb::VectorDataKeywordlist kwl;
       kwl.GetNameOfClass();
-      itk::ExposeMetaData<otb::VectorDataKeywordlist>(it.Get()->GetMetaDataDictionary(), otb::MetaDataKey::VectorDataKeywordlistKey, kwl);
+      itk::ExposeMetaData<otb::VectorDataKeywordlist>(data->Get(it)->GetMetaDataDictionary(), otb::MetaDataKey::VectorDataKeywordlistKey, kwl);
       fout << "New node: " << kwl.GetNumberOfFields() << " fields" << std::endl;
       fout << "- HasField(\"name\"): " << kwl.HasField("name") << std::endl;
       if (kwl.HasField("name"))
@@ -75,7 +61,7 @@ int otbVectorDataKeywordlist(int itkNotUsed(argc), char* argv[])
       fout << std::endl;
     }
 
-    ++it;
+    it++;
   }
   /*added PrintSelf*/
 

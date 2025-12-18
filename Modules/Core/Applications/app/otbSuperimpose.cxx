@@ -274,6 +274,7 @@ private:
     {
       otbAppLogINFO("Using the PHR mode");
 
+      // following offset computation also works for Pleiades Neo products as underlying metadata have the same name
       otb::PleiadesPToXSAffineTransformCalculator::TransformType::OffsetType offset =
           otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(GetParameterImage("inr")->GetImageMetadata(), 
                                                                      GetParameterImage("inm")->GetImageMetadata());

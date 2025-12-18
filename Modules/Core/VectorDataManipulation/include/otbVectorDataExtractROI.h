@@ -24,7 +24,6 @@
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbRemoteSensingRegion.h"
 #include "itkMacro.h"
-#include "itkPreOrderTreeIterator.h"
 
 namespace otb
 {
@@ -68,6 +67,8 @@ public:
 
   /** Image type information*/
   typedef TVectorData                               VectorDataType;
+  typedef typename VectorDataType::ConstPointer     VectorDataConstPointerType;
+  typedef typename VectorDataType::Pointer          VectorDataPointerType;
   typedef typename VectorDataType::DataNodeType     DataNodeType;
   typedef typename DataNodeType::Pointer            DataNodePointerType;
   typedef typename VectorDataType::DataTreeType     DataTreeType;
@@ -89,9 +90,7 @@ public:
 
   typedef itk::Point<typename VertexType::CoordRepType, IndexType::IndexDimension> ProjPointType;
 
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> InputTreeIteratorType;
-  typedef typename VectorDataType::DataTreeType::TreeNodeType              InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType                  ChildrenListType;
+  typedef typename VectorDataType::ChildrenListType          ChildrenListType;
 
   /** Method to Set/Get the Region of interest*/
   void SetRegion(const RegionType& region)
@@ -131,7 +130,7 @@ protected:
   /** Method to check if the line Bounding Box ha ve a non-null intersection with the ROI*/
   virtual bool IsLineIntersectionNotNull(LinePointerType line);
 
-  virtual void ProcessNode(InternalTreeNodeType* source, InternalTreeNodeType* destination);
+  virtual void ProcessNode(VectorDataConstPointerType inputVdata, DataNodePointerType source, VectorDataPointerType outputVdata, DataNodePointerType destination);
   using Superclass::ProcessNode;
 
 private:

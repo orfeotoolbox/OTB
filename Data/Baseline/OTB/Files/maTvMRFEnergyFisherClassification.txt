@@ -1,3 +1,0 @@
-
-Number of parameters: 6
-GetSingleValue(10, 1): 7.85815

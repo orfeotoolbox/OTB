@@ -264,7 +264,7 @@ void OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, con
 
   // Initialize the vectordata : EPSG 4326 is for WGS84
   m_OutputVectorData->SetProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
-  DataNodeType::Pointer root     = m_OutputVectorData->GetDataTree()->GetRoot()->Get();
+  DataNodeType::Pointer root     = m_OutputVectorData->GetRoot();
   DataNodeType::Pointer document = DataNodeType::New();
   DataNodeType::Pointer folder   = DataNodeType::New();
 
@@ -274,8 +274,8 @@ void OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, con
   document->SetNodeId("DOCUMENT");
   folder->SetNodeId("FOLDER");
 
-  m_OutputVectorData->GetDataTree()->Add(document, root);
-  m_OutputVectorData->GetDataTree()->Add(folder, document);
+  m_OutputVectorData->Add(document, root);
+  m_OutputVectorData->Add(folder, document);
 
   // Form the vector data with the values parsed
   for (unsigned int idx = 0; idx < m_VectorDataElementList.size(); ++idx)
@@ -330,7 +330,7 @@ void OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, con
         currentDataNode->SetFieldAsInt(m_ClassKey, m_ClassKeyValue);
 
         // Add the to vectordata
-        m_OutputVectorData->GetDataTree()->Add(currentDataNode, folder);
+        m_OutputVectorData->Add(currentDataNode, folder);
       }
     }
   }
