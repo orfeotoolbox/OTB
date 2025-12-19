@@ -30,6 +30,9 @@ interfaces are:
 +------------------------+-------------------------+--------------------------------------------------------------------+
 | Ikonos                 | TIFF                    | N/A                                                                |
 +------------------------+-------------------------+--------------------------------------------------------------------+
+| Nisar                  | HDF5 -> TIFF            | The HDF5 file need to be pre-processed with the                    |
+|                        |                         | `nisar_preparation.py <link_nisar_preparation_>`_ script.          |
++------------------------+-------------------------+--------------------------------------------------------------------+
 | Pleiades               | JPEG2000 / TIFF / DIMAP | We recommend the use of the tiff/jp2000 file. Indeed, when reading |
 |                        |                         | the DIMAP file we noticed that the image is shifted by 0.5 pixel   |
 |                        |                         | (this is a documented bug in GDAL).                                |
@@ -172,3 +175,5 @@ file::
 
 With this file attached, GDAL will be able to read the egm96.grd file
 as a ENVI dataset.
+
+.. _link_nisar_preparation: https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/master/Utilities/DataPreparation/nisar_preparation.py
