@@ -301,17 +301,22 @@ macro(otb_module_impl)
   set_property(GLOBAL PROPERTY ${__current_component}_MOD_DEPS
                                ${MODULE_DEPENDS_OF_COMPONENT})
 
-  get_property(_is_target_exported GLOBAL PROPERTY ${${otb-module}-targets}_EXPORTED)
+  get_property(_is_target_exported GLOBAL PROPERTY ${__current_component}Targets_EXPORTED)
   # check if _is_target_exported is unset or FALSE
   if (NOT DEFINED _is_target_exported OR NOT _is_target_exported)
     if (CMAKE_DEBUG)
       message(STATUS "[CMAKE_DEBUG] Exporting target ${${otb-module}-targets} part of component ${__current_component} in file ${__current_component}Targets.cmake located at ${OTB_INSTALL_PACKAGE_DIR}")
     endif()
-    install(EXPORT ${${otb-module}-targets}
+
+    if ("${__current_component}" STREQUAL "")
+      message(FATAL_ERROR "${otb-module} does not have component ${__current_component}")
+    endif()
+
+    install(EXPORT ${__current_component}Targets
             FILE ${__current_component}Targets.cmake
             DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
             COMPONENT ${__current_component})
-    set_property(GLOBAL PROPERTY ${${otb-module}-targets}_EXPORTED TRUE)
+    set_property(GLOBAL PROPERTY ${__current_component}Targets_EXPORTED TRUE)
   endif() # NOT DEFINED ${${otb-module}-targets}_EXPORTED
   otb_module_doxygen(${otb-module})   # module name
   unset(__current_component)
@@ -384,7 +389,7 @@ macro(otb_module_target_install _name _component)
   # do not add COMPONENT ${_component} to INCLUDE as it will be interpreted
   # as another directory to include and not a cmake keyword
   install(TARGETS ${_name}
-    EXPORT  ${${otb-module}-targets}
+    EXPORT ${_component}Targets
     RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_component}
     LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
     ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT ${_component}

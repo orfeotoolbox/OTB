@@ -31,5 +31,7 @@ otb_module(OTBCurl
     
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
   )
 

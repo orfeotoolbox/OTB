@@ -27,6 +27,7 @@ otb_module(OTBTIFF
     
   DESCRIPTION
     "${DOCUMENTATION}"
-
+  COMPONENT
+    Core
   EXCLUDE_FROM_DEFAULT
   )

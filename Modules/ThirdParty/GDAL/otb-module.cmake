@@ -27,4 +27,6 @@ otb_module(OTBGDAL
     
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
   )

@@ -27,6 +27,8 @@ otb_module(OTB6S
     
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    ThirdParty
   )
 
 otb_module_activation_option("Enable 6S radiometric and atmospheric correction module" ON)

@@ -27,4 +27,6 @@ otb_module(OTBITK
     
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
   )

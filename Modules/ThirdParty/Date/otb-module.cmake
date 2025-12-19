@@ -27,4 +27,6 @@ otb_module(OTBDate
     
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
   )

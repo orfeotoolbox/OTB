@@ -27,4 +27,6 @@ otb_module(OTBTinyXML
     
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
   )
