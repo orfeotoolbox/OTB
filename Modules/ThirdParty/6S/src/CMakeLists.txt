@@ -127,4 +127,4 @@ install(TARGETS otb6S
   ARCHIVE DESTINATION ${OTB3P_INSTALL_ARCHIVE_DIR} COMPONENT Core
   )
 
-otb_module_target( otb6S "COMPONENT_ThirdParty" NO_INSTALL )
+otb_module_target( otb6S "COMPONENT_Core" )
