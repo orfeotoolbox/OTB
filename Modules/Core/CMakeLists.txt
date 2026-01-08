@@ -106,10 +106,10 @@ add_subdirectory(Applications)
 # Get the list of enabled modules for this component. This list is created
 # in OTBModuleEnablement.cmake
 get_property(__ENABLED_MODULES GLOBAL PROPERTY ${arg}_MODULE_LIST)
-configure_file(${CMAKE_SOURCE_DIR}/CMake/GenericGroupConfig.cmake.in CMakeFiles/${otb-group}Config.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/GenericGroupConfig.cmake.in ${CMAKE_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake @ONLY)
 unset(__ENABLED_MODULES)
 
-install(FILES ${OTB_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
+install(FILES ${CMAKE_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
         DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
         COMPONENT ${otb-group})
 
