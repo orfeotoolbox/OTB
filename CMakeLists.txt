@@ -562,7 +562,7 @@ if(OTB_DATA_GIT_STATUS_MESSAGE)
   message( ${OTB_DATA_GIT_STATUS_MESSAGE})
 endif()
 
-set(option_list ${OTB_MODULE_ACTIVATION_OPTION_LIST})
+get_property(option_list GLOBAL PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST)
 list(SORT option_list)
 
 foreach(otb_option

@@ -295,5 +295,5 @@ macro(otb_module_activation_option _option_desc _default)
   option(${_option_name} ${_option_desc} ${_default})
   set(OTB_MODULE_${otb-module}_ACTIVATION_OPTION ${_option_name})
   # this list is init in OTBConstants.cmake
-  list(APPEND OTB_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
+  set_property(GLOBAL APPEND PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
 endmacro()

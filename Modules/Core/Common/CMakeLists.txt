@@ -23,9 +23,10 @@ project(OTBCommon)
 configure_file(src/otbConfigure.h.in otbConfigure.h.in)
 file(APPEND ${OTBCommon_BINARY_DIR}/otbConfigure.h.in
      "/* Optional third parties activation status */\n")
-foreach(_otb_module_activation_option IN LISTS OTB_MODULE_ACTIVATION_OPTION_LIST)
+get_property(_otb_module_activations_opts GLOBAL PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST)
+foreach(_opt IN LISTS _otb_module_activations_opts)
   file(APPEND ${OTBCommon_BINARY_DIR}/otbConfigure.h.in
-       "#cmakedefine ${_otb_module_activation_option}\n")
+       "#cmakedefine ${_opt}\n")
 endforeach()
 
 configure_file(${OTBCommon_BINARY_DIR}/otbConfigure.h.in otbConfigure.h)

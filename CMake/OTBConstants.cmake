@@ -80,7 +80,9 @@ macro(get_install_const)
 endmacro()
 
 macro(get_modules_const)
-  if(NOT OTB_MODULE_ACTIVATION_OPTION_LIST)
-    set(OTB_MODULE_ACTIVATION_OPTION_LIST "")
+  get_property(_is_module_activation_opt_list_defined GLOBAL PROPERTY
+               OTB_MODULE_ACTIVATION_OPTION_LIST DEFINED)
+  if(NOT _is_module_activation_opt_list_defined)
+    define_property(GLOBAL PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST)
   endif()
 endmacro()
