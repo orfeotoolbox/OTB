@@ -35,3 +35,4 @@ otb_module(OTBCurl
     Core
   )
 
+otb_module_activation_option("Enable curl based functionalities" ON)

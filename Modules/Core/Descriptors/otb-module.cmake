@@ -23,17 +23,23 @@ vector of numbers which is invariant to common image transformations. Descriptor
 then compared according to some criterion in order to be matched. This module
 contains different descriptors such as Fourrier-Mellin, SIFT, SURF, HOG, and so on.")
 
+list(APPEND _depends_of "OTBCommon"
+                        "OTBITK"
+                        "OTBImageBase"
+                        "OTBObjectList"
+                        "OTBPointSet"
+                        "OTBTransform"
+)
+
+# Controled in cmake option and declared by
+# otb_module_activation_option in ThirdParty/SiftFast
+if (OTB_USE_SIFTFAST)
+  list(APPEND _depends_of "OTBSiftFast")
+endif()
+
 otb_module(OTBDescriptors
   DEPENDS
-    OTBCommon
-    OTBITK
-    OTBImageBase
-    OTBObjectList
-    OTBPointSet
-    OTBTransform
-
-  OPTIONAL_DEPENDS
-    OTBSiftFast
+    ${_depends_of}
     
   TEST_DEPENDS
     OTBImageIO
@@ -46,3 +52,5 @@ otb_module(OTBDescriptors
   COMPONENT
     Core
 )
+
+unset(_depends_of)

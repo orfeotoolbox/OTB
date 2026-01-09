@@ -94,7 +94,6 @@ endmacro()
 # generated.
 # - <module_name> is MANDATORY!
 # - DEPENDS <list> are the cmake target dependencies
-# - OPTIONAL_DEPENDS <list> a list added to cmake dependencies only if their are previously enabled
 # - LIBRARIES <list> is the library list
 # - LIBRARY_DIRS <list> is a list of path
 # - SYSTEM_LIBRARY_DIRS <list> same as library dirs but for system libs
@@ -109,7 +108,6 @@ function(generate_cmake_module_configs
                    EXPORT_CODE_BUILD
                    EXPORT_CODE_INSTALL)
   set(multiValuesArgs DEPENDS
-                      OPTIONAL_DEPENDS
                       LIBRARIES
                       LIBRARY_DIRS
                       SYSTEM_LIBRARY_DIRS
@@ -136,16 +134,9 @@ function(generate_cmake_module_configs
   set(otb-module-EXPORT_CODE "")
 
   # --------------- COMMON VARS FOR BOTH BUILD AND INSTALL FILES ------------
-  # DEPENDENCIES, normal and optionnal
+  # DEPENDENCIES
   if (arg_DEPENDS)
     set(otb-module-DEPENDS "${arg_DEPENDS}")
-  endif()
-  if (arg_OPTIONAL_DEPENDS)
-    foreach(dep IN LISTS arg_OPTIONAL_DEPENDS)
-      if (${dep}_ENABLED)
-        list(APPEND otb-module-DEPENDS ${dep})
-      endif()
-    endforeach()
   endif()
 
   # Libraries to link to

@@ -20,14 +20,18 @@
 
 set(DOCUMENTATION "Adapters for the Curl library.")
 
-otb_module(OTBCurlAdapters
-ENABLE_SHARED
-  DEPENDS
-    OTBCommon
-    OTBITK
+list(APPEND _depends_of "OTBCommon" "OTBITK")
 
-  OPTIONAL_DEPENDS
-    OTBCurl
+# Controled in cmake option and declared by
+# otb_module_activation_option in ThirdParty/Curl
+if (OTB_USE_CURL)
+  list(APPEND _depends_of "OTBCurl")
+endif()
+
+otb_module(OTBCurlAdapters
+  ENABLE_SHARED
+  DEPENDS
+    ${_depends_of}
 
   TEST_DEPENDS
     OTBTestKernel
@@ -38,3 +42,5 @@ ENABLE_SHARED
   COMPONENT
     Core
 )
+
+unset(_depends_of)

@@ -38,7 +38,6 @@ endif()
 # - OTB_MODULE_${otb-module}_DECLARED == 1
 # - OTB_MODULE_${otb-module}-Test_DECLARED == 1
 # - OTB_MODULE_${otb-module}_DEPENDS empty by default, can be set with DEPENDS arg. This list is sorted
-# - OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS same as DEPENDS. This list is sorted
 # - OTB_MODULE_${otb-module}_Test_DEPENDS same as DEPENDS. This list is sorted
 # - OTB_MODULE_${otb-module}_DESCRIPTION == "description", can be changed by DESCRIPTION
 # - OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT == 0 by default but can be set with EXCLUDE_FROM_DEFAULT and EXCLUDE_FROM_ALL
@@ -53,13 +52,12 @@ macro(otb_module _name)
   set(OTB_MODULE_${otb-module}_DECLARED 1)
   set(OTB_MODULE_${otb-module-test}_DECLARED 1)
   set(OTB_MODULE_${otb-module}_DEPENDS "")
-  set(OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS "")
   set(OTB_MODULE_${otb-module-test}_DEPENDS "${otb-module}")
   set(OTB_MODULE_${otb-module}_DESCRIPTION "description")
   set(OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT 0)
   set(OTB_MODULE_${otb-module}_ENABLE_SHARED 0)
   foreach(arg ${ARGN})
-    if("${arg}" MATCHES "^(DEPENDS|OPTIONAL_DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT|COMPONENT)$")
+    if("${arg}" MATCHES "^(DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT|COMPONENT)$")
       set(_doing "${arg}")
     elseif("${arg}" MATCHES "^EXCLUDE_FROM_DEFAULT$")
       set(_doing "")
@@ -76,8 +74,6 @@ macro(otb_module _name)
       set(OTB_MODULE_${otb-module}_IS_DEPRECATED 1)
     elseif("${_doing}" MATCHES "^DEPENDS$")
       list(APPEND OTB_MODULE_${otb-module}_DEPENDS "${arg}")
-    elseif("${_doing}" MATCHES "^OPTIONAL_DEPENDS$")
-      list(APPEND OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS "${arg}")
     elseif("${_doing}" MATCHES "^TEST_DEPENDS$")
       list(APPEND OTB_MODULE_${otb-module-test}_DEPENDS "${arg}")
     elseif("${_doing}" MATCHES "^DESCRIPTION$")
@@ -99,7 +95,6 @@ macro(otb_module _name)
     endif()
   endforeach()
   list(SORT OTB_MODULE_${otb-module}_DEPENDS) # Deterministic order.
-  list(SORT OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS) # Deterministic order.
   list(SORT OTB_MODULE_${otb-module-test}_DEPENDS) # Deterministic order.
 endmacro()
 
@@ -132,11 +127,9 @@ macro(otb_module_impl)
 
   otb_module_use(${OTB_MODULE_${otb-module}_DEPENDS})
 
-  foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
-    if (${dep}_ENABLED)
-      otb_module_use(${dep})
-    endif()
-  endforeach()
+  if (${otb-module} STREQUAL "OTBCurlAdapters")
+    message(STATUS "")
+  endif()
 
   # create a list ${otb_module}_LIBRARIES containing all needed lib
   # (required and optionals if activated)
@@ -145,12 +138,6 @@ macro(otb_module_impl)
 
     foreach(dep IN LISTS OTB_MODULE_${otb-module}_DEPENDS)
       list(APPEND ${otb-module}_LIBRARIES "${${dep}_LIBRARIES}")
-    endforeach()
-
-    foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
-      if (${dep}_ENABLED)
-        list(APPEND ${otb-module}_LIBRARIES "${${dep}_LIBRARIES}")
-      endif()
     endforeach()
 
     if(${otb-module}_LIBRARIES)
@@ -268,7 +255,6 @@ macro(otb_module_impl)
   generate_cmake_module_configs("${otb-module}" "${_OTBModuleMacros_DIR}"
       COMPONENT "${__current_component}"
       DEPENDS ${OTB_MODULE_${otb-module}_DEPENDS}
-      OPTIONAL_DEPENDS ${OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS}
       LIBRARIES ${${otb-module}_LIBRARIES}
       LIBRARY_DIRS "\${GROUP_${__current_component}_LOCATION}/lib"
       SYSTEM_LIBRARY_DIRS ${${otb-module}_SYSTEM_LIBRARY_DIRS}
@@ -331,11 +317,6 @@ macro(otb_module_test)
     list(APPEND ${otb-module-test}_LIBRARIES "${${dep}_LIBRARIES}")
   endforeach()
   # make sure the test can link with optional libs
-  foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
-    if (${dep}_ENABLED)
-      list(APPEND ${otb-module-test}_LIBRARIES "${${dep}_LIBRARIES}")
-    endif()
-  endforeach()
 endmacro()
 
 # Set the "LABELS" target property to $otb-module if it exists. Otherwise

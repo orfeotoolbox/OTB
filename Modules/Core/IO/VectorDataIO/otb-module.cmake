@@ -22,18 +22,24 @@ set(DOCUMENTATION "This module contains classes related to the reading and the
 writing of vector data (see also VectorDataBase and VectorDataManipulation
 modules).")
 
+list(APPEND _depends_of "OTBVectorDataBase"
+                        "OTBIOGDAL"
+                        "OTBITK"
+                        "OTBVectorDataManipulation"
+                        "OTBCommon"
+                        "OTBMetadata"
+)
+
+# Controled in cmake option and declared by
+# otb_module_activation_option in ThirdParty/libkml
+if (OTB_USE_LIBKML)
+  list(APPEND _depends_of "OTBIOKML")
+endif()
+
 otb_module(OTBVectorDataIO
 ENABLE_SHARED
   DEPENDS
-    OTBVectorDataBase
-    OTBIOGDAL
-    OTBITK
-    OTBVectorDataManipulation
-    OTBCommon
-    OTBMetadata
-
-  OPTIONAL_DEPENDS
-    OTBIOKML
+    ${_depends_of}
 
   TEST_DEPENDS
     OTBTestKernel
@@ -43,3 +49,5 @@ ENABLE_SHARED
   COMPONENT
     Core
 )
+
+unset(_depends_of)
