@@ -127,10 +127,6 @@ macro(otb_module_impl)
 
   otb_module_use(${OTB_MODULE_${otb-module}_DEPENDS})
 
-  if (${otb-module} STREQUAL "OTBCurlAdapters")
-    message(STATUS "")
-  endif()
-
   # create a list ${otb_module}_LIBRARIES containing all needed lib
   # (required and optionals if activated)
   if(NOT DEFINED ${otb-module}_LIBRARIES)
@@ -241,10 +237,6 @@ macro(otb_module_impl)
         set_target_properties(${otb-module} PROPERTIES C_VISIBILITY_PRESET hidden)
         set_target_properties(${otb-module} PROPERTIES VISIBILITY_INLINES_HIDDEN 1)
       endif()
-    endif()
-    # just to test on Windobe
-    if (BUILD_SHARED_LIBS AND USE_COMPILER_HIDDEN_VISIBILITY)
-      message(WARNING "YOLOOOOOO")
     endif()
   endif()
 

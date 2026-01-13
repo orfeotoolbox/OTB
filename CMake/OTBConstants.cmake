@@ -79,10 +79,10 @@ macro(get_install_const)
   endif()
 endmacro()
 
-macro(get_modules_const)
+function(get_modules_const)
   get_property(_is_module_activation_opt_list_defined GLOBAL PROPERTY
                OTB_MODULE_ACTIVATION_OPTION_LIST DEFINED)
   if(NOT _is_module_activation_opt_list_defined)
     define_property(GLOBAL PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST)
   endif()
-endmacro()
+endfunction()

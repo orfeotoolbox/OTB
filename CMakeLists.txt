@@ -283,6 +283,10 @@ set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 # dependencies.
 add_subdirectory(Modules)
 add_subdirectory(Modules/Remote)
+# NOTE TLA: this should be refactored and put in a separate function
+# Add the QGIS Wrapper at the last minute as it need all the OTB application
+# to be declared
+# add_subdirectory(Modules/Core/Wrappers/QGIS)
 
 # Enable modules according to user inputs and the module dependency DAG.
 #include(OTBModuleEnablement)

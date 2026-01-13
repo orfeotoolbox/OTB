@@ -26,15 +26,16 @@ add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
   COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Cleaning ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
   COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
   COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
-  )
+)
 
-file(RELATIVE_PATH app_location ${OTB_BINARY_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
+# get the path of ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications relative
+# from ${OTB_BINARY_DIR} and store it in _app_location
+file(RELATIVE_PATH _app_location ${OTB_BINARY_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
 
-set(app_names ${OTB_APPLICATIONS_NAME_LIST})
-list(REMOVE_ITEM app_names "TestApplication")
-list(REMOVE_ITEM app_names "ApplicationExample")
-list(REMOVE_DUPLICATES app_names)
-set(dfiles)
+set(_app_names ${OTB_APPLICATIONS_NAME_LIST})
+list(REMOVE_ITEM _app_names "TestApplication")
+list(REMOVE_ITEM _app_names "ApplicationExample")
+list(REMOVE_DUPLICATES _app_names)
 set(generate_descriptor_cmd "$<TARGET_FILE:otbQgisDescriptor>")
 #debian does not use RPATH and build is failing
 #see gitlab #1593
@@ -44,25 +45,29 @@ if(CMAKE_SKIP_RPATH AND "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
 endif()
 # generate dependency list
 # put all app into a file
-# same for dfiles
-set(QGIS_APP_LIST_FILE "${CMAKE_CURRENT_BINARY_DIR}/qgis_apps_list.txt")
+set(_qgis_app_list_file "${CMAKE_CURRENT_BINARY_DIR}/qgis_apps_list.txt")
 # if file does not exists it does not emit an error
-file(REMOVE "${QGIS_APP_LIST_FILE}")
-file(TOUCH "${QGIS_APP_LIST_FILE}")
-set(QGIS_APP_DESCRIPTOR_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description")
+file(REMOVE "${_qgis_app_list_file}")
+file(TOUCH "${_qgis_app_list_file}")
+set(_qgis_app_descriptor_path "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description")
 
-foreach(app_name ${app_names})
-  add_dependencies(otbQgisDescriptor otbapp_${app_name})
-  file(APPEND "${QGIS_APP_LIST_FILE}" "${app_name}\n")
+foreach(_app_name ${_app_names})
+  add_dependencies(otbQgisDescriptor otbapp_${_app_name})
+  file(APPEND "${_qgis_app_list_file}" "${_app_name}\n")
 endforeach()
 
 # call otbQgisDescriptor with the app list, the location to create the files 
-add_custom_command(OUTPUT "${QGIS_APP_DESCRIPTOR_PATH}/algs.txt"
+add_custom_command(OUTPUT "${_qgis_app_descriptor_path}/algs.txt"
   COMMAND ${generate_descriptor_cmd}
-  "${QGIS_APP_LIST_FILE}" "${app_location}" "./${OTB_INSTALL_DATA_DIR}/description/"
+  "${_qgis_app_list_file}" "${_app_location}" "./${OTB_INSTALL_DATA_DIR}/description/"
   WORKING_DIRECTORY ${OTB_BINARY_DIR}
   COMMENT "Generate gqis descriptor files"
   VERBATIM)
 
-add_custom_target(generate_descriptors DEPENDS "${QGIS_APP_DESCRIPTOR_PATH}/algs.txt")
+add_custom_target(generate_descriptors DEPENDS "${_qgis_app_descriptor_path}/algs.txt")
 add_dependencies(${otb-module}-all generate_descriptors)
+
+unset(_app_location)
+unset(_app_names)
+unset(_qgis_app_descriptor_path)
+unset(_qgis_app_list_file)

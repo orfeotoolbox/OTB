@@ -98,10 +98,12 @@ add_subdirectory(OpticalCalibration)
 add_subdirectory(Smoothing)
 add_subdirectory(Wrappers/ApplicationEngine)
 add_subdirectory(Wrappers/CommandLine)
+# NOTE TLA: uncomment when there is a function that generate qgis wrappers
+# for the moment this folder is read in the main CMakeLists after all
+# other folders
 add_subdirectory(Wrappers/QGIS)
 add_subdirectory(Wrappers/SWIG)
 add_subdirectory(Applications)
-
 
 # Get the list of enabled modules for this component. This list is created
 # in OTBModuleEnablement.cmake
