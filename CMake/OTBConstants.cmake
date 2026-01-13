@@ -83,6 +83,13 @@ function(get_modules_const)
   get_property(_is_module_activation_opt_list_defined GLOBAL PROPERTY
                OTB_MODULE_ACTIVATION_OPTION_LIST DEFINED)
   if(NOT _is_module_activation_opt_list_defined)
-    define_property(GLOBAL PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST)
+    define_property(GLOBAL PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST
+                           BRIEF_DOCS "List of some optional module that are"
+                                      " activated (see thirdparty modules)"
+                           FULL_DOCS "List of some optional modules that are"
+                                      " activated (see thirdparty modules)."
+                                      "Modules can be added to this list with"
+                                      " the macro otb_module_activation_option"
+                                      " defined in OTBModuleAPI")
   endif()
 endfunction()
