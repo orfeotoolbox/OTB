@@ -286,7 +286,7 @@ add_subdirectory(Modules/Remote)
 # NOTE TLA: this should be refactored and put in a separate function
 # Add the QGIS Wrapper at the last minute as it need all the OTB application
 # to be declared
-# add_subdirectory(Modules/Core/Wrappers/QGIS)
+add_subdirectory(Modules/Core/Wrappers/QGIS)
 
 # Enable modules according to user inputs and the module dependency DAG.
 #include(OTBModuleEnablement)

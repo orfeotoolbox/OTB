@@ -37,6 +37,7 @@ set(SWIG_MODULE_otbApplication_EXTRA_DEPS
      otbPythonLogOutput.h
      otbProgressReporterManager.h
      OTBApplicationEngine)
+
 swig_add_library( otbApplication
     LANGUAGE python
     SOURCES ../otbApplication.i

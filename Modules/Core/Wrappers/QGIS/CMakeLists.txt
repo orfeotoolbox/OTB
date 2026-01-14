@@ -17,6 +17,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include(otb-module-init.cmake)
+
 if(OTB_WRAP_QGIS)
 	project(OTBQGIS)
 	otb_module_impl()

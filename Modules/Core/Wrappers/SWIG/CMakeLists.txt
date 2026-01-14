@@ -20,4 +20,5 @@
 
 project(OTBSWIGWrapper)
 
+include(otb-module-init.cmake)
 otb_module_impl()
