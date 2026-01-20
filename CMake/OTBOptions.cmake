@@ -5,6 +5,40 @@ option(OTB_USE_GSL "Enable GSL dependent modules" OFF)
 option(OTB_USE_LIBKML "Enable libkml dependent modules" OFF)
 option(OTB_USE_SIFTFAST "Enable SiftFast dependent modules" ON)
 
+option(OTBGroup_Core  "Request building Core modules" ON)
+option(OTBGroup_ThirdParty "Request using thirdparty modules" ON)
+
+set(groups_list
+    FeaturesExtraction
+    Hyperspectral
+    Learning
+    Miscellaneous
+    Remote
+    SAR
+    Segmentation
+    StereoProcessing
+)
+
+foreach( group ${groups_list})
+    if(NOT DEFINED OTBGroup_${group})
+      # ensure retrocompat between OTB_BUILD_<group> and OTBGroup_<group>
+      if(DEFINED OTB_BUILD_${group})
+        option(OTBGroup_${group} "Request building ${group} modules" ${OTB_BUILD_${group}})
+      else()
+        option(OTBGroup_${group} "Request building ${group} modules" OFF)
+      endif()
+    endif()
+    if (OTBGroup_${group})
+      list(APPEND GROUPS_ENABLED_LIST ${group})
+    endif()
+    # Hide group options if building all modules anyway.
+    if(OTB_BUILD_DEFAULT_MODULES)
+      set_property(CACHE OTBGroup_${group} PROPERTY TYPE INTERNAL)
+    else()
+      set_property(CACHE OTBGroup_${group} PROPERTY TYPE BOOL)
+    endif()
+endforeach()
+
 # NOTE TLA: Make a Dependency resolver file
 if(OTBGroup_Core AND NOT OTBGroup_Learning)
   find_package (Boost 1.73.0 REQUIRED COMPONENTS filesystem)

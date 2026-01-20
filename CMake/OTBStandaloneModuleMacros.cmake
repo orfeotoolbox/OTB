@@ -563,9 +563,9 @@ macro(otb_module_impl)
               DESTINATION ${__target_cmake_file_dir}
               COMPONENT ${__current_component})
     else()
-        install(EXPORT ${__export_name}
-                FILE ${__export_name}.cmake
-                DESTINATION ${__target_cmake_file_dir})
+      install(EXPORT ${__export_name}
+              FILE ${__export_name}.cmake
+              DESTINATION ${__target_cmake_file_dir})
     endif()
     # set the property to not create the target export file twice
     set_property(GLOBAL PROPERTY ${__export_name}_EXPORTED TRUE)

@@ -122,6 +122,10 @@ set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 get_package_name(${OTB_SOURCE_DIR} ${PROJECT_NAME} OTB_VERSION_STRING2)
 
 include(OTBConstants)
+#-----------------------------------------------------------------------------
+# The subdirectories added below this line should use only the public
+# interface with find_package(ITK). Set ITK_DIR to use this ITK build.
+set(OTB_DIR "${OTB_BINARY_DIR}")
 
 #-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
@@ -500,10 +504,6 @@ install(FILES ${CMAKE_BINARY_DIR}/README DESTINATION . COMPONENT Core)
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
 endif()
-#-----------------------------------------------------------------------------
-# The subdirectories added below this line should use only the public
-# interface with find_package(ITK). Set ITK_DIR to use this ITK build.
-set(OTB_DIR "${OTB_BINARY_DIR}")
 
 if(BUILD_EXAMPLES)
   add_subdirectory(Examples)

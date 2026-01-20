@@ -24,12 +24,6 @@
 # Download site : http://6s.ltdri.org/
 #
 
-set(OTB3P_INSTALL_EXPORT_NAME "${OTB6S-targets}")
-set(OTB3P_INSTALL_INCLUDE_DIR "${OTB6S_INSTALL_INCLUDE_DIR}")
-set(OTB3P_INSTALL_RUNTIME_DIR "${OTB6S_INSTALL_RUNTIME_DIR}")
-set(OTB3P_INSTALL_LIBRARY_DIR "${OTB6S_INSTALL_LIBRARY_DIR}")
-set(OTB3P_INSTALL_ARCHIVE_DIR "${OTB6S_INSTALL_ARCHIVE_DIR}")
-
 # Inform header files they are being included from a source inside the
 # otb_6S library.
 add_definitions(-DOTB_6S_SRC)
@@ -119,12 +113,5 @@ endif()
 if(MSVC_VERSION GREATER 1800)
   set_target_properties(otb6S PROPERTIES COMPILE_FLAGS "/Ob1 /Oy- /GS")
 endif()
-
-install(TARGETS otb6S
-  EXPORT ${OTB3P_INSTALL_EXPORT_NAME}
-  RUNTIME DESTINATION ${OTB3P_INSTALL_RUNTIME_DIR} COMPONENT Dependencies
-  LIBRARY DESTINATION ${OTB3P_INSTALL_LIBRARY_DIR} COMPONENT Dependencies
-  ARCHIVE DESTINATION ${OTB3P_INSTALL_ARCHIVE_DIR} COMPONENT Core
-  )
 
 otb_module_target( otb6S "COMPONENT_Core" )

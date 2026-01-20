@@ -43,7 +43,7 @@ list(APPEND otb_internal_modules_repos
 
 list(APPEND otb_internal_modules_git_tag
     "main" # Miscellaneous
-    "main" # FeaturesExtraction
+    "cleanup_P0" # FeaturesExtraction
     "main" # Learning
     "main" # SAR
     "main" # Segmentation

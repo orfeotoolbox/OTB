@@ -20,4 +20,4 @@
 
 add_subdirectory(ThirdParty)
 add_subdirectory(Core)
-# include("OTBInternalModules.cmake")
+include("OTBInternalModules.cmake")

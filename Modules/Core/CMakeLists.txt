@@ -107,7 +107,7 @@ add_subdirectory(Wrappers/SWIG)
 
 # Get the list of enabled modules for this component. This list is created
 # in OTBModuleEnablement.cmake
-get_property(__ENABLED_MODULES GLOBAL PROPERTY ${arg}_MODULE_LIST)
+get_property(__ENABLED_MODULES GLOBAL PROPERTY ${otb-group}_MODULE_LIST)
 configure_file(${CMAKE_SOURCE_DIR}/CMake/GenericGroupConfig.cmake.in ${CMAKE_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake @ONLY)
 unset(__ENABLED_MODULES)
 
