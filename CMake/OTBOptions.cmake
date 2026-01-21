@@ -19,6 +19,8 @@ set(groups_list
     StereoProcessing
 )
 
+set(__groups_enabled_list "")
+
 foreach( group ${groups_list})
     if(NOT DEFINED OTBGroup_${group})
       # ensure retrocompat between OTB_BUILD_<group> and OTBGroup_<group>
@@ -29,7 +31,7 @@ foreach( group ${groups_list})
       endif()
     endif()
     if (OTBGroup_${group})
-      list(APPEND GROUPS_ENABLED_LIST ${group})
+      list(APPEND __groups_enabled_list ${group})
     endif()
     # Hide group options if building all modules anyway.
     if(OTB_BUILD_DEFAULT_MODULES)
@@ -38,6 +40,10 @@ foreach( group ${groups_list})
       set_property(CACHE OTBGroup_${group} PROPERTY TYPE BOOL)
     endif()
 endforeach()
+
+list(REMOVE_DUPLICATES __groups_enabled_list)
+set_property(GLOBAL PROPERTY OTB_GROUPS_ENABLED ${__groups_enabled_list})
+
 
 # NOTE TLA: Make a Dependency resolver file
 if(OTBGroup_Core AND NOT OTBGroup_Learning)

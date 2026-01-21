@@ -286,5 +286,22 @@ macro(otb_module_activation_option _option_desc _default)
   option(${_option_name} ${_option_desc} ${_default})
   set(OTB_MODULE_${otb-module}_ACTIVATION_OPTION ${_option_name})
   # this list is init in OTBConstants.cmake
-  set_property(GLOBAL APPEND PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
+  set_property(GLOBAL APPEND PROPERTY ${OTB_MODULE_${otb-module}_COMPONENT}_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
 endmacro()
+
+function(generate_group_config_file group)
+  # NOTE TLA: may need to change this to ${OTBCommon_INCLUDES_DIR}
+  configure_file(${OTB_CMAKE_DIR}/otbConfigure.h.in otb${group}Configure.h.in)
+  file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/otbConfigure.h.in
+       "/* Optional third parties activation status */\n")
+
+  get_property(_otb_module_activations_opts GLOBAL PROPERTY ${group}_MODULE_ACTIVATION_OPTION_LIST)
+
+  foreach(_opt IN LISTS _otb_module_activations_opts)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/otb${group}Configure.h.in
+        "#cmakedefine ${_opt}\n")
+  endforeach()
+
+  # configure_file(${OTBCommon_BINARY_DIR}/otbConfigure.h.in otbConfigure.h)
+  configure_file(${CMAKE_CURRENT_BINARY_DIR}/otb${group}Configure.h.in otb${group}Configure.h)
+endfunction()

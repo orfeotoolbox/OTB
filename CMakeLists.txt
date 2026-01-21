@@ -566,8 +566,16 @@ if(OTB_DATA_GIT_STATUS_MESSAGE)
   message( ${OTB_DATA_GIT_STATUS_MESSAGE})
 endif()
 
-get_property(option_list GLOBAL PROPERTY OTB_MODULE_ACTIVATION_OPTION_LIST)
-list(SORT option_list)
+# get the list of all activable modules in activated groups
+set(__all_activable_modules "")
+get_property(__groups_enabled GLOBAL PROPERTY OTB_GROUPS_ENABLED)
+
+foreach(__group ${__groups_enabled})
+  get_property(__group_activable_modules GLOBAL PROPERTY ${__group}_MODULE_ACTIVATION_OPTION_LIST)
+  list(APPEND __all_activable_modules ${__group_activable_modules})
+endforeach()
+
+list(SORT __all_activable_modules)
 
 foreach(otb_option
     CMAKE_SOURCE_DIR
@@ -581,7 +589,7 @@ foreach(otb_option
     CMAKE_BUILD_TYPE
     CMAKE_C_FLAGS
     CMAKE_CXX_FLAGS
-    ${option_list}
+    ${__all_activable_modules}
     OTB_WRAP_PYTHON
     OTB_WRAP_QGIS
     OTB_DATA_ROOT
