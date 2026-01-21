@@ -19,7 +19,7 @@
  */
 
 
-#include "otbConfigure.h" // for OTB_USE_CURL
+#include "otbCoreConfigure.h" // for OTB_USE_CURL
 #include "otbCurlHelperInterface.h"
 
 #ifdef OTB_USE_CURL

@@ -22,7 +22,7 @@
 #define otbImageFileReader_hxx
 
 #include "otbImageFileReader.h"
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 
 #include "otbSystem.h"
 #include <itksys/SystemTools.hxx>

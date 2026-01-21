@@ -36,7 +36,7 @@
 #include "otbMetaDataKey.h"
 #include "otbImageCommons.h"
 
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 
 #include "otbNumberOfDivisionsStrippedStreamingManager.h"
 #include "otbNumberOfDivisionsTiledStreamingManager.h"

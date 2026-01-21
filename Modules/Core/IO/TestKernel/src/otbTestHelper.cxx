@@ -50,7 +50,7 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbOGRHelpers.h"
 
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 
 #define ITK_TEST_DIMENSION_MAX 6
 

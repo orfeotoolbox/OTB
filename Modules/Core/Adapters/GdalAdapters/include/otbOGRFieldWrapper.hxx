@@ -26,7 +26,7 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include "otbOGRFieldWrapper.h"
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 #include <cassert>
 #include <vector>
 #include <boost/mpl/map.hpp>

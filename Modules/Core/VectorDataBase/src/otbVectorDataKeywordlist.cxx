@@ -23,7 +23,7 @@
 
 #include "otbVectorDataKeywordlist.h"
 
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 #include "itkNumericTraits.h"
 
 namespace otb

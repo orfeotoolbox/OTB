@@ -27,7 +27,7 @@
 #include "itkSize.h"
 
 #include "otbGDALDatasetWrapper.h"
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 
 #include "OTBIOGDALExport.h"
 #include <string>

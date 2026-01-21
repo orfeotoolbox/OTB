@@ -21,7 +21,7 @@
 #ifndef otbTestMain_h
 #define otbTestMain_h
 
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 #include "otbConfigurationManager.h"
 
 #include <map>

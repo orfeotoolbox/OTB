@@ -31,7 +31,7 @@ set(OTBCommon_LIBRARIES OTBCommon)
 otb_module_impl()
 
 install(FILES
-  ${OTBCommon_BINARY_DIR}/otbConfigure.h
+  ${OTBCommon_BINARY_DIR}/otbCoreConfigure.h
   DESTINATION ${OTBCommon_INSTALL_INCLUDE_DIR}
   COMPONENT Core
 )

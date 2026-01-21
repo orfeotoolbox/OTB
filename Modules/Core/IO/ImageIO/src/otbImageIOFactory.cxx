@@ -19,7 +19,7 @@
  */
 
 #include "otbImageIOFactory.h"
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 
 #include "otbGDALImageIOFactory.h"
 #include <mutex>

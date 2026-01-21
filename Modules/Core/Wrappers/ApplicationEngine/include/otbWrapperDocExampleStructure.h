@@ -26,7 +26,7 @@
 
 #include <string>
 #include <vector>
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 #include "itkFixedArray.h"
 #include "OTBApplicationEngineExport.h"
 

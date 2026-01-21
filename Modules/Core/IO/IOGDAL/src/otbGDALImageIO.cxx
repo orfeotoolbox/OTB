@@ -49,7 +49,7 @@
 
 #include "otbOGRHelpers.h"
 #include "otbGeometryMetadata.h"
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 
 #include "stdint.h" //needed for uintptr_t
 

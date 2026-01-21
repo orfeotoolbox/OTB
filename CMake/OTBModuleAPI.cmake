@@ -302,6 +302,5 @@ function(generate_group_config_file group)
         "#cmakedefine ${_opt}\n")
   endforeach()
 
-  # configure_file(${OTBCommon_BINARY_DIR}/otbConfigure.h.in otbConfigure.h)
   configure_file(${CMAKE_CURRENT_BINARY_DIR}/otb${group}Configure.h.in otb${group}Configure.h)
 endfunction()

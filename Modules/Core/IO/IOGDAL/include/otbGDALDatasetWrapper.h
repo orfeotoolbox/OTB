@@ -24,7 +24,7 @@
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 #include "otbGeometryMetadata.h"
 
 

@@ -23,7 +23,7 @@
 #include <cstring>
 #include <sstream>
 #include <itkLightObject.h>
-#include "otbConfigure.h" // for OTB_USE_CURL
+#include "otbCoreConfigure.h" // for OTB_USE_CURL
 #include "otbMacro.h"
 #include "otbCurlHelper.h"
 

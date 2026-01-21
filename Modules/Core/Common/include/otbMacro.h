@@ -31,7 +31,7 @@
 #include "itkMacro.h"
 #include "itkObject.h"
 #include "itkThreadSupport.h"
-#include "otbConfigure.h"
+#include "otbCoreConfigure.h"
 #include "otbLogger.h"
 
 /**
