@@ -42,13 +42,13 @@ list(APPEND otb_internal_modules_repos
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/stereoprocessing.git")
 
 list(APPEND otb_internal_modules_git_tag
-    "main" # Miscellaneous
+    "cleanup_P0" # Miscellaneous
     "cleanup_P0" # FeaturesExtraction
     "cleanup_P0" # Learning
-    "main" # SAR
-    "main" # Segmentation
-    "main" # Hyperspectral
-    "main" # StereoProcessing
+    "cleanup_P0" # SAR
+    "cleanup_P0" # Segmentation
+    "cleanup_P0" # Hyperspectral
+    "cleanup_P0" # StereoProcessing
     )
 
 list(APPEND otb_internal_modules_get_submodules
