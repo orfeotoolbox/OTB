@@ -23,51 +23,56 @@
 # When a new internal module is added, the four lists; otb_internal_modules, 
 # otb_internal_modules_repos, otb_internal_modules_git_tag,
 # otb_internal_modules_desc
+# /!\ BEWARE OF THIS LIST ORDER
+# As cmake read modules in this order if you break it may have cmake
+# configuration problem. Note that
+# - FeaturesExtraction depends of Core
+# - Learning depends of FeaturesExtraction, Core
+# - SAR depends of FeaturesExtraction, Core
+# - Segmentation depends of FeaturesExtraction, Core
+# - Hyperspectral depends of FeaturesExtraction, Core
+# - StereoProcessing depends of FeaturesExtraction, Core
+# - Miscellaneous depends of Learning, FeaturesExtraction, Core
 list(APPEND otb_internal_modules
-    "Miscellaneous"
     "FeaturesExtraction"
     "Learning"
     "SAR"
     "Segmentation"
     "Hyperspectral"
-    "StereoProcessing")
+    "StereoProcessing"
+    "Miscellaneous")
 
 list(APPEND otb_internal_modules_repos
-    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/featuresextraction.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/learning.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/sar.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/segmentation.git"
     "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/hyperspectral.git"
-    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/stereoprocessing.git")
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/stereoprocessing.git"
+    "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-modules/miscellaneous.git"
+)
 
 list(APPEND otb_internal_modules_git_tag
-    "cleanup_P0" # Miscellaneous
     "cleanup_P0" # FeaturesExtraction
     "cleanup_P0" # Learning
     "cleanup_P0" # SAR
     "cleanup_P0" # Segmentation
     "cleanup_P0" # Hyperspectral
     "cleanup_P0" # StereoProcessing
+    "cleanup_P0" # Miscellaneous
     )
 
 list(APPEND otb_internal_modules_get_submodules
-     "OFF" # Miscellaneous 
-     "OFF" # FeaturesExtraction
-     "OFF" # Learning
-     "OFF" # SAR
-     "OFF" # Segmentation
-     "OFF" # Hyperspectral
-     "OFF" # StereoProcessing
+    "OFF" # FeaturesExtraction
+    "OFF" # Learning
+    "OFF" # SAR
+    "OFF" # Segmentation
+    "OFF" # Hyperspectral
+    "OFF" # StereoProcessing
+    "OFF" # Miscellaneous 
     )
 
 list(APPEND otb_internal_modules_desc
-"This module deals with image simulation algorithm. Using
-objects transmittance and reflectance and sensor characteristics, it can be possible
-to generate realistic hyperspectral synthetic set of data. This module includes
-PROSPECT (leaf optical properties) and SAIL (canopy bidirectional reflectance)
-models, as well as PROSAIL, which is the combination of the two previous ones." # Miscellaneous
-
 "This module contains classical filtering applications, such as texture extraction, edge extraction, smoothing, morphological operations. This module relies on external libraries (MuParser / MuParserX) contained in OTB-Dependencies. it can be installed along with the Core package with a simple tar extract command and directly available after sourcing the otbenv.profile." # FeaturesExtraction
 
 "This module contains Machine Learning applications based on classical supervised or unsupervised algorithms (SVM, Random Forest, K-Means, Multi-layer Perceptron Neural Network, etc.). Its applications handle the whole processing chain : sample selection, learning, prediction and finalization of a classification map. It also contains a regression framework." # Learning
@@ -79,6 +84,12 @@ models, as well as PROSAIL, which is the combination of the two previous ones." 
 "This module contains specific applications to handle hyperspectral images : spectral angle classification, end member number estimation or unmixing." # Hyperspectral
 
 "This module allows to register stereoscopic images and compute disparity in order to build a 3D model from a couple of satellite images in raw / sensor geometry." #StereoProcessing
+
+"This module deals with image simulation algorithm. Using
+objects transmittance and reflectance and sensor characteristics, it can be possible
+to generate realistic hyperspectral synthetic set of data. This module includes
+PROSPECT (leaf optical properties) and SAIL (canopy bidirectional reflectance)
+models, as well as PROSAIL, which is the combination of the two previous ones." # Miscellaneous
 )
 
 set(__i 0) # group index
