@@ -120,4 +120,5 @@ if (CMAKE_DEBUG)
 endif()
 
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/PackageConfig.cmake)
 unset(otb-group)

@@ -255,9 +255,9 @@ macro(check_compiler_platform_flags)
     endif()
     # Add flags for the SUN compiler to provide all the methods for std::allocator.
     #
-    CHECK_CXX_SOURCE_COMPILES("-features=no%anachronisms" SUN_COMPILER)
+    check_cxx_source_compiles("-features=no%anachronisms" SUN_COMPILER)
     if(SUN_COMPILER)
-      CHECK_CXX_SOURCE_COMPILES("-library=stlport4" SUN_COMPILER_HAS_STL_PORT_4)
+      check_cxx_source_compiles("-library=stlport4" SUN_COMPILER_HAS_STL_PORT_4)
       if(SUN_COMPILER_HAS_STL_PORT_4)
         set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -library=stlport4")
       endif()
@@ -327,7 +327,7 @@ macro(check_compiler_platform_flags)
     set(OTB_CXX_DISABLE_OPTIMIZATION_FLAG "-O0")
   endif()
   if(DEFINED OTB_CXX_DISABLE_OPTIMIZATION_FLAG)
-    CHECK_CXX_COMPILER_FLAG(${OTB_CXX_DISABLE_OPTIMIZATION_FLAG} CXX_HAS_DISABLE_OPTIMIZATION_FLAG)
+    check_cxx_compiler_flag(${OTB_CXX_DISABLE_OPTIMIZATION_FLAG} CXX_HAS_DISABLE_OPTIMIZATION_FLAG)
   endif()
 endmacro()#End the platform check function
 

@@ -678,4 +678,4 @@ message("======================= End of OTB cmake summary ======================
 unset(option_list)
 
 #----------------------------------------------------------------------------
-include(Packaging_OTB)
+# include(Packaging_OTB)

@@ -40,19 +40,19 @@ add_custom_target( OTBHeaderTests
 
 
 
-SET(BANNED_HEADERS)
+set(BANNED_HEADERS)
 if(NOT OTB_USE_OPENCV)
-	SET(BANNED_HEADERS "${BANNED_HEADERS} otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h otbOpenCVUtils.h otbCvRTreesWrapper.h")
+	set(BANNED_HEADERS "${BANNED_HEADERS} otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h otbOpenCVUtils.h otbCvRTreesWrapper.h")
 endif()
 if(NOT OTB_USE_SHARK)
-  SET(BANNED_HEADERS "${BANNED_HEADERS} otbSharkRandomForestsMachineLearningModel.h otbSharkRandomForestsMachineLearningModel.hxx otbSharkUtils.h otbRequiresSharkCheck.h otbSharkRandomForestsMachineLearningModelFactory.h  otbSharkKMeansMachineLearningModel.h otbSharkKMeansMachineLearningModel.hxx otbSharkKMeansMachineLearningModelFactory.h otbSharkKMeansMachineLearningModelFactory.hxx otbPCAModel.h otbPCAModel.hxx otbPCAModelFactory.h otbPCAModelFactory.hxx otbAutoencoderModel.h otbAutoencoderModel.hxx otbAutoencoderModelFactory.h otbAutoencoderModelFactory.hxx")
+  set(BANNED_HEADERS "${BANNED_HEADERS} otbSharkRandomForestsMachineLearningModel.h otbSharkRandomForestsMachineLearningModel.hxx otbSharkUtils.h otbRequiresSharkCheck.h otbSharkRandomForestsMachineLearningModelFactory.h  otbSharkKMeansMachineLearningModel.h otbSharkKMeansMachineLearningModel.hxx otbSharkKMeansMachineLearningModelFactory.h otbSharkKMeansMachineLearningModelFactory.hxx otbPCAModel.h otbPCAModel.hxx otbPCAModelFactory.h otbPCAModelFactory.hxx otbAutoencoderModel.h otbAutoencoderModel.hxx otbAutoencoderModelFactory.h otbAutoencoderModelFactory.hxx")
 endif()
 if(NOT OTB_USE_LIBSVM)
-	SET(BANNED_HEADERS "${BANNED_HEADERS} otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")
+	set(BANNED_HEADERS "${BANNED_HEADERS} otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")
 endif()
 
 if(NOT OTB_USE_SIFTFAST)
-  SET(BANNED_HEADERS "${BANNED_HEADERS} otbSiftFastImageFilter.h")
+  set(BANNED_HEADERS "${BANNED_HEADERS} otbSiftFastImageFilter.h")
 endif()
 
 # ************ ADD YOUR BANNED HEADERS HERE ************

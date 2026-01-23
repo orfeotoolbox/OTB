@@ -324,8 +324,8 @@ endmacro()
 macro(otb_module_impl)
   include(GNUInstallDirs)
   # Force shared lib and testing
-  OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
-  OPTION(BUILD_TESTING "Build testing" OFF)
+  option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+  option(BUILD_TESTING "Build testing" OFF)
 
   find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
