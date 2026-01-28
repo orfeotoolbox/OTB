@@ -23,5 +23,5 @@ otb_module_impl()
 
 install(DIRECTORY ${OTBFunctor_SOURCE_DIR}/include/
         DESTINATION ${OTBFunctor_INSTALL_INCLUDE_DIR}
-        COMPONENT Common
+        COMPONENT Core
         )

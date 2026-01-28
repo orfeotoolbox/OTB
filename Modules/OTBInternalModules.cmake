@@ -158,6 +158,7 @@ while(${__i} LESS ${__nb_internal_modules})
         set(Module_${__otb_module_name} ON)
         set(__location "${OTB_SOURCE_DIR}/Modules/${__otb_module_name}")
         add_subdirectory("${__location}")
+        message(STATUS "CPACK_PACKAGE_FILE_NAME == ${CPACK_PACKAGE_FILE_NAME}")
     endif() # ${OTBGroup_${module_name}}
     math(EXPR __i "${__i}+1")
 endwhile() # i LESS_EQUAL __nb_internal_modules

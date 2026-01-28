@@ -24,5 +24,5 @@ otb_module_impl()
 
 install(DIRECTORY ${OTBComplexImage_SOURCE_DIR}/include/
         DESTINATION ${OTBComplexImage_INSTALL_INCLUDE_DIR}
-        COMPONENT Common
+        COMPONENT Core
         )

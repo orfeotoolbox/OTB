@@ -23,5 +23,5 @@ otb_module_impl()
 
 install(DIRECTORY ${OTBPointSet_SOURCE_DIR}/include/
         DESTINATION ${OTBPointSet_INSTALL_INCLUDE_DIR}
-        COMPONENT Common
+        COMPONENT Core
         )

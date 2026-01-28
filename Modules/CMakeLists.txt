@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
+# set(CPACK_COMPONENTS_ALL "Core" "FeaturesExtraction" "Learning" "Miscellaneous" "Remote" "SAR" "Segmentation" "StereoProcessing")
 add_subdirectory(ThirdParty)
 add_subdirectory(Core)
 include("OTBInternalModules.cmake")
