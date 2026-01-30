@@ -18,51 +18,22 @@
 # limitations under the License.
 #
 
-# these are cache variables, so they could be overwritten with -D,
-# Add automatically generated CMakeConfig
-message(STATUS "Component list ${CPACK_COMPONENTS_ALL}")
-set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
+# get the package constants used in cpack
+get_package_const()
 
-set(CPACK_PACKAGE_NAME "Core"
-    CACHE STRING "Main Group for Core Modules of OTB"
-)
-# which is useful in case of packing only selected components instead of the whole thing
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Core OTB Package"
-    CACHE STRING "This package contains the Core module of OTB. All other modules depends of this one."
-)
-set(CPACK_PACKAGE_VENDOR "CS Group")
-
-set(CPACK_VERBATIM_VARIABLES YES)
-
-set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
-set(CPACK_OUTPUT_FILE_PREFIX "${CMAKE_BINARY_DIR}")
-
-set(CPACK_PACKAGE_VERSION_MAJOR ${OTB_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${OTB_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${OTB_VERSION_PATCH})
-
-# custom package name to stick to what is already done in OTB
-set(CPACK_PACKAGE_FILE_NAME "OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}-${CMAKE_SYSTEM_NAME}-${CPACK_PACKAGE_NAME}")
-
-message(STATUS "CPACK_PACKAGE_FILE_NAME == ${CPACK_PACKAGE_FILE_NAME}")
-set(CPACK_PACKAGE_CONTACT "thibaut.romain@cs-soprasteria.com")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Thibaut ROMAIN")
-
+# Adapt License and readme path
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
-# NOTE TLA: change this to CMAKE_CURRENT_SOURCE_DIR for remote P0 modules
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
 
-set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
-
-# use ZIP packaging for Windows
-if(WIN32)
-    set(CPACK_GENERATOR "ZIP")
-else()
-    set(CPACK_GENERATOR "TGZ")
-endif()
-
-# output package in controlled directory
-set(CPACK_OUTPUT_FILE_PREFIX "${CMAKE_SOURCE_DIR}/build_packages")
-
 include(CPack)
-message(STATUS "CPACK_PACKAGE_FILE_NAME == ${CPACK_PACKAGE_FILE_NAME}")
+
+# cpack_add_component_group(Core
+#                          DISPLAY_NAME Core
+#                          DESCRIPTION "Main Group for Core of OTB" 
+#                          EXPANDED
+#                          BOLD_TITLE)
+
+cpack_add_component(Core
+                    DISPLAY_NAME Core
+                    DESCRIPTION "Main Group for Core of OTB"
+                    REQUIRED)

@@ -22,3 +22,8 @@
 add_subdirectory(ThirdParty)
 add_subdirectory(Core)
 include("OTBInternalModules.cmake")
+
+# cpack_add_component(Remote
+#                     [DISPLAY_NAME Remote]
+#                     [DESCRIPTION "Contains all Remote modules libraries and applications for OTB" ]
+#                     [OPTIONAL])
