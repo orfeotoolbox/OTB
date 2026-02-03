@@ -32,8 +32,13 @@ from osgeo import gdal
 
 logger = logging.getLogger(__name__)
 
-GRIDS_DATASETS = ("/frequencyA/HH", "/frequencyA/VV", "/frequencyA/HV", "/frequencyA/VH", "/frequencyA/RH", "/frequencyA/RV",
-                  "/frequencyB/HH", "/frequencyB/VV", "/frequencyB/HV", "/frequencyB/VH", "/frequencyB/RH", "/frequencyB/RV")
+GRIDS_DATASETS = ("/frequencyA/HH", "/frequencyA/VV", "/frequencyA/HV",
+                  "/frequencyA/VH", "/frequencyA/RH", "/frequencyA/RV",
+                  "/frequencyB/HH", "/frequencyB/VV", "/frequencyB/HV",
+                  "/frequencyB/VH", "/frequencyB/RH", "/frequencyB/RV")
+SENSOR_MODEL_DATASETS = ("calibrationInformation/geometry/beta0",
+                         "calibrationInformation/geometry/gamma0",
+                         "calibrationInformation/geometry/sigma0")
 
 
 def convert_date(input_date: str) -> str:
@@ -150,6 +155,8 @@ def extract_nisar_product(nisar_file: Path) -> None:
         netcdf_dataset = f"{dataset[1].replace('HDF5', 'NETCDF')}"
         # Open the dataset
         ds = gdal.Open(netcdf_dataset)
+        if ds is None:
+          continue
         # Check presence of projection
         if ds.GetProjectionRef() == '':
             logger.warning(f"The dataset {netcdf_dataset} doesn't contain a projection")
