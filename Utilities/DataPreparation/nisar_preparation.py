@@ -50,90 +50,107 @@ def convert_date(input_date: str) -> str:
     return datetime.strptime(input_date, "%Y%m%dT%H%M%S").isoformat('T')
 
 
-def add_product_metadata(nisar_file: Path, outfile: Path) -> None:
+def add_product_metadata(nisar_file: Path, outfile: Path, sensor_model) -> None:
     """
     Add the metadata from the HDF5 file to the TIF file.
     :param nisar_file: Path to the HDF NISAR file
     :param outfile: Path to the output TIF file
+    :param sensor_model: Dict providing the parameters for the sensor model
     """
     # Open the output file
-    ds = gdal.Open(str(outfile))
-    metadata = ds.GetMetadata()
+    with gdal.Open(str(outfile)) as ds:
+      metadata = ds.GetMetadata()
+      metadata.update(sensor_model)
 
-    # Read the input file
-    with h5py.File(str(nisar_file), 'r') as h5file:
-        # Load the metadata
-        for k, v in h5file.attrs.items():
-            metadata[k] = v
+      # Read the input file
+      with h5py.File(str(nisar_file), 'r') as h5file:
+          # Load the metadata
+          metadata.update(**h5file.attrs)
 
-    # Read metadata from filename (see product specification)
-    splited = str(nisar_file).split("_")
-    # 0 SensorID
-    metadata["SensorID"] = splited[0]
-    # 1 0 Instrument
-    match splited[1][0]:
-        case "L":
-            metadata["Instrument"] = "L-SAR"
-        case "S":
-            metadata["Instrument"] = "S-SAR"
-        case _:
-            logger.warning(f"Unable to read metadata 'Instrument'. Unknown key {splited[1][0]}")
-    # 1 1 Level
-    metadata["ProductLevel"] = int(splited[1][1])
-    # 2 Processing type
-    match splited[2]:
-        case "PR":
-            metadata["ProcessingType"] = "Production"
-        case "UR":
-            metadata["ProcessingType"] = "Urgent Response"
-        case "OD":
-            metadata["ProcessingType"] = "Science On-Demand"
-        case _:
-            logger.warning(f"Unable to read metadata 'ProcessingType'. Unknown Processing Type {splited[2]}")
-    # 3 Product Identifier
-    if splited[3] not in ["GSLC", "RSLC"]:
-        logger.warning(f"Unable to read metadata 'ProductType'. Only processes GSLC and RSLC products. {splited[3]} is not accepted.")
-    metadata["ProductType"] = splited[3]
-    # 4 Cycle number
-    metadata["CycleNumber"] = splited[4]
-    # 5 Relative orbit
-    metadata["RelativeOrbit"] = splited[5]
-    # 6 Orbit Direction
-    match splited[6]:
-        case "A":
-            metadata["OrbitDirection"] = "Ascending"
-        case "D":
-            metadata["OrbitDirection"] = "Descending"
-        case _:
-            logger.warning(f"Unable to read metadata 'OrbitDirection'. Unknown direction {splited[6]}")
-    # 7 Frame number
-    metadata["FrameNumber"] = splited[7]
-    # 8 Bandwidth Mode Code
-    metadata["BandwidthMode"] = splited[8]
-    # 9 Polarization
-    metadata["PolarizationCode"] = splited[9]
-    # 10 Source of data
-    metadata["SourceMode"] = splited[10]
-    # 11 StartDateTime
-    metadata["StartDateTime"] = convert_date(splited[11])
-    # 12 EndDateTime
-    metadata["EndDateTime"] = convert_date(splited[12])
-    # 13 Composite Release Identifier
-    metadata["CompositeReleaseIdentifier"] = splited[13]
-    # 14 Product accuracy
-    metadata["ProductAccuracy"] = splited[14]
-    # 15 Coverage Indicator
-    metadata["CoverageIndicator"] = splited[15]
-    # 16 Location of the Science Data System
-    # 17 Product Counter
-    metadata["ProductCounter"] = splited[17].split('.')[0]
+      # Read metadata from filename (see product specification)
+      splited = str(nisar_file).split("_")
+      # 0 SensorID
+      metadata["SensorID"] = splited[0]
+      # 1 0 Instrument
+      match splited[1][0]:
+          case "L":
+              metadata["Instrument"] = "L-SAR"
+          case "S":
+              metadata["Instrument"] = "S-SAR"
+          case _:
+              logger.warning(f"Unable to read metadata 'Instrument'. Unknown key {splited[1][0]}")
+      # 1 1 Level
+      metadata["ProductLevel"] = int(splited[1][1])
+      # 2 Processing type
+      match splited[2]:
+          case "PR":
+              metadata["ProcessingType"] = "Production"
+          case "UR":
+              metadata["ProcessingType"] = "Urgent Response"
+          case "OD":
+              metadata["ProcessingType"] = "Science On-Demand"
+          case _:
+              logger.warning(f"Unable to read metadata 'ProcessingType'. Unknown Processing Type {splited[2]}")
+      # 3 Product Identifier
+      if splited[3] not in ["GSLC", "RSLC"]:
+          logger.warning(f"Unable to read metadata 'ProductType'. Only processes GSLC and RSLC products. {splited[3]} is not accepted.")
+      metadata["ProductType"] = splited[3]
+      # 4 Cycle number
+      metadata["CycleNumber"] = splited[4]
+      # 5 Relative orbit
+      metadata["RelativeOrbit"] = splited[5]
+      # 6 Orbit Direction
+      match splited[6]:
+          case "A":
+              metadata["OrbitDirection"] = "Ascending"
+          case "D":
+              metadata["OrbitDirection"] = "Descending"
+          case _:
+              logger.warning(f"Unable to read metadata 'OrbitDirection'. Unknown direction {splited[6]}")
+      # 7 Frame number
+      metadata["FrameNumber"] = splited[7]
+      # 8 Bandwidth Mode Code
+      metadata["BandwidthMode"] = splited[8]
+      # 9 Polarization
+      metadata["PolarizationCode"] = splited[9]
+      # 10 Source of data
+      metadata["SourceMode"] = splited[10]
+      # 11 StartDateTime
+      metadata["StartDateTime"] = convert_date(splited[11])
+      # 12 EndDateTime
+      metadata["EndDateTime"] = convert_date(splited[12])
+      # 13 Composite Release Identifier
+      metadata["CompositeReleaseIdentifier"] = splited[13]
+      # 14 Product accuracy
+      metadata["ProductAccuracy"] = splited[14]
+      # 15 Coverage Indicator
+      metadata["CoverageIndicator"] = splited[15]
+      # 16 Location of the Science Data System
+      # 17 Product Counter
+      metadata["ProductCounter"] = splited[17].split('.')[0]
 
-    # Polarization
-    metadata["Polarization"] = metadata["Band"].split('_')[-1]
+      # Polarization
+      metadata["Polarization"] = metadata["Band"].split('_')[-1]
 
-    # Write the metadata
-    ds.SetMetadata(metadata)
+      # Write the metadata
+      ds.SetMetadata(metadata)
 
+
+def fetch_sensor_model(sensor_model_datasets: list) -> dict:
+  """
+  Fetch the Sensor Model LUTs
+  :param sensor_model_datasets: List of the dataset containing the LUTs
+  :return: A dictionary containing a numpyarray for each LUT
+  """
+  sensor_model_dict = dict()
+  for dataset in sensor_model_datasets:
+    # NISAR HDF5 products are actually more similar to NetCDFs
+    netcdf_dataset = f"{dataset[1].replace('HDF5', 'NETCDF')}"
+    # Open the dataset
+    ds = gdal.Open(netcdf_dataset)
+    band = ds.GetRasterBand(1)
+    sensor_model_dict[f"calib_{dataset[1].split('/')[-1]}"] = band.ReadAsArray().tolist()
+  return sensor_model_dict
 
 def extract_nisar_product(nisar_file: Path) -> None:
     """
@@ -149,10 +166,15 @@ def extract_nisar_product(nisar_file: Path) -> None:
     # Fetch the datasets present in the nisar file
     datasets_json = json.loads(subprocess.check_output(f"gdalinfo -json {nisar_file}", shell=True))
     frequency_datasets = [(k, v) for k, v in datasets_json["metadata"]['SUBDATASETS'].items() if v.endswith(GRIDS_DATASETS)]
+    sensor_model_datasets = [(k, v) for k, v in datasets_json["metadata"]['SUBDATASETS'].items() if v.endswith(SENSOR_MODEL_DATASETS)]
+    # Fetch the sensor model
+    sensor_model = fetch_sensor_model(sensor_model_datasets)
     # Extract the Subdatasets
     for dataset in frequency_datasets:
+        print(dataset)
         # NISAR HDF5 products are actually more similar to NetCDFs
         netcdf_dataset = f"{dataset[1].replace('HDF5', 'NETCDF')}"
+        print(netcdf_dataset)
         # Open the dataset
         ds = gdal.Open(netcdf_dataset)
         if ds is None:
@@ -168,7 +190,7 @@ def extract_nisar_product(nisar_file: Path) -> None:
         # Extract the dataset
         subprocess.run(f"gdal_translate -of GTiff -ot Float32 -mo Band={mo} {netcdf_dataset} {str(outfile)}", shell=True)
         # Add the metadata
-        add_product_metadata(nisar_file, outfile)
+        add_product_metadata(nisar_file, outfile, sensor_model)
 
 
 if __name__ == "__main__":
