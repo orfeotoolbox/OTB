@@ -68,7 +68,7 @@ def add_product_metadata(nisar_file: Path, outfile: Path, sensor_model) -> None:
           metadata.update(**h5file.attrs)
 
       # Read metadata from filename (see product specification)
-      splited = str(nisar_file).split("_")
+      splited = nisar_file.name.split("_")
       # 0 SensorID
       metadata["SensorID"] = splited[0]
       # 1 0 Instrument
