@@ -256,6 +256,13 @@ macro(otb_module_impl)
       EXPORT_CODE_BUILD "${${otb-module}_EXPORT_CODE_BUILD}"
       EXPORT_CODE_INSTALL "${${otb-module}_EXPORT_CODE_INSTALL}"
       )
+
+  # read test CMakeLists AFTER writing <otb-module>.cmake as test needs this
+  # file
+  if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
+    add_subdirectory(test)
+  endif()
+
   # construct a list of the MODULES dependencies. It will help later in
   # <MODULE>Config.cmake file to scan the correct module dependencies before
   # the module targets

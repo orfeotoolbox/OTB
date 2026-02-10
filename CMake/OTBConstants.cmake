@@ -143,9 +143,6 @@ macro(get_package_const)
 
   list(APPEND CPACK_COMPONENTS_ALL "Core" "Dependencies")
 
-  message(WARNING "CPACK_COMPONENTS_ALL = ${CPACK_COMPONENTS_ALL}")
-
-
   if(WIN32)
       set(CPACK_GENERATOR "ZIP")
   else()
