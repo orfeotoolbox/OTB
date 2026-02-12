@@ -3,13 +3,12 @@ set(otb-group "Core")
 # OTBBoostAdapter needs only Thirdparty/Boost
 add_subdirectory(Adapters/BoostAdapters)
 # OTBCommon needs BoostAdapters
+# OTBCommon tests needs OTBImageBase
 add_subdirectory(Common)
 # OTBCurlAdapters needs Common and OTBITK thirdparty
 add_subdirectory(Adapters/CurlAdapters)
 add_subdirectory(Adapters/GdalAdapters)
 
-# OTBConvolution needs OTBCommon
-add_subdirectory(Convolution)
 # OTBObjectList depends of OTBCommon and OTBITK
 add_subdirectory(ObjectList)
 # OTBMetadata depends of OTBObjectList
@@ -18,6 +17,8 @@ add_subdirectory(Metadata)
 add_subdirectory(ImageList)
 # OTBImageBase depends of OTBMetadata
 add_subdirectory(ImageBase)
+# OTBConvolution needs OTBCommon
+add_subdirectory(Convolution)
 
 # --- OTBImage base dependee
 # OTBFunctor depends of OTBImageBase
@@ -30,6 +31,8 @@ add_subdirectory(Streaming)
 add_subdirectory(Interpolation)
 # IOGDAL needs OTBImageBase
 add_subdirectory(IO/IOGDAL)
+# IOExtendedFilename depends of OTBIOGDAL
+add_subdirectory(IO/ExtendedFilename)
 # ---
 
 # OTBPath depends of OTBVectorDataBase
@@ -50,10 +53,10 @@ add_subdirectory(ImageManipulation)
 # OTBVectorDataManipulation needs OTBTransform
 add_subdirectory(VectorDataManipulation)
 
-# OTBLabelMap depends of OTBVectorDataManipulation
-add_subdirectory(LabelMap)
 # OTBProjection needs OTBVectorDataManipulation
 add_subdirectory(Projection)
+# OTBLabelMap depends of OTBVectorDataManipulation
+add_subdirectory(LabelMap)
 
 # OTBConversion depends of OTBLabelMap
 add_subdirectory(Conversion)
@@ -63,12 +66,15 @@ add_subdirectory(Mosaic)
 
 # OTBStatistics needs OTBMosaic
 add_subdirectory(Statistics)
+# OTBImageIO depends of OTBStatistics
+add_subdirectory(IO/ImageIO)
+
+# TestKernel depends of ImageIO
+add_subdirectory(IO/TestKernel)
 # OTBPansharpening needs OTBStatistics
 add_subdirectory(PanSharpening)
 
 
-add_subdirectory(IO/ExtendedFilename)
-add_subdirectory(IO/ImageIO)
 
 if (OTB_USE_LIBKML)
     add_subdirectory(IO/IOKML)
@@ -76,7 +82,6 @@ if (OTB_USE_LIBKML)
 endif()
 
 add_subdirectory(IO/IOXML)
-add_subdirectory(IO/TestKernel)
 add_subdirectory(IO/VectorDataIO)
 # OTBCarto needs OTBImageIO
 add_subdirectory(IO/Carto)
