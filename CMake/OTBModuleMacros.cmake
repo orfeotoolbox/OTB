@@ -259,8 +259,13 @@ macro(otb_module_impl)
 
   # read test CMakeLists AFTER writing <otb-module>.cmake as test needs this
   # file
-  if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
-    add_subdirectory(test)
+  # As there is test cyclic dependencies for Core module, tests are not read
+  # here
+  # TO REMOVE when tests dependency for Core are correctly managed
+  if(NOT (${__current_component} STREQUAL "Core"))
+    if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
+      add_subdirectory(test)
+    endif()
   endif()
 
   # construct a list of the MODULES dependencies. It will help later in

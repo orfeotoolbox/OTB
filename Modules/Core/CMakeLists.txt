@@ -121,9 +121,40 @@ install(FILES ${CMAKE_BINARY_DIR}/CMakeFiles/${otb-group}Config.cmake
         COMPONENT ${otb-group})
 
 if (CMAKE_DEBUG)
-    message(STATUS "[CMAKE_DEBUG] Generating ${otb-group}Config.cmake for component \"${otb-group}\" that will be installed in \"${OTB_INSTALL_PACKAGE_DIR}\"")
+    message(STATUS "[CMAKE_DEBUG] ${otb-group}Config.cmake generated for component \"${otb-group}\" that will be installed in \"${OTB_INSTALL_PACKAGE_DIR}\"")
 endif()
 
+
+# /!\ UGLY FIX, DO NOT TRY THIS AT HOME /!\
+# Read the test folder of Core modules ONLY AFTER READING ALL MODULES DIRS.
+# When reading the module directories, we create file OTB<ModuleName>.cmake used
+# by intern mecanism to resolve dependency (in otb_module_impl)
+# THIS IS A NASTY FIX needed to make tests works as THERE IS CYCLIC DEPENDENCIES
+# FOR CORE TESTS. Thus it need some the OTB<ModuleName>.cmake files that are
+# not already made (but only for test).
+# E.G. OTBCommon tests needs OTBTestKernel, which needs... OTBCommon!! Yeeeeh!!
+#
+# WHEN THIS CODE IS CLEANED, also remove the if (component != Core) that
+# does not read tests when we use the Core module
+# in otb_module_impl in OTBModuleMacro
+#
+# Instead of Nasty solution, if we have time, we can use solutions proposed at
+# https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2530#note_118810
+
+# First read all otb-modules files of Core
+if (BUILD_TESTING)
+    # part of this code was in OTBModuleEnablement
+    # match all otb-module.cmake files in Core and its subdirs.
+    file( GLOB_RECURSE _core_modules_files RELATIVE "${OTB_SOURCE_DIR}" ${CMAKE_CURRENT_SOURCE_DIR}/*/otb-module.cmake )
+    foreach(_module_file ${_core_modules_files})
+        # get parent directory
+        get_filename_component(_module_dir ${_module_file} DIRECTORY)
+        # check if tests exists and build them
+        if (EXISTS ${_module_dir}/test/CMakeLists.cmake)
+            add_subdirectory(${_module_dir}/test)
+        endif()
+    endforeach()
+endif()
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/PackageConfig.cmake)
 unset(otb-group)
