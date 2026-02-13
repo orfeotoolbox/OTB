@@ -74,12 +74,8 @@ add_subdirectory(IO/TestKernel)
 # OTBPansharpening needs OTBStatistics
 add_subdirectory(PanSharpening)
 
-
-
-if (OTB_USE_LIBKML)
-    add_subdirectory(IO/IOKML)
-    add_subdirectory(IO/KMZWriter)
-endif()
+add_subdirectory(IO/IOKML)
+add_subdirectory(IO/KMZWriter)
 
 add_subdirectory(IO/IOXML)
 add_subdirectory(IO/VectorDataIO)
@@ -150,8 +146,8 @@ if (BUILD_TESTING)
         # get parent directory
         get_filename_component(_module_dir ${_module_file} DIRECTORY)
         # check if tests exists and build them
-        if (EXISTS ${_module_dir}/test/CMakeLists.cmake)
-            add_subdirectory(${_module_dir}/test)
+        if (EXISTS "${OTB_SOURCE_DIR}/${_module_dir}/test/CMakeLists.txt")
+            add_subdirectory(${OTB_SOURCE_DIR}/${_module_dir}/test)
         endif()
     endforeach()
 endif()

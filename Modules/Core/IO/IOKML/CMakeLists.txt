@@ -18,7 +18,9 @@
 # limitations under the License.
 #
 
-project(OTBIOKML)
+if (OTB_USE_LIBKML)
+    project(OTBIOKML)
 
-set(OTBIOKML_LIBRARIES OTBIOKML)
-otb_module_impl()
+    set(OTBIOKML_LIBRARIES OTBIOKML)
+    otb_module_impl()
+endif()

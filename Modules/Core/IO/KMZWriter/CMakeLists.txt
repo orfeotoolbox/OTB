@@ -18,5 +18,7 @@
 # limitations under the License.
 #
 
-project(OTBKMZWriter)
-otb_module_impl()
+if (OTB_USE_LIBKML)
+    project(OTBKMZWriter)
+    otb_module_impl()
+endif()
