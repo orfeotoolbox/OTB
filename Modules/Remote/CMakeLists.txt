@@ -22,6 +22,21 @@
 include(OTBModuleRemote)
 
 file(GLOB remotes "*.remote.cmake")
+# download each remote module present next to this file
 foreach(remote_module ${remotes})
   include(${remote_module})
+endforeach()
+
+set(_remote_module_dep_order otbGRM OTBTemporalGapFilling
+                             S1TilingSupportApplications
+                             SertitObject
+                             DiapOTBModule
+                             OTBBioVars
+                             OTBFFSforGMM
+                             OTBPhenology)
+
+foreach(_remote_module _remote_module_dep_order)
+  if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_remote_module}")
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/${_remote_module}")
+  endif()
 endforeach()
