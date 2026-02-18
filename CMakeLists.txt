@@ -286,9 +286,15 @@ set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 # Make sure remote modules are downloaded before sorting out the module
 # dependencies.
 add_subdirectory(Modules)
-add_subdirectory(Modules/Remote)
+
+if (OTB_BUILD_Remote OR OTBGroup_Remote)
+  # ensure option are ON if used later in code
+  option(OTB_BUILD_Remote "Request building Remote modules" TRUE)
+  option(OTBGroup_Remote "Request building Remote modules" TRUE)
+  add_subdirectory(Modules/Remote)
+endif()
 # NOTE TLA: this should be refactored and put in a separate function
-# Add the QGIS Wrapper at the last minute as it need all the OTB application
+# Add the QGIS Wrapper at the last minute as it need all the OTB applications
 # to be declared
 add_subdirectory(Modules/Core/Wrappers/QGIS)
 

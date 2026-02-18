@@ -27,7 +27,8 @@ foreach(remote_module ${remotes})
   include(${remote_module})
 endforeach()
 
-set(_remote_module_dep_order otbGRM OTBTemporalGapFilling
+set(_remote_module_dep_order otbGRM
+                             OTBTemporalGapFilling
                              S1TilingSupportApplications
                              SertitObject
                              DiapOTBModule
@@ -35,8 +36,29 @@ set(_remote_module_dep_order otbGRM OTBTemporalGapFilling
                              OTBFFSforGMM
                              OTBPhenology)
 
-foreach(_remote_module _remote_module_dep_order)
-  if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_remote_module}")
+foreach(_remote_module ${_remote_module_dep_order})
+  if (Module_${_remote_module} AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_remote_module}")
     add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/${_remote_module}")
+
+    # Same NASTY fix done in Core CMakelists. Here the problem is different,
+    # this is not a cyclic dependency :
+    # As we install Remote module in Core component, the quickfix made for Core
+    # test (not read the test folder in otb_module_impl if we are in Core), work
+    # also here... thus at this line, tests are not read
+    # Instead of finding another nasty quickfix, do the same here
+    if (BUILD_TESTING)
+        # part of this code was in OTBModuleEnablement
+        # match all otb-module.cmake files in Core and its subdirs.
+        file( GLOB_RECURSE _remote_modules_files "${_remote_module}/*otb-module.cmake" )
+        foreach(_module_file ${_remote_modules_files})
+            # get parent directory
+            get_filename_component(_module_dir ${_module_file} DIRECTORY)
+            # check if tests exists and build them
+            if (EXISTS "${_module_dir}/test/CMakeLists.txt")
+                add_subdirectory(${_module_dir}/test)
+            endif()
+        endforeach()
+    endif()
+
   endif()
 endforeach()

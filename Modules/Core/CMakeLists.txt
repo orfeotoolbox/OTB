@@ -132,7 +132,7 @@ endif()
 #
 # WHEN THIS CODE IS CLEANED, also remove the if (component != Core) that
 # does not read tests when we use the Core module
-# in otb_module_impl in OTBModuleMacro
+# in otb_module_impl in OTBModuleMacro. Do the same for the Remote Cmakelists!
 #
 # Instead of Nasty solution, if we have time, we can use solutions proposed at
 # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2530#note_118810
