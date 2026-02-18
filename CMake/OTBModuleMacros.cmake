@@ -56,6 +56,9 @@ macro(otb_module _name)
   set(OTB_MODULE_${otb-module}_DESCRIPTION "description")
   set(OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT 0)
   set(OTB_MODULE_${otb-module}_ENABLE_SHARED 0)
+  # Set Core as default module for module in OTB build tree that are not in
+  # specific package like modules in "Remote"
+  set(OTB_MODULE_${otb-module}_COMPONENT Core)
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT|COMPONENT)$")
       set(_doing "${arg}")
@@ -106,7 +109,7 @@ macro(otb_module_impl)
   set(${otb-module}_INSTALL_ARCHIVE_DIR ${OTB_INSTALL_ARCHIVE_DIR})
   set(${otb-module}_INSTALL_INCLUDE_DIR ${OTB_INSTALL_INCLUDE_DIR})
   # var just to be less verbose, used only in this function
-  set(__current_component ${OTB_MODULE_${otb-module}_COMPONENT})
+  set(_current_component ${OTB_MODULE_${otb-module}_COMPONENT})
 
   # Collect all sources and headers for IDE projects.
   set(_srcs "")
@@ -144,7 +147,7 @@ macro(otb_module_impl)
   # install include if present
   if(EXISTS ${${otb-module}_SOURCE_DIR}/include)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
-    install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT ${__current_component})
+    install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT ${_current_component})
   endif()
 
   if(NOT OTB_SOURCE_DIR)
@@ -187,7 +190,7 @@ macro(otb_module_impl)
   if(EXISTS ${${otb-module}_SOURCE_DIR}/src/CMakeLists.txt)
     # append module to "<component-name>Targets_MODULES" property which
     # has GLOBAL scope
-    set_property(GLOBAL APPEND PROPERTY ${__current_component}Targets_MODULES ${otb-module})
+    set_property(GLOBAL APPEND PROPERTY ${_current_component}Targets_MODULES ${otb-module})
     # execute cmakelists of src
     add_subdirectory(src)
   endif()
@@ -216,7 +219,7 @@ macro(otb_module_impl)
     install(FILES
       ${_export_header_file}
       DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
-      COMPONENT ${__current_component}
+      COMPONENT ${_current_component}
       )
 
     # Do not export this shared lib ELF symbols if USE_COMPILER_HIDDEN_VISIBILITY
@@ -245,13 +248,13 @@ macro(otb_module_impl)
   # quoting them will "cancel" the list effect and malform the generated
   # files
   generate_cmake_module_configs("${otb-module}" "${_OTBModuleMacros_DIR}"
-      COMPONENT "${__current_component}"
+      COMPONENT "${_current_component}"
       DEPENDS ${OTB_MODULE_${otb-module}_DEPENDS}
       LIBRARIES ${${otb-module}_LIBRARIES}
-      LIBRARY_DIRS "\${GROUP_${__current_component}_LOCATION}/lib"
+      LIBRARY_DIRS "\${GROUP_${_current_component}_LOCATION}/lib"
       SYSTEM_LIBRARY_DIRS ${${otb-module}_SYSTEM_LIBRARY_DIRS}
       INCLUDE_DIRS_BUILD ${${otb-module}_INCLUDE_DIRS}
-      INCLUDE_DIRS_INSTALL "\${GROUP_${__current_component}_LOCATION}/${${otb-module}_INSTALL_INCLUDE_DIR}"
+      INCLUDE_DIRS_INSTALL "\${GROUP_${_current_component}_LOCATION}/${${otb-module}_INSTALL_INCLUDE_DIR}"
       SYSTEM_INCLUDE_DIRS ${${otb-module}_SYSTEM_INCLUDE_DIRS}
       EXPORT_CODE_BUILD "${${otb-module}_EXPORT_CODE_BUILD}"
       EXPORT_CODE_INSTALL "${${otb-module}_EXPORT_CODE_INSTALL}"
@@ -262,7 +265,7 @@ macro(otb_module_impl)
   # As there is test cyclic dependencies for Core module, tests are not read
   # here
   # TO REMOVE when tests dependency for Core are correctly managed
-  if(NOT (${__current_component} STREQUAL "Core"))
+  if(NOT (${_current_component} STREQUAL "Core"))
     if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
       add_subdirectory(test)
     endif()
@@ -276,7 +279,7 @@ macro(otb_module_impl)
   # to use list operation
   # Here if property does not exists yet, the variable is empty
   get_property(MODULE_DEPENDS_OF_COMPONENT
-               GLOBAL PROPERTY ${__current_component}_MOD_DEPS)
+               GLOBAL PROPERTY ${_current_component}_MOD_DEPS)
   foreach(dep IN LISTS ${otb-module}_LIBRARIES)
     # add the component of each dep. Here use the ${OTB_MODULE_${dep}_COMPONENT}
     # var instead of ${dep}_component because this last may not been already
@@ -286,30 +289,30 @@ macro(otb_module_impl)
   list(REMOVE_DUPLICATES MODULE_DEPENDS_OF_COMPONENT)
   # name of own module can be present in dependencies, remove it
 
-  list(REMOVE_ITEM MODULE_DEPENDS_OF_COMPONENT "${__current_component}")
+  list(REMOVE_ITEM MODULE_DEPENDS_OF_COMPONENT "${_current_component}")
   # redefine property with the cleaned improved list
-  set_property(GLOBAL PROPERTY ${__current_component}_MOD_DEPS
+  set_property(GLOBAL PROPERTY ${_current_component}_MOD_DEPS
                                ${MODULE_DEPENDS_OF_COMPONENT})
 
-  get_property(_is_target_exported GLOBAL PROPERTY ${__current_component}Targets_EXPORTED)
+  get_property(_is_target_exported GLOBAL PROPERTY ${_current_component}Targets_EXPORTED)
   # check if _is_target_exported is unset or FALSE
   if (NOT DEFINED _is_target_exported OR NOT _is_target_exported)
     if (CMAKE_DEBUG)
-      message(STATUS "[CMAKE_DEBUG] Exporting target ${${otb-module}-targets} part of component ${__current_component} in file ${__current_component}Targets.cmake located at ${OTB_INSTALL_PACKAGE_DIR}")
+      message(STATUS "[CMAKE_DEBUG] Exporting target ${${otb-module}-targets} part of component ${_current_component} in file ${_current_component}Targets.cmake located at ${OTB_INSTALL_PACKAGE_DIR}")
     endif()
 
-    if ("${__current_component}" STREQUAL "")
-      message(FATAL_ERROR "${otb-module} does not have component ${__current_component}")
+    if ("${_current_component}" STREQUAL "")
+      message(FATAL_ERROR "${otb-module} does not have component ${_current_component}")
     endif()
 
-    install(EXPORT ${__current_component}Targets
-            FILE ${__current_component}Targets.cmake
+    install(EXPORT ${_current_component}Targets
+            FILE ${_current_component}Targets.cmake
             DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-            COMPONENT ${__current_component})
-    set_property(GLOBAL PROPERTY ${__current_component}Targets_EXPORTED TRUE)
+            COMPONENT ${_current_component})
+    set_property(GLOBAL PROPERTY ${_current_component}Targets_EXPORTED TRUE)
   endif() # NOT DEFINED ${${otb-module}-targets}_EXPORTED
   otb_module_doxygen(${otb-module})   # module name
-  unset(__current_component)
+  unset(_current_component)
 endmacro()
 
 macro(otb_module_test)
