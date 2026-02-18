@@ -130,6 +130,7 @@ else()
 endif()
 
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+            PARALLEL_LEVEL 8
             RETURN_VALUE _build_rv
             CAPTURE_CMAKE_ERROR _build_error
             )

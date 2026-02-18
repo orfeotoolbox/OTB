@@ -136,7 +136,7 @@ file (REMOVE ${SB_TXT})
 # git ls-remote $REMOTE $BRANCH_NAME
 ####################################
 file ( WRITE "${OTB_SOURCE_DIR}/sb_branch.txt" "${IMAGE_NAME}/${SB_MD5}")
-message( "Checking out git for existence of archive")
+message( "Checking out git for existence of archive ${IMAGE_NAME}/${SB_MD5}")
 set ( REMOTE "https://gitlab.orfeo-toolbox.org/orfeotoolbox/superbuild-artifact/")
 set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
 
@@ -153,6 +153,7 @@ else()
   
   ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
               TARGET "OTB_DEPENDS"
+              PARALLEL_LEVEL 8
               RETURN_VALUE _build_rv
               NUMBER_ERRORS _build_nb_err
               CAPTURE_CMAKE_ERROR _build_error

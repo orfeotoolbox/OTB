@@ -26,6 +26,9 @@ set (ENV{LANG} "C") # Only ascii output
 
 get_filename_component( OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY )
 
+# NOTE TLA: here XDK_INSTALL_PATH is empty ?
+message(STATUS "XDK_INSTALL_PATH = ${XDK_INSTALL_PATH}")
+
 if(WIN32)
   file(TO_NATIVE_PATH "${XDK_INSTALL_PATH}" XDK_INSTALL_PATH_NATIVE)
   file(TO_NATIVE_PATH "${CTEST_BINARY_DIRECTORY}/bin" OTB_BUILD_BIN_DIR_NATIVE)
@@ -114,6 +117,7 @@ endif()
 
 ctest_build(
   BUILD "${CTEST_BINARY_DIRECTORY}"
+  PARALLEL_LEVEL 8
   TARGET package
   RETURN_VALUE _build_rv
   CAPTURE_CMAKE_ERROR _build_error
