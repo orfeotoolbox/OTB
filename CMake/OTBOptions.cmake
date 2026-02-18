@@ -44,6 +44,7 @@ endforeach()
 list(REMOVE_DUPLICATES __groups_enabled_list)
 set_property(GLOBAL PROPERTY OTB_GROUPS_ENABLED ${__groups_enabled_list})
 
+# TODO: get a list of option for remote module, here or inside Module/Remote that can be read in this file
 
 # NOTE TLA: Make a Dependency resolver file
 if(OTBGroup_Core AND NOT OTBGroup_Learning)

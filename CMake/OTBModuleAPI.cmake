@@ -289,6 +289,14 @@ macro(otb_module_activation_option _option_desc _default)
   set_property(GLOBAL APPEND PROPERTY ${OTB_MODULE_${otb-module}_COMPONENT}_MODULE_ACTIVATION_OPTION_LIST ${_option_name})
 endmacro()
 
+
+# Create an otb<group>Configure file from otbConfigure.h.in
+# The generated file contains preprocessor defines of activated options
+# listed in ${group}_MODULE_ACTIVATION_OPTION_LIST property
+#
+# The activation option is controled by the otb_module_activation_option
+# function in this file.
+# This function must be used only on per OTB group
 function(generate_group_config_file group)
   # NOTE TLA: may need to change this to ${OTBCommon_INCLUDES_DIR}
   configure_file(${OTB_CMAKE_DIR}/otbConfigure.h.in otb${group}Configure.h.in)

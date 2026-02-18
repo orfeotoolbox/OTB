@@ -122,9 +122,7 @@ set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 get_package_name(${OTB_SOURCE_DIR} ${PROJECT_NAME} OTB_VERSION_STRING2)
 
 include(OTBConstants)
-#-----------------------------------------------------------------------------
-# The subdirectories added below this line should use only the public
-# interface with find_package(ITK). Set ITK_DIR to use this ITK build.
+
 set(OTB_DIR "${OTB_BINARY_DIR}")
 
 #-----------------------------------------------------------------------------
@@ -287,20 +285,6 @@ set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 # dependencies.
 add_subdirectory(Modules)
 
-if (OTB_BUILD_Remote OR OTBGroup_Remote)
-  # ensure option are ON if used later in code
-  option(OTB_BUILD_Remote "Request building Remote modules" TRUE)
-  option(OTBGroup_Remote "Request building Remote modules" TRUE)
-  add_subdirectory(Modules/Remote)
-endif()
-# NOTE TLA: this should be refactored and put in a separate function
-# Add the QGIS Wrapper at the last minute as it need all the OTB applications
-# to be declared
-add_subdirectory(Modules/Core/Wrappers/QGIS)
-
-# Enable modules according to user inputs and the module dependency DAG.
-#include(OTBModuleEnablement)
-
 #----------------------------------------------------------------------
 # Generate OTBConfig.cmake for the build tree.
 set(OTB_CONFIG_CODE "
@@ -372,8 +356,8 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
         DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
         COMPONENT Core)
 
-set(__PYTHON_VERSION_MAJOR "3")
-set(__PYTHON_VERSION_MINOR "10")
+set(_PYTHON_VERSION_MAJOR "3")
+set(_PYTHON_VERSION_MINOR "10")
 
 if (UNIX)
   # output of python3 --version is "Python XX.XX.XX", notice the space that
@@ -381,16 +365,16 @@ if (UNIX)
   execute_process(
     COMMAND python3 --version
     RESULT_VARIABLE CMD_RES
-    OUTPUT_VARIABLE __PYTHON_VERSION_DURING_BUILD
+    OUTPUT_VARIABLE _PYTHON_VERSION_DURING_BUILD
   )
   # Get the first two digit and concatenate them
-  string(REGEX MATCH " ([0-9]+)\.([0-9]+)" TMP_VAR "${__PYTHON_VERSION_DURING_BUILD}")
+  string(REGEX MATCH " ([0-9]+)\.([0-9]+)" TMP_VAR "${_PYTHON_VERSION_DURING_BUILD}")
 
   if (${CMAKE_MATCH_COUNT} EQUAL 2)
     # CMAKE_MATCH_0 is the entire match
     # See https://cmake.org/cmake/help/latest/variable/CMAKE_MATCH_n.html
-    set(__PYTHON_VERSION_MAJOR "${CMAKE_MATCH_1}")
-    set(__PYTHON_VERSION_MINOR "${CMAKE_MATCH_2}")
+    set(_PYTHON_VERSION_MAJOR "${CMAKE_MATCH_1}")
+    set(_PYTHON_VERSION_MINOR "${CMAKE_MATCH_2}")
   endif()
 endif()
 
@@ -404,7 +388,7 @@ if(XDK_INSTALL_PATH)
             COMPONENT Dependencies)
     # Redhat8 case : the bindings are installed by default in lib64/python3.12
     if( EXISTS ${XDK_INSTALL_PATH}/lib64)
-      install(DIRECTORY "${XDK_INSTALL_PATH}/lib64/python${__PYTHON_VERSION_MAJOR}.${__PYTHON_VERSION_MINOR}"
+      install(DIRECTORY "${XDK_INSTALL_PATH}/lib64/python${_PYTHON_VERSION_MAJOR}.${_PYTHON_VERSION_MINOR}"
               DESTINATION ./lib
               USE_SOURCE_PERMISSIONS
               COMPONENT Dependencies)
@@ -473,7 +457,7 @@ if(UNIX)
     COMPONENT Core
     )
 
-  # the file need __PYTHON_VERSION_MAJOR and __PYTHON_VERSION_MINOR vars
+  # the file need _PYTHON_VERSION_MAJOR and _PYTHON_VERSION_MINOR vars
   configure_file(${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh.in
                  ${CMAKE_BINARY_DIR}/post_install.sh @ONLY)
   install( PROGRAMS
@@ -573,15 +557,15 @@ if(OTB_DATA_GIT_STATUS_MESSAGE)
 endif()
 
 # get the list of all activable modules in activated groups
-set(__all_activable_modules "")
-get_property(__groups_enabled GLOBAL PROPERTY OTB_GROUPS_ENABLED)
+set(_all_activable_modules "")
+get_property(_groups_enabled GLOBAL PROPERTY OTB_GROUPS_ENABLED)
 
-foreach(__group ${__groups_enabled})
-  get_property(__group_activable_modules GLOBAL PROPERTY ${__group}_MODULE_ACTIVATION_OPTION_LIST)
-  list(APPEND __all_activable_modules ${__group_activable_modules})
+foreach(_group ${_groups_enabled})
+  get_property(_group_activable_modules GLOBAL PROPERTY ${_group}_MODULE_ACTIVATION_OPTION_LIST)
+  list(APPEND _all_activable_modules ${_group_activable_modules})
 endforeach()
 
-list(SORT __all_activable_modules)
+list(SORT _all_activable_modules)
 
 foreach(otb_option
     CMAKE_SOURCE_DIR
@@ -595,7 +579,7 @@ foreach(otb_option
     CMAKE_BUILD_TYPE
     CMAKE_C_FLAGS
     CMAKE_CXX_FLAGS
-    ${__all_activable_modules}
+    ${_all_activable_modules}
     OTB_WRAP_PYTHON
     OTB_WRAP_QGIS
     OTB_DATA_ROOT
@@ -682,9 +666,6 @@ message("======================= End of OTB cmake summary ======================
 
 #don't need this one anymore. so unset it.
 unset(option_list)
-
-#----------------------------------------------------------------------------
-# include(Packaging_OTB)
 
 
 

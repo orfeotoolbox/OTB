@@ -20,6 +20,8 @@
 
 project(OTBCommon)
 
+# Generate otbCoreConfigure.h from otbConfigure.h.in in CMake folder
+# that contains C/C++ preproc defines used in code
 generate_group_config_file(${otb-group})
 
 set(OTBCommon_INCLUDE_DIRS

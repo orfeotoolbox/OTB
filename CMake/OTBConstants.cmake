@@ -133,12 +133,8 @@ macro(get_package_const)
   set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
   # without this you won't be able to pack only specified component
 
-
-
-  # NOTE TLA: isolate this in a function called before packaging
-  # NOTE TLA: we could set the list depending of enabled component.
-  # Actually, even if we enable only Core and FeaturesExtraction (for instance)
-  # we also generate empty packages for other components
+  # The ENABLED_GROUPS property is filled in OTBInternalModules with enabled
+  # Groups. Thus we only create enabled components
   get_property(CPACK_COMPONENTS_ALL GLOBAL PROPERTY ENABLED_GROUPS)
 
   list(APPEND CPACK_COMPONENTS_ALL "Core" "Dependencies")

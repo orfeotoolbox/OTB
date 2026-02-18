@@ -22,12 +22,18 @@ if(BUILD_TESTING)
   enable_testing()
 endif()
 
-# set(CPACK_COMPONENTS_ALL "Core" "FeaturesExtraction" "Learning" "Miscellaneous" "Remote" "SAR" "Segmentation" "StereoProcessing")
 add_subdirectory(ThirdParty)
 add_subdirectory(Core)
 include("OTBInternalModules.cmake")
 
-# cpack_add_component(Remote
-#                     [DISPLAY_NAME Remote]
-#                     [DESCRIPTION "Contains all Remote modules libraries and applications for OTB" ]
-#                     [OPTIONAL])
+if (OTB_BUILD_Remote OR OTBGroup_Remote)
+  # ensure option are ON if used later in code
+  option(OTB_BUILD_Remote "Request building Remote modules" TRUE)
+  option(OTBGroup_Remote "Request building Remote modules" TRUE)
+  add_subdirectory(Remote)
+endif()
+
+# NOTE TLA: this should be refactored and put in a separate function
+# Add the QGIS Wrapper at the last minute as it need all the OTB applications
+# to be declared
+add_subdirectory(Core/Wrappers/QGIS)
