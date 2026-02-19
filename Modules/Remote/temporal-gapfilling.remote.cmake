@@ -29,7 +29,7 @@ https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling
 Declares application ImageTimeSeriesGapFilling
 "
   "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
-  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling.git
+  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/remote_modules/temporalgapfilling.git
   GIT_TAG master
-  GIT_SUBMODULES ON
+  GIT_SUBMODULES OFF
 )
