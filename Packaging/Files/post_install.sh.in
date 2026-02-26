@@ -39,9 +39,12 @@ sed -i 's#/builds/otb/xdk#\$OTB_INSTALL_DIR#g'    "${OTB_INSTALL_DIR}/bin/curl-c
 
 sh "$OTB_INSTALL_DIR"/tools/sanitize_rpath.sh
 
-ostype="$(lsb_release -is)"
+IS_REDHAT_BASE=false
+if [ -n "$(grep -i -e '^Red' /etc/os-release )" ]; then
+  IS_REDHAT_BASE=true
+fi
 
-if [ "$ostype" != "RedHatEnterprise" ] ; then
+if [ "$IS_REDHAT_BASE" = false ] ; then
   concatpyversion="$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]*\).*/\1\2/')"
   # Compare the concat version with the version used to build this OTB package
   # The python build version is filled by cmake

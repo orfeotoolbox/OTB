@@ -37,12 +37,17 @@ cat_path()
 
 # The below environment variables only affect current shell
 # So if you run again from a terminal, you need to run the script again
-OS="$(lsb_release -is)"
+IS_REDHAT_BASE=false
+if [ -n "$(grep -i -e '^Red' /etc/os-release )" ]; then
+  IS_REDHAT_BASE=true
+fi
+
+
 # test the shell used before OS as variable used to resolve this script
 # path may differ
 if [ -n "${BASH}" ]; then
   # dirname does not exists on RH-based OS
-  if [ "$OS" = "RedHatEnterprise" ] || [ "$OS" = "Fedora" ] || [ "$OS" = "RockyLinux" ]; then
+  if [ "$IS_REDHAT_BASE" = true ]; then
     OTB_INSTALL_DIR="$(realpath $(dirname "${BASH_SOURCE[0]}"))"
   elif [ -n "${BASH}" ]; then
     OTB_INSTALL_DIR="$( dirname -- "$( readlink -f -- "${BASH_SOURCE[0]}"; )"; )"
