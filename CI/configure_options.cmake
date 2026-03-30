@@ -42,7 +42,6 @@ set (otb_qa_option "CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON")
 set (otb_use_option
     "OTB_USE_6S:BOOL=ON"
     "OTB_USE_CURL:BOOL=ON"
-    "OTB_USE_GSL:BOOL=ON"
     "OTB_USE_LIBKML:BOOL=OFF"
     "OTB_USE_SIFTFAST:BOOL=ON"
     "OTB_USE_SSE_FLAGS:BOOL=ON")
@@ -57,7 +56,8 @@ set (cmake_configure_option
 # extra options for XDK builds
 if(XDK_INSTALL_PATH)
   list(APPEND cmake_configure_option "CMAKE_PREFIX_PATH=${XDK_INSTALL_PATH}")
-  foreach(remote_module OTBTemporalGapFilling SertitObject otbGRM S1TilingSupportApplications) #DiapOTBModule
+  # do not use temporalGapFilling as it is under GNU GPL
+  foreach(remote_module SertitObject otbGRM S1TilingSupportApplications) #DiapOTBModule
     list(APPEND cmake_configure_option "Module_${remote_module}:BOOL=ON")
   endforeach()
 endif()
