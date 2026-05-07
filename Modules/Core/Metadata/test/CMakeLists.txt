@@ -25,6 +25,7 @@ otbMetadataTestDriver.cxx
 otbImageMetadataInterfaceTest.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
+otbNISARCalibrationLookupDataTest.cxx
 otbImageMetadataTest.cxx
 otbGeomMetadataSupplierTest.cxx
 otbXMLMetadataSupplierTest.cxx
@@ -39,6 +40,9 @@ otb_module_target_label(otbMetadataTestDriver)
 
 otb_add_test(NAME coreMetaDataNoDataHelperTest COMMAND otbMetadataTestDriver
   otbNoDataHelperTest)
+
+otb_add_test(NAME ioTuNISARCalibrationLookupDataTest COMMAND otbMetadataTestDriver
+  otbNISARCalibrationLookupDataTest)
 
 otb_add_test(NAME ioTvSarCalibrationLookupDataTest_SENTINEL1 COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvSarCalibrationLookupDataTest_SENTINEL1.txt

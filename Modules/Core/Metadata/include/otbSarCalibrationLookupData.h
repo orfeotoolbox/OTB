@@ -78,7 +78,7 @@ public:
     m_Type = t;
   }
 
-  itkGetMacro(Type, short);
+  itkGetConstMacro(Type, short);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
