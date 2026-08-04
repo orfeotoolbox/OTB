@@ -118,7 +118,7 @@ Debian / Ubuntu
   .. code-block:: bash
 
     # Install mandatory dependencies
-    apt install -y --no-install-recommends libboost-filesystem-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libcurl4-gnutls-dev libgdal-dev python3-gdal libexpat1-dev libfftw3-dev libgeotiff-dev libgsl-dev libinsighttoolkit4-dev libgeotiff-dev libpng-dev libtinyxml-dev
+    apt install -y --no-install-recommends libboost-filesystem-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libcurl4-gnutls-dev libgdal-dev python3-gdal libexpat1-dev libfftw3-dev libgeotiff-dev libgsl-dev libinsighttoolkit4-dev libpng-dev libtinyxml-dev
 
     # Install optional dependencies
     apt install -y --no-install-recommends libmuparser-dev libmuparserx-dev libkml-dev libopencv-core-dev libopencv-ml-dev libopenmpi-dev libsvm-dev
