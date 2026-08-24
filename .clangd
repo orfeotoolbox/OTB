@@ -1,4 +1,4 @@
----
+#.clangd
 CompileFlags:
-  CompilationDatabase: "/home/tlaurent/Workspace/OTB/otb_builds/otb_develop"
-...
+  Add: [-DOTB_MANUAL_INSTANTIATION]
+
