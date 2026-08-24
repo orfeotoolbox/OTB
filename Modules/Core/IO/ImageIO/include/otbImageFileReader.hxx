@@ -33,6 +33,7 @@
 #include "otbImageIOFactory.h"
 #include "otbImageMetadata.h"
 #include "otbImageMetadataInterfaceFactory.h"
+#include "otbLogHelpers.h"
 #include "otbMetaDataKey.h"
 #include "otbMetadataSupplierInterface.h"
 
@@ -47,6 +48,7 @@
 
 #include <ostream>
 #include <string>
+#include <cassert>
 
 namespace otb
 {
@@ -56,7 +58,7 @@ static const size_t DerivedSubdatasetPrefixLength = sizeof(DerivedSubdatasetPref
 
 template <class TOutputImage, class ConvertPixelTraits>
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::ImageFileReader()
+::ImageFileReader(unsigned long streamHeight)
 : m_ImageIO()
 , m_UserSpecifiedImageIO(false)
 , m_UseStreaming(true)
@@ -64,6 +66,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 , m_FilenameHelper(FNameHelperType::New())
 , m_AdditionalNumber(0)
 , m_IOComponents(0)
+, m_StreamHeight(streamHeight)
 {
 }
 
@@ -85,7 +88,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   os << indent << "UserSpecifiedImageIO flag: " << this->m_UserSpecifiedImageIO << "\n";
   os << indent << "m_FileName: "                << this->m_FileName << "\n";
-  os << indent << "m_UseStreaming flag: "       << this->m_UseStreaming << "\n";
+  os << indent << "m_StreamHeight: "            << this->m_StreamHeight << "\n";
   os << indent << "m_ActualIORegion: "          << this->m_ActualIORegion << "\n";
   os << indent << "m_AdditionalNumber: "        << this->m_AdditionalNumber << "\n";
 }
@@ -103,29 +106,64 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
+auto ImageFileReader<TOutputImage, ConvertPixelTraits>
+::ReadInto(
+    itk::ImageIORegion const& ioRegion,
+    std::vector<char> &       loadBuffer,
+    OutputImagePixelType*     destBuffer
+) -> OutputImagePixelType*
+{
+  assert(destBuffer);
+
+  // Adapt the image size with the region and take into account a potential
+  // remapping of the components. m_BandList is empty if no band range is set
+  auto const nb_components = std::max<unsigned>(this->m_ImageIO->GetNumberOfComponents(), this->m_BandList.size());
+  std::streamoff nbBytes =
+    (this->m_ImageIO->GetComponentSize()
+     * nb_components)
+    * static_cast<std::streamoff>(ioRegion.GetNumberOfPixels());
+
+  otbMsgDevMacro(
+      "ALLOCATE temp buffer: " << (nbBytes / 1024l / 1024l) << "MB for " << NeatRegionLogger(ioRegion));
+  loadBuffer.resize(nbBytes);
+
+  this->m_ImageIO->SetIORegion(ioRegion);
+  this->m_ImageIO->Read(loadBuffer.data());
+
+  if (m_FilenameHelper->BandRangeIsSet())
+    this->m_ImageIO->DoMapBuffer(loadBuffer.data(), ioRegion.GetNumberOfPixels(), this->m_BandList);
+
+  this->DoConvertBuffer(loadBuffer.data(), ioRegion.GetNumberOfPixels(), destBuffer);
+  return destBuffer + nb_components * static_cast<std::streamoff>(ioRegion.GetNumberOfPixels());
+};
+
+template <class TOutputImage, class ConvertPixelTraits>
 void ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GenerateData()
 {
   typename TOutputImage::Pointer output = this->GetOutput();
 
-  // allocate the output buffer
-  output->SetBufferedRegion(output->GetRequestedRegion());
-  output->Allocate();
-
-  // Raise an exception if the file could not be opened
+  // ---[ Raise an exception if the file could not be opened
   // i.e. if this->m_ImageIO is Null
   this->TestValidImageIO();
 
-  // Tell the ImageIO to read the file
+  // ---[ Allocate the output buffer
+  otbMsgDevMacro("Allocating for  " << NeatRegionLogger(output->GetRequestedRegion()));
+  output->SetBufferedRegion(output->GetRequestedRegion());
+  output->Allocate();
   OutputImagePixelType* buffer = output->GetPixelContainer()->GetBufferPointer();
+
+  // ---[ Tell the ImageIO to read the file
   this->m_ImageIO->SetFileName(this->m_FileName);
 
   itk::ImageIORegion ioRegion(TOutputImage::ImageDimension);
 
   itk::ImageIORegion::SizeType  ioSize  = ioRegion.GetSize();
   itk::ImageIORegion::IndexType ioStart = ioRegion.GetIndex();
+  assert(2 <= ioStart.size());
+  assert(2 <= ioSize.size());
 
-  /* Init IORegion with size or streaming size */
+  // ---[ Override ioRegion with streaming size
   SizeType dimSize;
   for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
   {
@@ -162,41 +200,51 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   ioRegion.SetSize(ioSize);
   ioRegion.SetIndex(ioStart);
+  m_ActualIORegion = ioRegion;
 
-  this->m_ImageIO->SetIORegion(ioRegion);
+  // constexpr auto x_index = 0;
+  constexpr auto y_index = 1;
 
-  typedef otb::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType> ConvertIOPixelTraits;
-  typedef otb::DefaultConvertPixelTraits<typename TOutputImage::PixelType>   ConvertOutputPixelTraits;
+  otbMsgDevMacro("Fetching " << NeatRegionLogger(ioRegion));
+  otb::Logger::Instance()->Flush();  // make sure to flush logs in case of bug
 
-  if (this->m_ImageIO->GetComponentTypeInfo() == typeid(typename ConvertOutputPixelTraits::ComponentType) &&
-      (this->m_ImageIO->GetNumberOfComponents() == ConvertIOPixelTraits::GetNumberOfComponents()) && !m_FilenameHelper->BandRangeIsSet())
+  using ConvertIOPixelTraits     = otb::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType>;
+  using ConvertOutputPixelTraits = otb::DefaultConvertPixelTraits<typename TOutputImage::PixelType>;
+
+  if (this->m_ImageIO->GetComponentTypeInfo() == typeid(typename ConvertOutputPixelTraits::ComponentType)
+      && (this->m_ImageIO->GetNumberOfComponents() == ConvertIOPixelTraits::GetNumberOfComponents())
+      && !m_FilenameHelper->BandRangeIsSet())
   {
     // Have the ImageIO read directly into the allocated buffer
+    this->m_ImageIO->SetIORegion(ioRegion);
     this->m_ImageIO->Read(buffer);
-    return;
   }
   else // a type conversion is necessary
   {
-    // note: char is used here because the buffer is read in bytes
-    // regardless of the actual type of the pixels.
-    ImageRegionType region = output->GetBufferedRegion();
+    // note: char is used here because the buffer is read in bytes regardless of the actual type of the pixels.
+    std::vector<char> loadBuffr;
 
-    // Adapt the image size with the region and take into account a potential
-    // remapping of the components. m_BandList is empty if no band range is set
-    std::streamoff nbBytes = (this->m_ImageIO->GetComponentSize() * std::max(this->m_ImageIO->GetNumberOfComponents(), (unsigned int)m_BandList.size())) *
-                             static_cast<std::streamoff>(region.GetNumberOfPixels());
-
-    char* loadBuffer = new char[nbBytes];
-
-    this->m_ImageIO->Read(loadBuffer);
-
-    if (m_FilenameHelper->BandRangeIsSet())
-      this->m_ImageIO->DoMapBuffer(loadBuffer, region.GetNumberOfPixels(), this->m_BandList);
-
-    this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
-
-    delete[] loadBuffer;
+    if (m_StreamHeight == 0)
+    { // Mono-block reading
+      ReadInto(ioRegion, loadBuffr, buffer);
   }
+    else
+    { // Streamed reading
+      auto nb_remaining_lines = ioRegion.GetSize()[y_index];
+      while (nb_remaining_lines > 0)
+      {
+        auto nb_lines_to_load = std::min(nb_remaining_lines, m_StreamHeight);
+        ioRegion.GetModifiableSize()[y_index] = nb_lines_to_load;
+
+        buffer = ReadInto(ioRegion, loadBuffr, buffer);
+
+        ioRegion.GetModifiableIndex()[y_index] += nb_lines_to_load;
+        nb_remaining_lines -= nb_lines_to_load;
+      }
+    }
+  }
+
+  this->m_ImageIO->SetIORegion(m_ActualIORegion); // just in case...
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
@@ -661,11 +709,8 @@ std::vector<std::string> ImageFileReader<TOutputImage, ConvertPixelTraits>
 
 template <class TOutputImage, class ConvertPixelTraits>
 void ImageFileReader<TOutputImage, ConvertPixelTraits>
-::DoConvertBuffer(void* inputData, size_t numberOfPixels)
+::DoConvertBuffer(void* inputData, size_t numberOfPixels, OutputImagePixelType* outputData)
 {
-  // get the pointer to the destination buffer
-  OutputImagePixelType* outputData = this->GetOutput()->GetPixelContainer()->GetBufferPointer();
-
 // TODO:
 // Pass down the PixelType (RGB, VECTOR, etc.) so that any vector to
 // scalar conversion be type specific. i.e. RGB to scalar would use
