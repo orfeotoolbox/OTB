@@ -35,6 +35,7 @@
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbExtendedFilenameToReaderOptions.h"
 #include "otbImageIOBase.h"
+#include "otbNewMacro.h"
 
 #include "itkMacro.h"
 #include "itkImageRegion.h"
@@ -77,7 +78,7 @@ public:
   using Pointer    = itk::SmartPointer<Self>;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageFileReader, ImageSource);
@@ -137,17 +138,41 @@ public:
   static std::string GetDerivedDatasetSourceFileName(const std::string& filename);
 
 protected:
-  ImageFileReader();
+  ImageFileReader(unsigned long streamHeight = 0);
   ~ImageFileReader() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Convert a block of pixels from one type to another. */
-  void DoConvertBuffer(void* buffer, size_t numberOfPixels);
+  void DoConvertBuffer(void* buffer, size_t numberOfPixels, OutputImagePixelType* outputData);
 
 private:
+  /**
+   * Internal: Read and convert input image into destination, using a cached
+   * buffer.
+   *
+   * Reads requested region `ioRegion` from current GDAL image into destination
+   * buffer `destBuffer`, while using `loadBuffer` as an intermediary buffer
+   * to dump as a direct dump on input image.
+   *
+   * \param[in]     ioRegion defines the region to read from input image
+   * \param[in,out] loadBuffer cached intermediary buffer where image data is
+   *                dumped before being de-interleaved.
+   *                It will be resized on-the-fly.
+   * \param[in]     destBuffer pointer to where the decoded images will be
+   *                stored.
+   * \return `destBuffer + number_of_bytes_written`
+   * \pre `destBuffer != nullptr`
+   */
+  OutputImagePixelType* ReadInto(
+      itk::ImageIORegion const& ioRegion,
+      std::vector<char> & loadBuffer,
+      OutputImagePixelType* destBuffer
+  );
+
   /** Test whether m_ImageIO is valid (not NULL).
    * This is intended to be called after trying to create it via an
    * ImageIOFactory. Throws an exception with an appropriate message otherwise.
+   * \throw otb::ImageFileReaderException
    */
   void TestValidImageIO();
 
@@ -166,8 +191,6 @@ private:
   bool                      m_UserSpecifiedImageIO = false;
 
   std::string m_FileName; // The file to be read
-
-  bool m_UseStreaming;
 
   /** The region that the ImageIO class will return when we ask to produce the
    * requested region.
