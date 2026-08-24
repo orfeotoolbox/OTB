@@ -25,23 +25,24 @@
 #include "otbCoreConfigure.h"
 
 #include "otbSystem.h"
-#include <itksys/SystemTools.hxx>
+
+#include "otbConvertPixelBuffer.h"
+#include "otbGeomMetadataSupplier.h"
+#include "otbImageCommons.h"
+#include "otbImageFileReaderException.h"
+#include "otbImageIOFactory.h"
+#include "otbImageMetadata.h"
+#include "otbImageMetadataInterfaceFactory.h"
+#include "otbMetaDataKey.h"
+#include "otbMetadataSupplierInterface.h"
+
+#include "otbMacro.h"
 
 #include "itkImageIOFactory.h"
 #include "itkPixelTraits.h"
 #include "itkVectorImage.h"
 #include "itkMetaDataObject.h"
-
-#include "otbConvertPixelBuffer.h"
-#include "otbImageIOFactory.h"
-#include "otbMetaDataKey.h"
-#include "otbImageMetadata.h"
-#include "otbImageMetadataInterfaceFactory.h"
-#include "otbImageCommons.h"
-#include "otbGeomMetadataSupplier.h"
-
-#include "otbMacro.h"
-
+#include <itksys/SystemTools.hxx>
 #include <boost/type_traits/is_complex.hpp>
 
 #include <ostream>
@@ -54,25 +55,21 @@ static const char   DerivedSubdatasetPrefix[]     = "DERIVED_SUBDATASET:";
 static const size_t DerivedSubdatasetPrefixLength = sizeof(DerivedSubdatasetPrefix);
 
 template <class TOutputImage, class ConvertPixelTraits>
-ImageFileReader<TOutputImage, ConvertPixelTraits>::ImageFileReader()
-  : m_ImageIO(),
-    m_UserSpecifiedImageIO(false),
-    m_FileName(""),
-    m_UseStreaming(true),
-    m_ActualIORegion(),
-    m_FilenameHelper(FNameHelperType::New()),
-    m_AdditionalNumber(0),
-    m_IOComponents(0)
+ImageFileReader<TOutputImage, ConvertPixelTraits>
+::ImageFileReader()
+: m_ImageIO()
+, m_UserSpecifiedImageIO(false)
+, m_UseStreaming(true)
+, m_ActualIORegion()
+, m_FilenameHelper(FNameHelperType::New())
+, m_AdditionalNumber(0)
+, m_IOComponents(0)
 {
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-ImageFileReader<TOutputImage, ConvertPixelTraits>::~ImageFileReader()
-{
-}
-
-template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
@@ -83,19 +80,19 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::PrintSelf(std::ostream& 
   }
   else
   {
-    os << indent << "ImageIO: (null)"
-       << "\n";
+    os << indent << "ImageIO: (null)" << "\n";
   }
 
   os << indent << "UserSpecifiedImageIO flag: " << this->m_UserSpecifiedImageIO << "\n";
-  os << indent << "m_FileName: " << this->m_FileName << "\n";
-  os << indent << "m_UseStreaming flag: " << this->m_UseStreaming << "\n";
-  os << indent << "m_ActualIORegion: " << this->m_ActualIORegion << "\n";
-  os << indent << "m_AdditionalNumber: " << this->m_AdditionalNumber << "\n";
+  os << indent << "m_FileName: "                << this->m_FileName << "\n";
+  os << indent << "m_UseStreaming flag: "       << this->m_UseStreaming << "\n";
+  os << indent << "m_ActualIORegion: "          << this->m_ActualIORegion << "\n";
+  os << indent << "m_AdditionalNumber: "        << this->m_AdditionalNumber << "\n";
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::SetImageIO(otb::ImageIOBase* imageIO)
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
+::SetImageIO(otb::ImageIOBase* imageIO)
 {
   if (this->m_ImageIO != imageIO)
   {
@@ -106,9 +103,9 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::SetImageIO(otb::ImageIOB
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateData()
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GenerateData()
 {
-
   typename TOutputImage::Pointer output = this->GetOutput();
 
   // allocate the output buffer
@@ -203,7 +200,8 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateData()
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::EnlargeOutputRequestedRegion(itk::DataObject* output)
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
+::EnlargeOutputRequestedRegion(itk::DataObject* output)
 {
   typename TOutputImage::Pointer out = dynamic_cast<TOutputImage*>(output);
 
@@ -223,15 +221,16 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::EnlargeOutputRequestedRe
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformation(void)
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GenerateOutputInformation(void)
 {
-  typename TOutputImage::Pointer output = this->GetOutput();
-
   // Check to see if we can read the file given the name or prefix
-  if (this->m_FileName == "")
+  if (this->m_FileName.empty())
   {
     throw otb::ImageFileReaderException(__FILE__, __LINE__, "Filename must be specified.");
   }
+
+  typename TOutputImage::Pointer output = this->GetOutput();
 
   // Find real image file name
   // !!!!  Update FileName
@@ -240,7 +239,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   if (found)
   {
     // Update FileName
-    this->m_FileName = lFileName;
+    this->m_FileName = std::move(lFileName);
   }
 
   if (this->m_UserSpecifiedImageIO == false) // try creating via factory
@@ -351,7 +350,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     {
       if (m_FilenameHelper->GetResolutionFactor() != 0)
       {
-        spacing[i] = 1.0 * std::pow((double)2, (double)m_FilenameHelper->GetResolutionFactor());
+        spacing[i] = 1.0 * std::pow(2.0, (double)m_FilenameHelper->GetResolutionFactor());
       }
       else
       {
@@ -391,7 +390,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   {
     GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName(), m_FileName);
     ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-    if(imd.Has(MDStr::Mission) && (imd[MDStr::Mission] == "Pléiades"))
+    if (imd.Has(MDStr::Mission) && (imd[MDStr::Mission] == "Pléiades"))
       geomSupplier.FetchRPC(imd, 0.5, 0.5);
     else
       geomSupplier.FetchRPC(imd);
@@ -445,9 +444,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   IndexType start;
   start.Fill(0);
 
-  ImageRegionType region;
-  region.SetSize(dimSize);
-  region.SetIndex(start);
+  ImageRegionType region(start, dimSize);
 
   // detect number of output components
   m_IOComponents = this->m_ImageIO->GetNumberOfComponents();
@@ -466,7 +463,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     {
       bandRangeMetadata.push_back(imd.Bands[elem]);
     }
-    imd.Bands = bandRangeMetadata;
+    imd.Bands = std::move(bandRangeMetadata);
     m_IOComponents = m_BandList.size();
   }
 
@@ -476,7 +473,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   using ConvertIOPixelTraits = otb::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType>;
   if (strcmp(output->GetNameOfClass(), "Image") == 0 && !(this->m_ImageIO->GetNumberOfComponents() == ConvertIOPixelTraits::GetNumberOfComponents()))
   {
-    imd.Bands = ImageMetadata::ImageMetadataBandsType (ConvertIOPixelTraits::GetNumberOfComponents());
+    imd.Bands = ImageMetadata::ImageMetadataBandsType(ConvertIOPixelTraits::GetNumberOfComponents());
   }
 
   // THOMAS : ajout
@@ -484,7 +481,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   // VectorLength before allocate
   if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
   {
-    typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
+    using AccessorFunctorType = typename TOutputImage::AccessorFunctorType;
     AccessorFunctorType::SetVectorLength(output, m_IOComponents);
   }
 
@@ -497,9 +494,9 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-std::string ImageFileReader<TOutputImage, ConvertPixelTraits>::GetDerivedDatasetSourceFileName(const std::string& filename)
+std::string ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GetDerivedDatasetSourceFileName(const std::string& filename)
 {
-
   const size_t dsds_pos = filename.find(otb::DerivedSubdatasetPrefix);
 
   if (dsds_pos != std::string::npos)
@@ -516,7 +513,8 @@ std::string ImageFileReader<TOutputImage, ConvertPixelTraits>::GetDerivedDataset
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::TestValidImageIO()
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
+::TestValidImageIO()
 {
   if (this->m_ImageIO.IsNull())
   {
@@ -525,37 +523,45 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::TestValidImageIO()
     // Test if the file exists.
     if (!itksys::SystemTools::FileExists(fileToCheck))
     {
-      throw otb::ImageFileReaderException(__FILE__, __LINE__, std::string("Cannot open image ") + fileToCheck + std::string(". The file does not exist."),
+      throw otb::ImageFileReaderException(__FILE__, __LINE__, "Cannot open image " + fileToCheck + ". The file does not exist.",
                                           fileToCheck);
     }
     else
     {
-      throw otb::ImageFileReaderException(__FILE__, __LINE__, std::string("Cannot open image ") + this->m_FileName +
-                                                                  std::string(". Probably unsupported format or incorrect filename extension."),
+      throw otb::ImageFileReaderException(__FILE__, __LINE__,
+                                          "Cannot open image " + this->m_FileName + ". Probably unsupported format or incorrect filename extension.",
                                           this->m_FileName);
     }
   }
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-bool ImageFileReader<TOutputImage, ConvertPixelTraits>::GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName)
+bool ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName)
 {
-  std::vector<std::string> listFileSearch;
-  listFileSearch.push_back("DAT_01.001");
-  listFileSearch.push_back("dat_01.001"); // RADARSAT or SAR_ERS2
-  listFileSearch.push_back("IMAGERY.TIF");
-  listFileSearch.push_back("imagery.tif"); // For format SPOT5TIF
+  // TODO simplify:
+  // - This is private function, it should return the string found, instead of the bool.
+  // - Internally, just use std::find_first_of
+  // - It doesn't rely on any internal data => make it static / non-template
+  // - It should be case insensitive
+
+  // TODO: (C++17+: -> std::array{...})
+  std::vector<std::string> listFileSearch{
+    "DAT_01.001",
+    "dat_01.001", // RADARSAT or SAR_ERS2
+    "IMAGERY.TIF",
+    "imagery.tif", // For format SPOT5TIF
   // Not recognized as a supported file format by GDAL.
-  //        listFileSearch.push_back("IMAGERY.BIL"); listFileSearch.push_back("imagery.bil"); //For format SPOT5BIL
-  listFileSearch.push_back("IMAG_01.DAT");
-  listFileSearch.push_back("imag_01.dat"); // For format SPOT4
+    //        "IMAGERY.BIL", "imagery.bil"; //For format SPOT5BIL
+    "IMAG_01.DAT",
+    "imag_01.dat", // For format SPOT4
+  };
 
   std::string str_FileName;
   bool        fic_trouve(false);
 
   // If it's a directory, look at the content to see if it's RADARSAT, ERS
-  std::vector<std::string> listFileFind;
-  listFileFind = System::Readdir(filename);
+  std::vector<std::string> listFileFind = System::Readdir(filename);
   if (listFileFind.empty() == false)
   {
     unsigned int cpt(0);
@@ -566,7 +572,7 @@ bool ImageFileReader<TOutputImage, ConvertPixelTraits>::GetGdalReadImageFileName
       {
         if (str_FileName.compare(listFileSearch[i]) == 0)
         {
-          GdalFileName = std::string(filename) + str_FileName; // listFileSearch[i];
+          GdalFileName = filename + str_FileName; // listFileSearch[i];
           fic_trouve   = true;
         }
       }
@@ -575,7 +581,7 @@ bool ImageFileReader<TOutputImage, ConvertPixelTraits>::GetGdalReadImageFileName
   }
   else
   {
-    std::string strFileName(filename);
+    std::string const strFileName(filename); // Why not just use strFileName??
 
     std::string extension = itksys::SystemTools::GetFilenameLastExtension(strFileName);
     if ((extension == ".HDR") || (extension == ".hdr"))
@@ -585,16 +591,17 @@ bool ImageFileReader<TOutputImage, ConvertPixelTraits>::GetGdalReadImageFileName
     else
     {
       // Else, the filename is the name of the file to open
-      GdalFileName = std::string(filename);
+      GdalFileName = filename;
     }
     fic_trouve = true;
   }
 
-  return (fic_trouve);
+  return fic_trouve;
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::SetFileName(const std::string& extendedFileName)
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
+::SetFileName(const std::string& extendedFileName)
 {
   const std::string skip_geom_key = "skipgeom";
   const std::string geom_key      = "geom";
@@ -627,13 +634,15 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::SetFileName(const std::s
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-const char* ImageFileReader<TOutputImage, ConvertPixelTraits>::GetFileName() const
+const char* ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GetFileName() const
 {
   return this->m_FilenameHelper->GetSimpleFileName();
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-unsigned int ImageFileReader<TOutputImage, ConvertPixelTraits>::GetOverviewsCount()
+unsigned int ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GetOverviewsCount()
 {
   this->UpdateOutputInformation();
 
@@ -642,7 +651,8 @@ unsigned int ImageFileReader<TOutputImage, ConvertPixelTraits>::GetOverviewsCoun
 
 
 template <class TOutputImage, class ConvertPixelTraits>
-std::vector<std::string> ImageFileReader<TOutputImage, ConvertPixelTraits>::GetOverviewsInfo()
+std::vector<std::string> ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GetOverviewsInfo()
 {
   this->UpdateOutputInformation();
 
@@ -650,7 +660,8 @@ std::vector<std::string> ImageFileReader<TOutputImage, ConvertPixelTraits>::GetO
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::DoConvertBuffer(void* inputData, size_t numberOfPixels)
+void ImageFileReader<TOutputImage, ConvertPixelTraits>
+::DoConvertBuffer(void* inputData, size_t numberOfPixels)
 {
   // get the pointer to the destination buffer
   OutputImagePixelType* outputData = this->GetOutput()->GetPixelContainer()->GetBufferPointer();
@@ -684,30 +695,40 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::DoConvertBuffer(void* in
       ConvertPixelBuffer<type, OutputImagePixelType, ConvertPixelTraits>::Convert(static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels); \
     }                                                                                                                                                         \
   }
-#define OTB_CONVERT_CBUFFER_IF_BLOCK(type)                                                                                                                \
-  else if (m_ImageIO->GetComponentTypeInfo() == typeid(type))                                                                                             \
-  {                                                                                                                                                       \
-    if (strcmp(this->GetOutput()->GetNameOfClass(), "VectorImage") == 0)                                                                                  \
-    {                                                                                                                                                     \
-      if ((typeid(OutputImagePixelType) == typeid(std::complex<double>)) || (typeid(OutputImagePixelType) == typeid(std::complex<float>)) ||              \
-          (typeid(OutputImagePixelType) == typeid(std::complex<int>)) || (typeid(OutputImagePixelType) == typeid(std::complex<short>)))                   \
-      {                                                                                                                                                   \
-        ConvertPixelBuffer<type::value_type, OutputImagePixelType, ConvertPixelTraits>::ConvertComplexVectorImageToVectorImageComplex(                    \
-            static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels);                                                                   \
-      }                                                                                                                                                   \
-      else                                                                                                                                                \
-      {                                                                                                                                                   \
-        ConvertPixelBuffer<type::value_type, OutputImagePixelType, ConvertPixelTraits>::ConvertComplexVectorImageToVectorImage(                           \
-            static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels);                                                                   \
-      }                                                                                                                                                   \
-    }                                                                                                                                                     \
-    else                                                                                                                                                  \
-    {                                                                                                                                                     \
-      ConvertPixelBuffer<type::value_type, OutputImagePixelType, ConvertPixelTraits>::ConvertComplexToGray(static_cast<type*>(inputData), m_IOComponents, \
-                                                                                                           outputData, numberOfPixels);                   \
-    }                                                                                                                                                     \
+
+#define OTB_CONVERT_CBUFFER_IF_BLOCK(type)                                             \
+  else if (m_ImageIO->GetComponentTypeInfo() == typeid(type))                          \
+  {                                                                                    \
+    if (strcmp(this->GetOutput()->GetNameOfClass(), "VectorImage") == 0)               \
+    {                                                                                  \
+      if ((typeid(OutputImagePixelType) == typeid(std::complex<double>))               \
+          || (typeid(OutputImagePixelType) == typeid(std::complex<float>))             \
+          || (typeid(OutputImagePixelType) == typeid(std::complex<int>))               \
+          || (typeid(OutputImagePixelType) == typeid(std::complex<short>)))            \
+      {                                                                                \
+        ConvertPixelBuffer<type::value_type, OutputImagePixelType, ConvertPixelTraits> \
+        ::ConvertComplexVectorImageToVectorImageComplex(                               \
+            static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels  \
+        );                                                                             \
+      }                                                                                \
+      else                                                                             \
+      {                                                                                \
+        ConvertPixelBuffer<type::value_type, OutputImagePixelType, ConvertPixelTraits> \
+        ::ConvertComplexVectorImageToVectorImage(                                      \
+            static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels  \
+        );                                                                             \
+      }                                                                                \
+    }                                                                                  \
+    else                                                                               \
+    {                                                                                  \
+      ConvertPixelBuffer<type::value_type, OutputImagePixelType, ConvertPixelTraits>   \
+        ::ConvertComplexToGray(                                                        \
+            static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels  \
+        );                                                                             \
+    }                                                                                  \
   }
 
+  // TODO: switch on typeid
   if (0)
   {
   }
@@ -729,19 +750,19 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::DoConvertBuffer(void* in
   {
     otb::ImageFileReaderException e(__FILE__, __LINE__);
     std::ostringstream            msg;
-    msg << "Couldn't convert component type: " << std::endl
-        << "    " << ImageIOBase::GetComponentTypeAsString(m_ImageIO->GetComponentType()) << std::endl
-        << "to one of: " << std::endl
-        << "    " << typeid(unsigned char).name() << std::endl
-        << "    " << typeid(char).name() << std::endl
-        << "    " << typeid(unsigned short).name() << std::endl
-        << "    " << typeid(short).name() << std::endl
-        << "    " << typeid(unsigned int).name() << std::endl
-        << "    " << typeid(int).name() << std::endl
-        << "    " << typeid(unsigned long).name() << std::endl
-        << "    " << typeid(long).name() << std::endl
-        << "    " << typeid(float).name() << std::endl
-        << "    " << typeid(double).name() << std::endl;
+    msg << "Couldn't convert component type: " << "\n"
+        << "    " << ImageIOBase::GetComponentTypeAsString(m_ImageIO->GetComponentType()) << "\n"
+        << "to one of: " << "\n"
+        << "    " << typeid(unsigned char).name() << "\n"
+        << "    " << typeid(char).name() << "\n"
+        << "    " << typeid(unsigned short).name() << "\n"
+        << "    " << typeid(short).name() << "\n"
+        << "    " << typeid(unsigned int).name() << "\n"
+        << "    " << typeid(int).name() << "\n"
+        << "    " << typeid(unsigned long).name() << "\n"
+        << "    " << typeid(long).name() << "\n"
+        << "    " << typeid(float).name() << "\n"
+        << "    " << typeid(double).name() << "\n";
     e.SetDescription(msg.str());
     e.SetLocation(ITK_LOCATION);
     throw e;

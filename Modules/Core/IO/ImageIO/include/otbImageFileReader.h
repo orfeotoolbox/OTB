@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,22 +22,23 @@
 #define otbImageFileReader_h
 
 #if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include "itkImageSource.h"
-#pragma GCC diagnostic pop
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-parameter"
+#  include "itkImageSource.h"
+#  pragma GCC diagnostic pop
 #else
-#include "itkImageSource.h"
+#  include "itkImageSource.h"
 #endif
-#include "otbImageIOBase.h"
-#include "itkMacro.h"
-#include "itkImageRegion.h"
+
 #include "OTBImageIOExport.h"
 
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbExtendedFilenameToReaderOptions.h"
-#include "otbImageFileReaderException.h"
-#include "otbMetadataSupplierInterface.h"
+#include "otbImageIOBase.h"
+
+#include "itkMacro.h"
+#include "itkImageRegion.h"
+
 #include <string>
 
 namespace otb
@@ -60,18 +61,20 @@ namespace otb
  * \sa ImageIOBase
  *
  * \ingroup IOFilters
- *
- *
  * \ingroup OTBImageIO
  */
-template <class TOutputImage, class ConvertPixelTraits = DefaultConvertPixelTraits<typename TOutputImage::IOPixelType>>
-class OTBImageIO_EXPORT_TEMPLATE ImageFileReader : public itk::ImageSource<TOutputImage>
+template <
+    class TOutputImage,
+    class ConvertPixelTraits = DefaultConvertPixelTraits<typename TOutputImage::IOPixelType>
+>
+class OTBImageIO_EXPORT_TEMPLATE ImageFileReader
+: public itk::ImageSource<TOutputImage>
 {
 public:
-  /** Standard class typedefs. */
-  typedef ImageFileReader                Self;
-  typedef itk::ImageSource<TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
+  // Standard class typedefs.
+  using Self       = ImageFileReader;
+  using Superclass = itk::ImageSource<TOutputImage>;
+  using Pointer    = itk::SmartPointer<Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -80,19 +83,19 @@ public:
   itkTypeMacro(ImageFileReader, ImageSource);
 
   /** The size of the output image. */
-  typedef typename TOutputImage::SizeType SizeType;
+  using SizeType             = typename TOutputImage::SizeType;
 
   /** The size of the output image. */
-  typedef typename TOutputImage::IndexType IndexType;
+  using IndexType            = typename TOutputImage::IndexType;
 
   /** The region of the output image. */
-  typedef typename TOutputImage::RegionType ImageRegionType;
+  using ImageRegionType      = typename TOutputImage::RegionType;
 
   /** The pixel type of the output image. */
-  typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
+  using OutputImagePixelType = typename TOutputImage::InternalPixelType;
 
   /** The Filename Helper. */
-  typedef ExtendedFilenameToReaderOptions FNameHelperType;
+  using FNameHelperType      = ExtendedFilenameToReaderOptions;
 
   /** Prepare image allocation at the first call of the pipeline processing */
   void GenerateOutputInformation(void) override;
@@ -100,19 +103,21 @@ public:
   /** Does the real work. */
   void GenerateData() override;
 
-  /** Give the reader a chance to indicate that it will produce more
-   * output than it was requested to produce. ImageFileReader cannot
-   * currently read a portion of an image (since the ImageIO objects
-   * cannot read a portion of an image), so the ImageFileReader must
-   * enlarge the RequestedRegion to the size of the image on disk. */
+  /** Give the reader a chance to indicate that it will produce more output than
+   * it was requested to produce.
+   * ImageFileReader cannot currently read a portion of an image (since the
+   * ImageIO objects cannot read a portion of an image), so the ImageFileReader
+   * must enlarge the RequestedRegion to the size of the image on disk.
+   */
   void EnlargeOutputRequestedRegion(itk::DataObject* output) override;
 
-  /** Set/Get the ImageIO helper class. Often this is created via the object
-   * factory mechanism that determines whether a particular ImageIO can
-   * read a certain file. This method provides a way to get the ImageIO
-   * instance that is created. Or you can directly specify the ImageIO
-   * to use to read a particular file in case the factory mechanism will
-   * not work properly (e.g., unknown or unusual extension). */
+  /** Set/Get the ImageIO helper class.
+   * Often this is created via the object factory mechanism that determines
+   * whether a particular ImageIO can read a certain file. This method provides
+   * a way to get the ImageIO instance that is created. Or you can directly
+   * specify the ImageIO to use to read a particular file in case the factory
+   * mechanism will not work properly (e.g., unknown or unusual extension).
+   */
   void SetImageIO(otb::ImageIOBase* imageIO);
   itkGetObjectMacro(ImageIO, otb::ImageIOBase);
 
@@ -124,7 +129,6 @@ public:
    * Returns: overview count, zero if none. */
   unsigned int GetOverviewsCount();
 
-
   /** Get description about overviews available into the file specified
    * Returns: overview info, empty if none.*/
   std::vector<std::string> GetOverviewsInfo();
@@ -134,20 +138,22 @@ public:
 
 protected:
   ImageFileReader();
-  ~ImageFileReader() override;
+  ~ImageFileReader() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Convert a block of pixels from one type to another. */
   void DoConvertBuffer(void* buffer, size_t numberOfPixels);
 
 private:
-  /** Test whether m_ImageIO is valid (not NULL). This is intended to be called
-   * after trying to create it via an ImageIOFactory. Throws an exception with
-   * an appropriate message otherwise. */
+  /** Test whether m_ImageIO is valid (not NULL).
+   * This is intended to be called after trying to create it via an
+   * ImageIOFactory. Throws an exception with an appropriate message otherwise.
+   */
   void TestValidImageIO();
 
-  /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
-    * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
+  /** Generate the filename (for GDALImageI for example).
+   * If filename is a directory, look if is a CEOS product (file "DAT...") In
+   * this case, the GdalFileName contain the open image file.
     */
   bool GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName);
 
@@ -155,35 +161,47 @@ private:
   void operator=(const Self&) = delete;
 
   otb::ImageIOBase::Pointer m_ImageIO;
-  bool                      m_UserSpecifiedImageIO; // keep track whether the
-                                                    // ImageIO is user specified
+
+  /// keeps track whether the ImageIO is user specified
+  bool                      m_UserSpecifiedImageIO = false;
 
   std::string m_FileName; // The file to be read
 
   bool m_UseStreaming;
 
-  // The region that the ImageIO class will return when we ask to
-  // produce the requested region.
+  /** The region that the ImageIO class will return when we ask to produce the
+   * requested region.
+   */
   itk::ImageIORegion m_ActualIORegion;
 
   FNameHelperType::Pointer m_FilenameHelper;
 
-  unsigned int m_AdditionalNumber;
+  unsigned int m_AdditionalNumber = 0;
+
+  /** Store the number of components to be exported to the output image.
+   * This variable can be the number of components in m_ImageIO or the number of
+   * components in the m_BandList (if used)
+   */
+  unsigned int m_IOComponents = 0;
+
+  /** Option to limit the number of lines loaded at a time.
+   * The option is considered _set_ when it's strictly positive (> 0).
+   * Sometimes loading an image region requires twice as much RAM than what the
+   * buffered region would use, and we may not have that much memory. This
+   * paremeter will tell to stream the loading.
+   */
+  unsigned long m_StreamHeight;
 
   /** Mapping between origin components and output components (before any
-   * conversion) */
+   * conversion).
+   */
   std::vector<unsigned int> m_BandList;
-
-  /** Store the number of components to be exported to the output image
-   *  This variable can be the number of components in m_ImageIO or the
-   *  number of components in the m_BandList (if used) */
-  unsigned int m_IOComponents;
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFileReader.hxx"
+#  include "otbImageFileReader.hxx"
 #endif
 
 #include "otbImage.h"
