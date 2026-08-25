@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -10,7 +10,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -70,9 +70,9 @@ class OTBImageBase_EXPORT ImageIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageIOBase             Self;
-  typedef itk::LightProcessObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  using Self       = ImageIOBase;
+  using Superclass = itk::LightProcessObject;
+  using Pointer    = itk::SmartPointer<Self>;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageIOBase, Superclass);
@@ -82,14 +82,14 @@ public:
   itkGetStringMacro(FileName);
 
   /** Types for managing image size and image index components. */
-  typedef long          IndexValueType;
-  typedef unsigned long SizeValueType;
+  using IndexValueType = long;
+  using SizeValueType  = unsigned long;
 
   /**
    * \class UnknownType
    * Used to return information when types are unknown.
- *
- * \ingroup OTBImageBase
+   *
+   * \ingroup OTBImageBase
    */
   class UnknownType
   {
@@ -98,7 +98,7 @@ public:
   /** Enums used to manipulate the pixel type. The pixel type provides
    * context for automatic data conversions (for instance, RGB to
    * SCALAR, VECTOR to SCALAR). */
-  typedef enum {
+  enum IOPixelType {
     UNKNOWNPIXELTYPE,
     SCALAR,
     RGB,
@@ -112,13 +112,13 @@ public:
     COMPLEX,
     FIXEDARRAY,
     MATRIX
-  } IOPixelType;
+  };
 
   /** Enums used to manipulate the component type. The component type
    * refers to the actual storage class associated with either a
    * SCALAR pixel type or elements of a compound pixel.
    */
-  typedef enum { UNKNOWNCOMPONENTTYPE, UCHAR, CHAR, USHORT, SHORT, UINT, INT, ULONG, LONG, FLOAT, DOUBLE, CSHORT, CINT, CFLOAT, CDOUBLE } IOComponentType;
+  enum IOComponentType { UNKNOWNCOMPONENTTYPE, UCHAR, CHAR, USHORT, SHORT, UINT, INT, ULONG, LONG, FLOAT, DOUBLE, CSHORT, CINT, CFLOAT, CDOUBLE };
 
   /** Set/Get the number of independent variables (dimensions) in the
    * image being read or written. Note this is not necessarily what
@@ -153,9 +153,9 @@ public:
 
   /** Set/Get the image direction on an axis-by-axis basis. The
    * SetDirection() method is required when writing the image. */
-  virtual void SetDirection(unsigned int i, std::vector<double>& direction);
-  virtual void SetDirection(unsigned int i, vnl_vector<double>& direction);
-  virtual std::vector<double> GetDirection(unsigned int i) const
+  virtual void SetDirection(unsigned int i, std::vector<double> direction);
+  virtual void SetDirection(unsigned int i, vnl_vector<double> const& direction);
+  virtual std::vector<double> const& GetDirection(unsigned int i) const
   {
     return m_Direction[i];
   }
@@ -278,10 +278,10 @@ public:
   static std::string GetByteOrderAsString(ByteOrder);
 
   /** Type for representing size of bytes, and or positions along a file */
-  typedef std::streamoff SizeType;
+  using SizeType       = std::streamoff;
 
   /** Type for representing size of bytes, and or positions along a memory buffer */
-  typedef size_t BufferSizeType;
+  using BufferSizeType = size_t;
 
   /** Convenient method for accessing the number of bytes to get to
    * the next pixel. Returns m_Strides[1];
@@ -327,7 +327,7 @@ public:
   virtual bool CanReadFile(const char*) = 0;
 
   /** Determine if the ImageIO can stream reading from this
-      file. Default is false. */
+    file. Default is false. */
   virtual bool CanStreamRead()
   {
     return false;
@@ -419,7 +419,7 @@ public:
                                                       const itk::ImageIORegion& largestPossibleRegion);
 
   /** Type for the list of strings to be used for extensions.  */
-  typedef std::vector<std::string> ArrayOfExtensionsType;
+  using ArrayOfExtensionsType = std::vector<std::string>;
 
   /** This method returns an array with the list of filename extensions
    * supported for reading by this ImageIO class. This is intended to
@@ -438,7 +438,7 @@ public:
    *  contain extracted bands before and after mapping. bandList mapping
    * between origin components and output components (before any
    * conversion)*/
-  void DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList);
+  void DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int> const& bandList);
 
   /** Returns a const ref to the list of attached files*/
   itkGetConstReferenceMacro(AttachedFileNames, std::vector<std::string>);
@@ -449,7 +449,7 @@ public:
 
 protected:
   ImageIOBase();
-  ~ImageIOBase() override;
+  ~ImageIOBase() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Used internally to keep track of the type of the pixel. */
@@ -568,8 +568,8 @@ protected:
   ImageMetadata m_Imd;
 
   /** Mapping between origin components and output components. Note that the buffer is
-  already mapped after calling the DoMapBuffer method. This attribute is useful to write
-  band related metadatas. */
+    already mapped after calling the DoMapBuffer method. This attribute is useful to write
+    band related metadatas. */
   std::vector<unsigned int> m_BandList;
 
 private:

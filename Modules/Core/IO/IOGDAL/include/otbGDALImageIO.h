@@ -33,7 +33,6 @@
 
 /* C++ Libraries */
 #include <string>
-#include <unordered_map>
 
 
 class GDALDataset;
