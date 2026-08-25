@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -10,7 +10,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,8 @@
  */
 
 #include <complex>
-#include <sstream>
+#include <istream>
+#include <ostream>
 #include <string>
 
 #if defined(_MSC_VER)
@@ -38,7 +39,11 @@ namespace otb
 {
 
 ImageIOBase::ImageIOBase()
-  : m_PixelType(SCALAR), m_ComponentType(UNKNOWNCOMPONENTTYPE), m_ByteOrder(OrderNotApplicable), m_FileType(TypeNotApplicable), m_NumberOfDimensions(0)
+: m_PixelType(SCALAR)
+, m_ComponentType(UNKNOWNCOMPONENTTYPE)
+, m_ByteOrder(OrderNotApplicable)
+, m_FileType(TypeNotApplicable)
+, m_NumberOfDimensions(0)
 {
   Reset(false);
 }
@@ -58,10 +63,6 @@ void ImageIOBase::Reset(const bool)
   m_UseCompression     = false;
   m_UseStreamedReading = false;
   m_UseStreamedWriting = false;
-}
-
-ImageIOBase::~ImageIOBase()
-{
 }
 
 const ImageIOBase::ArrayOfExtensionsType& ImageIOBase::GetSupportedWriteExtensions() const
@@ -130,7 +131,7 @@ void ImageIOBase::SetSpacing(unsigned int i, double spacing)
   m_Spacing[i] = spacing;
 }
 
-void ImageIOBase::SetDirection(unsigned int i, std::vector<double>& direction)
+void ImageIOBase::SetDirection(unsigned int i, std::vector<double> direction)
 {
   if (i >= m_Direction.size())
   {
@@ -138,10 +139,10 @@ void ImageIOBase::SetDirection(unsigned int i, std::vector<double>& direction)
     itkExceptionMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Direction.size());
   }
   this->Modified();
-  m_Direction[i] = direction;
+  m_Direction[i] = std::move(direction);
 }
 
-void ImageIOBase::SetDirection(unsigned int i, vnl_vector<double>& direction)
+void ImageIOBase::SetDirection(unsigned int i, vnl_vector<double> const& direction)
 {
   if (i >= m_Direction.size())
   {
@@ -203,6 +204,7 @@ const std::type_info& ImageIOBase::GetComponentTypeInfo() const
 template <typename T>
 bool itkSetPixelType(ImageIOBase* This, const std::type_info& ptype, ImageIOBase::IOComponentType ntype, T itkNotUsed(dummy))
 {
+  // TODO: use class specialization
   if (ptype == typeid(T))
   {
     This->SetNumberOfComponents(1);
@@ -402,6 +404,7 @@ bool itkSetPixelType(ImageIOBase* This, const std::type_info& ptype, ImageIOBase
 template <typename T>
 bool itkSetPixelType(ImageIOBase* This, const std::type_info& ptype, ImageIOBase::IOComponentType itkNotUsed(ntype), std::complex<T> itkNotUsed(dummy))
 {
+  // TODO: use class specialization
   if (ptype == typeid(std::complex<short>))
   {
     This->SetNumberOfComponents(1);
@@ -513,12 +516,12 @@ ImageIOBase::SizeType ImageIOBase::GetImageSizeInPixels() const
 
 ImageIOBase::SizeType ImageIOBase::GetImageSizeInComponents() const
 {
-  return (this->GetImageSizeInPixels() * m_NumberOfComponents);
+  return this->GetImageSizeInPixels() * m_NumberOfComponents;
 }
 
 ImageIOBase::SizeType ImageIOBase::GetImageSizeInBytes() const
 {
-  return (this->GetImageSizeInComponents() * this->GetComponentSize());
+  return this->GetImageSizeInComponents() * this->GetComponentSize();
 }
 
 ImageIOBase::SizeType ImageIOBase::GetComponentStride() const
@@ -1178,21 +1181,15 @@ itk::ImageIORegion ImageIOBase::GenerateStreamableReadRegionFromRequestedRegion(
  *  of the image in file. */
 std::vector<double> ImageIOBase::GetDefaultDirection(unsigned int k) const
 {
-  std::vector<double> axis;
-  axis.resize(this->GetNumberOfDimensions());
-
   // Fill up with the equivalent of a line from an Identity matrix
-  for (unsigned int r = 0; r < axis.size(); r++)
-  {
-    axis[r] = 0.0;
-  }
+  std::vector<double> axis(this->GetNumberOfDimensions(), 0.0);
 
   axis[k] = 1.0;
 
   return axis;
 }
 
-void ImageIOBase::DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList)
+void ImageIOBase::DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int> const& bandList)
 {
   m_BandList = bandList;
 
@@ -1202,7 +1199,7 @@ void ImageIOBase::DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<u
   char*  inPos         = static_cast<char*>(buffer);
   char*  outPos        = static_cast<char*>(buffer);
   bool   workBackward  = (outPixelSize > inPixelSize);
-  char*  pixBuffer     = new char[outPixelSize];
+  char*  pixBuffer     = new char[outPixelSize]; // TODO: use vector!
 
   memset(pixBuffer, 0, outPixelSize);
 
@@ -1244,50 +1241,50 @@ void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "FileName: " << m_FileName << std::endl;
-  os << indent << "FileType: " << ImageIOBase::GetFileTypeAsString(m_FileType) << std::endl;
-  os << indent << "ByteOrder: " << ImageIOBase::GetByteOrderAsString(m_ByteOrder) << std::endl;
-  os << indent << "IORegion: " << std::endl;
+  os << indent << "FileName: " << m_FileName << "\n";
+  os << indent << "FileType: " << ImageIOBase::GetFileTypeAsString(m_FileType) << "\n";
+  os << indent << "ByteOrder: " << ImageIOBase::GetByteOrderAsString(m_ByteOrder) << "\n";
+  os << indent << "IORegion: " << "\n";
   m_IORegion.Print(os, indent.GetNextIndent());
   os << indent << "Number of Components/Pixel: " << m_NumberOfComponents << "\n";
-  os << indent << "Pixel Type: " << ImageIOBase::GetPixelTypeAsString(m_PixelType) << std::endl;
-  os << indent << "Component Type: " << ImageIOBase::GetComponentTypeAsString(m_ComponentType) << std::endl;
+  os << indent << "Pixel Type: " << ImageIOBase::GetPixelTypeAsString(m_PixelType) << "\n";
+  os << indent << "Component Type: " << ImageIOBase::GetComponentTypeAsString(m_ComponentType) << "\n";
   os << indent << "Dimensions: ( ";
   for (unsigned int i = 0; i < m_NumberOfDimensions; i++)
   {
     os << m_Dimensions[i] << " ";
   }
-  os << ")" << std::endl;
+  os << ")" << "\n";
   os << indent << "Origin: ( ";
   for (unsigned int i = 0; i < m_NumberOfDimensions; i++)
   {
     os << m_Origin[i] << " ";
   }
-  os << ")" << std::endl;
+  os << ")" << "\n";
 
   if (m_UseCompression)
   {
-    os << indent << "UseCompression: On" << std::endl;
+    os << indent << "UseCompression: On" << "\n";
   }
   else
   {
-    os << indent << "UseCompression: Off" << std::endl;
+    os << indent << "UseCompression: Off" << "\n";
   }
   if (m_UseStreamedReading)
   {
-    os << indent << "UseStreamedReading: On" << std::endl;
+    os << indent << "UseStreamedReading: On" << "\n";
   }
   else
   {
-    os << indent << "UseStreamedReading: Off" << std::endl;
+    os << indent << "UseStreamedReading: Off" << "\n";
   }
   if (m_UseStreamedWriting)
   {
-    os << indent << "UseStreamedWriting: On" << std::endl;
+    os << indent << "UseStreamedWriting: On" << "\n";
   }
   else
   {
-    os << indent << "UseStreamedWriting: Off" << std::endl;
+    os << indent << "UseStreamedWriting: Off" << "\n";
   }
 }
 

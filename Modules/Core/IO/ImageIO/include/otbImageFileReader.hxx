@@ -164,28 +164,23 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   assert(2 <= ioSize.size());
 
   // ---[ Override ioRegion with streaming size
-  SizeType dimSize;
+  // TODO: make sure the new region in within the orginal one
   for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
   {
     if (i < this->m_ImageIO->GetNumberOfDimensions())
     {
       if (!this->m_ImageIO->CanStreamRead())
-        dimSize[i] = this->m_ImageIO->GetDimensions(i);
+        ioSize[i] = this->m_ImageIO->GetDimensions(i);
       else
-        dimSize[i] = output->GetRequestedRegion().GetSize()[i];
+        ioSize[i] = output->GetRequestedRegion().GetSize()[i];
     }
     else
     {
       // Number of dimensions in the output is more than number of dimensions
       // in the ImageIO object (the file).  Use default values for the size,
       // spacing, and origin for the final (degenerate) dimensions.
-      dimSize[i] = 1;
+      ioSize[i] = 1;
     }
-  }
-
-  for (unsigned int i = 0; i < dimSize.GetSizeDimension(); ++i)
-  {
-    ioSize[i] = dimSize[i];
   }
 
   IndexType start;
@@ -341,23 +336,22 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   double                               spacing[TOutputImage::ImageDimension];
   double                               origin[TOutputImage::ImageDimension];
   typename TOutputImage::DirectionType direction;
-  std::vector<double>                  axis;
-  int                                  spacing_sign(0);
+
+  auto const sign = [](auto v) {
+    return v < 0 ? -1 : 1;
+  };
 
   for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
   {
     if (i < this->m_ImageIO->GetNumberOfDimensions())
     {
       dimSize[i] = this->m_ImageIO->GetDimensions(i);
-      if (this->m_ImageIO->GetSpacing(i) < 0)
-        spacing_sign = -1;
-      else
-        spacing_sign = 1;
-      spacing[i]     = spacing_sign * this->m_ImageIO->GetSpacing(i);
+      auto const spacing_sign = sign(this->m_ImageIO->GetSpacing(i) < 0);
+      spacing[i]     = spacing_sign * this->m_ImageIO->GetSpacing(i); // isn't it std::abs()?
       origin[i]      = this->m_ImageIO->GetOrigin(i);
-      // Please note: direction cosines are stored as columns of the
-      // direction matrix
-      axis = this->m_ImageIO->GetDirection(i);
+      // Please note: direction cosines are stored as columns of the direction matrix
+      auto const& axis = this->m_ImageIO->GetDirection(i);
+
       for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
       {
         if (j < this->m_ImageIO->GetNumberOfDimensions())
@@ -380,41 +374,23 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
       origin[i]  = 0.5;
       for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
       {
-        if (i == j)
-        {
-          direction[j][i] = 1.0;
-        }
-        else
-        {
-          direction[j][i] = 0.0;
-        }
+        direction[j][i] = (i == j) ? 1.0 : 0.0;
       }
     }
   }
 
   if (m_FilenameHelper->GetSkipCarto())
   {
+    auto const spacing_value = (m_FilenameHelper->GetResolutionFactor() != 0)
+      ? 1.0 * std::pow(2.0, (double)m_FilenameHelper->GetResolutionFactor())
+      : 1.0;
     for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
     {
-      if (m_FilenameHelper->GetResolutionFactor() != 0)
-      {
-        spacing[i] = 1.0 * std::pow(2.0, (double)m_FilenameHelper->GetResolutionFactor());
-      }
-      else
-      {
-        spacing[i] = 1.0;
-      }
+      spacing[i] = spacing_value;
       origin[i] = 0.5 * spacing[i];
       for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
       {
-        if (i == j)
-        {
-          direction[j][i] = 1.0;
-        }
-        else
-        {
-          direction[j][i] = 0.0;
-        }
+        direction[j][i] = (i == j) ? 1.0 : 0.0;
       }
     }
   }
