@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -467,7 +467,7 @@ T* downcast_check(Parameter* param)
   T* down = dynamic_cast<T*>(param);
   if (down == nullptr)
   {
-    param->TypeError(ParameterTypeToString(T::New()->GetType()));
+    param->TypeError(ParameterTypeToString(T::Type));
   }
   return down;
 }
@@ -478,7 +478,7 @@ const T* const_downcast_check(const Parameter* param)
   const T* down = dynamic_cast<const T*>(param);
   if (down == nullptr)
   {
-    param->TypeError(ParameterTypeToString(T::New()->GetType()));
+    param->TypeError(ParameterTypeToString(T::Type));
   }
   return down;
 }

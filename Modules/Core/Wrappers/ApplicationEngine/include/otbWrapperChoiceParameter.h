@@ -52,6 +52,8 @@ public:
   /** RTTI support */
   itkTypeMacro(ChoiceParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_Choice;
+
   /** Add a value to the choice */
   void AddChoice(std::string choicekey, std::string choiceName);
 
@@ -91,7 +93,10 @@ public:
   bool HasValue() const override;
   void ClearValue() override;
 
-  ParameterType GetType() const override;
+  ParameterType GetType() const override
+  {
+    return Type;
+  }
 
   int  ToInt() const override;
   void FromInt(int value) override;

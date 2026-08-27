@@ -50,6 +50,8 @@ public:
   /** RTTI support */
   itkTypeMacro(InputVectorDataParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_InputVectorData;
+
   using CoordinatePrecisionType = double;
   using ValuePrecisionType      = double;
   using VectorDataType          = otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>;
@@ -69,7 +71,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_InputVectorData;
+    return Type;
   }
 
   std::string ToString() const override

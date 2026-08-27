@@ -50,6 +50,8 @@ public:
   /** RTTI support */
   itkTypeMacro(BoolParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_Bool;
+
   /** This parameter is ON/OFF switch, it always has a value */
   bool HasValue() const override
   {
@@ -62,7 +64,10 @@ public:
   void SetValue(bool state);
   void SetValue(const std::string& str);
 
-  ParameterType GetType() const override;
+  ParameterType GetType() const override
+  {
+    return Type;
+  }
 
   int         ToInt() const override;
   std::string ToString() const override;

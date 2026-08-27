@@ -53,6 +53,8 @@ public:
   /** RTTI support */
   itkTypeMacro(InputVectorDataListParameter, ParameterList);
 
+  static constexpr auto Type = ParameterType_InputVectorDataList;
+
   /** Get one list of the stored image. */
   const VectorDataListType* GetVectorDataList() const;
   VectorDataListType*       GetVectorDataList();
@@ -82,7 +84,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_InputVectorDataList;
+    return Type;
   }
 
 protected:

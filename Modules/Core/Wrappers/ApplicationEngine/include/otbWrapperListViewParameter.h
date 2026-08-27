@@ -53,6 +53,8 @@ public:
   /** RTTI support */
   itkTypeMacro(ListViewParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_ListView;
+
   itkSetMacro(SingleSelection, bool);
   itkGetMacro(SingleSelection, bool);
   itkBooleanMacro(SingleSelection);
@@ -156,7 +158,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_ListView;
+    return Type;
   }
 
   std::string ToString() const override

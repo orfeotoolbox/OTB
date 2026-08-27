@@ -49,6 +49,8 @@ public:
   /** RTTI support */
   itkTypeMacro(StringParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_String;
+
   /** Set the value */
   void SetValue(std::string value)
   {
@@ -74,7 +76,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_String;
+    return Type;
   }
 
   std::string ToString() const override

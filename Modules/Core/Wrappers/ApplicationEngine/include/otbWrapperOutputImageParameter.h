@@ -53,6 +53,8 @@ public:
   /** RTTI support */
   itkTypeMacro(OutputImageParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_OutputImage;
+
   /** Set the value */
   itkSetObjectMacro(Image, ImageBaseType);
 
@@ -111,7 +113,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_OutputImage;
+    return Type;
   }
 
   std::string ToString() const override

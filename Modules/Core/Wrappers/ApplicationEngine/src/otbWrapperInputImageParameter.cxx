@@ -100,11 +100,6 @@ void InputImageParameter::ClearValue()
   m_UseFilename      = true;
 }
 
-ParameterType InputImageParameter::GetType() const
-{
-  return ParameterType_InputImage;
-}
-
 std::string InputImageParameter::ToString() const
 {
   return GetFileName();

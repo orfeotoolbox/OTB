@@ -57,6 +57,8 @@ public:
   /** RTTI support */
   itkTypeMacro(StringListParameter, ParameterList);
 
+  static constexpr auto Type = ParameterType_StringList;
+
   /** Set the value */
   void SetValue(const StringListInterface::StringVector&);
 
@@ -81,7 +83,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_StringList;
+    return Type;
   }
 
   //

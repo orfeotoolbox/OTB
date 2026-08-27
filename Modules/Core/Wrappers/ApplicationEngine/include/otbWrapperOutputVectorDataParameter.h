@@ -52,6 +52,7 @@ public:
   /** RTTI support */
   itkTypeMacro(OutputVectorDataParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_OutputVectorData;
 
   /** Set the value */
   itkSetObjectMacro(VectorData, VectorDataType);
@@ -78,7 +79,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_OutputVectorData;
+    return Type;
   }
 
   std::string ToString() const override

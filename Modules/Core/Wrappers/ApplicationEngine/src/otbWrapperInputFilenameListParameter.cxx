@@ -82,9 +82,5 @@ const std::string& InputFilenameListParameter::GetFilenameFilter() const
   return FILENAME_FILTER;
 }
 
-ParameterType InputFilenameListParameter::GetType() const
-{
-  return ParameterType_InputFilenameList;
-}
 }
 }

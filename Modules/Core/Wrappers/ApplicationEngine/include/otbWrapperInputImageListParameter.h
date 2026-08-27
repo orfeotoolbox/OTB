@@ -53,6 +53,8 @@ public:
   /** RTTI support */
   itkTypeMacro(InputImageListParameter, ParameterList);
 
+  static constexpr auto Type = ParameterType_InputImageList;
+
   /** Get one list of the stored image. WARNING : if the parameter list changes,
    *  the returned image list may become obsolete. You should call
    *  GetImageList() again to make sure your image list is up-to-date. */
@@ -85,7 +87,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_InputImageList;
+    return Type;
   }
 
 protected:
