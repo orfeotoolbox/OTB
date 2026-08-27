@@ -122,7 +122,7 @@ public:
   void SetImageIO(otb::ImageIOBase* imageIO);
   itkGetObjectMacro(ImageIO, otb::ImageIOBase);
 
-  virtual void SetFileName(const std::string& extendedFileName);
+  virtual void SetFileName(std::string extendedFileName);
 
   virtual const char* GetFileName() const;
 
@@ -153,7 +153,7 @@ private:
    * Reads requested region `ioRegion` from current GDAL image into destination
    * buffer `destBuffer`, while using `loadBuffer` as an intermediary buffer
    * to dump as a direct dump on input image.
-   *
+   * 
    * \param[in]     ioRegion defines the region to read from input image
    * \param[in,out] loadBuffer cached intermediary buffer where image data is
    *                dumped before being de-interleaved.
@@ -179,7 +179,7 @@ private:
   /** Generate the filename (for GDALImageI for example).
    * If filename is a directory, look if is a CEOS product (file "DAT...") In
    * this case, the GdalFileName contain the open image file.
-    */
+   */
   bool GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName);
 
   ImageFileReader(const Self&) = delete;
