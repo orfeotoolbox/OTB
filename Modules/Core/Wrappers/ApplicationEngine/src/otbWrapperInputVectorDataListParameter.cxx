@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -57,15 +57,11 @@ InputVectorDataParameter::Pointer& InputVectorDataListParameter::FromVectorData(
 }
 
 /*****************************************************************************/
-InputVectorDataListParameter::InputVectorDataListParameter() : m_VectorDataList(VectorDataListType::New())
+InputVectorDataListParameter::InputVectorDataListParameter()
+: m_VectorDataList(VectorDataListType::New())
 {
   SetName("Input VectorData List");
   SetKey("vdList");
-}
-
-/*****************************************************************************/
-InputVectorDataListParameter::~InputVectorDataListParameter()
-{
 }
 
 /*****************************************************************************/
@@ -85,7 +81,7 @@ VectorDataListType* InputVectorDataListParameter::GetVectorDataList()
 }
 
 /*****************************************************************************/
-const VectorDataType* InputVectorDataListParameter::GetNthVectorData(std::size_t i)
+const VectorDataType* InputVectorDataListParameter::GetNthVectorData(std::size_t i) const
 {
   assert(i < m_Parameters.size());
   assert(!m_Parameters[i].IsNull());

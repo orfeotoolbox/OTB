@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,18 +35,6 @@ namespace otb
 namespace Wrapper
 {
 
-
-/*****************************************************************************/
-template <typename T>
-ParameterList<T>::ParameterList() : AbstractParameterList(), m_Parameters()
-{
-}
-
-/*****************************************************************************/
-template <typename T>
-ParameterList<T>::~ParameterList()
-{
-}
 
 /*****************************************************************************/
 template <typename T>
@@ -316,7 +304,7 @@ typename L::ObjectType* ParameterList<T>::GetObjectList(L& this_list, Get get)
 /*****************************************************************************/
 template <typename T>
 template <typename L, typename Get>
-const typename L::ObjectType* ParameterList<T>::GetObjectList(L& this_list, Get get) const
+const typename L::ObjectType* ParameterList<T>::GetObjectList(L const& this_list, Get get) const
 {
   return const_cast<ParameterList<T>*>(this)->GetObjectList(this_list, get);
 }

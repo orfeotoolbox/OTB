@@ -46,22 +46,12 @@ namespace otb
 namespace Wrapper
 {
 
-ParameterGroup::ParameterGroup()
-{
-}
-
-ParameterGroup::~ParameterGroup()
-{
-}
-
-std::vector<std::string> ParameterGroup::GetParametersKeys(bool recursive)
+std::vector<std::string> ParameterGroup::GetParametersKeys(bool recursive) const
 {
   std::vector<std::string> parameters;
 
-  ParameterListType::iterator pit;
-  for (pit = m_ParameterList.begin(); pit != m_ParameterList.end(); ++pit)
+  for (Parameter* param : m_ParameterList)
   {
-    Parameter*  param = *pit;
     std::string currentKey(param->GetKey());
     parameters.push_back(currentKey);
 
@@ -72,7 +62,7 @@ std::vector<std::string> ParameterGroup::GetParametersKeys(bool recursive)
     {
       ParameterGroup*          paramAsGroup = dynamic_cast<ParameterGroup*>(param);
       std::vector<std::string> subparams    = paramAsGroup->GetParametersKeys();
-      for (std::vector<std::string>::const_iterator it = subparams.begin(); it != subparams.end(); ++it)
+      for (auto it = subparams.begin(); it != subparams.end(); ++it)
       {
         parameters.push_back(currentKey + "." + *it);
       }
@@ -82,7 +72,7 @@ std::vector<std::string> ParameterGroup::GetParametersKeys(bool recursive)
       ChoiceParameter* paramAsChoice = dynamic_cast<ChoiceParameter*>(param);
 
       std::vector<std::string> subparams = paramAsChoice->GetParametersKeys();
-      for (std::vector<std::string>::const_iterator it = subparams.begin(); it != subparams.end(); ++it)
+      for (auto it = subparams.begin(); it != subparams.end(); ++it)
       {
         parameters.push_back(currentKey + "." + *it);
       }
@@ -155,7 +145,7 @@ void ParameterGroup::ClearChoices(std::string paramKey)
 }
 
 /** Get the choices made in the QListWidget */
-std::vector<int> ParameterGroup::GetSelectedItems(std::string paramKey)
+std::vector<int> ParameterGroup::GetSelectedItems(std::string const& paramKey) const
 {
   Parameter* param = GetParameterByKey(paramKey);
 
@@ -182,13 +172,13 @@ std::vector<int> ParameterGroup::GetSelectedItems(std::string paramKey)
 }
 
 /* Get the parameter type from its string version of ParameterType enum */
-ParameterType ParameterGroup::GetParameterTypeFromString(const std::string& str)
+ParameterType ParameterGroup::GetParameterTypeFromString(const std::string& str) const
 {
   return ParameterStringToType(str);
 }
 
 /* Get the parameter type as string from its ParameterType enum */
-std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
+std::string ParameterGroup::GetParameterTypeAsString(ParameterType type) const
 {
   return ParameterTypeToString(type);
 }
@@ -373,7 +363,7 @@ void ParameterGroup::AddParameter(Parameter::Pointer p)
   m_ParameterList.push_back(p);
 }
 
-bool ParameterGroup::ReplaceParameter(std::string& key, Parameter::Pointer p)
+bool ParameterGroup::ReplaceParameter(std::string const& key, Parameter::Pointer p)
 {
   bool                     ret = true;
   ParameterKey             pName(key);
@@ -432,7 +422,7 @@ bool ParameterGroup::ReplaceParameter(std::string& key, Parameter::Pointer p)
   return ret;
 }
 
-Parameter::Pointer ParameterGroup::GetParameterByIndex(unsigned int i, bool follow)
+Parameter::Pointer ParameterGroup::GetParameterByIndex(unsigned int i, bool follow) const
 {
   Parameter* param = m_ParameterList[i];
   if (follow)
@@ -442,7 +432,7 @@ Parameter::Pointer ParameterGroup::GetParameterByIndex(unsigned int i, bool foll
   return Parameter::Pointer(param);
 }
 
-Parameter::Pointer ParameterGroup::GetParameterByKey(std::string name, bool follow)
+Parameter::Pointer ParameterGroup::GetParameterByKey(std::string const& name, bool follow) const
 {
   ParameterKey pName(name);
 
@@ -454,11 +444,8 @@ Parameter::Pointer ParameterGroup::GetParameterByKey(std::string name, bool foll
 
   // Look for parentName in the current group
   Parameter::Pointer          parentParam;
-  ParameterListType::iterator vit;
-  for (vit = m_ParameterList.begin(); vit != m_ParameterList.end(); ++vit)
+  for (Parameter::Pointer param : m_ParameterList)
   {
-    Parameter::Pointer param = *vit;
-
     if (param->GetKey() == parentName)
     {
       parentParam = param;
@@ -543,7 +530,7 @@ Parameter::Pointer ParameterGroup::GetParameterByKey(std::string name, bool foll
   return parentParam.GetPointer();
 }
 
-unsigned int ParameterGroup::GetNumberOfParameters()
+unsigned int ParameterGroup::GetNumberOfParameters() const
 {
   return m_ParameterList.size();
 }

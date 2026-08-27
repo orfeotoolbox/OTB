@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,10 +39,10 @@ class OTBApplicationEngine_EXPORT FieldParameter : public ListViewParameter
 {
 public:
   /** Standard class typedef */
-  typedef FieldParameter                Self;
-  typedef ListViewParameter               Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = FieldParameter;
+  using Superclass   = ListViewParameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -50,7 +50,9 @@ public:
   /** RTTI support */
   itkTypeMacro(FieldParameter, ListViewParameter);
 
-  typedef std::vector<OGRFieldType> TypeFilterType;
+  using TypeFilterType = std::vector<OGRFieldType>;
+
+  static constexpr auto Type = ParameterType_Field;
 
   ParameterType GetType() const override
   {
@@ -83,7 +85,7 @@ public:
 
 protected:
   /** Constructor */
-  FieldParameter() = default;
+  using ListViewParameter::ListViewParameter;
 
   /** Destructor */
   ~FieldParameter() override = default;

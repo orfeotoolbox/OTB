@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,28 +27,35 @@ namespace otb
 namespace Wrapper
 {
 
-// TODO: Constructor/destructor
 Parameter::Parameter()
-  : m_Name(), m_Description(), m_Key(), m_Mandatory(true), m_Active(false), m_UserValue(false), m_UserLevel(UserLevel_Basic), m_Role(Role_Input), m_Root(this)
+: m_Name()
+, m_Description()
+, m_Key()
+, m_Mandatory(true)
+, m_Active(false)
+, m_UserValue(false)
+, m_UserLevel(UserLevel_Basic)
+, m_Role(Role_Input)
+, m_Root(this)
 {
 }
 
 /** Set/get the parameter name */
-void Parameter::SetName(const std::string& name)
+void Parameter::SetName(std::string name)
 {
-  m_Name = name;
+  m_Name = std::move(name);
   this->Modified();
 }
 
-const char* Parameter::GetName() const
+std::string const& Parameter::GetName() const
 {
-  return this->m_Name.c_str();
+  return this->m_Name;
 }
 
 /** Set/get the parameter description */
-void Parameter::SetDescription(const std::string& description)
+void Parameter::SetDescription(std::string description)
 {
-  m_Description = description;
+  m_Description = std::move(description);
   this->Modified();
 }
 
@@ -58,14 +65,14 @@ const std::string& Parameter::GetDescription() const
 }
 
 /** Set/get the parameter key */
-void Parameter::SetKey(const std::string& key)
+void Parameter::SetKey(std::string key)
 {
-  m_Key = key;
+  m_Key = std::move(key);
   this->Modified();
 }
-const char* Parameter::GetKey() const
+std::string const& Parameter::GetKey() const
 {
-  return this->m_Key.c_str();
+  return this->m_Key;
 }
 
 /** Set the parameter Mandatory flag */

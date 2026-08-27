@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,9 +26,7 @@
 #include "otbMacro.h"
 #include "otbWrapperTypes.h"
 
-
 #include <itkObjectFactory.h>
-
 
 #include <string>
 
@@ -49,26 +47,26 @@ namespace Wrapper
 class OTBApplicationEngine_EXPORT Parameter : public itk::Object
 {
 public:
-  /** Standard class typedef */
-  typedef Parameter                     Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  // Standard class typedefs
+  using Self         = Parameter;
+  using Superclass   = itk::Object;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** RTTI support */
   itkTypeMacro(Parameter, itk::Object);
 
   /** Set/get the parameter name */
-  virtual void        SetName(const std::string&);
-  virtual const char* GetName() const;
+  virtual void               SetName(std::string);
+  virtual std::string const& GetName() const;
 
   /** Set/get the parameter description */
-  virtual void               SetDescription(const std::string&);
+  virtual void               SetDescription(std::string);
   virtual const std::string& GetDescription() const;
 
   /** Set/get the parameter key */
-  virtual void        SetKey(const std::string&);
-  virtual const char* GetKey() const;
+  virtual void               SetKey(std::string);
+  virtual std::string const& GetKey() const;
 
   /** Set the parameter Active flag */
   virtual void SetActive(bool flag);

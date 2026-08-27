@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,31 +49,31 @@ class OTBApplicationEngine_EXPORT CompositeApplication : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef CompositeApplication          Self;
-  typedef Application                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = CompositeApplication;
+  using Superclass   = Application;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** RTTI support */
   itkTypeMacro(CompositeApplication, Application);
 
-  /** Filters typedef */
-  typedef itk::MemberCommand<Self> AddProcessCommandType;
+  /** Filters using AddProcessCommandType = */
+  using AddProcessCommandType = itk::MemberCommand<Self>;
 
-  typedef struct
+  struct InternalApplication
   {
     Application::Pointer App;
     std::string          Desc;
-  } InternalApplication;
+  };
 
-  typedef std::map<std::string, InternalApplication> InternalAppContainer;
+  using InternalAppContainer = std::map<std::string, InternalApplication>;
 
 protected:
   /** Constructor */
   CompositeApplication();
 
   /** Destructor */
-  ~CompositeApplication() override;
+  ~CompositeApplication() override = default;
 
   /**
    * Callback function to retrieve the process watchers on internal filters
@@ -86,7 +86,7 @@ protected:
    * \param key Identifier associated to the created application
    * \param desc Description of the internal application
    */
-  bool AddApplication(std::string appType, std::string key, std::string desc);
+  bool AddApplication(std::string appType, std::string const& key, std::string desc);
 
   /**
    * Method to remove all internal applications. Application deriving from
@@ -99,7 +99,7 @@ protected:
    * Connect two existing parameters together. The first parameter will point to
    * the second parameter.
    */
-  bool Connect(std::string fromKey, std::string toKey);
+  bool Connect(std::string const& fromKey, std::string const& toKey);
 
   /**
    * Share a parameter between the composite application and an internal application
@@ -109,7 +109,12 @@ protected:
    * \param name Name for the local parameter, if empty the target's name is used
    * \param desc Description for the local parameter, if empty the target's description is used
    */
-  bool ShareParameter(std::string localKey, std::string internalKey, std::string name = std::string(), std::string desc = std::string());
+  bool ShareParameter(
+      std::string const& localKey,
+      std::string const& internalKey,
+      std::string const& name = "",
+      std::string const& desc = ""
+  );
 
   /**
    * Decode a key to extract potential prefix for internal applications
@@ -124,22 +129,22 @@ protected:
   /**
    * Get the internal application with the given identifier
    */
-  Application* GetInternalApplication(std::string id);
+  Application* GetInternalApplication(std::string const& id);
 
   /**
    * Get the description of an internal application
    */
-  std::string GetInternalAppDescription(std::string id);
+  std::string GetInternalAppDescription(std::string const& id);
 
   /**
    * Utility function to call Execute() on an internal app and get its output logs
    */
-  void ExecuteInternal(std::string key);
+  void ExecuteInternal(std::string const& key);
 
   /**
    * Utility function to call UpdateParameters() on an internal app
    */
-  void UpdateInternalParameters(std::string key);
+  void UpdateInternalParameters(std::string const& key);
 
 private:
   CompositeApplication(const CompositeApplication&) = delete;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,8 +25,8 @@
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
 #include "otbImageFileWriter.h"
-#include <string>
 #include "otbMultiImageFileWriter.h"
+#include <string>
 
 namespace otb
 {
@@ -42,10 +42,10 @@ class OTBApplicationEngine_EXPORT OutputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef OutputImageParameter          Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = OutputImageParameter;
+  using Superclass   = Parameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -96,8 +96,7 @@ public:
   /** Return true if a filename is set */
   bool HasValue() const override;
 
-  void SetFileName(const char* filename);
-  void SetFileName(const std::string& filename);
+  void SetFileName(std::string filename);
 
   itkGetStringMacro(FileName);
 
@@ -129,7 +128,7 @@ protected:
   /** Constructor */
   OutputImageParameter();
   /** Destructor */
-  ~OutputImageParameter() override;
+  ~OutputImageParameter() override = default;
 
 private:
   OutputImageParameter(const Parameter&) = delete;

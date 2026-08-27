@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,15 +41,13 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT ParameterKey
+class OTBApplicationEngine_EXPORT ParameterKey final
 {
 public:
-  typedef ParameterKey Self;
+  using Self = ParameterKey;
 
-  ParameterKey();
-  ParameterKey(const char* val);
-  ParameterKey(const std::string& val);
-  virtual ~ParameterKey();
+  ParameterKey() = default;
+  ParameterKey(std::string val);
 
 
   /** Class Methods used to interface with the registered factories */
@@ -63,16 +61,16 @@ last() : return "tata"
    */
 
   /** Returns the string after the last point separator */
-  std::string GetLastElement();
+  std::string GetLastElement() const;
 
   /** Returns the string before the first point separator */
-  std::string GetFirstElement();
+  std::string GetFirstElement() const;
 
   /** Returns the string before the last point separator */
-  std::string GetRoot();
+  std::string GetRoot() const;
 
   /** Returns the vector of string that contains each element separated by a point. */
-  std::vector<std::string> Split();
+  std::vector<std::string> Split() const;
 
   /** Append a string at the end of the key. A point separator will be added before the string. */
   void Append(const std::string& val);
@@ -81,19 +79,13 @@ last() : return "tata"
   void Append(const ParameterKey& pKey);
 
   /** Get Key value */
-  std::string GetKey()
-  {
-    return m_Key;
-  }
-
-  /** Get Key value */
-  std::string GetKey() const
+  std::string const& GetKey() const
   {
     return m_Key;
   }
 
   /** Set Key value */
-  void SetKey(const std::string& val)
+  void SetKey(std::string val)
   {
     // Check chain : lowercase, alphanumerical or "."
     itksys::RegularExpression reg;
@@ -101,7 +93,7 @@ last() : return "tata"
 
     if (!reg.find(val))
     {
-      m_Key = val;
+      m_Key = std::move(val);
     }
     else
     {
