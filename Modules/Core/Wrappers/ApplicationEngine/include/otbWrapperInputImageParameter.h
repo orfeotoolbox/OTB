@@ -55,6 +55,8 @@ public:
   /** RTTI support */
   itkTypeMacro(InputImageParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_InputImage;
+
   struct Connector
   {
     itk::Object::Pointer app;
@@ -131,7 +133,10 @@ public:
   bool HasValue() const override;
   void ClearValue() override;
 
-  ParameterType GetType() const override;
+  ParameterType GetType() const override
+  {
+    return Type;
+  }
   std::string   ToString() const override;
   void FromString(const std::string& value) override;
 

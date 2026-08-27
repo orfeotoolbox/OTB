@@ -58,6 +58,8 @@ public:
   /** RTTI support */
   itkTypeMacro(InputFilenameListParameter, Superclass);
 
+  static constexpr auto Type = ParameterType_InputFilenameList;
+
   /** */
   Role GetDirection(std::size_t) const override;
 
@@ -70,8 +72,10 @@ public:
   /** */
   const std::string& GetFilenameFilter() const override;
 
-  ParameterType GetType() const override;
-
+  ParameterType GetType() const override
+  {
+    return Type;
+  }
 
   //
   // Protected methods.

@@ -49,6 +49,7 @@ public:
   /** RTTI support */
   itkTypeMacro(OutputFilenameParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_OutputFilename;
 
   bool HasValue() const override
   {
@@ -75,7 +76,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_OutputFilename;
+    return Type;
   }
 
   std::string ToString() const override

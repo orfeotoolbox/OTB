@@ -192,9 +192,11 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_Float;
+
   ParameterType GetType() const override
   {
-    return ParameterType_Float;
+    return Type;
   }
 
   void FromFloat(float value) override
@@ -217,15 +219,20 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_Double;
+
   ParameterType GetType() const override
   {
-    return ParameterType_Double;
+    return Type;
   }
 
   void FromDouble(double value) override
   {
     SetValue(value);
   }
+
+protected:
+  using NumericalParameter::NumericalParameter;
 };
 
 class OTBApplicationEngine_EXPORT IntParameter : public NumericalParameter<int>
@@ -239,9 +246,11 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_Int;
+
   ParameterType GetType() const override
   {
-    return ParameterType_Int;
+    return Type;
   }
 
 protected:
@@ -263,9 +272,11 @@ public:
   /** RTTI support */
   itkTypeMacro(RAMParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_RAM;
+
   ParameterType GetType() const override
   {
-    return ParameterType_RAM;
+    return Type;
   }
 
   /** Constructor */
@@ -290,6 +301,8 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(RadiusParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_Radius;
+
   bool HasValue() const override
   {
     return true;
@@ -297,7 +310,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_Radius;
+    return Type;
   }
 
 protected:

@@ -134,7 +134,9 @@ public:
     */
   virtual std::vector<Parameter::Pointer> GetChildrenList();
 
-  /** Get the dynamic type as declared in WrapperTypes.h */
+  /** Get the dynamic type as declared in WrapperTypes.h
+   * Expect to return the constexpr `ActualParameterType::Type`
+   */
   virtual ParameterType GetType() const = 0;
 
   /** Error raising function to indicate a type conversion error */

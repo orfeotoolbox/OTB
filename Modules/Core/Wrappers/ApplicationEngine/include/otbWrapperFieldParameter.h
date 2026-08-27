@@ -50,13 +50,13 @@ public:
   /** RTTI support */
   itkTypeMacro(FieldParameter, ListViewParameter);
 
-  using TypeFilterType = std::vector<OGRFieldType>;
-
   static constexpr auto Type = ParameterType_Field;
+
+  using TypeFilterType = std::vector<OGRFieldType>;
 
   ParameterType GetType() const override
   {
-    return ParameterType_Field;
+    return Type;
   }
 
   /** Set vector data name from which we choose the fields */

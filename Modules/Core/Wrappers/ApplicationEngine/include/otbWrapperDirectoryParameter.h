@@ -51,6 +51,8 @@ public:
   /** RTTI support */
   itkTypeMacro(DirectoryParameter, Parameter);
 
+  static constexpr auto Type = ParameterType_Directory;
+
   bool HasValue() const override
   {
     return m_StringParam->HasValue();
@@ -76,9 +78,9 @@ public:
   // GetActive method
   otbGetObjectMemberConstMacro(StringParam, Active, bool);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
-    return ParameterType_Directory;
+    return Type;
   }
 
   std::string ToString() const override

@@ -50,9 +50,11 @@ public:
   /** RTTI support */
   itkTypeMacro(BandParameter, ListViewParameter);
 
+  static constexpr auto Type = ParameterType_Band;
+
   ParameterType GetType() const override
   {
-    return ParameterType_Band;
+    return Type;
   }
 
   /** Set raster data name from which we choose the fields */

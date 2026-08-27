@@ -193,11 +193,6 @@ void ChoiceParameter::ClearValue()
   m_CurrentChoice = 0;
 }
 
-ParameterType ChoiceParameter::GetType() const
-{
-  return ParameterType_Choice;
-}
-
 int ChoiceParameter::ToInt() const
 {
   return this->GetValue();

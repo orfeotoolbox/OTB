@@ -48,6 +48,8 @@ public:
 
   itkTypeMacro(ParameterList, Parameter);
 
+  static constexpr auto Type = ParameterType_Group;
+
   void AddParameter(Parameter::Pointer p);
 
   /** Method to substitute a parameter in a group.
@@ -101,7 +103,7 @@ public:
 
   ParameterType GetType() const override
   {
-    return ParameterType_Group;
+    return Type;
   }
 
 protected:

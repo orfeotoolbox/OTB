@@ -69,11 +69,6 @@ void BoolParameter::SetValue(const std::string& str)
   }
 }
 
-ParameterType BoolParameter::GetType() const
-{
-  return ParameterType_Bool;
-}
-
 int BoolParameter::ToInt() const
 {
   return static_cast<int>(this->GetValue());
