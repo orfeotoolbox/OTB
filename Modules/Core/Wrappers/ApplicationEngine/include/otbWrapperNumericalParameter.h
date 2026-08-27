@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,6 +30,7 @@ namespace otb
 {
 namespace Wrapper
 {
+
 /** \class NumericalParameter
  *  \brief This class represents a numerical parameter
  *
@@ -40,13 +41,13 @@ class ITK_ABI_EXPORT NumericalParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef NumericalParameter            Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = NumericalParameter;
+  using Superclass   = Parameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Typedef of the scalar type */
-  typedef T ScalarType;
+  using ScalarType   = T;
 
   /** Implement the reset method (replace value by default value) */
   void Reset() override
@@ -68,6 +69,7 @@ public:
 
   void SetValue(const std::string& valueStr)
   {
+    // TODO: don't use atof!!
     ScalarType value = static_cast<ScalarType>(atof(valueStr.c_str()));
     SetValue(value);
   }
@@ -156,27 +158,22 @@ public:
 
 protected:
   /** Constructor */
-  NumericalParameter()
-    : m_DefaultValue(itk::NumericTraits<T>::Zero), m_MinimumValue(itk::NumericTraits<T>::NonpositiveMin()), m_MaximumValue(itk::NumericTraits<T>::max())
-  {
-  }
+  using Parameter::Parameter;
 
   /** Destructor */
-  ~NumericalParameter() override
-  {
-  }
+  ~NumericalParameter() override = default;
 
   /** Value */
   boost::optional<T> m_Value;
 
   /** Default value (when applicable) */
-  ScalarType m_DefaultValue;
+  ScalarType m_DefaultValue = itk::NumericTraits<T>::Zero;
 
   /** Minimum value */
-  ScalarType m_MinimumValue;
+  ScalarType m_MinimumValue = itk::NumericTraits<T>::NonpositiveMin();
 
   /** Maximum value */
-  ScalarType m_MaximumValue;
+  ScalarType m_MaximumValue = itk::NumericTraits<T>::max();
 
 private:
   NumericalParameter(const Parameter&) = delete;
@@ -188,9 +185,9 @@ class OTBApplicationEngine_EXPORT FloatParameter : public NumericalParameter<flo
 {
 public:
   /** Standard class typedef */
-  typedef FloatParameter                Self;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = FloatParameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
@@ -204,15 +201,18 @@ public:
   {
     SetValue(value);
   }
+
+protected:
+  using NumericalParameter::NumericalParameter;
 };
 
 class OTBApplicationEngine_EXPORT DoubleParameter : public NumericalParameter<double>
 {
 public:
   /** Standard class typedef */
-  typedef DoubleParameter                Self;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = DoubleParameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
@@ -232,9 +232,9 @@ class OTBApplicationEngine_EXPORT IntParameter : public NumericalParameter<int>
 {
 public:
   /** Standard class typedef */
-  typedef IntParameter                  Self;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = IntParameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
@@ -243,16 +243,19 @@ public:
   {
     return ParameterType_Int;
   }
+
+protected:
+  using NumericalParameter::NumericalParameter;
 };
 
 class OTBApplicationEngine_EXPORT RAMParameter : public NumericalParameter<unsigned int>
 {
 public:
   /** Standard class typedef */
-  typedef RAMParameter                  Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = RAMParameter;
+  using Superclass   = Parameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -280,9 +283,9 @@ public:
 class OTBApplicationEngine_EXPORT RadiusParameter : public IntParameter
 {
 public:
-  typedef RadiusParameter               Self;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = RadiusParameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   itkNewMacro(Self);
   itkTypeMacro(RadiusParameter, Parameter);

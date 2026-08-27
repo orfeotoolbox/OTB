@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,14 +24,6 @@ namespace otb
 {
 namespace Wrapper
 {
-
-ChoiceParameter::ChoiceParameter() : m_CurrentChoice(0)
-{
-}
-
-ChoiceParameter::~ChoiceParameter()
-{
-}
 
 void ChoiceParameter::AddChoice(std::string choicekey, std::string choiceName)
 {
@@ -56,18 +48,17 @@ void ChoiceParameter::AddChoice(std::string choicekey, std::string choiceName)
   this->AddChild(choice.m_AssociatedParameter.GetPointer());
 }
 
-std::string ChoiceParameter::GetChoiceKey(int i) const
+std::string const& ChoiceParameter::GetChoiceKey(int i) const
 {
   return m_ChoiceList[i].m_Key;
 }
 
 
-std::vector<std::string> ChoiceParameter::GetChoiceKeys()
+std::vector<std::string> ChoiceParameter::GetChoiceKeys() const
 {
   std::vector<std::string> ret;
-  ChoiceList::iterator     it = m_ChoiceList.begin();
 
-  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+  for (auto it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
   {
     ret.push_back(it->m_Key);
   }
@@ -76,18 +67,17 @@ std::vector<std::string> ChoiceParameter::GetChoiceKeys()
 }
 
 
-std::string ChoiceParameter::GetChoiceName(int i)
+std::string const& ChoiceParameter::GetChoiceName(int i) const
 {
   return m_ChoiceList[i].m_Name;
 }
 
 
-std::vector<std::string> ChoiceParameter::GetChoiceNames()
+std::vector<std::string> ChoiceParameter::GetChoiceNames() const
 {
   std::vector<std::string> ret;
-  ChoiceList::iterator     it = m_ChoiceList.begin();
 
-  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+  for (auto it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
   {
     ret.push_back(it->m_Name);
   }
@@ -95,16 +85,14 @@ std::vector<std::string> ChoiceParameter::GetChoiceNames()
 }
 
 
-ParameterGroup::Pointer ChoiceParameter::GetChoiceParameterGroupByIndex(int i)
+ParameterGroup::Pointer ChoiceParameter::GetChoiceParameterGroupByIndex(int i) const
 {
   return m_ChoiceList[i].m_AssociatedParameter;
 }
 
-ParameterGroup::Pointer ChoiceParameter::GetChoiceParameterGroupByKey(std::string choiceKey)
+ParameterGroup::Pointer ChoiceParameter::GetChoiceParameterGroupByKey(std::string const& choiceKey) const
 {
-  ChoiceList::iterator it = m_ChoiceList.begin();
-
-  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+  for (auto it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
   {
     if (it->m_Key == choiceKey)
     {
@@ -115,7 +103,7 @@ ParameterGroup::Pointer ChoiceParameter::GetChoiceParameterGroupByKey(std::strin
   itkExceptionMacro(<< "Cannot find choice key: '" << choiceKey << "'");
 }
 
-unsigned int ChoiceParameter::GetNbChoices(void)
+unsigned int ChoiceParameter::GetNbChoices(void) const
 {
   return m_ChoiceList.size();
 }
@@ -150,7 +138,7 @@ void ChoiceParameter::SetValue(unsigned int v)
   this->Modified();
 }
 
-void ChoiceParameter::SetValue(std::string choiceKey)
+void ChoiceParameter::SetValue(std::string const& choiceKey)
 {
   ChoiceList::iterator it = m_ChoiceList.begin();
 
@@ -175,13 +163,11 @@ unsigned int ChoiceParameter::GetValue() const
 }
 
 /** Return any value */
-std::vector<std::string> ChoiceParameter::GetParametersKeys()
+std::vector<std::string> ChoiceParameter::GetParametersKeys() const
 {
   std::vector<std::string> parameters;
 
-  ChoiceList::iterator cit = m_ChoiceList.begin();
-
-  for (cit = m_ChoiceList.begin(); cit != m_ChoiceList.end(); ++cit)
+  for (auto cit = m_ChoiceList.begin(); cit != m_ChoiceList.end(); ++cit)
   {
     if (cit->m_AssociatedParameter)
     {

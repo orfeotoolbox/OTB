@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,21 +25,16 @@ namespace otb
 namespace Wrapper
 {
 
-ListViewParameter::ListViewParameter() : m_ChoiceList(), m_CurrentChoice(0), m_SelectedItems(), m_SelectedKeys(), m_SelectedNames(), m_SingleSelection(false)
-{
-}
-
-ListViewParameter::~ListViewParameter()
-{
-}
-
-
 void ListViewParameter::AddChoice(std::string choicekey, std::string choiceName)
 {
+#if 0
   ListViewChoice choice;
   choice.m_Key  = choicekey;
   choice.m_Name = choiceName;
   m_ChoiceList.push_back(choice);
+#else
+  m_ChoiceList.push_back({std::move(choicekey), std::move(choiceName)});
+#endif
 }
 
 std::string ListViewParameter::GetChoiceKey(int i) const
@@ -55,12 +50,11 @@ std::string ListViewParameter::GetChoiceKey(int i) const
 }
 
 
-std::vector<std::string> ListViewParameter::GetChoiceKeys()
+std::vector<std::string> ListViewParameter::GetChoiceKeys() const
 {
   std::vector<std::string> ret;
-  ChoiceList::iterator     it = m_ChoiceList.begin();
 
-  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+  for (auto it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
   {
     ret.push_back(it->m_Key);
   }
@@ -69,7 +63,7 @@ std::vector<std::string> ListViewParameter::GetChoiceKeys()
 }
 
 
-std::string ListViewParameter::GetChoiceName(int i)
+std::string ListViewParameter::GetChoiceName(int i) const
 {
   if (m_ChoiceList.empty())
   {
@@ -82,19 +76,18 @@ std::string ListViewParameter::GetChoiceName(int i)
 }
 
 
-std::vector<std::string> ListViewParameter::GetChoiceNames()
+std::vector<std::string> ListViewParameter::GetChoiceNames() const
 {
   std::vector<std::string> ret;
-  ChoiceList::iterator     it = m_ChoiceList.begin();
 
-  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+  for (auto it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
   {
     ret.push_back(it->m_Name);
   }
   return ret;
 }
 
-unsigned int ListViewParameter::GetNbChoices(void)
+unsigned int ListViewParameter::GetNbChoices(void) const
 {
   return m_ChoiceList.size();
 }
@@ -140,7 +133,7 @@ void ListViewParameter::ClearChoices()
 }
 
 
-void ListViewParameter::SetSelectedNames(std::vector<std::string> selectedNames)
+void ListViewParameter::SetSelectedNames(std::vector<std::string> const& selectedNames)
 {
   std::vector<int>         selectedItems;
   std::vector<std::string> names = this->GetChoiceNames();
@@ -152,7 +145,7 @@ void ListViewParameter::SetSelectedNames(std::vector<std::string> selectedNames)
 
   for (unsigned int i = 0; i < selectedNames.size(); i++)
   {
-    const std::string selectedName = selectedNames[i];
+    std::string const& selectedName = selectedNames[i];
     unsigned int      j(0);
     for (; j < names.size(); j++)
     {
@@ -181,7 +174,7 @@ void ListViewParameter::SetSelectedNames(std::vector<std::string> selectedNames)
 }
 
 
-void ListViewParameter::SetSelectedKeys(std::vector<std::string> selectedKeys)
+void ListViewParameter::SetSelectedKeys(std::vector<std::string> const& selectedKeys)
 {
   std::vector<int>         selectedItems;
   std::vector<std::string> keys = this->GetChoiceKeys();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,41 +27,29 @@ namespace otb
 namespace Wrapper
 {
 
-ParameterKey::ParameterKey() : m_Key("")
+ParameterKey::ParameterKey(std::string val)
 {
+  this->SetKey(std::move(val));
 }
 
-ParameterKey::ParameterKey(const char* val)
-{
-  this->SetKey(std::string(val));
-}
 
-ParameterKey::ParameterKey(const std::string& val)
-{
-  this->SetKey(val);
-}
-
-ParameterKey::~ParameterKey()
-{
-}
-
-std::string ParameterKey::GetLastElement()
+std::string ParameterKey::GetLastElement() const
 {
   return m_Key.substr(m_Key.find_last_of(".") + 1, m_Key.size());
 }
 
-std::string ParameterKey::GetFirstElement()
+std::string ParameterKey::GetFirstElement() const
 {
   return m_Key.substr(0, m_Key.find_first_of("."));
 }
 
-std::string ParameterKey::GetRoot()
+std::string ParameterKey::GetRoot() const
 {
   return m_Key.substr(0, m_Key.find_last_of("."));
 }
 
 
-std::vector<std::string> ParameterKey::Split()
+std::vector<std::string> ParameterKey::Split() const
 {
   std::vector<std::string> res;
   boost::split(res, m_Key, boost::is_any_of("."), boost::token_compress_on);

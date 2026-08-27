@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -44,12 +44,12 @@ class OTBApplicationEngine_EXPORT StringListParameter : public ParameterList<Str
   // Public methods.
 public:
   /** Standard class typedef */
-  typedef StringListParameter            Self;
-  typedef ParameterList<StringParameter> Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  using Self           = StringListParameter;
+  using Superclass     = ParameterList<StringParameter>;
+  using Pointer        = itk::SmartPointer<Self>;
+  using ConstPointer   = itk::SmartPointer<const Self>;
 
-  typedef StringListInterface::StringVector StringListType;
+  using StringListType = StringListInterface::StringVector;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -91,7 +91,7 @@ protected:
   StringListParameter();
 
   /** Destructor */
-  ~StringListParameter() override;
+  ~StringListParameter() override = default;
 
   //
   // Private methods.

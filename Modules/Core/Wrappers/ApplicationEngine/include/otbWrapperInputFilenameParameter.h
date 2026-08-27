@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,10 +38,10 @@ class OTBApplicationEngine_EXPORT InputFilenameParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef InputFilenameParameter        Self;
-  typedef StringParameter               Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = InputFilenameParameter;
+  using Superclass   = StringParameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -59,7 +59,7 @@ public:
   otbGetObjectMemberConstMacro(StringParam, Value, std::string);
 
   // Set Value
-  virtual void SetValue(const std::string value)
+  virtual void SetValue(const std::string& value)
   {
     itkDebugMacro("setting member m_StringParam to " << value);
     this->m_StringParam->SetValue(value);
@@ -97,16 +97,13 @@ protected:
   }
 
   /** Destructor */
-  ~InputFilenameParameter() override
-  {
-  }
+  ~InputFilenameParameter() override = default;
 
 private:
   InputFilenameParameter(const InputFilenameParameter&) = delete;
   void operator=(const InputFilenameParameter&) = delete;
 
   StringParameter::Pointer m_StringParam;
-
 }; // End class Parameter
 
 } // End namespace Wrapper

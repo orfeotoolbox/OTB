@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,19 +35,19 @@ namespace otb
 namespace Wrapper
 {
 /** \class InputImageParameter
- *  \brief This class represents a InputImage parameter
+ *  \brief This class represents an InputImage parameter
  *
  * \ingroup OTBApplicationEngine
  */
-
-class OTBApplicationEngine_EXPORT InputImageParameter : public Parameter
+class OTBApplicationEngine_EXPORT InputImageParameter
+: public Parameter
 {
 public:
-  /** Standard class typedef */
-  typedef InputImageParameter           Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  // Standard class typedefs
+  using Self         = InputImageParameter;
+  using Superclass   = Parameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -173,7 +173,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWrapperInputImageParameter.hxx"
+#  include "otbWrapperInputImageParameter.hxx"
 #endif
 
 #endif

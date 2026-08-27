@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,10 +36,6 @@ CompositeApplication::CompositeApplication()
   m_AddProcessCommand->SetCallbackFunction(this, &CompositeApplication::LinkWatchers);
 }
 
-CompositeApplication::~CompositeApplication()
-{
-}
-
 void CompositeApplication::LinkWatchers(itk::Object* itkNotUsed(caller), const itk::EventObject& event)
 {
   if (typeid(AddProcessToWatchEvent) == typeid(event))
@@ -48,7 +44,7 @@ void CompositeApplication::LinkWatchers(itk::Object* itkNotUsed(caller), const i
   }
 }
 
-bool CompositeApplication::AddApplication(std::string appType, std::string key, std::string desc)
+bool CompositeApplication::AddApplication(std::string appType, std::string const& key, std::string desc)
 {
   if (m_AppContainer.count(key))
   {
@@ -56,8 +52,8 @@ bool CompositeApplication::AddApplication(std::string appType, std::string key, 
     return false;
   }
   InternalApplication container;
-  container.App  = ApplicationRegistry::CreateApplication(appType);
-  container.Desc = desc;
+  container.App  = ApplicationRegistry::CreateApplication(std::move(appType));
+  container.Desc = std::move(desc);
   // Setup logger
   container.App->SetLogger(this->GetLogger());
   container.App->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
@@ -70,7 +66,7 @@ void CompositeApplication::ClearApplications()
   m_AppContainer.clear();
 }
 
-bool CompositeApplication::Connect(std::string fromKey, std::string toKey)
+bool CompositeApplication::Connect(std::string const& fromKey, std::string const& toKey)
 {
   std::string  key1(fromKey);
   std::string  key2(toKey);
@@ -92,7 +88,12 @@ bool CompositeApplication::Connect(std::string fromKey, std::string toKey)
   return app1->GetParameterList()->ReplaceParameter(key1, proxyParam.GetPointer());
 }
 
-bool CompositeApplication::ShareParameter(std::string localKey, std::string internalKey, std::string name, std::string desc)
+bool CompositeApplication::ShareParameter(
+    std::string const& localKey,
+    std::string const& internalKey,
+    std::string const& name,
+    std::string const& desc
+)
 {
   std::string  internalKeyCheck(internalKey);
   Application* app       = DecodeKey(internalKeyCheck);
@@ -108,9 +109,9 @@ bool CompositeApplication::ShareParameter(std::string localKey, std::string inte
   target.first  = app->GetParameterList();
   target.second = internalKeyCheck;
   proxyParam->SetTarget(target);
-  proxyParam->SetName(name.empty() ? rawTarget->GetName() : name);
-  proxyParam->SetDescription(desc.empty() ? rawTarget->GetDescription() : desc);
-  proxyParam->SetKey(proxyKey);
+  proxyParam->SetName(name.empty() ? rawTarget->GetName() : std::move(name));
+  proxyParam->SetDescription(desc.empty() ? rawTarget->GetDescription() : std::move(desc));
+  proxyParam->SetKey(std::move(proxyKey));
 
   // Get group parameter where the proxy should be added
   Parameter::Pointer baseParam(proxyParam.GetPointer());
@@ -138,27 +139,27 @@ Application* CompositeApplication::DecodeKey(std::string& key)
   return ret;
 }
 
-Application* CompositeApplication::GetInternalApplication(std::string id)
+Application* CompositeApplication::GetInternalApplication(std::string const& id)
 {
   if (!m_AppContainer.count(id))
     otbAppLogFATAL("Unknown internal application : " << id);
   return m_AppContainer[id].App;
 }
 
-std::string CompositeApplication::GetInternalAppDescription(std::string id)
+std::string CompositeApplication::GetInternalAppDescription(std::string const& id)
 {
   if (!m_AppContainer.count(id))
     otbAppLogFATAL("Unknown internal application : " << id);
   return m_AppContainer[id].Desc;
 }
 
-void CompositeApplication::ExecuteInternal(std::string key)
+void CompositeApplication::ExecuteInternal(std::string const& key)
 {
   otbAppLogINFO(<< GetInternalAppDescription(key) << "...");
   GetInternalApplication(key)->Execute();
 }
 
-void CompositeApplication::UpdateInternalParameters(std::string key)
+void CompositeApplication::UpdateInternalParameters(std::string const& key)
 {
   GetInternalApplication(key)->UpdateParameters();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,7 +21,7 @@
 #ifndef otbWrapperListViewParameter_h
 #define otbWrapperListViewParameter_h
 
-#include "otbWrapperParameterGroup.h"
+#include "otbWrapperParameter.h"
 #include <string>
 
 namespace otb
@@ -42,10 +42,10 @@ class OTBApplicationEngine_EXPORT ListViewParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef ListViewParameter             Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = ListViewParameter;
+  using Superclass   = Parameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -64,16 +64,16 @@ public:
   std::string GetChoiceKey(int i) const;
 
   /** Get the list of the different choice keys */
-  std::vector<std::string> GetChoiceKeys();
+  std::vector<std::string> GetChoiceKeys() const;
 
   /** Get the long name of a specific choice value */
-  std::string GetChoiceName(int i);
+  std::string GetChoiceName(int i) const;
 
   /** Get the list of the different choice keys */
-  std::vector<std::string> GetChoiceNames();
+  std::vector<std::string> GetChoiceNames() const;
 
   /** Get the number of available choice */
-  unsigned int GetNbChoices(void);
+  unsigned int GetNbChoices(void) const;
 
   /** Set choice value */
   virtual void SetValue(unsigned int v);
@@ -97,22 +97,22 @@ public:
 
   void ClearChoices();
 
-  std::vector<int> GetSelectedItems()
+  std::vector<int> const& GetSelectedItems() const
   {
     return m_SelectedItems;
   }
 
-  void SetSelectedNames(std::vector<std::string> selectedNames);
+  void SetSelectedNames(std::vector<std::string> const& selectedNames);
 
-  std::vector<std::string> GetSelectedNames() const
+  std::vector<std::string> const& GetSelectedNames() const
   {
     return m_SelectedNames;
   }
 
 
-  void SetSelectedKeys(std::vector<std::string> selectedKeys);
+  void SetSelectedKeys(std::vector<std::string> const& selectedKeys);
 
-  std::vector<std::string> GetSelectedKeys()
+  std::vector<std::string> const& GetSelectedKeys() const
   {
     return m_SelectedKeys;
   }
@@ -129,19 +129,19 @@ public:
   {
   }
 
-  void SetSelectedItems(std::vector<std::string> selectedItems)
+  void SetSelectedItems(std::vector<std::string> const& selectedItems)
   {
     std::vector<int> items;
     for (unsigned int i = 0; i < selectedItems.size(); i++)
     {
-      items.push_back(atoi(selectedItems[i].c_str()));
+      items.push_back(atoi(selectedItems[i].c_str())); // TODO: get rid of atoi!!!
     }
     this->SetSelectedItems(items);
   }
 
   void SetSelectedItems(std::vector<int> selectedItems)
   {
-    m_SelectedItems = selectedItems;
+    m_SelectedItems = std::move(selectedItems);
     m_SelectedNames.clear();
     m_SelectedKeys.clear();
     // update selected names and keys
@@ -188,28 +188,24 @@ public:
 
 protected:
   /** Constructor */
-  ListViewParameter();
+  using Parameter::Parameter;
 
   /** Destructor */
-  ~ListViewParameter() override;
+  ~ListViewParameter() override = default;
 
   struct ListViewChoice
   {
-    ListViewChoice()
-    {
-    }
-
     std::string m_Key;
     std::string m_Name;
   };
 
-  typedef std::vector<ListViewChoice> ChoiceList;
+  using ChoiceList = std::vector<ListViewChoice>;
   ChoiceList                          m_ChoiceList;
-  unsigned int                        m_CurrentChoice;
   std::vector<int>                    m_SelectedItems;
   std::vector<std::string>            m_SelectedKeys;
   std::vector<std::string>            m_SelectedNames;
-  bool                                m_SingleSelection;
+  unsigned int                        m_CurrentChoice = 0;
+  bool                                m_SingleSelection = false;
 
 private:
   ListViewParameter(const ListViewParameter&) = delete;

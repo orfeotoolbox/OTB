@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,10 +41,10 @@ class OTBApplicationEngine_EXPORT ChoiceParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef ChoiceParameter               Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = ChoiceParameter;
+  using Superclass   = Parameter;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -56,34 +56,34 @@ public:
   void AddChoice(std::string choicekey, std::string choiceName);
 
   /** Get the key of a specific choice value */
-  std::string GetChoiceKey(int i) const;
+  std::string const& GetChoiceKey(int i) const;
 
   /** Get the list of the different choice keys */
-  std::vector<std::string> GetChoiceKeys();
+  std::vector<std::string> GetChoiceKeys() const;
 
   /** Get the long name of a specific choice value */
-  std::string GetChoiceName(int i);
+  std::string const& GetChoiceName(int i) const;
 
   /** Get the list of the different choice keys */
-  std::vector<std::string> GetChoiceNames();
+  std::vector<std::string> GetChoiceNames() const;
 
   /** Get the ParameterGroup associated to a choice value */
-  ParameterGroup::Pointer GetChoiceParameterGroupByIndex(int i);
+  ParameterGroup::Pointer GetChoiceParameterGroupByIndex(int i) const;
 
   /** Get the ParameterGroup associated to a choice value */
-  ParameterGroup::Pointer GetChoiceParameterGroupByKey(std::string choiceKey);
+  ParameterGroup::Pointer GetChoiceParameterGroupByKey(std::string const& choiceKey) const;
 
   /** Get all parameters that are child of this choice parameter */
-  std::vector<std::string> GetParametersKeys();
+  std::vector<std::string> GetParametersKeys() const;
 
   /** Get the number of available choice */
-  unsigned int GetNbChoices(void);
+  unsigned int GetNbChoices(void) const;
 
   /** Set choice value */
   virtual void SetValue(unsigned int v);
 
   /** Set choice value by its key */
-  virtual void SetValue(std::string choiceKey);
+  virtual void SetValue(std::string const& choiceKey);
 
   /** Return any value */
   virtual unsigned int GetValue() const;
@@ -101,17 +101,13 @@ public:
 
 protected:
   /** Constructor */
-  ChoiceParameter();
+  using Parameter::Parameter;
 
   /** Destructor */
-  ~ChoiceParameter() override;
+  ~ChoiceParameter() override = default;
 
   struct Choice
   {
-    Choice()
-    {
-    }
-
     std::string             m_Key;
     std::string             m_Name;
     ParameterGroup::Pointer m_AssociatedParameter;
@@ -120,7 +116,7 @@ protected:
   typedef std::vector<Choice> ChoiceList;
   ChoiceList                  m_ChoiceList;
 
-  unsigned int m_CurrentChoice;
+  unsigned int m_CurrentChoice = 0;
 
 private:
   ChoiceParameter(const ChoiceParameter&) = delete;
