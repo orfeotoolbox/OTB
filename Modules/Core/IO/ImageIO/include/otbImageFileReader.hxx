@@ -337,16 +337,16 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   double                               origin[TOutputImage::ImageDimension];
   typename TOutputImage::DirectionType direction;
 
-  auto const sign = [](auto v) {
-    return v < 0 ? -1 : 1;
+  auto const sign = [](double v) {
+    return v < 0. ? -1 : 1;
   };
 
   for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
   {
     if (i < this->m_ImageIO->GetNumberOfDimensions())
     {
+      auto const spacing_sign = sign(this->m_ImageIO->GetSpacing(i));
       dimSize[i] = this->m_ImageIO->GetDimensions(i);
-      auto const spacing_sign = sign(this->m_ImageIO->GetSpacing(i) < 0);
       spacing[i]     = spacing_sign * this->m_ImageIO->GetSpacing(i); // isn't it std::abs()?
       origin[i]      = this->m_ImageIO->GetOrigin(i);
       // Please note: direction cosines are stored as columns of the direction matrix
@@ -625,7 +625,7 @@ bool ImageFileReader<TOutputImage, ConvertPixelTraits>
 
 template <class TOutputImage, class ConvertPixelTraits>
 void ImageFileReader<TOutputImage, ConvertPixelTraits>
-::SetFileName(const std::string& extendedFileName)
+::SetFileName(std::string extendedFileName)
 {
   const std::string skip_geom_key = "skipgeom";
   const std::string geom_key      = "geom";
@@ -633,7 +633,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   // First, see if the simple filename has changed
   typename FNameHelperType::Pointer helper = FNameHelperType::New();
 
-  helper->SetExtendedFileName(extendedFileName);
+  helper->SetExtendedFileName(std::move(extendedFileName));
   std::string simpleFileName = helper->GetSimpleFileName();
 
   if (simpleFileName == this->m_FileName)
