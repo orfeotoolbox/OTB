@@ -153,20 +153,21 @@ private:
    * Reads requested region `ioRegion` from current GDAL image into destination
    * buffer `destBuffer`, while using `loadBuffer` as an intermediary buffer
    * to dump as a direct dump on input image.
-   * 
+   *
    * \param[in]     ioRegion defines the region to read from input image
    * \param[in,out] loadBuffer cached intermediary buffer where image data is
    *                dumped before being de-interleaved.
    *                It will be resized on-the-fly.
-   * \param[in]     destBuffer pointer to where the decoded images will be
-   *                stored.
+   * \param[in]     destBuffer pointer to where the decoded images will be stored.
+   * \param[in]     nb_components_out number of components per pixel in ouput
    * \return `destBuffer + number_of_bytes_written`
    * \pre `destBuffer != nullptr`
    */
   OutputImagePixelType* ReadInto(
       itk::ImageIORegion const& ioRegion,
-      std::vector<char> & loadBuffer,
-      OutputImagePixelType* destBuffer
+      std::vector<char> &       loadBuffer,
+      OutputImagePixelType*     destBuffer,
+      unsigned int              nb_components_out
   );
 
   /** Test whether m_ImageIO is valid (not NULL).
