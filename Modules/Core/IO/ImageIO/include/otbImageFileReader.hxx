@@ -60,12 +60,11 @@ template <class TOutputImage, class ConvertPixelTraits>
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::ImageFileReader(unsigned long streamHeight)
 : m_ImageIO()
-, m_UserSpecifiedImageIO(false)
-, m_UseStreaming(true)
+// , m_UserSpecifiedImageIO(false)
 , m_ActualIORegion()
 , m_FilenameHelper(FNameHelperType::New())
-, m_AdditionalNumber(0)
-, m_IOComponents(0)
+// , m_AdditionalNumber(0)
+// , m_IOComponents(0)
 , m_StreamHeight(streamHeight)
 {
 }
@@ -110,31 +109,47 @@ auto ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::ReadInto(
     itk::ImageIORegion const& ioRegion,
     std::vector<char> &       loadBuffer,
-    OutputImagePixelType*     destBuffer
+    OutputImagePixelType*     destBuffer,
+    unsigned int              nb_components_out
 ) -> OutputImagePixelType*
 {
   assert(destBuffer);
 
   // Adapt the image size with the region and take into account a potential
   // remapping of the components. m_BandList is empty if no band range is set
-  auto const nb_components = std::max<unsigned>(this->m_ImageIO->GetNumberOfComponents(), this->m_BandList.size());
-  std::streamoff nbBytes =
-    (this->m_ImageIO->GetComponentSize()
-     * nb_components)
-    * static_cast<std::streamoff>(ioRegion.GetNumberOfPixels());
+  auto const nb_components_in  = std::max<unsigned>(this->m_ImageIO->GetNumberOfComponents(), this->m_BandList.size());
+  auto const nb_pixels         = ioRegion.GetNumberOfPixels();
+
+  std::streamoff const nb_bytes =
+    (this->m_ImageIO->GetComponentSize() * nb_components_in)
+    * static_cast<std::streamoff>(nb_pixels);
+
+#if 0
+  otbDebugMacro("nb_components in: " << nb_components_in << " (compos: " << this->m_ImageIO->GetNumberOfComponents() <<  " / bandlist: " << this->m_BandList.size());
+  otbDebugMacro("nb_components out: " << nb_components_out);
+  otbDebugMacro("destBuffer   : @" << static_cast<void*>(destBuffer));
+  otbDebugMacro("nb_pixels    : " << nb_pixels << " -> " << NeatRegionLogger(ioRegion));
+  otbDebugMacro("nb_bytes     : " << nb_bytes);
+#endif
 
   otbMsgDevMacro(
-      "ALLOCATE temp buffer: " << (nbBytes / 1024l / 1024l) << "MB for " << NeatRegionLogger(ioRegion));
-  loadBuffer.resize(nbBytes);
+      "ALLOCATE temp buffer: " << (nb_bytes / 1024l / 1024l) << "MB for " << NeatRegionLogger(ioRegion));
+  otb::Logger::Instance()->Flush();  // make sure to flush logs in case of bug
+  loadBuffer.resize(nb_bytes);
 
   this->m_ImageIO->SetIORegion(ioRegion);
   this->m_ImageIO->Read(loadBuffer.data());
 
   if (m_FilenameHelper->BandRangeIsSet())
-    this->m_ImageIO->DoMapBuffer(loadBuffer.data(), ioRegion.GetNumberOfPixels(), this->m_BandList);
+    this->m_ImageIO->DoMapBuffer(loadBuffer.data(), nb_pixels, this->m_BandList);
 
-  this->DoConvertBuffer(loadBuffer.data(), ioRegion.GetNumberOfPixels(), destBuffer);
-  return destBuffer + nb_components * static_cast<std::streamoff>(ioRegion.GetNumberOfPixels());
+  this->DoConvertBuffer(loadBuffer.data(), nb_pixels, destBuffer);
+
+#if 0
+  otbDebugMacro("destBuffer += " << nb_components_out * static_cast<std::streamoff>(nb_pixels)
+                << " --> " << static_cast<void*>(destBuffer + nb_components_out * static_cast<std::streamoff>(nb_pixels)));
+#endif
+  return destBuffer + nb_components_out * static_cast<std::streamoff>(nb_pixels);
 };
 
 template <class TOutputImage, class ConvertPixelTraits>
@@ -152,6 +167,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   output->SetBufferedRegion(output->GetRequestedRegion());
   output->Allocate();
   OutputImagePixelType* buffer = output->GetPixelContainer()->GetBufferPointer();
+  auto buffer_end = buffer + output->GetRequestedRegion().GetSize()[0] * output->GetRequestedRegion().GetSize()[1] * this->m_ImageIO->GetNumberOfComponents();
 
   // ---[ Tell the ImageIO to read the file
   this->m_ImageIO->SetFileName(this->m_FileName);
@@ -197,7 +213,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   ioRegion.SetIndex(ioStart);
   m_ActualIORegion = ioRegion;
 
-  // constexpr auto x_index = 0;
+  constexpr auto x_index = 0;
   constexpr auto y_index = 1;
 
   otbMsgDevMacro("Fetching " << NeatRegionLogger(ioRegion));
@@ -216,13 +232,15 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   }
   else // a type conversion is necessary
   {
+    auto const nb_components_out = this->GetOutput()->GetNumberOfComponentsPerPixel();
+
     // note: char is used here because the buffer is read in bytes regardless of the actual type of the pixels.
     std::vector<char> loadBuffr;
 
     if (m_StreamHeight == 0)
     { // Mono-block reading
-      ReadInto(ioRegion, loadBuffr, buffer);
-  }
+      ReadInto(ioRegion, loadBuffr, buffer, nb_components_out);
+    }
     else
     { // Streamed reading
       auto nb_remaining_lines = ioRegion.GetSize()[y_index];
@@ -231,7 +249,17 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
         auto nb_lines_to_load = std::min(nb_remaining_lines, m_StreamHeight);
         ioRegion.GetModifiableSize()[y_index] = nb_lines_to_load;
 
-        buffer = ReadInto(ioRegion, loadBuffr, buffer);
+#if 0
+        otbMsgDevMacro(
+            "ReadInto\n"
+            << nb_lines_to_load << " lines -> " << NeatRegionLogger(ioRegion)
+            << "\n[" << static_cast<void*>(buffer) << " .. " 
+            << static_cast<void*>(buffer + nb_lines_to_load * ioRegion.GetSize()[x_index] * nb_components_out)
+            << "\nMAX: " << static_cast<void*>(buffer_end)
+        );
+#endif
+        assert(buffer + nb_lines_to_load * ioRegion.GetSize()[x_index] * nb_components_out <= buffer_end);
+        buffer = ReadInto(ioRegion, loadBuffr, buffer, nb_components_out);
 
         ioRegion.GetModifiableIndex()[y_index] += nb_lines_to_load;
         nb_remaining_lines -= nb_lines_to_load;
@@ -347,8 +375,8 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
     {
       auto const spacing_sign = sign(this->m_ImageIO->GetSpacing(i));
       dimSize[i] = this->m_ImageIO->GetDimensions(i);
-      spacing[i]     = spacing_sign * this->m_ImageIO->GetSpacing(i); // isn't it std::abs()?
-      origin[i]      = this->m_ImageIO->GetOrigin(i);
+      spacing[i] = spacing_sign * this->m_ImageIO->GetSpacing(i); // isn't it std::abs()?
+      origin[i]  = this->m_ImageIO->GetOrigin(i);
       // Please note: direction cosines are stored as columns of the direction matrix
       auto const& axis = this->m_ImageIO->GetDirection(i);
 
@@ -387,7 +415,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
     for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
     {
       spacing[i] = spacing_value;
-      origin[i] = 0.5 * spacing[i];
+      origin[i]  = 0.5 * spacing[i];
       for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
       {
         direction[j][i] = (i == j) ? 1.0 : 0.0;
@@ -510,9 +538,9 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   }
 
   if (img_common != nullptr)
-    {
+  {
     img_common->SetImageMetadata(imd);
-    }
+  }
 
   output->SetLargestPossibleRegion(region);
 }
@@ -575,7 +603,7 @@ bool ImageFileReader<TOutputImage, ConvertPixelTraits>
     "dat_01.001", // RADARSAT or SAR_ERS2
     "IMAGERY.TIF",
     "imagery.tif", // For format SPOT5TIF
-  // Not recognized as a supported file format by GDAL.
+    // Not recognized as a supported file format by GDAL.
     //        "IMAGERY.BIL", "imagery.bil"; //For format SPOT5BIL
     "IMAG_01.DAT",
     "imag_01.dat", // For format SPOT4
@@ -703,18 +731,21 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 // VectorImage needs to copy out the buffer differently.. The buffer is of
 // type InternalPixelType, but each pixel is really 'k' consecutive pixels.
 
-#define OTB_CONVERT_BUFFER_IF_BLOCK(type)                                                                                                                     \
-  else if (m_ImageIO->GetComponentTypeInfo() == typeid(type))                                                                                                 \
-  {                                                                                                                                                           \
-    if (strcmp(this->GetOutput()->GetNameOfClass(), "VectorImage") == 0)                                                                                      \
-    {                                                                                                                                                         \
-      ConvertPixelBuffer<type, OutputImagePixelType, ConvertPixelTraits>::ConvertVectorImage(static_cast<type*>(inputData), m_IOComponents, outputData,       \
-                                                                                             numberOfPixels);                                                 \
-    }                                                                                                                                                         \
-    else                                                                                                                                                      \
-    {                                                                                                                                                         \
-      ConvertPixelBuffer<type, OutputImagePixelType, ConvertPixelTraits>::Convert(static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels); \
-    }                                                                                                                                                         \
+#define OTB_CONVERT_BUFFER_IF_BLOCK(type)                                             \
+  else if (m_ImageIO->GetComponentTypeInfo() == typeid(type))                         \
+  {                                                                                   \
+    if (strcmp(this->GetOutput()->GetNameOfClass(), "VectorImage") == 0)              \
+    {                                                                                 \
+      ConvertPixelBuffer<type, OutputImagePixelType, ConvertPixelTraits>              \
+      ::ConvertVectorImage(                                                           \
+          static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels); \
+    }                                                                                 \
+    else                                                                              \
+    {                                                                                 \
+      ConvertPixelBuffer<type, OutputImagePixelType, ConvertPixelTraits>              \
+      ::Convert(                                                                      \
+          static_cast<type*>(inputData), m_IOComponents, outputData, numberOfPixels); \
+    }                                                                                 \
   }
 
 #define OTB_CONVERT_CBUFFER_IF_BLOCK(type)                                             \
@@ -749,7 +780,6 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
     }                                                                                  \
   }
 
-  // TODO: switch on typeid
   if (0)
   {
   }
