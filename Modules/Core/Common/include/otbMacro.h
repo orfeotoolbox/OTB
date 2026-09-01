@@ -105,11 +105,11 @@ namespace otb
 #define otbClassContext(x) << this->GetNameOfClass() << " (" << this << "): " x
 
 // Beware that to log to CRITICAL level, level should be passed as "Error"
-#define otbLogMacro(level, msg)                           \
-  {                                                       \
-    std::ostringstream itkmsg;                            \
-    itkmsg             msg << "\n";                       \
-    otb::Logger::Instance()->level(itkmsg.str().c_str()); \
+#define otbLogMacro(level, msg)                   \
+  {                                               \
+    std::ostringstream itkmsg;                    \
+    itkmsg             msg << "\n";               \
+    otb::Logger::Instance()->level(itkmsg.str()); \
   }
 
 
