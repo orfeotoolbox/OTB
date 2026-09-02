@@ -254,11 +254,11 @@ boost::optional<double> GetDEMValue(double lon, double lat, DatasetCache const& 
   auto const x = xy.first;
   auto const y = xy.second;
 
-  auto is_out_raster = [&](auto x, auto y, GDALDataset & ds) {
-    return x < 0
-      ||   y < 0
-      || 1+x > ds.GetRasterXSize()   // no need to test x > size
-      || 1+y > ds.GetRasterYSize();  // no need to test Y > size
+  auto is_out_raster = [&](auto x_, auto y_, GDALDataset & ds) {
+    return x_ < 0
+      ||   y_ < 0
+      || 1+x_ > ds.GetRasterXSize()   // no need to test x_ > size
+      || 1+y_ > ds.GetRasterYSize();  // no need to test y_ > size
   };
 
   if (is_out_raster(x, y, *dsc))
@@ -688,9 +688,9 @@ bool DEMHandler::OpenGeoidFile(std::string geoidFile)
   int nb_success = 0;
   {
     const std::lock_guard<std::mutex> lock(demMutex);
-    for (auto tls : m_tlses)
+    for (auto tls_ : m_tlses)
     {
-      nb_success += tls->OpenGeoidFile(geoidFile) ? 1 : 0;
+      nb_success += tls_->OpenGeoidFile(geoidFile) ? 1 : 0;
       // if any is true, all should be!
     }
   } // <- release lock

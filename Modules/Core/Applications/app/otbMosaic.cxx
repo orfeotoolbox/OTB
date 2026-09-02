@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2016-2019 IRSTEA
  *
  * This file is part of Orfeo Toolbox
@@ -11,7 +11,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -642,21 +642,18 @@ private:
     {
     case Interpolator_Linear:
     {
-      typedef itk::LinearInterpolateImageFunction<FloatVectorImageType, double> LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       filter->SetInterpolator(interpolator);
     }
     break;
     case Interpolator_NNeighbor:
     {
-      typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType, double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       filter->SetInterpolator(interpolator);
     }
     break;
     case Interpolator_BCO:
     {
-      typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> BCOInterpolationType;
       BCOInterpolationType::Pointer                                  interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       filter->SetInterpolator(interpolator);
