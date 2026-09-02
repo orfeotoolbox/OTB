@@ -51,6 +51,7 @@ otbVectorImageFileReaderWriterTest.cxx
 otbIntImageIOTest.cxx
 otbPNGIndexedNbBandsTest.cxx
 otbImageFileReaderTest.cxx
+otbImageFileReaderPoliciesTest.cxx
 otbVectorImageFileWriterTestWithoutInput.cxx
 otbWritingComplexDataWithComplexImageTest.cxx
 otbStreamingImageFileWriterWithFilterTest.cxx
@@ -504,6 +505,28 @@ otb_add_test(NAME ioTvImageFileReaderPDS2TIFF COMMAND otbImageIOTestDriver
   otbImageFileReaderTest
   ${INPUTDATA}/pdsImage.img
   ${TEMP}/ioTvImageFileReaderPDS2TIFF.tif)
+
+otb_add_test(NAME ioTvImageFileReaderPolicyStreamRemainder
+  # This test requires some conversion on the bands. For instance,
+  # transforming from a 4 bands image to the 1 band image
+  COMMAND otbImageIOTestDriver --compare-image ${EPSILON_9} ${INPUTDATA}/anaglyphInput1.tif?&bands=1 ${TEMP}/ioImageFileReaderSplit.tiff
+  otbImageFileReaderPoliciesTest
+  # We take band1 in order to avoid grayscale computation from the original 3 bands
+  ${INPUTDATA}/anaglyphInput1.tif?&bands=1
+  ${TEMP}/ioImageFileReaderSplit.tiff
+  # Input image has a height of 1056px, 500 is not a divider
+  500)
+
+otb_add_test(NAME ioTvImageFileReaderPolicyStreamMultiple
+  # This test requires some conversion on the bands. For instance,
+  # transforming from a 4 bands image to the 1 band image
+  COMMAND otbImageIOTestDriver --compare-image ${EPSILON_9} ${INPUTDATA}/anaglyphInput1.tif?&bands=1 ${TEMP}/ioImageFileReaderSplit.tiff
+  otbImageFileReaderPoliciesTest
+  # We take band1 in order to avoid grayscale computation from the original 3 bands
+  ${INPUTDATA}/anaglyphInput1.tif?&bands=1
+  ${TEMP}/ioImageFileReaderSplit.tiff
+  # Input image has a height of 1056px, 264 is a divider
+  264)
 
 otb_add_test(NAME ioTvWritingComplexDataWithComplexImage COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}
