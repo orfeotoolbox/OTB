@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -156,7 +156,7 @@ struct OTBMetadata_EXPORT RPCParam
   double LineNum[20] = {
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-  
+
   // Line denominator coefficients
   double LineDen[20] = {
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -183,7 +183,7 @@ struct OTBMetadata_EXPORT RPCParam
     oss << "]";
     return oss.str();
   }
-  
+
   // Equality comparison with tolerance
   template <class BinaryPredicate>
   bool Compare(const RPCParam & other, const BinaryPredicate & p) const
@@ -207,7 +207,7 @@ struct OTBMetadata_EXPORT RPCParam
   // Equality comparison operator (hidden friend idiom)
   friend bool operator==(const RPCParam & lhs, const RPCParam & rhs)
   {
-    return lhs.Compare(rhs, [](double rhs, double lhs){return rhs == lhs;});
+    return lhs.Compare(rhs, [](double rhs_, double lhs_){return rhs_ == lhs_;});
   }
 
 };

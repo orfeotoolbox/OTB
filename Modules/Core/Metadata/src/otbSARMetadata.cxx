@@ -537,16 +537,16 @@ void SARCalib::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   {
     PointSetType::PointType point;
     typename PointSetType::PixelType pointValue;
-    std::ostringstream oss;
-    oss << std::setprecision(STRING_PRECISION);
+    std::ostringstream oss_;
+    oss_ << std::setprecision(STRING_PRECISION);
     for(unsigned int i = 0 ; i < input->GetNumberOfPoints() ; ++i)
     {
       if (input->GetPoint(i, &point) && input->GetPointData(i, &pointValue))
       {
-        oss << point << " " << pointValue << ";";
+        oss_ << point << " " << pointValue << ";";
       }
     }
-    return oss.str();
+    return oss_.str();
   };
   kwl.emplace(prefix + "RadiometricCalibrationNoise",
               pointsetToString(radiometricCalibrationNoise));

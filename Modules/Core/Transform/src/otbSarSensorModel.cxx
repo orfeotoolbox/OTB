@@ -660,10 +660,10 @@ const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projec
   GCP const* closest = &gcpParam.GCPs.front(); // Let's silence warning...
 
   // Squared distance between a Point and a gcp
-  auto squaredDistance = [](const Point2DType & imPt, const GCP & gcp)
+  auto squaredDistance = [](const Point2DType & imPt_, const GCP & gcp)
     {
-      double dx = imPt[0] - gcp.m_GCPCol;
-      double dy = imPt[1] - gcp.m_GCPRow;
+      double dx = imPt_[0] - gcp.m_GCPCol;
+      double dy = imPt_[1] - gcp.m_GCPRow;
 
     return dx * dx + dy * dy;
     };

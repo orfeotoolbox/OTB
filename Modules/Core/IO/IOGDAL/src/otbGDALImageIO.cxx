@@ -1460,11 +1460,11 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* Case 1: Set the projection coordinate system of the image            */
   /* -------------------------------------------------------------------- */
 #if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
-  if (std::string const projectionRef = m_Imd.Has(MDGeom::ProjectionWKT) ? m_Imd.GetProjectionWKT() : ""
-      ; !projectionRef.empty())
+  if (std::string const projectionRefWKT = m_Imd.Has(MDGeom::ProjectionWKT) ? m_Imd.GetProjectionWKT() : ""
+      ; !projectionRefWKT.empty())
   {
-    otbMsgDevMacro(<<"GDALImageIO::InternalWriteImageInformation -> Has ProjectionWKT: '" << projectionRef << "'");
-    dataset->SetProjection(projectionRef.c_str());
+    otbMsgDevMacro(<<"GDALImageIO::InternalWriteImageInformation -> Has ProjectionWKT: '" << projectionRefWKT << "'");
+    dataset->SetProjection(projectionRefWKT.c_str());
     if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
       GDALMetadataWriteRPC(dataset);
     if (m_Imd.Has(MDGeom::SAR))

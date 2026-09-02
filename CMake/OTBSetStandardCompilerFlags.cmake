@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -9,7 +9,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -149,6 +149,7 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
       -Wno-invalid-offsetof
       -Woverloaded-virtual
       -Wstrict-null-sentinel
+      -Wshadow
     )
   endif()
 ##-Wno-c++0x-static-nonintegral-init
@@ -185,7 +186,7 @@ macro(check_compiler_platform_flags)
          # With MS compilers on Win64, we need the /bigobj switch, else generated
          # code results in objects with number of sections exceeding object file
          # format.
-         # see http://msdn.microsoft.com/en-us/library/ms173499.aspx
+         # see https://msdn.microsoft.com/en-us/library/ms173499.aspx
          if(MSVC_VERSION GREATER 1310)
            set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} /bigobj")
          endif()
