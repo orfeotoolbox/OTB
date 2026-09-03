@@ -47,9 +47,9 @@ median, variance, kurtosis, skewness. The result could be use to perform further
 object-oriented image analysis.
 "
   "${OTB_SOURCE_DIR}/Modules/Remote/${__mod_name}"
-  GIT_REPOSITORY https://github.com/gpo-geo/SertitObject
+  GIT_REPOSITORY https://github.com/Julien-Osman/SertitObject
   GIT_TAG b13961b775724c8de4fa45bc5c5bec14b6d2afef
-  GIT_SUBMODULES ON
+  GIT_SUBMODULES OFF
 )
 
 # use a temporary fork because pull request #8 not merged yet
