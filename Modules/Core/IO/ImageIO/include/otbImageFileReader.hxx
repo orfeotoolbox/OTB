@@ -39,8 +39,6 @@
 
 #include "otbMacro.h"
 
-#include "itkImageIOFactory.h"
-#include "itkPixelTraits.h"
 #include "itkVectorImage.h"
 #include "itkMetaDataObject.h"
 #include <itksys/SystemTools.hxx>
@@ -58,9 +56,13 @@ static const size_t DerivedSubdatasetPrefixLength = sizeof(DerivedSubdatasetPref
 
 template <class TOutputImage, class ConvertPixelTraits>
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::ImageFileReader(unsigned long streamHeight)
+::ImageFileReader(
+    unsigned long streamHeight,
+    bool mustReuseLoadedRegion
+)
 : m_ImageIO()
 // , m_UserSpecifiedImageIO(false)
+, m_mustReuseLoadedRegion(mustReuseLoadedRegion)
 , m_ActualIORegion()
 , m_FilenameHelper(FNameHelperType::New())
 // , m_AdditionalNumber(0)
@@ -119,6 +121,7 @@ auto ImageFileReader<TOutputImage, ConvertPixelTraits>
   // remapping of the components. m_BandList is empty if no band range is set
   auto const nb_components_in  = std::max<unsigned>(this->m_ImageIO->GetNumberOfComponents(), this->m_BandList.size());
   auto const nb_pixels         = ioRegion.GetNumberOfPixels();
+  assert(nb_pixels > 0 && "we shall not read into an empty region");
 
   std::streamoff const nb_bytes =
     (this->m_ImageIO->GetComponentSize() * nb_components_in)
@@ -157,17 +160,35 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GenerateData()
 {
   typename TOutputImage::Pointer output = this->GetOutput();
+  auto const nb_components_out = output->GetNumberOfComponentsPerPixel();
 
   // ---[ Raise an exception if the file could not be opened
   // i.e. if this->m_ImageIO is Null
   this->TestValidImageIO();
 
   // ---[ Allocate the output buffer
+  // Note: Allocate() depends on Reserve() which guarantee to keep the values stored in the
+  // previously allocated buffer, as std::vector::reserve() does.
+  auto const  old_buffered_size = output->GetBufferedRegion().GetSize();
+  auto const* old_buffer_begin  = output->GetPixelContainer()->GetBufferPointer();
+
   otbMsgDevMacro("Allocating for  " << NeatRegionLogger(output->GetRequestedRegion()));
   output->SetBufferedRegion(output->GetRequestedRegion());
   output->Allocate();
   OutputImagePixelType* buffer = output->GetPixelContainer()->GetBufferPointer();
-  auto buffer_end = buffer + output->GetRequestedRegion().GetSize()[0] * output->GetRequestedRegion().GetSize()[1] * this->m_ImageIO->GetNumberOfComponents();
+
+  auto const  buffered_size = output->GetBufferedRegion().GetSize();
+  auto const* buffer_end    = buffer + buffered_size[0] * buffered_size[1] * nb_components_out;
+  (void) buffer_end; // used in assertions
+
+  if (buffer == old_buffer_begin)
+  {
+    // Handle the case where the buffer is shrinked.
+    // The start doesn't change, the end is still valid memory.
+    // -> Be sure to point to the actual old memory for future assertion checks.
+    auto const* old_buffer_end    = old_buffer_begin + old_buffered_size[0] * old_buffered_size[1];
+    buffer_end = std::max(buffer_end, old_buffer_end);
+  }
 
   // ---[ Tell the ImageIO to read the file
   this->m_ImageIO->SetFileName(this->m_FileName);
@@ -211,10 +232,88 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   ioRegion.SetSize(ioSize);
   ioRegion.SetIndex(ioStart);
-  m_ActualIORegion = ioRegion;
 
   constexpr auto x_index = 0;
   constexpr auto y_index = 1;
+
+  signed const y_start_old = m_ActualIORegion.GetIndex()[y_index];
+  signed const y_size_old  = m_ActualIORegion.GetSize()[y_index];
+  signed const y_start_new = ioStart[y_index];
+  signed const y_size_new  = ioSize[y_index];
+
+  signed const y_end_old = y_start_old + y_size_old;
+  signed const y_end_new = y_start_new + y_size_new;
+
+  bool const can_reuse // = span on the same columns
+  =  TOutputImage::ImageDimension == 2
+  && m_mustReuseLoadedRegion
+  && ioRegion.GetIndex()[x_index] == m_ActualIORegion.GetIndex()[x_index]
+  && ioRegion.GetSize()[x_index]  == m_ActualIORegion.GetSize()[x_index]
+  ;
+  m_ActualIORegion = ioRegion;
+  auto move = [&](auto do_move, signed delta_start, signed nb_common_lines)
+  {
+    assert(nb_common_lines > 0);
+    auto const x_size_new  = ioSize[x_index];
+    // auto const nb_components = std::max<unsigned>(this->m_ImageIO->GetNumberOfComponents(), m_BandList.size());
+    auto const nb_components = nb_components_out;
+    auto const x_components_offset = x_size_new * nb_components;
+    // ioRegion will be used to know what region is loaded
+    ioSize[y_index]  -= nb_common_lines;
+    ioStart[y_index] += delta_start;
+    ioRegion.SetSize(ioSize);
+    ioRegion.SetIndex(ioStart);
+    do_move(x_components_offset);
+    otbMsgDevMacro("Reuse " << nb_common_lines << " lines. Only load "
+                   << ioSize[y_index] << " / " << y_size_new << " lines"
+                   << "\n\tload shift = " << (delta_start * x_components_offset)
+                   << "\t= " << nb_common_lines << " lines * " << x_size_new << " pixels * "
+                   << nb_components << " components");
+  };
+
+  if (can_reuse && y_start_old <= y_start_new && y_start_new < y_end_old)
+  { // DES
+    signed const nb_common_lines = y_end_old - y_start_new;
+    auto up = [&](auto x_components_offset)
+    {
+      auto const nb_lines_discarded = y_start_new - y_start_old;
+      auto dest = buffer + nb_common_lines * x_components_offset;
+      assert(dest == buffer + (y_size_old - nb_lines_discarded) * x_components_offset);
+      assert(nb_lines_discarded <= y_size_old);
+      assert(buffer + y_size_old * x_components_offset <= buffer_end);
+      std::move_backward(
+          buffer + nb_lines_discarded * x_components_offset,
+          buffer + y_size_old * x_components_offset,
+          dest
+      );
+      buffer = dest;
+    };
+    move(up, nb_common_lines, nb_common_lines);
+  }
+  else if (can_reuse && y_start_new <= y_start_old && y_start_old < y_end_new)
+  { // ASC
+    auto const delta_start     = y_start_old - y_start_new;
+    auto const nb_common_lines = y_end_new - y_start_old;
+    auto down = [&](auto x_components_offset)
+    {
+      assert(buffer + nb_common_lines * x_components_offset <= buffer_end);
+      assert(buffer + (nb_common_lines + delta_start) * x_components_offset <= buffer_end);
+      std::move(
+          buffer,
+          buffer + nb_common_lines * x_components_offset,
+          buffer + delta_start * x_components_offset);
+      // and change bufer value => new pixels will be loaded at the start!
+    };
+    move(down, 0, nb_common_lines);
+  }
+  else if (m_mustReuseLoadedRegion)
+  { // not need to log if not requested
+    otbMsgDevMacro("Cannot reuse lines"
+                   << "\n\tcan_reuse: " << can_reuse
+                   << "\n\ty_old ∈ [" << y_start_old << ", " << y_end_old << "["
+                   << "\n\ty_new ∈ [" << y_start_new << ", " << y_end_new << "["
+    );
+  }
 
   otbMsgDevMacro("Fetching " << NeatRegionLogger(ioRegion));
   otb::Logger::Instance()->Flush();  // make sure to flush logs in case of bug
@@ -232,8 +331,6 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   }
   else // a type conversion is necessary
   {
-    auto const nb_components_out = this->GetOutput()->GetNumberOfComponentsPerPixel();
-
     // note: char is used here because the buffer is read in bytes regardless of the actual type of the pixels.
     std::vector<char> loadBuffr;
 
@@ -253,7 +350,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
         otbMsgDevMacro(
             "ReadInto\n"
             << nb_lines_to_load << " lines -> " << NeatRegionLogger(ioRegion)
-            << "\n[" << static_cast<void*>(buffer) << " .. " 
+            << "\n[" << static_cast<void*>(buffer) << " .. "
             << static_cast<void*>(buffer + nb_lines_to_load * ioRegion.GetSize()[x_index] * nb_components_out)
             << "\nMAX: " << static_cast<void*>(buffer_end)
         );

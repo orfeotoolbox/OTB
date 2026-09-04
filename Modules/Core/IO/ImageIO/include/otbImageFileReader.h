@@ -138,7 +138,31 @@ public:
   static std::string GetDerivedDatasetSourceFileName(const std::string& filename);
 
 protected:
-  ImageFileReader(unsigned long streamHeight = 0);
+  /**
+   * Init constructor.
+   * @param[in] streamHeight  Enable streamed reading when auxiliary buffer is required to read the
+   *                          image and convert it into the expected output format.
+   *                          The objective is to reduce memory consumption and not double (or
+   *                          worse) the quantity of memory required when reading an image region.
+   *                          This parameter defines how many lines may be read at once.
+   * @param[in] mustReuseLoadedRegion When OTB streams the production of images, multiple
+   *                          consecutive input requested regions may share many lines in common.
+   *                          This option enables reusing lines alreaded loaded.
+   *                          As feature shines in very few use cases (like
+   *                          SARCartesianMeanEstimation), it is not enabled by default. It has to
+   *                          be explicitly enabled in OTB Applications that konw it makes sense.
+   */
+  explicit ImageFileReader(
+      unsigned long streamHeight = 0, // expect an ambiguity if you pass an int instead of un unsigned long
+      bool mustReuseLoadedRegion = false
+  );
+
+  explicit ImageFileReader(
+      bool mustReuseLoadedRegion
+  )
+  : ImageFileReader(0, mustReuseLoadedRegion)
+  {}
+
   ~ImageFileReader() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -190,6 +214,9 @@ private:
 
   /// keeps track whether the ImageIO is user specified
   bool                      m_UserSpecifiedImageIO = false;
+
+  /// Autorize reuse of previously loaded image region
+  bool                      m_mustReuseLoadedRegion = false;
 
   std::string m_FileName; // The file to be read
 
