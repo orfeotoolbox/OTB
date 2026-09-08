@@ -1,0 +1,131 @@
+Seulement dans shark_modified: build
+diff --color -bur shark_normal/doc/sphinx_pages/rest_sources/tutorials/first_steps/your_programs.rst shark_modified/doc/sphinx_pages/rest_sources/tutorials/first_steps/your_programs.rst
+--- shark_normal/doc/sphinx_pages/rest_sources/tutorials/first_steps/your_programs.rst	2018-05-04 10:47:18.000000000 +0200
++++ shark_modified/doc/sphinx_pages/rest_sources/tutorials/first_steps/your_programs.rst	2026-09-03 14:20:53.885155326 +0200
+@@ -18,7 +18,7 @@
+ 
+ 	# Executable
+ 	add_executable(ExampleProject HelloWorld.cpp)
+-        set_property(TARGET ExampleProject PROPERTY CXX_STANDARD 11)
++        set_property(TARGET ExampleProject PROPERTY CXX_STANDARD 20)
+ 	target_link_libraries(ExampleProject ${SHARK_LIBRARIES})
+ 
+ 
+diff --color -bur shark_normal/examples/Benchmark/BLAS/CMakeLists.txt shark_modified/examples/Benchmark/BLAS/CMakeLists.txt
+--- shark_normal/examples/Benchmark/BLAS/CMakeLists.txt	2018-05-04 10:47:18.000000000 +0200
++++ shark_modified/examples/Benchmark/BLAS/CMakeLists.txt	2026-09-03 14:20:53.870155174 +0200
+@@ -9,7 +9,7 @@
+ 
+ 	add_executable(${NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${SRC})
+ 	target_link_libraries(${NAME} ${SHARK_LIBRARIES})
+-	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 11)
++	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 20)
+ 	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+ endmacro()
+ 
+diff --color -bur shark_normal/examples/Benchmark/shark/CMakeLists.txt shark_modified/examples/Benchmark/shark/CMakeLists.txt
+--- shark_normal/examples/Benchmark/shark/CMakeLists.txt	2018-05-04 10:47:18.000000000 +0200
++++ shark_modified/examples/Benchmark/shark/CMakeLists.txt	2026-09-03 14:20:53.870155174 +0200
+@@ -9,7 +9,7 @@
+ 
+ 	add_executable(${NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${SRC})
+ 	target_link_libraries(${NAME} ${SHARK_LIBRARIES})
+-	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 11)
++	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 20)
+ 	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+ endmacro()
+ 
+diff --color -bur shark_normal/examples/CMakeLists.txt shark_modified/examples/CMakeLists.txt
+--- shark_normal/examples/CMakeLists.txt	2018-05-04 10:47:18.000000000 +0200
++++ shark_modified/examples/CMakeLists.txt	2026-09-03 14:20:53.870155174 +0200
+@@ -26,7 +26,7 @@
+ 	if( BUILD_EXAMPLES )
+ 		add_executable(${NAME} ${EXAMPLES_CPP_DIR}/${TUT_SRC}.cpp)
+ 		target_link_libraries(${NAME} shark)
+-		set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 11)
++		set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 20)
+ 		set_property(TARGET ${NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+ 
+ 		# Add the dependencies to the target examples
+diff --color -bur shark_normal/include/shark/Data/Impl/Dataset.inl shark_modified/include/shark/Data/Impl/Dataset.inl
+--- shark_normal/include/shark/Data/Impl/Dataset.inl	2018-05-04 10:47:18.000000000 +0200
++++ shark_modified/include/shark/Data/Impl/Dataset.inl	2026-09-08 10:56:40.625686026 +0200
+@@ -646,13 +646,13 @@
+ 	template<class B>
+ 	struct TransformedDataElementTypeFromBatch{
+ 		typedef typename batch_to_element<
+-			typename std::result_of<Functor&&(B)>::type 
++			typename std::invoke_result<Functor&&,B>::type 
+ 		>::type type;
+ 	};
+ public:
+ 	typedef typename boost::mpl::eval_if<
+ 		CanBeCalled<Functor,T>,
+-		std::result_of<Functor&&(T) >,
++		std::invoke_result<Functor&&, T >,
+ 		TransformedDataElementTypeFromBatch<
+ 			typename Batch<T>::type 
+ 		>
+diff --color -bur shark_normal/include/shark/LinAlg/BLAS/cpu/iterator.hpp shark_modified/include/shark/LinAlg/BLAS/cpu/iterator.hpp
+--- shark_normal/include/shark/LinAlg/BLAS/cpu/iterator.hpp	2018-05-04 10:47:18.000000000 +0200
++++ shark_modified/include/shark/LinAlg/BLAS/cpu/iterator.hpp	2026-09-08 10:57:16.502089786 +0200
+@@ -500,7 +500,7 @@
+ 	typedef typename BaseIterator::iterator_category iterator_category;
+ 	typedef std::size_t size_type;
+ 	typedef std::ptrdiff_t difference_type;
+-	typedef typename std::result_of<F(typename BaseIterator::value_type)>::type value_type;
++	typedef typename std::invoke_result<F, typename BaseIterator::value_type>::type value_type;
+ 	typedef value_type reference;
+ 	typedef value_type *pointer;
+ 
+@@ -660,7 +660,7 @@
+ class binary_transform_iterator:
+ public random_access_iterator_base<
+ 	binary_transform_iterator<Iterator1,Iterator2,F>,
+-	typename std::result_of<F(typename Iterator1::value_type, typename Iterator2::value_type)>::type,
++	typename std::invoke_result<F, typename Iterator1::value_type, typename Iterator2::value_type>::type,
+ 	typename iterator_restrict_traits<
+ 		typename Iterator1::iterator_category,
+ 		typename Iterator2::iterator_category
+@@ -676,7 +676,7 @@
+ 	>::iterator_category iterator_category;
+ 	typedef std::size_t size_type;
+ 	typedef std::ptrdiff_t difference_type;
+-	typedef typename std::result_of<F(typename Iterator1::value_type, typename Iterator2::value_type)>::type value_type;
++	typedef typename std::invoke_result<F, typename Iterator1::value_type, typename Iterator2::value_type>::type value_type;
+ 	typedef value_type reference;
+ 	typedef value_type *pointer;
+ 
+diff --color -bur shark_normal/src/CMakeLists.txt shark_modified/src/CMakeLists.txt
+--- shark_normal/src/CMakeLists.txt	2018-05-04 10:47:18.000000000 +0200
++++ shark_modified/src/CMakeLists.txt	2026-09-03 14:20:53.885155326 +0200
+@@ -33,7 +33,7 @@
+ target_link_libraries( shark ${LINK_LIBRARIES})
+ 
+ set_target_properties( shark PROPERTIES DEBUG_POSTFIX _debug )
+-set_property(TARGET shark PROPERTY CXX_STANDARD 11)
++set_property(TARGET shark PROPERTY CXX_STANDARD 20)
+ set_property(TARGET shark PROPERTY CXX_STANDARD_REQUIRED ON)
+ 
+ if( WIN32 )
+@@ -43,7 +43,7 @@
+ # Add the version executable
+ add_executable(SharkVersion Version.cpp)
+ target_link_libraries(SharkVersion shark)
+-set_property(TARGET SharkVersion PROPERTY CXX_STANDARD 11)
++set_property(TARGET SharkVersion PROPERTY CXX_STANDARD 20)
+ set_property(TARGET SharkVersion PROPERTY CXX_STANDARD_REQUIRED ON)
+ 
+ # Install the library
+diff --color -bur shark_normal/Test/CMakeLists.txt shark_modified/Test/CMakeLists.txt
+--- shark_normal/Test/CMakeLists.txt	2018-05-04 10:47:18.000000000 +0200
++++ shark_modified/Test/CMakeLists.txt	2026-09-03 14:20:53.843154902 +0200
+@@ -38,7 +38,7 @@
+ 	# Create the test executable
+ 	add_executable( ${NAME} ${SRC} Models/derivativeTestHelper.h )
+ 	target_link_libraries( ${NAME} shark ${boost_unit_test_lib})
+-	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 11)
++	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 20)
+ 	set_property(TARGET ${NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+ 
+ 	if(GCOV_CHECK)
