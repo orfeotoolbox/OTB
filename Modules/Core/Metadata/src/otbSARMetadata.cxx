@@ -576,6 +576,9 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   // Double
   rescalingFactor = ::value_or_throw<double>(kwl, prefix + "RescalingFactor", "(SARCalib::FromKeywordlist)");
 
+  calibrationStartTime = ::value_or_throw<MetaData::TimePoint>(kwl, prefix + "CalibrationStartTime", "(SARCalib::FromKeywordlist)");
+  calibrationStopTime  = ::value_or_throw<MetaData::TimePoint>(kwl, prefix + "CalibrationStopTime",  "(SARCalib::FromKeywordlist)");
+  
   std::istringstream iss(Get(kwl, prefix + "CalibrationStartTime"));
   if (!(iss >> calibrationStartTime))
   {
