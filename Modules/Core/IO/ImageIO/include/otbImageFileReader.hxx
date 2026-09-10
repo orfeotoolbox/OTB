@@ -413,8 +413,19 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     auto gdalMetadataSupplierPointer = dynamic_cast<MetadataSupplierInterface*>(m_ImageIO.GetPointer());
     if (gdalMetadataSupplierPointer)
     {
-      ImageMetadataInterfaceFactory::CreateIMI(imd, *gdalMetadataSupplierPointer);
-      otbLogMacro(Debug, << "Loading metadata from official product");
+      bool hasMetadataType = false;
+      const auto metadataType = gdalMetadataSupplierPointer->GetMetadataValue("METADATATYPE", hasMetadataType);
+      const bool hasEmbeddedOtbMetadata = hasMetadataType && metadataType == "OTB";
+
+      if (hasEmbeddedOtbMetadata)
+      {
+        otbLogMacro(Info, << "Loading metadata from embedded OTB GDAL metadata");
+      }
+      else
+      {
+        ImageMetadataInterfaceFactory::CreateIMI(imd, *gdalMetadataSupplierPointer);
+        otbLogMacro(Info, << "Loading metadata from official product");
+      }
     }
   }
 

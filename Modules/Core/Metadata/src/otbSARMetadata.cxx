@@ -20,6 +20,7 @@
 
 #include "otbSARMetadata.h"
 #include "otbSarCalibrationLookupData.h"
+#include "otbNISARCalibrationLookupData.h"
 #include "otbSentinel1CalibrationLookupData.h"
 #include "otbStringUtilities.h"
 #include "otbSpan.h"
@@ -575,11 +576,9 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   // Double
   rescalingFactor = ::value_or_throw<double>(kwl, prefix + "RescalingFactor", "(SARCalib::FromKeywordlist)");
 
-  // MetaData::TimePoint
-#if 1
   calibrationStartTime = ::value_or_throw<MetaData::TimePoint>(kwl, prefix + "CalibrationStartTime", "(SARCalib::FromKeywordlist)");
   calibrationStopTime  = ::value_or_throw<MetaData::TimePoint>(kwl, prefix + "CalibrationStopTime",  "(SARCalib::FromKeywordlist)");
-#else
+  
   std::istringstream iss(Get(kwl, prefix + "CalibrationStartTime"));
   if (!(iss >> calibrationStartTime))
   {
@@ -592,8 +591,6 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
     otbGenericExceptionMacro(itk::ExceptionObject,
         << "Unable to decode " << Get(kwl, prefix + "CalibrationStopTime"));
   }
-#endif
-
 
   // std::array<int>
   StringToIntArray(Get(kwl, prefix + "RadiometricCalibrationNoisePolynomialDegree"),
@@ -613,7 +610,7 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
     output->Initialize();
 
     unsigned int id = 0;
-    const std::regex PointSet_regex("\\[([0-9]+), ([0-9]+)] ([0-9]+)");
+    const std::regex PointSet_regex("\\[([0-9]+), ([0-9]+)\\] ([0-9]+)");
     std::smatch PointSet_match;
     PointSetType::PointType point;
     typename PointSetType::PixelType pointValue;
@@ -665,6 +662,12 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
       if (sensor == "Sentinel1")
       {
         auto lut = Sentinel1CalibrationLookupData::New();
+        lut->FromKeywordlist(kwl, prefix + "CalibrationLookupData_" + id + "_");
+        calibrationLookupData[id_short] = lut;
+      }
+      else if (sensor == "NISAR")
+      {
+        auto lut = NISARCalibrationLookupData::New();
         lut->FromKeywordlist(kwl, prefix + "CalibrationLookupData_" + id + "_");
         calibrationLookupData[id_short] = lut;
       }
