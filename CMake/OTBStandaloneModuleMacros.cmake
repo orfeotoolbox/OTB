@@ -555,7 +555,7 @@ macro(otb_module_impl)
   # check if _is_target_exported is unset or FALSE
   if (NOT DEFINED _is_target_exported OR NOT _is_target_exported)
     if (CMAKE_DEBUG)
-      message(STATUS "[CMAKE_DEBUG] Creating target export ${__export_name} for target ${otb-module} part of component ${__current_component} in file ${__export_name}.cmake located at ${__target_cmake_file_dir}")
+      message(STATUS "[CMAKE_DEBUG] Creating target export ${__export_name} for target ${otb-module} part of component ${__current_component} in file ${__export_name}.cmake located at ${__target_cmake_file_dir}")
     endif()
     if (__current_component)
       install(EXPORT ${__export_name}
