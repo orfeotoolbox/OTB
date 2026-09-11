@@ -44,28 +44,33 @@ macro(otb_create_application)
   # vars with name prefixed by "APPLICATION_"
   cmake_parse_arguments(APPLICATION  "" "NAME;BUILD_PATH;INSTALL_PATH" "SOURCES;INCLUDE_DIRS;LINK_LIBRARIES" ${ARGN} )
 
+  # When called from the OTB build system, use OTB_INSTALL_APP_DIR
+  if (NOT APPLICATION_INSTALL_PATH)
+    # Case for OTB build tree or P0 module using OTBConstant.cmake file
+    if (OTB_INSTALL_APP_DIR)
+      set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR})
+    else()
+      message(FATAL_ERROR "${otb-module} --> ${APPLICATION_NAME}: INSTALL_PATH is not provided to otb_create_application function.\nEither provide a path (relative to package root) where it will be installed or use OTB_INSTALL_APP_DIR declared in OTBConstants.cmake")
+    endif()
+  endif()
+
   set( APPLICATION_TARGET_NAME otbapp_${APPLICATION_NAME} )
 
-  # NOTE TLA: why not use a target_include_directories ?
   # Build the library as a MODULE (shared lib even if OTB is built statically)
   # include_directories(${APPLICATION_INCLUDE_DIRS})
   add_library(${APPLICATION_TARGET_NAME} MODULE ${APPLICATION_SOURCES})
-  target_include_directories(${APPLICATION_TARGET_NAME} PRIVATE ${APPLICATION_INCLUDE_DIRS})
+  target_include_directories(${APPLICATION_TARGET_NAME} PUBLIC ${APPLICATION_INCLUDE_DIRS})
   target_link_libraries(${APPLICATION_TARGET_NAME} ${APPLICATION_LINK_LIBRARIES})
-  if(otb-module)
-    if (CMAKE_DEBUG)
-      message(STATUS "[CMAKE_DEBUG] otb-module: ${otb-module} --> otb_module_target_label(${APPLICATION_TARGET_NAME})")
-    endif()
-    otb_module_target_label(${APPLICATION_TARGET_NAME})
+  if (CMAKE_DEBUG)
+    message(STATUS "[CMAKE_DEBUG] otb-module: ${otb-module} --> otb_module_target_label(${APPLICATION_TARGET_NAME})")
   endif()
+  otb_module_target_label(${APPLICATION_TARGET_NAME})
 
   # Setup build output location
   # Do not output in the standard lib folder where all shared libs goes.
   # This is to avoid the application factory to look into each and every shared lib
   # for itkLoad symbol
-  if(otb-module)
-    set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
-  endif()
+  set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
 
   set(__export_name "${otb-module}Targets")
 
@@ -93,46 +98,23 @@ macro(otb_create_application)
     message(STATUS "[CMAKE_DEBUG]  otb-module: ${otb-module} --> APPLICATION_INSTALL_PATH: ${APPLICATION_INSTALL_PATH}")
   endif()
 
-  # When called from the OTB build system, use OTB_INSTALL_APP_DIR
-  if (NOT APPLICATION_INSTALL_PATH AND OTB_INSTALL_APP_DIR)
-    set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR})
-  endif()
-
-  if (APPLICATION_INSTALL_PATH)
-    if(otb-module)
-      # use the EXPORT keyword create CMake commands relative to this target
-      # in the appropriate target file
-      if (OTB_MODULE_${otb-module}_COMPONENT)
-        if (CMAKE_DEBUG)
-          message(STATUS "[CMAKE_DEBUG] otb_create_application: target \"${APPLICATION_TARGET_NAME}\" will be in export ${__export_name} and part of component ${OTB_MODULE_${otb-module}_COMPONENT}")
-        endif()
-        install(TARGETS ${APPLICATION_TARGET_NAME}
-                EXPORT ${__export_name}
-                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-                COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT})
-      else()
-        if (CMAKE_DEBUG)
-          message(STATUS "[CMAKE_DEBUG] otb_create_application: target \"${APPLICATION_TARGET_NAME}\" will be in export ${__export_name} and does not set OTB_MODULE_\${otb-module}_COMPONENT")
-        endif()
-        install(TARGETS ${APPLICATION_TARGET_NAME}
-                EXPORT ${__export_name}
-                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH})
-      endif()
-    else()
-      if (CMAKE_DEBUG)
-        message(STATUS "[CMAKE_DEBUG] otb_create_application: target \"${APPLICATION_TARGET_NAME}\" will not be in export and will be part of Dependencies component")
-      endif()
-      install(TARGETS ${APPLICATION_TARGET_NAME}
-              LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-              COMPONENT Dependencies)
-    endif()
-  else()
+  # use the EXPORT keyword create CMake commands relative to this target
+  # in the appropriate target file
+  if (OTB_MODULE_${otb-module}_COMPONENT)
     if (CMAKE_DEBUG)
-      message(STATUS "[CMAKE_DEBUG] otb_create_application: no APPLICATION_INSTALL_PATH, target \"${APPLICATION_TARGET_NAME}\" will not be in export and will be part of Dependencies component")
+      message(STATUS "[CMAKE_DEBUG] otb_create_application: target \"${APPLICATION_TARGET_NAME}\" will be in export ${__export_name} and part of component ${OTB_MODULE_${otb-module}_COMPONENT}")
     endif()
     install(TARGETS ${APPLICATION_TARGET_NAME}
-            LIBRARY DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
-            COMPONENT Dependencies)
+            EXPORT ${__export_name}
+            LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
+            COMPONENT ${OTB_MODULE_${otb-module}_COMPONENT})
+  else()
+    if (CMAKE_DEBUG)
+      message(STATUS "[CMAKE_DEBUG] otb_create_application: target \"${APPLICATION_TARGET_NAME}\" will be in export ${__export_name} and does not set OTB_MODULE_\${otb-module}_COMPONENT")
+    endif()
+    install(TARGETS ${APPLICATION_TARGET_NAME}
+            EXPORT ${__export_name}
+            LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH})
   endif()
 
   # What is the path to the applications
