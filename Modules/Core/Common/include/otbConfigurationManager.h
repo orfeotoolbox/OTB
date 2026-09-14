@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,10 +21,8 @@
 #ifndef _otbConfigurationManager_h
 #define _otbConfigurationManager_h
 
-#include "itkVersion.h"
-
 #include <string>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 #include "itkLoggerBase.h"
 #include "OTBCommonExport.h"
 
@@ -37,13 +35,13 @@ namespace otb
  * environment variables if they are set, or from default values if
  * not.
  *
- * Please refer to each static method documentation for available
+ * Please refer to each function documentation for available
  * configuration values and related environment variables.
  */
-class OTBCommon_EXPORT ConfigurationManager
+namespace OTBCommon_EXPORT ConfigurationManager
 {
-public:
   using RAMValueType = std::uint64_t ;
+
   /**
    * DEMDirectory is a directory were DEM tiles are stored.
    *
@@ -51,7 +49,7 @@ public:
    * returns it contents as a string
    * Else, returns an empty string
    */
-  static std::string GetDEMDirectory();
+  std::string GetDEMDirectory();
 
   /**
    * GeoidFile is path to a geoid file.
@@ -60,7 +58,7 @@ public:
    * returns it contents as a string
    * Else, returns an empty string
    */
-  static std::string GetGeoidFile();
+  std::string GetGeoidFile();
 
   /**
    * MaxRAMHint denotes the maximum memory OTB should use for
@@ -71,7 +69,27 @@ public:
    * Else, returns default value, which is 128 Mb
    *
    */
-  static RAMValueType GetMaxRAMHint();
+  RAMValueType GetMaxRAMHint();
+
+  /**
+   * Returns the maximum number of rows read at once from images.
+   *  In some scenarios where multi-bands input images need to be reorganized before they could be
+   * processed, OTB may momentarily double the memory it uses, and go twice over
+   * :envvar:`OTB_MAX_RAM_HINT` value.
+   * For those cases, this option controls the maximum number of lines directly loaded in memory
+   * before they are reorganized for processing.
+   *
+   * This value will be used in `otb::ImageFileReader` to stream the reading of image files.
+   * A value of 0 tells to read as many lines as there are, even if there isn't enough RAM available
+   * to accommodate the temporary buffer used.
+   *
+   * By default, this value is assumed to be 0.
+   *
+   * \return `$OTB_MAX_NUMBER_OF_ROWS_READ_AT_ONCE` or 0 if unset
+   * \throw std::invalid_argument if the variable cannot be decode as an int.
+   * \throw std::out_of_range if the decoded int doesn't fit in an `unsigned int`.
+   */
+  unsigned long GetMaxImageRowsReadAtOnce();
 
   /**
    * Logger level controls the level of logging that OTB will output.
@@ -91,7 +109,7 @@ public:
    * decoded), level is INFO.
    *
    */
-  static itk::LoggerBaseEnums::PriorityLevel GetLoggerLevel();
+  itk::LoggerBaseEnums::PriorityLevel GetLoggerLevel();
 
   /**
    * If OpenMP is enabled, the number of threads for openMP is set to the
@@ -99,13 +117,8 @@ public:
    * of threads is returned.
    * If OpenMP is disabled, this function does nothing
    */
-  static int InitOpenMPThreads();
+  int InitOpenMPThreads();
 
-private:
-  ConfigurationManager()                            = delete;
-  ~ConfigurationManager()                           = delete;
-  ConfigurationManager(const ConfigurationManager&) = delete;
-  void operator=(const ConfigurationManager&) = delete;
 };
 }
 

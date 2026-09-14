@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,6 +24,7 @@
 #include "otbWrapperInputImageParameter.h"
 
 #include "otbWrapperCastImage.h"
+#include "otbImageFileReader.h"
 
 namespace otb
 {
@@ -108,9 +109,9 @@ TImageType* InputImageParameter::GetImage()
     {
       //////////////////////// Filename case:
       // A new valid filename has been given : a reader is created
-      typedef otb::ImageFileReader<TImageType> ReaderType;
+      using ReaderType = otb::ImageFileReader<TImageType>;
 
-      typename ReaderType::Pointer reader = ReaderType::New();
+      typename ReaderType::Pointer reader = ReaderType::New(m_StreamHeight, m_mustReuseLoadedRegion);
 
       reader->SetFileName(m_FileName);
 
@@ -134,9 +135,9 @@ TImageType* InputImageParameter::GetImage()
       else
       {
         // Check if the image type asked here is the same as the one used for the reader
-        if (dynamic_cast<TImageType*>(m_Image.GetPointer()))
+        if (auto im = dynamic_cast<TImageType*>(m_Image.GetPointer()); im)
         {
-          return dynamic_cast<TImageType*>(m_Image.GetPointer());
+          return im;
         }
         else
         {
@@ -156,16 +157,15 @@ TImageType* InputImageParameter::GetImage()
       return nullptr;
     }
     // Check if the image type asked here is the same as m_image
-    TImageType *im = dynamic_cast<TImageType*>(m_Image.GetPointer());
-    if (im)
+    // TImageType *im = dynamic_cast<TImageType*>(m_Image.GetPointer());
+    if (auto im = dynamic_cast<TImageType*>(m_Image.GetPointer()); im)
     {
       return im;
     }
     // check if we already done this cast
     if (m_OutputCasted)
     {
-      im = dynamic_cast<TImageType*>(m_OutputCasted.GetPointer());
-      if (im)
+      if (auto im = dynamic_cast<TImageType*>(m_OutputCasted.GetPointer()); im)
       {
         return im;
       }
@@ -185,7 +185,6 @@ TImageType* InputImageParameter::GetImage()
 /** declare a specialization for ImageBaseType */
 template <>
 OTBApplicationEngine_EXPORT ImageBaseType* InputImageParameter::GetImage<ImageBaseType>();
-
 
 } // End namespace Wrapper
 } // End namespace otb

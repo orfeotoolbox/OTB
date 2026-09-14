@@ -21,6 +21,7 @@
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperTypes.h"
 #include "otbWrapperInputImageParameterMacros.h"
+#include "otbConfigurationManager.h"
 
 
 namespace otb
@@ -29,11 +30,27 @@ namespace otb
 namespace Wrapper
 {
 
-InputImageParameter::InputImageParameter()
+InputImageParameter::InputImageParameter(
+    Parameter::Info info,
+    bool mustReuseLoadedRegion,
+    unsigned long streamHeight
+)
+: Parameter(std::move(info))
+, m_StreamHeight(streamHeight ? streamHeight : ConfigurationManager::GetMaxImageRowsReadAtOnce())
+, m_mustReuseLoadedRegion(mustReuseLoadedRegion)
 {
-  this->SetName("Input Image");
-  this->SetKey("in");
+  if (GetName().empty())
+    SetName("Input Image");
+  if (GetKey().empty())
+    SetKey("in");
 }
+
+InputImageParameter::InputImageParameter(
+    Info info,
+    unsigned long streamHeight
+)
+: InputImageParameter(std::move(info), false, streamHeight)
+{}
 
 bool InputImageParameter::SetFromFileName(std::string filename)
 {
