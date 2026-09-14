@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,17 +23,12 @@
 #include "otbMacro.h"
 #include "otbLogger.h"
 
-#include "itkMultiThreaderBase.h"
-
 #include "itksys/SystemTools.hxx"
 
 #ifdef _OPENMP
-#include <omp.h>
+#  include "itkMultiThreaderBase.h"
+#  include <omp.h>
 #endif
-
-#include <cstdlib>
-#include <algorithm>
-#include <string>
 
 namespace otb
 {
@@ -63,6 +58,19 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
   {
     // Default value
     return 256;
+  }
+}
+
+unsigned long ConfigurationManager::GetMaxImageRowsReadAtOnce()
+{
+  std::string max_rows_hint;
+  if (itksys::SystemTools::GetEnv("OTB_MAX_NUMBER_OF_ROWS_READ_AT_ONCE", max_rows_hint))
+  {
+    return std::stoul(max_rows_hint);
+  }
+  else
+  { // Default value
+    return 0;
   }
 }
 

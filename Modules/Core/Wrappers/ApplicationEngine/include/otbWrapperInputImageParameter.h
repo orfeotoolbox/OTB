@@ -22,9 +22,8 @@
 #define otbWrapperInputImageParameter_h
 
 
-#include "otbImageFileReader.h"
-#include "otbClampImageFilter.h"
 #include "otbWrapperParameter.h"
+#include "otbNewMacro.h"
 
 #include "itkImageBase.h"
 
@@ -50,7 +49,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(InputImageParameter, Parameter);
@@ -141,8 +140,29 @@ public:
   void FromString(const std::string& value) override;
 
 protected:
-  /** Constructor */
-  InputImageParameter();
+  /**
+   * Default (& init) constructor.
+   * Initialize a new instance with its parameter information, and permits to enable reuse of image
+   * parts already used.
+   *
+   * \param[in] info                   Parameter information (name, key, description)
+   * \param[in] mustReuseLoadedRegion  Enable reuse of image part previously load for previous
+   *                                   output strip/stream.
+   * \param[in] streamHeight           Permits to indirectly control RAM usage during image loading.
+   *                                   Setting this parameter overrides whatever
+   *                                   `ConfigurationManager::GetMaxImageRowsReadAtOnce()` returns.
+   */
+  InputImageParameter(
+      Info info = Info{},
+      bool mustReuseLoadedRegion = false,
+      unsigned long streamHeight = 0 // expect an ambiguity if you pass an int instead of un unsigned long
+  );
+
+  /// \overload
+  InputImageParameter(
+      Info info,
+      unsigned long streamHeight // expect an ambiguity if you pass an int instead of un unsigned long
+  );
 
   /** Destructor */
   ~InputImageParameter() override = default;
@@ -159,6 +179,17 @@ private:
   itk::ProcessObject::Pointer m_OutputCaster = nullptr;
   itk::DataObject::Pointer    m_OutputCasted = nullptr;
 
+  /** Option to limit the number of lines loaded at a time.
+   * The option is considered _set_ when it's strictly positive (> 0).
+   * Sometimes loading an image region requires twice as much RAM than what the buffered region
+   * would use, and we may not have that much memory. This paremeter will tell to stream the
+   * loading.
+   */
+  unsigned long m_StreamHeight                      = 0;
+
+  /// Autorize reuse of previously loaded image region
+  bool                      m_mustReuseLoadedRegion = false;
+
 private:
   /** */
   template <typename TOutputImage, typename TInputImage>
@@ -173,6 +204,14 @@ private:
   Connector   m_Connection{};
 
 }; // End class InputImage Parameter
+
+template <>
+struct ParameterTypeTraits<ParameterType_InputImage>
+{
+  using Type = InputImageParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_InputImage>::Type::Type == ParameterType_InputImage);
 
 } // End namespace Wrapper
 } // End namespace otb
