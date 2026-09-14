@@ -128,7 +128,7 @@ parameters:
 -  ``ParameterType_String`` : parameter storing character string.
 
 -  ``ParameterType_StringList`` : parameter storing a list of character
-   string.
+   strings.
 
 -  ``ParameterType_InputFilename`` : parameter storing an input file
    name.
@@ -141,7 +141,7 @@ parameters:
 -  ``ParameterType_Group`` : parameter storing children parameters.
 
 -  ``ParameterType_Choice`` : parameter storing a list of choices
-   (doesn’t support multi-choice). It also allows to create specific
+   (doesn’t support multi-choice). It also allows creating specific
    sub-parameters for each available choice.
 
 -  ``ParameterType_ListView`` : parameter storing a list of choices
@@ -150,7 +150,7 @@ parameters:
 -  ``ParameterType_InputImage`` : parameter storing an input image.
 
 -  ``ParameterType_InputImageList`` : parameter storing a list of input
-   image.
+   images.
 
 -  ``ParameterType_InputVectorData`` : parameter storing input vector
    data.
@@ -253,7 +253,7 @@ In the example given in introduction, we assume that :
 Connecting parameters
 ~~~~~~~~~~~~~~~~~~~~~
 
-Once you have internal applications, you may want to setup their
+Once you have internal applications, you may want to set up their
 parameters. There are typically 3 cases.
 
 You may want to expose a parameter of an internal application as a
@@ -280,7 +280,7 @@ Note that the functions ``ShareParameter()`` and ``Connect()`` :
 -  Use the same syntax to access internal parameters (“application
    identifier” dot “parameter key”).
 
--  Shall be used in the DoInit() function, after the internal
+-  Shall be used in the ``DoInit()`` function, after the internal
    applications have been added.
 
 In this synchronization, the two parameters should have the same type,
@@ -289,8 +289,8 @@ both accessed using ``GetParameterString()`` and
 ``SetParameterString()``.
 
 This type of connection is a transition to the third case : you may want
-to connect the output of an internal application to the input of an
-other internal application. Here the difficulty is that the two
+to connect the output of an internal application to the input of another
+internal application. Here the difficulty is that the two
 parameters to connect probably have different types. Let say you want to
 connect parameter ``a.out`` to parameter ``b.in``. The “Connect()”
 function may work in favorable cases (see previous paragraph), but for
@@ -320,8 +320,8 @@ applications have a specific behaviour during parameter update.
 
 In the ``DoExecute()`` of your composite application, you have to call
 ``ExecuteInternal()`` in order to launch each internal application. The
-order should be compatible with image parameter connexions. If you want
-to do “in-memory” connexions, you can do it between two calls to
+order should be compatible with image parameter connections. If you want
+to do “in-memory” connections, you can do it between two calls to
 ``ExecuteInternal()``, for instance :
 
 .. code-block:: cpp
