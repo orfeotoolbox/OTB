@@ -38,7 +38,7 @@ endif()
 set(GROUP_DEPENDENCIES "@GROUP_DEPS@")
 string(TOUPPER "@otb-group@" UPPER_GROUP_NAME)
 
-# until all the process of this file is successfull, group is considerate as
+# until all the process of this file is successful, group is considerate as
 # unfound
 set(@otb-group@_FOUND 0)
 
@@ -91,14 +91,14 @@ list(REMOVE_DUPLICATES OTB_MODULES_DIRS)
 
 if (NOT EXISTS "${_GROUP_CMAKEDIR}/@otb-group@Targets.cmake")
   set(@otb-group@_FOUND 0)
-  # inform but do not use FATAL_ERROR as the component can be optionnal
+  # inform but do not use FATAL_ERROR as the component can be optional
   message(WARNING "[@otb-group@Config] Can not find required @otb-group@Target file in ${_GROUP_CMAKEDIR}")
 else()
   message(STATUS "[@otb-group@Config] Reading @otb-group@Target file in ${_GROUP_CMAKEDIR}")
   include(${_GROUP_CMAKEDIR}/@otb-group@Targets.cmake)
 endif()
 
-# set an all capitals FOUND var to stick to standart
+# set an all capitals FOUND var to stick to standard
 set(${UPPER_GROUP_NAME}_FOUND ${@otb-group@_FOUND})
 
 unset(GROUP_DEPENDENCIES)

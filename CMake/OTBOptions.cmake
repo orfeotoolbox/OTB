@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-# Old behavior was controled by otb_module_activation_option in otb-module files
+# Old behavior was controlled by otb_module_activation_option in otb-module files
 option(OTB_USE_6S "Enable 6S radiometric and atmospheric correction module" ON)
 option(OTB_USE_GSL "Enable GSL dependent modules" OFF)
 option(OTB_USE_LIBKML "Enable libkml dependent modules" OFF)

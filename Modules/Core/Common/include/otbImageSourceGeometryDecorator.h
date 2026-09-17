@@ -61,7 +61,7 @@ namespace otb
  *     this->DoUpdateParameters_NoInputImage();
  *
  *     // can use auto because a GeneratorType::Pointer is returned
- *     auto generator = this->InstanciateImageGenerator<otb::ComputeNormalsOnEllipsoidImageSource>();
+ *     auto generator = this->InstantiateImageGenerator<otb::ComputeNormalsOnEllipsoidImageSource>();
  *     ...
  * @endcode
  *

@@ -102,7 +102,7 @@ list(LENGTH otb_internal_groups_get_submodules __nb_submodule_settings)
 list(LENGTH otb_internal_groups_desc __nb_docs_desc)
 
 if (NOT (${__nb_internal_groups} EQUAL ${__nb_urls}))
-    message(FATAL_ERROR "There is one P0 remote module name or module url missings, aborting")
+    message(FATAL_ERROR "There is one P0 remote module name or module url missing, aborting")
 endif()
 if (NOT (${__nb_internal_groups} EQUAL ${__nb_branches}))
     message(FATAL_ERROR "There is one P0 remote module name or module branches missing, aborting")

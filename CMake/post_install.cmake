@@ -53,7 +53,7 @@ function(sanitize_system_paths input_file)
           endif()
         endif()
       endforeach()
-      # remove path if needed, add the lib names without "so" extention
+      # remove path if needed, add the lib names without "so" extension
       # and remove duplicates
       if(_to_be_removed)
         list(REMOVE_ITEM extract_str ${_to_be_removed})

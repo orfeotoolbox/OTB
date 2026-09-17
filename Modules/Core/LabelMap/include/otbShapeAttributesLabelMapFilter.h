@@ -42,7 +42,7 @@ namespace Functor
  * This is a comparison functor suitable for storing Offset instances
  * in an STL container.  The ordering is total and unique but has
  * little geometric meaning.
- * This class is copied from ITK 4.12.0 for compatability with ITK 4, 5( alpha2), ITK5 (master)
+ * This class is copied from ITK 4.12.0 for compatibility with ITK 4, 5( alpha2), ITK5 (master)
  * \ingroup OTBLabelMap
  */
 template< unsigned int VOffsetDimension >

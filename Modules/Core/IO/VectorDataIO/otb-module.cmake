@@ -30,7 +30,7 @@ list(APPEND _depends_of "OTBVectorDataBase"
                         "OTBMetadata"
 )
 
-# Controled in cmake option and declared by
+# Controlled in cmake option and declared by
 # otb_module_activation_option in ThirdParty/libkml
 if (OTB_USE_LIBKML)
   list(APPEND _depends_of "OTBIOKML")

@@ -145,7 +145,7 @@ endif()
 # /!\ UGLY FIX, DO NOT TRY THIS AT HOME /!\
 # Read the test folder of Core modules ONLY AFTER READING ALL MODULES DIRS.
 # When reading the module directories, we create file OTB<ModuleName>.cmake used
-# by intern mecanism to resolve dependency (in otb_module_impl)
+# by intern mechanism to resolve dependency (in otb_module_impl)
 # THIS IS A NASTY FIX needed to make tests works as THERE IS CYCLIC DEPENDENCIES
 # FOR CORE TESTS. Thus it need some the OTB<ModuleName>.cmake files that are
 # not already made (but only for test).

@@ -213,7 +213,7 @@ public:
 
   /**
    * Finds nodes from an xapth(-like) list of parameters.
-   * Recursivelly descend into the tree structure following the requested
+   * Recursively descend into the tree structure following the requested
    * xpath-like sequence to return the associated node (as a wrapper around
    * `TiXmlElement`)
    * \tparam C  variadic list of `char const*`
@@ -328,7 +328,7 @@ public:
   class const_iterator
   {
   public:
-    /** Defaut construtor to point to `end()`.
+    /** Default constructor to point to `end()`.
      * \throw None
      * \post always returns true when compared to `node().end()`
      */
@@ -524,7 +524,7 @@ using Element  = details::NodeImpl<TiXmlElement>;
  *
  * From there, node views can be found and interrogated for their content.
  *
- * Non copyable, but movable -- as OTB is still in C++14. C++17 garantied
+ * Non copyable, but movable -- as OTB is still in C++14. C++17 guaranteed
  * copy/move elision on return is exactly what we need.
  *
  * \internal The actual document is held through `details::WrapDocument` first

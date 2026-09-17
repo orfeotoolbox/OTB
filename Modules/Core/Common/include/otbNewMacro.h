@@ -25,7 +25,7 @@
  * Defines a static `New(...)` creation function that forwards construction
  * parameters to constructors with parameters.
  *
- * \note Unfortunatelly _forwarding references_ are not compatible with
+ * \note Unfortunately _forwarding references_ are not compatible with
  * `std::initializer_list`. IOW, this macro that defines a generic `New()`
  * function cannot be used with constructors that expect
  * `std::initializer_list`.

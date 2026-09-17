@@ -345,7 +345,7 @@ void writeModuleQGISDescriptor(const Application::Pointer app,
   */
   std::string param_line;
   for (const std::string& paramKey: appKeyList) {
-    // the following function can throw, but let is thow upper
+    // the following function can throw, but let is throw upper
     param_line = QGISLineFactory(app, paramKey);
     if (!param_line.empty())
       *module_descriptor << param_line << std::endl;
@@ -390,7 +390,7 @@ int main(int argc, char* argv[])
 
   std::string module_name;
 
-  // for all modules list, write the detailled QGIS descriptor and add it
+  // for all modules list, write the detailed QGIS descriptor and add it
   // in the algs.txt list with its group
   while (std::getline(module_list_file, module_name)) {
     bool descriptor_written = false;
@@ -403,7 +403,7 @@ int main(int argc, char* argv[])
 
     std::string qgis_desc_path = work_dir + module_name + ".txt";
 
-    // write detailled module desc
+    // write detailed module desc
     try {
       writeModuleQGISDescriptor(appli, module_name, group, qgis_desc_path);
       descriptor_written = true;

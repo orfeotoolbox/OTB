@@ -33,7 +33,7 @@ if(OTB_CPPCHECK_TEST)
   include(${_OTBModuleMacros_DIR}/OTBModuleCPPCheckTest.cmake)
 endif()
 
-# Declare usefull OTB_MODULE_ vars
+# Declare useful OTB_MODULE_ vars
 # OUTPUT:
 # - OTB_MODULE_${otb-module}_DECLARED == 1
 # - OTB_MODULE_${otb-module}-Test_DECLARED == 1

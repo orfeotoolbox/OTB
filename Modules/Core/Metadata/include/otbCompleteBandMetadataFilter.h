@@ -154,7 +154,7 @@ protected:
     outputPtr->SetImageMetadata(std::move(meta));
   }
 
-  // We still need to overide these functions, to do nothing within them.
+  // We still need to override these functions, to do nothing within them.
   void ThreadedGenerateData(OutputImageRegionType const&, itk::ThreadIdType) override
   {}
   void DynamicThreadedGenerateData(OutputImageRegionType const&) override

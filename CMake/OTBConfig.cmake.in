@@ -37,7 +37,7 @@
 # be installed in the lib/cmake/OTB-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@
 # folder of the components.
 # The PATH_SUFFIXES option of find_package helps to find the correct config file
-# accross all folder provided in CMAKE_PREFIX_PATH variable
+# across all folder provided in CMAKE_PREFIX_PATH variable
 macro(otb_find_component comp required)
   get_filename_component(_OTB_CMAKEDIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
   string(TOUPPER "${comp}" _UPPER_COMP_NAME)
@@ -57,7 +57,7 @@ macro(otb_find_component comp required)
 
   if (NOT ${${_UPPER_COMP_NAME}_FOUND})
     if (NOT ${required})
-      message(WARNING "[OTBConfig] optionnal dependency ${comp} can not be found. Does your CMAKE_PREFIX_PATH is correctly set?")
+      message(WARNING "[OTBConfig] optional dependency ${comp} can not be found. Does your CMAKE_PREFIX_PATH is correctly set?")
     endif()
   else()
     message(STATUS "[OTBConfig] Found component ${comp}")

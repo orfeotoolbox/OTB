@@ -438,7 +438,7 @@ endmacro()
 
 # Generate header with C++ macro "<TARGET_LIBRARY>_EXPORT" able to change
 # symbol visibility used during link.
-# For futher information see ELF Symbols and https://gcc.gnu.org/wiki/Visibility
+# For further information see ELF Symbols and https://gcc.gnu.org/wiki/Visibility
 function(OTB_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
   get_property(type TARGET ${TARGET_LIBRARY} PROPERTY TYPE)
   if(NOT ${type} STREQUAL "STATIC_LIBRARY"

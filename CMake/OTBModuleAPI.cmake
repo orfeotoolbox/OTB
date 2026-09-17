@@ -43,7 +43,7 @@ macro(_otb_module_use_recurse mod)
 endmacro()
 
 # append to ${ns}_LIBRAIRIES/INCLUDE_DIRS/LIBRARY_DIRS
-# the ${mod}_LIBRAIRIES/INCLUDE_DIRS/LIBRARY_DIRS and thoses of its dependencies
+# the ${mod}_LIBRAIRIES/INCLUDE_DIRS/LIBRARY_DIRS and those of its dependencies
 macro(_otb_module_config_recurse ns mod)
   if(NOT _${ns}_${mod}_USED)
     set(_${ns}_${mod}_USED 1)
@@ -294,7 +294,7 @@ endmacro()
 # The generated file contains preprocessor defines of activated options
 # listed in ${group}_MODULE_ACTIVATION_OPTION_LIST property
 #
-# The activation option is controled by the otb_module_activation_option
+# The activation option is controlled by the otb_module_activation_option
 # function in this file.
 # This function must be used only on per OTB group
 function(generate_group_config_file group)

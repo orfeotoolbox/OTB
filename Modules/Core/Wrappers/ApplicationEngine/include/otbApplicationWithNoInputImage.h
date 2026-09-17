@@ -50,7 +50,7 @@ namespace Wrapper
  * This decorator class provides the following services:
  * - `DoInit_NoInputImage()` meant to be called from `DoInit()` specialisation.
  * - `DoUpdateParameters_NoInputImage()` meant to be called from `DoExecute()` specialisation,
- * - `InstanciateImageGenerator()` meant to be called from `DoExecute()` to instanciate the actual
+ * - `InstantiateImageGenerator()` meant to be called from `DoExecute()` to instantiate the actual
  *    image generator.
  *
  * It defines parameters that mimic `OrthoRectification` interface: it defines the same parameters
@@ -333,7 +333,7 @@ protected:
   }
 
   /**
-   * Instanciates the image generator.
+   * Instantiates the image generator.
    * \tparam TImageGeneratorType  Type of the image generator. Expected to inherit from
    *                              `itk::ImageSource`, and to provide: `SetOutputSize()`,
    *                              `SetOutputSpacing()` and `SetOutputOrigin()` and
@@ -341,7 +341,7 @@ protected:
    * \tparam BuildArgs            Auto detected types of parameters to forward
    * \param[in] args  Construction parameters forwarded to `TImageGeneratorType` constructor.
    *
-   * \return A new instance of `TImageGeneratorType` fully configured regarding the image ouput
+   * \return A new instance of `TImageGeneratorType` fully configured regarding the image output
    * region, spatial reference...
    *
    * \sa `otb::ImageSourceGeometryDecorator`, `otb::ImageSourceProjectionReferenceDecorator`

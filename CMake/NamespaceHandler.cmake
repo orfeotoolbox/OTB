@@ -19,7 +19,7 @@
 #
 
 # NOTE TLA: this file seems to be unused (see NAMESPACE condition at the end)
-# and occurance
+# and occurrence
 # replace target name on one line
 macro(ns_filter_line)
 foreach(_t_name ${_t_list})
@@ -30,7 +30,7 @@ endmacro()
 # This function sets the namespace for all targets in the CMake files installed
 # by OTB
 function(otb_set_namespace folder ns)
-  # all combinaison of string with add_library or add exectuable a lib name 
+  # all combinaison of string with add_library or add executable a lib name
   # and IMPORTED in target definition
   set(_t_regex "add_(library|executable) *\\( *([a-zA-Z0-9_:-]+) (.* )?IMPORTED( |\\)).*")
   if(EXISTS "${folder}/OTBCoreTargets.cmake")

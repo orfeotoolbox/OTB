@@ -29,11 +29,11 @@ namespace otb
 
 /**
  * Decorate an input (image, image filter...) with an in-place image filter.
- * Helper function to simplify the instanciation of an in-place image filter
+ * Helper function to simplify the instantiation of an in-place image filter
  * that operates on top of another filter. Indeed, the input + output image
  * filter type is automagically deduced.
  *
- * \tparam TInplaceFilter Type of the in-place image filter to instanciate
+ * \tparam TInplaceFilter Type of the in-place image filter to instantiate
  * \tparam TInput  Auto-deduced input type
  * \tparam Args    Auto-deduced variadic list of the types of the parameters
  *                 forwarded to the `TInplaceFilter` constructor through its

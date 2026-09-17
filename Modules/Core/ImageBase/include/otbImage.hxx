@@ -115,7 +115,7 @@ namespace details
  *     throw std::logic_error("this cannot work");
  * @endcode
  *
- * Unfortunatly OTB is still in C++14.
+ * Unfortunately OTB is still in C++14.
  *
  * As this workaround is very specific to this usage, it's kept in `otbImage.hxx`.
  * Let's deprecate it in C++17.

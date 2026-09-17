@@ -202,7 +202,7 @@ public:
       Iterator lIter(m_Iter + i);
       return lIter;
     }
-    /// Substract
+    /// Subtract
     [[nodiscard]] Iterator operator-(int i) const
     {
       Iterator lIter(m_Iter - i);

@@ -40,7 +40,7 @@ namespace otb
 
 /**
  * \ingroup OTBCommon
- * \name Metaprog utilties to repack arrays and numbers into arrays */
+ * \name Metaprog utilities to repack arrays and numbers into arrays */
 //@{
 
 namespace details
@@ -635,7 +635,7 @@ inline OutArray repack(Inputs const&... inputs)
  * If all arrays types used as parameters are of the same type, this type will
  * be used, but with:
  * - the type of underlying elements defined from the common type of all inputs
- * - the size of the ouput array automatically deduced from the inputs.
+ * - the size of the output array automatically deduced from the inputs.
  *
  * If mixed array types are used (e.g `itk::FixedArray` and `std::array`), then
  * the fallback type (`itk::FixedArray` by default) will be used.

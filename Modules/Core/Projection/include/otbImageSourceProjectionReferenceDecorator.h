@@ -79,7 +79,7 @@ protected:
 
   /**
    * Specialized loop meant to be called from leaf specialization of `ThreadedGenerateData().
-   * This fonctions takes care of line-wise iteration over the current output region, and of
+   * This functions takes care of line-wise iteration over the current output region, and of
    * converting pixel coordinates into WGS84 lon/lat coordinates, efficiently.
    *
    * \tparam TCommandOnLine   The command applied once per line, before iterating on the pixels.
@@ -167,7 +167,7 @@ protected:
     );
   }
 
-  // TODO: The day otb::CoordinateTransformation exposes batch tranformation,
+  // TODO: The day otb::CoordinateTransformation exposes batch transformation,
   // and SpatialReference constructor accepts pointers, we could have directly a
   // vector<CoordinateTransformation>
   // => For the moment, use the right unique_ptr type.

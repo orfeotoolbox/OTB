@@ -68,7 +68,7 @@ protected:
     this->template AddParameter<parameter_type_v<TNoData>>(
         m_nodata_key,
         "NoData value",
-        "Ouput cells with no data are filled with this value (optional " + std::to_string(m_nodata_default_value) + " by default)"
+        "Output cells with no data are filled with this value (optional " + std::to_string(m_nodata_default_value) + " by default)"
     );
     parameter_type<TNoData>::set_default(
         *this,
@@ -93,7 +93,7 @@ protected:
     std::ostringstream oss;
     oss << origin_FileName;
 
-    // Check if FileName is extended (with the ? caracter)
+    // Check if FileName is extended (with the ? character)
     // If not extended then override the FileName
     auto const extension_start = origin_FileName.find('?');
     if (extension_start == std::string::npos && !origin_FileName.empty())

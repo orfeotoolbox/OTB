@@ -33,7 +33,7 @@ void ConvertPhysicalPointCoordinatesToWGS84(
 #if GDAL_VERSION_NUM >= 3030000
   // #   pragma message "GDAL >= 3.3 => Using TransformWithErrorCodes"
   // Directly call TransformWithErrorCodes() instead of Transform() that
-  // would allocate everytime with malloc, and with a vector as well in
+  // would allocate every time with malloc, and with a vector as well in
   // order to store results... that we'll ignore, for now...
   ct.TransformWithErrorCodes(
       line_size,

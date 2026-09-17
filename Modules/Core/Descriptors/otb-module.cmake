@@ -31,7 +31,7 @@ list(APPEND _depends_of "OTBCommon"
                         "OTBTransform"
 )
 
-# Controled in cmake option and declared by
+# Controlled in cmake option and declared by
 # otb_module_activation_option in ThirdParty/SiftFast
 if (OTB_USE_SIFTFAST)
   list(APPEND _depends_of "OTBSiftFast")

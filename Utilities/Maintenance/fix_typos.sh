@@ -48,6 +48,8 @@ EXCLUDED_FILES="$EXCLUDED_FILES,*/Documentation/SoftwareGuide/Art/*,*/Documentat
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Copyright/*,*/SuperBuild/Copyright/*"
 # exclude maintenance, translation, license
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Utilities/Maintenance/fix_typos.sh,*/fix_typos/*,LICENSE,*/i18n/*"
+# exclude P0 Modules
+EXCLUDED_FILES="$EXCLUDED_FILES,*/Modules/FeaturesExtraction/*,*/Modules/Hyperspectral/*,*/Modules/Learning/*,*/Modules/Miscellaneous/*,*/Modules/Remote/*,*/Modules/SAR/*,*/Modules/Segmentation/*,*/Modules/StereoProcessing/*"
 # exclude Data directory
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Data/*"
 

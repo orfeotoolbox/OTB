@@ -59,7 +59,7 @@ struct has_next<IT, otb::void_t<decltype(std::declval<IT&>().Next())>>
 : std::true_type {};
 
 /**
- * Convinience constant that tells whether it's an `Iterator` that has the `Next()` function.
+ * Convenience constant that tells whether it's an `Iterator` that has the `Next()` function.
  */
 template <class IT>
 constexpr bool has_next_v = has_next<IT>::value;
@@ -95,12 +95,12 @@ struct has_next_line<IT, otb::void_t<decltype(std::declval<IT&>().NextLine())>>
 : std::true_type {};
 
 /**
- * Convinience constant that tells whether it's a `ScanLineIterator` that has the `NextLine()` function.
+ * Convenience constant that tells whether it's a `ScanLineIterator` that has the `NextLine()` function.
  */
 template <class IT>
 constexpr bool has_next_line_v = has_next_line<IT>::value;
 
-/** Convinience to increment iterator to the next line.
+/** Convenience to increment iterator to the next line.
  * Example:
  *
  * @code
@@ -170,7 +170,7 @@ struct has_get<IT, otb::void_t<decltype(std::declval<IT&>().Get())>>
 : std::true_type {};
 
 /**
- * Convinience constant that tells whether it looks like an iterator that has the `Get()` function.
+ * Convenience constant that tells whether it looks like an iterator that has the `Get()` function.
  */
 template <class IT>
 constexpr bool has_get_v = has_get<IT>::value;
@@ -188,7 +188,7 @@ struct has_set<IT,
 : std::true_type {};
 
 /**
- * Convinience constant that tells whether it looks like an iterator that has the `Set()` function.
+ * Convenience constant that tells whether it looks like an iterator that has the `Set()` function.
  */
 template <class IT>
 constexpr bool has_set_v = has_set<IT>::value;

@@ -78,7 +78,7 @@ GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::OpenFromMemory(
       char pixel_offset[64] = {'\0'};
       char line_offset[64] = {'\0'};
       char band_start_in_mem[32] = {'\0'};
-      // use CPLPrintPointer to avoid worrying between windows and linux adress
+      // use CPLPrintPointer to avoid worrying between windows and linux address
       int nRet = CPLPrintPointer(band_start_in_mem,
                 static_cast<GByte*>(mem_ptr) + band_offset * i,
                                   sizeof(band_start_in_mem));
