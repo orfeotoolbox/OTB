@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -37,9 +37,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check compiler versions
-set(OTB_MIN_GNU_VER 8)
-set(OTB_MIN_MSVC_VER 19)
-set(OTB_MIN_Clang_VER 10)
+# To be changed according to https://en.cppreference.com/cpp/compiler_support/20
+# if the c++ version changes
+set(OTB_MIN_GNU_VER 10)
+set(OTB_MIN_MSVC_VER 19.29)
+set(OTB_MIN_Clang_VER 13)
 if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
   if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
     message(FATAL_ERROR "The version of your ${CMAKE_CXX_COMPILER_ID} "
