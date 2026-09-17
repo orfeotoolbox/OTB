@@ -1,3 +1,35 @@
+OTB-v 10.0.0 - Changes since version 9.1.0 (September 17th, 2026)
+-----------------------------------------------------------------
+Features added:
+  * !1103: Nisar integration by Julien Osman
+  * !1099: C++ 20 by Tristan Laurent
+  * !1096: Resolve "Backport S1Tiling toolbox to OTB" by Luc Hermitte
+  * !1094: Lum driver support by Tristan Laurent
+  * #2501: Compile OTB with ZSTD by Tristan Laurent
+
+Bugs fixed:
+  * !1102: Fix cpp20 windows by Tristan Laurent
+  * !1082: Correct post_install sed commands by Tristan Laurent
+  * !1077: Fix Mosaic nodata input value by Rémi Cresson
+  * !1056: ENH: update GDAL from 3.9.3 to 3.11.0 by Tristan Laurent
+
+Packaging:
+  * !1093: Update all superbuild dependencies before OTB 10 release by Tristan Laurent
+  * !1092: remove stereoprocessing code and use remote module one by Tristan Laurent
+  * !1091: Remove Hyperspectral and use it as a remote P0 module by Tristan Laurent
+  * !1090: COMP: compile CURL with version symbols by Tristan Laurent
+  * !1087: Move segmentation code in a remote module by Tristan Laurent
+  * !1086: Use SAR module as a remote module by Tristan Laurent
+  * !1083: Update dependencies for security purpose by Thibaut ROMAIN
+  * !1080: Update swig 4.3.1 by Tristan Laurent
+  * !1074: Remove learning to use it as remote module by Tristan Laurent
+  * !998: PKG: add LERC as external dep, compile gdal with it by Tristan Laurent
+
+Documentation:
+  * !1090: COMP: compile CURL with version symbols by Tristan Laurent
+  * !1089: DOC: update deadlinks for cookbook and markdown files by Tristan Laurent
+  * !1081: Add doc to compile cookbook by Tristan Laurent
+
 OTB-v 9.1.1 - Changes since version 9.1.0 (March 19th, 2024)
 -------------------------------------------------------------
 Bugs fixed:
