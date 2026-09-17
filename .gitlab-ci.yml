@@ -37,8 +37,8 @@ variables:
 
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
       when: never
     - if: '$CI_COMMIT_BRANCH'
 
@@ -55,7 +55,10 @@ stages:
     max: 2
     when:
       - runner_system_failure
-      - stuck_or_timeout_failure
+      - runner_external_dependency_failure
+      - stuck_pending_no_matching_runners
+      - no_updates_running
+      - no_updates_canceling
 
 .common:
   extends: .general
@@ -66,10 +69,10 @@ stages:
 
 .common-build:
   extends: .common
-  only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
   stage: build
   # as build also use test, we need to get the git Data submodule
   # LFS is compatible only with HTTP in CI, thus force it.
@@ -114,9 +117,11 @@ stages:
   extends: .common
   variables:
     CI_SKIP_TESTING: "ON"
-  only:
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" &&
+          $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^release-[0-9]+\.[0-9]+$/
   stage: build
   artifacts:
     when: always
@@ -143,10 +148,10 @@ stages:
 
 .common-prepare:
   extends: .common
-  only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
   stage: prepare
   artifacts:
     expire_in: 24 hrs
@@ -159,9 +164,9 @@ stages:
 #-------------------------- precheck job ---------------------------------------
 fast-build:
   extends: .common
-  only:
-    - merge_requests
-    - branches
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-itk5:22.04
   variables:
@@ -186,10 +191,10 @@ fast-build:
 
 legal-check:
   extends: .common
-  only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   variables:
@@ -254,9 +259,10 @@ python3.12-gdal-bindings:
   extends: .common
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
-  only:
-    refs:
-      - /^release-[0-9]+\.[0-9]+$/
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" &&
+          $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^release-[0-9]+\.[0-9]+$/
   script:
     - |
       MAJOR_VERSION=$(egrep "set\(OTB_VERSION_MAJOR" < CMakeLists.txt | egrep -o "[0-9]+")
@@ -368,13 +374,11 @@ windows-10-complete-build:
 #------------------------- QA related jobs -------------------------------------
 ubuntu-qa-code-coverage:
   extends: .common-build
-  only:
-    refs:
-      - merge_requests
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-    variables:
-      - $SONAR_OTB_TOKEN
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
+    - if: $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   script:
     - ctest -V -S CI/main_qa.cmake
@@ -388,13 +392,11 @@ ubuntu-qa-code-coverage:
 ubuntu-qa-static-analysis:
   extends: .common
   stage: build
-  only:
-    refs:
-      - merge_requests
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-    variables:
-      - $SONAR_OTB_TOKEN
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
+    - if: $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
@@ -421,12 +423,10 @@ ubuntu-sonar-report:
     GIT_DEPTH: ""
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
   stage: report
-  only:
-    refs:
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-    variables:
-      - $SONAR_OTB_TOKEN
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop" 
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
+    # - if: $SONAR_OTB_TOKEN
   script:
     - sonar-scanner -Dproject.settings=sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
@@ -449,9 +449,11 @@ deploy:
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   stage: deploy
   extends: .common
-  only:
-    - develop@orfeotoolbox/otb
-    - /^release-[0-9]+\.[0-9]+$/
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" &&
+          $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^release-[0-9]+\.[0-9]+$/
+    - if: $CI_COMMIT_BRANCH == "develop"
   before_script:
     - git checkout -f -q $CI_COMMIT_SHA
   script:
@@ -478,9 +480,11 @@ update-archive:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
   stage: deploy
   extends: .general
-  only:
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^release-[0-9]+\.[0-9]+$/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" &&
+          $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^release-[0-9]+\.[0-9]+$/
+    - if: $CI_COMMIT_BRANCH == "develop"
   before_script:
     # Provision efficiently the local LFS cache before checkout
     - git lfs fetch origin $CI_COMMIT_SHA
@@ -515,9 +519,8 @@ release-docker:
       name: gcr.io/kaniko-project/executor:debug
       entrypoint: [""]
   stage: docker
-  only:
-    refs:
-      - /^release-[0-9]+\.[0-9]+$/
+  rules:
+    - if: $CI_COMMIT_TAG
   needs:
       - job: ubuntu-22-complete-build
         artifacts: true
