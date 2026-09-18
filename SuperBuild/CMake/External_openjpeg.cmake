@@ -33,15 +33,13 @@ ADD_SUPERBUILD_CMAKE_VAR(OPENJPEG ZLIB_LIBRARY)
 #GIT_REPOSITORY "https://github.com/uclouvain/openjpeg.git"
 #GIT_TAG 081de4b15f54cb4482035b7bf5e3fb443e4bc84b
 
-set(__OPENJPEG_VERSION "2.5.4")
-
 ExternalProject_Add(OPENJPEG
   PREFIX OPENJPEG
-  URL "https://github.com/uclouvain/openjpeg/archive/v${__OPENJPEG_VERSION}.tar.gz"
+  URL "https://github.com/uclouvain/openjpeg/archive/v2.5.4.tar.gz"
   URL_MD5 6160de075bb5191e482bc0f024b375e4
   # change download name as the file notation vx.x.x is used everywhere
   # and can be in conflict with other package
-  DOWNLOAD_NAME "openjpeg_v${__OPENJPEG_VERSION}.tar.gz"
+  DOWNLOAD_NAME "openjpeg_v2.5.4.tar.gz"
   BINARY_DIR ${OPENJPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

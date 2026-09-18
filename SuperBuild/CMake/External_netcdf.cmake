@@ -26,7 +26,6 @@ SETUP_SUPERBUILD(NETCDF)
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(NETCDF HDF5 ZLIB CURL HDF4 JPEG)
 
 set(NETCDF_SB_CONFIG)
-set(NETCDF_VERSION "4.9.3")
 
 # this should not be needed but see Mantis-1457
 if(UNIX)
@@ -39,13 +38,13 @@ endif()
 
 ExternalProject_Add(NETCDF
   PREFIX NETCDF
-  URL "https://github.com/Unidata/netcdf-c/archive/refs/tags/v${NETCDF_VERSION}.tar.gz"
+  URL "https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.9.3.tar.gz"
   URL_MD5 bc9eb96e1983bf90fb3a99cc358c5ac3
   SOURCE_DIR ${NETCDF_SB_SRC}
   BINARY_DIR ${NETCDF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-  DOWNLOAD_NAME "netcdf-c-${NETCDF_VERSION}.tar.gz"
+  DOWNLOAD_NAME "netcdf-c-4.9.3.tar.gz"
   DEPENDS ${NETCDF_DEPENDENCIES}
   CMAKE_CACHE_ARGS
   ${SB_CMAKE_CACHE_ARGS}

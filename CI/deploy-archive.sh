@@ -23,13 +23,13 @@ jobs_directory=/home/otbpush/test
 
 build_dir=$(readlink -f "$1")
 
-scp "${build_dir}"/SuperBuild-archives-*.{tar.bz2,md5} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp "${build_dir}"/SuperBuild-archives-*.{tar.gz,md5} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
 if [ "$CI_COMMIT_REF_NAME" = "develop" ] # check if the branch name is develop or not
 then # we are on develop
 ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-  mv ${jobs_directory}/SuperBuild-archives-*.{tar.bz2,md5} ${jobs_directory}/superbuild_archive
+  mv ${jobs_directory}/SuperBuild-archives-*.{tar.gz,md5} ${jobs_directory}/superbuild_archive
 else # we are on a release branch
 ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-  mv ${jobs_directory}/SuperBuild-archives-*.{tar.bz2,md5} ${jobs_directory}/staging/
+  mv ${jobs_directory}/SuperBuild-archives-*.{tar.gz,md5} ${jobs_directory}/staging/
 fi

@@ -29,13 +29,11 @@ else()
   message(WARNING "  No suitable python interpreter was found !")
 endif()
 
-set(__SWIG_VERSION "4.4.0")
-
 if(MSVC)
   # Use pre-built swig executable (no linking is required, no install done)
   ExternalProject_Add(SWIG
     PREFIX SWIG
-    URL "https://downloads.sourceforge.net/project/swig/swigwin/swigwin-${__SWIG_VERSION}/swigwin-${__SWIG_VERSION}.zip"
+    URL "https://downloads.sourceforge.net/project/swig/swigwin/swigwin-4.4.0/swigwin-4.4.0.zip"
     URL_MD5 16bdcc5f39a172879e93f57cea91dfef
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -54,7 +52,7 @@ else()
 
   ExternalProject_Add(SWIG
     PREFIX SWIG
-    URL "https://downloads.sourceforge.net/project/swig/swig/swig-${__SWIG_VERSION}/swig-${__SWIG_VERSION}.tar.gz"
+    URL "https://downloads.sourceforge.net/project/swig/swig/swig-4.4.0/swig-4.4.0.tar.gz"
     URL_MD5 62d77e7d90057d5410f7a28ff57d854f
     BINARY_DIR ${SWIG_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
