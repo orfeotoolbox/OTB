@@ -63,7 +63,7 @@ PATH=$(cat_path "$OTB_INSTALL_DIR/bin" "$PATH")
 # export PYTHONPATH to import otbApplication.py
 PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/python" "$PYTHONPATH")
 # add path to internal gdal and python apps
-xdk_lib_python=$(find "$OTB_INSTALL_DIR/lib" -mindepth 2 -maxdepth 2 -type d -name "sites-packages")
+xdk_lib_python=$(find "$OTB_INSTALL_DIR/lib" -mindepth 2 -maxdepth 2 -type d -name "site-packages")
 
 # if we found something
 if [ -n "$xdk_lib_python" ]; then
