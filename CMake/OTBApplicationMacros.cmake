@@ -94,6 +94,7 @@ macro(otb_create_application)
   # Remove the usual 'lib' prefix to make it clear it is a plugin
   # and not a shared library to link against
   set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY PREFIX "")
+  set_property(TARGET ${APPLICATION_TARGET_NAME} PROPERTY SUFFIX "${CMAKE_SHARED_LIBRARY_SUFFIX}")
   if (CMAKE_DEBUG)
     message(STATUS "[CMAKE_DEBUG]  otb-module: ${otb-module} --> APPLICATION_INSTALL_PATH: ${APPLICATION_INSTALL_PATH}")
   endif()
