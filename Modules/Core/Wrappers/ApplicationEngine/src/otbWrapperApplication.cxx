@@ -591,18 +591,20 @@ void Application::RegisterPipeline()
     // if current is a list push every of its members in datastack
     if (dynamic_cast<DataObjectListInterface*>(current))
     {
-      DataObjectListInterface* list   = dynamic_cast<DataObjectListInterface*>(current);
-      int                      length = list->Size();
-      for (int i = 0; i < length; i++)
+      DataObjectListInterface* list         = dynamic_cast<DataObjectListInterface*>(current);
+      const std::size_t        length       = list->Size();
+      for (std::size_t i = 0; i < length; ++i)
       {
-        itk::DataObject* newData = list->GetNthDataObject(i);
-        if (!current || inputData.count(current))
+        itk::DataObject* newData = list->GetNthDataObject(static_cast<unsigned int>(i));
+        if (!newData || inputData.count(newData))
           continue;
         dataStack.push(newData);
         continue;
       }
     }
     // Finally get the current's process object source
+    if (!current)
+      continue;
     itk::ProcessObject* process = (current->GetSource()).GetPointer();
     if (!process || m_Filters.find(process) != m_Filters.end())
       continue;
@@ -611,9 +613,10 @@ void Application::RegisterPipeline()
     // Push back all source's inputs in datastack
     for (auto const& it : inputs)
     {
-      if (inputData.count(it.GetPointer()))
+      itk::DataObject* input = it.GetPointer();
+      if (!input || inputData.count(input))
         continue;
-      dataStack.push(it.GetPointer());
+      dataStack.push(input);
     }
   }
 }
@@ -671,11 +674,11 @@ void Application::FreeResources()
       // If input is a list
       if (dynamic_cast<DataObjectListInterface*>(data.GetPointer()))
       {
-        DataObjectListInterface* list   = dynamic_cast<DataObjectListInterface*>(data.GetPointer());
-        int                      length = list->Size();
-        for (int i = 0; i < length; i++)
+        DataObjectListInterface* list         = dynamic_cast<DataObjectListInterface*>(data.GetPointer());
+        const std::size_t        length       = list->Size();
+        for (std::size_t i = 0; i < length; ++i)
         {
-          itk::DataObject* newData = list->GetNthDataObject(i);
+          itk::DataObject* newData = list->GetNthDataObject(static_cast<unsigned int>(i));
           if (!newData || dataSet.count(newData))
             continue;
           dataSet.insert(newData);
