@@ -51,7 +51,7 @@ public:
   typedef SubsampledImageRegionConstIterator<TImage> Superclass;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SubsampledImageRegionConstIterator, SubsampledImageRegionConstIterator);
+  itkTypeMacro(SubsampledImageRegionIterator, SubsampledImageRegionConstIterator);
 
   itkStaticConstMacro(ImageIteratorDimension, unsigned int, Superclass::ImageIteratorDimension);
 
