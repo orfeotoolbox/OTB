@@ -49,7 +49,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GDALImageIO, itk::LightObject);
+  itkTypeMacro(GDALDatasetWrapper, itk::LightObject);
 
   /** Easy access to the internal GDALDataset object.
    *  Don't close it, it will be automatic */

@@ -185,7 +185,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShiftScaleImageFilter, itk::UnaryFunctorImageFilter);
+  itkTypeMacro(ShiftScaleVectorImageFilter, itk::UnaryFunctorImageFilter);
 
   itkGetMacro(Scale, InputPixelType);
   itkSetMacro(Scale, InputPixelType);

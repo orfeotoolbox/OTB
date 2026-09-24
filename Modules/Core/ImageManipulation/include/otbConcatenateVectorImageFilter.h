@@ -46,7 +46,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorImageToImagePixelAccessor, ImageToImageFilter);
+  itkTypeMacro(ConcatenateVectorImageFilter, ImageToImageFilter);
 
   /** Template related typedefs */
   typedef TInputImage1 InputImage1Type;
