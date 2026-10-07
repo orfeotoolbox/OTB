@@ -11,10 +11,17 @@ insert_final_newline = true
 # Set default charset
 charset = utf-8
 
-# 4 space indentation
+# Default indendation
+indent_size = 4
 indent_style = space
-indent_size = 2
 
 # Various options
 trim_trailing_whitespace = true
+
+# C++ only options (don't apply to git commits e.g.)
+[*.{cxx,hxx,h}]
 max_line_length = 160
+indent_size = 2
+
+[COMMIT_EDITMSG]
+max_line_length = 79
