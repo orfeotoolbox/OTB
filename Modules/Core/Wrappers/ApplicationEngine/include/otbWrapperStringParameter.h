@@ -104,6 +104,15 @@ private:
 
 }; // End class Parameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_String`. */
+template <>
+struct ParameterTypeTraits<ParameterType_String>
+{
+  using Type = StringParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_String>::Type::Type == ParameterType_String);
+
 } // End namespace Wrapper
 } // End namespace otb
 

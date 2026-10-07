@@ -107,6 +107,15 @@ private:
   StringParameter::Pointer m_StringParam;
 }; // End class Parameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_InputFilename`. */
+template <>
+struct ParameterTypeTraits<ParameterType_InputFilename>
+{
+  using Type = InputFilenameParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_InputFilename>::Type::Type == ParameterType_InputFilename);
+
 } // End namespace Wrapper
 } // End namespace otb
 

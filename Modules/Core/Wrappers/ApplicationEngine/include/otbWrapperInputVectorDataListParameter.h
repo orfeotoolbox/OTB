@@ -28,8 +28,6 @@
 
 namespace otb
 {
-
-
 namespace Wrapper
 {
 
@@ -109,8 +107,16 @@ private:
 
 }; // End class InputVectorDataList Parameter
 
-} // End namespace Wrapper
+/** `ParameterTypeTraits` specialisation for `ParameterType_InputVectorDataList`. */
+template <>
+struct ParameterTypeTraits<ParameterType_InputVectorDataList>
+{
+  using Type = InputVectorDataListParameter;
+};
 
+static_assert(ParameterTypeTraits<ParameterType_InputVectorDataList>::Type::Type == ParameterType_InputVectorDataList);
+
+} // End namespace Wrapper
 } // End namespace otb
 
 #endif

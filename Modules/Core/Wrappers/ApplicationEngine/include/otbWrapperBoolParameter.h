@@ -90,6 +90,15 @@ private:
   bool m_Value = false;
 };
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_Bool`. */
+template <>
+struct ParameterTypeTraits<ParameterType_Bool>
+{
+  using Type = BoolParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_Bool>::Type::Type == ParameterType_Bool);
+
 } // end of namespace Wrapper
 } // end of namespace otb
 

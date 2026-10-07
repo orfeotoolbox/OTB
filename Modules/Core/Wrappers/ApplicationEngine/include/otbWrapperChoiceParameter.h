@@ -129,6 +129,15 @@ private:
 
 }; // End class Parameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_Choice`. */
+template <>
+struct ParameterTypeTraits<ParameterType_Choice>
+{
+  using Type = ChoiceParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_Choice>::Type::Type == ParameterType_Choice);
+
 } // End namespace Wrapper
 } // End namespace otb
 

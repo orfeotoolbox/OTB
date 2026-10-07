@@ -28,7 +28,6 @@
 
 namespace otb
 {
-
 namespace Wrapper
 {
 
@@ -94,8 +93,16 @@ private:
 
 }; // End class InputFilenameList Parameter
 
-} // End namespace Wrapper
+/** `ParameterTypeTraits` specialisation for `ParameterType_InputFilenameList`. */
+template <>
+struct ParameterTypeTraits<ParameterType_InputFilenameList>
+{
+  using Type = InputFilenameListParameter;
+};
 
+static_assert(ParameterTypeTraits<ParameterType_InputFilenameList>::Type::Type == ParameterType_InputFilenameList);
+
+} // End namespace Wrapper
 } // End namespace otb
 
 #endif

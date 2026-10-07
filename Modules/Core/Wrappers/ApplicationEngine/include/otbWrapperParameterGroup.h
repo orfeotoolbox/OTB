@@ -65,10 +65,49 @@ public:
   /** Get the choices made in a ListView Parameter widget*/
   std::vector<int> GetSelectedItems(std::string const& paramKey) const;
 
-  /** Add a new parameter to the parameter group
-   * the parent key of paramKey can be the path to a parameter group
-   * or the path to a choice value */
-  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
+  /** Add a new parameter to the parameter group.
+   * The parent key of paramKey can be the path to a parameter group
+   * or the path to a choice value
+   */
+  void AddParameter(ParameterType type, std::string_view paramKey, std::string paramName);
+
+  /**
+   * Templated overload of `AddParameter`.
+   * Unlike the non-templated version, this one is simplifier and more efficient as type association
+   * is done through `ParameterTypeTraits<type>`.
+
+   * @tparam type  Exact type of parameter to add (enum value of type `ParameterType`)
+   * @param[in] paramKey   Parameter key -- can be a path in a parameter group
+   * @param[in] paramName  Parameter name
+   *
+   * \return the new parameter created -- with no type degradation
+   */
+  template <ParameterType type>
+  auto AddParameter(std::string paramKey)
+  -> ParameterTypeTraits_t<type>*
+  {
+    auto [parentAsGroup, parentkey, lastkey] = this->DecodeKey(paramKey);
+    if (parentAsGroup)
+    {
+      using ActualParameterType = ParameterTypeTraits_t<type>;
+      Parameter::Pointer newParam = ActualParameterType::New();
+      newParam->SetKey(std::move(paramKey));
+      newParam->SetName(std::move(paramName));
+
+      if (parentAsGroup != this)
+      {
+        newParam->SetRoot(parentAsGroup);
+        parentAsGroup->AddChild(newParam);
+      }
+      parentAsGroup->AddParameter(newParam);
+      return newParam;
+    }
+    else
+    {
+      itkExceptionMacro(<< "Cannot add " << lastkey << " to parameter " << parentkey);
+    }
+  }
+
 
   Parameter::Pointer GetParameterByIndex(unsigned int i, bool follow = true) const;
 
@@ -117,6 +156,16 @@ private:
   ParameterGroup(const ParameterGroup&) = delete;
   void operator=(const ParameterGroup&) = delete;
 };
+
+/** `ParameterTypeTraits` specialisation for `ParameterType_Group`. */
+template <>
+struct ParameterTypeTraits<ParameterType_Group>
+{
+  using Type = ParameterGroup;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_Group>::Type::Type == ParameterType_Group);
+
 }
 }
 

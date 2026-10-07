@@ -84,6 +84,15 @@ private:
 
 }; // End class BandParameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_Band`. */
+template <>
+struct ParameterTypeTraits<ParameterType_Band>
+{
+  using Type = BandParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_Band>::Type::Type == ParameterType_Band);
+
 } // End namespace Wrapper
 } // End namespace otb
 

@@ -104,6 +104,15 @@ private:
   void operator=(const Parameter&) = delete;
 };
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_InputVectorData`. */
+template <>
+struct ParameterTypeTraits<ParameterType_InputVectorData>
+{
+  using Type = InputVectorDataParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_InputVectorData>::Type::Type == ParameterType_InputVectorData);
+
 } // End namespace Wrapper
 } // End namespace otb
 

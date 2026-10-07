@@ -163,6 +163,15 @@ private:
   otb::MultiImageFileWriter::Pointer m_MultiWriter;
 }; // End class OutputImage Parameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_OutputImage`. */
+template <>
+struct ParameterTypeTraits<ParameterType_OutputImage>
+{
+  using Type = OutputImageParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_OutputImage>::Type::Type == ParameterType_OutputImage);
+
 } // End namespace Wrapper
 } // End namespace otb
 

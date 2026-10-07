@@ -196,6 +196,21 @@ private:
 
 }; // End class Parameter
 
+/**
+ * Type-traits meant to associate `ParameterType` enum value to a concrete `Parameter` child class.
+ * This traits will be used by templated `Application::AddParameter` flavor.
+ * @tparam type  Enum value of type `ParameterType`
+ */
+template <ParameterType type>
+struct ParameterTypeTraits
+{
+  using Type = void;
+};
+
+/** Type alias shortcut to `ParameterTypeTraits<type>::Type`. */
+template <ParameterType type>
+using ParameterTypeTraits_t = typename ParameterTypeTraits<type>::Type;
+
 } // End namespace Wrapper
 } // End namespace otb
 
