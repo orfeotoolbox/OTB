@@ -140,29 +140,8 @@ public:
   void FromString(const std::string& value) override;
 
 protected:
-  /**
-   * Default (& init) constructor.
-   * Initialize a new instance with its parameter information, and permits to enable reuse of image
-   * parts already used.
-   *
-   * \param[in] info                   Parameter information (name, key, description)
-   * \param[in] mustReuseLoadedRegion  Enable reuse of image part previously load for previous
-   *                                   output strip/stream.
-   * \param[in] streamHeight           Permits to indirectly control RAM usage during image loading.
-   *                                   Setting this parameter overrides whatever
-   *                                   `ConfigurationManager::GetMaxImageRowsReadAtOnce()` returns.
-   */
-  InputImageParameter(
-      Info info = Info{},
-      bool mustReuseLoadedRegion = false,
-      unsigned long streamHeight = 0 // expect an ambiguity if you pass an int instead of un unsigned long
-  );
-
-  /// \overload
-  InputImageParameter(
-      Info info,
-      unsigned long streamHeight // expect an ambiguity if you pass an int instead of un unsigned long
-  );
+  /** Constructor */
+  InputImageParameter();
 
   /** Destructor */
   ~InputImageParameter() override = default;
@@ -185,10 +164,10 @@ private:
    * would use, and we may not have that much memory. This paremeter will tell to stream the
    * loading.
    */
-  unsigned long m_StreamHeight                      = 0;
+  unsigned long m_StreamHeight          = 0;
 
   /// Autorize reuse of previously loaded image region
-  bool                      m_mustReuseLoadedRegion = false;
+  bool          m_mustReuseLoadedRegion = false;
 
 private:
   /** */
@@ -205,6 +184,7 @@ private:
 
 }; // End class InputImage Parameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_InputImage`. */
 template <>
 struct ParameterTypeTraits<ParameterType_InputImage>
 {

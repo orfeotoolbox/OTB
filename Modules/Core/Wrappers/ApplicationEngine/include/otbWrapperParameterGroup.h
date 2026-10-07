@@ -83,10 +83,29 @@ public:
    * \return the new parameter created -- with no type degradation
    */
   template <ParameterType type>
-  auto AddParameter(std::string paramKey)
+  auto AddParameter(std::string paramKey, std::string paramName)
   -> ParameterTypeTraits_t<type>*
   {
-    auto [parentAsGroup, parentkey, lastkey] = this->DecodeKey(paramKey);
+    ParameterKey pKey(paramKey);
+    std::vector<std::string> splitKey = pKey.Split();
+
+    // Get the last subkey
+    std::string lastkey = pKey.GetLastElement();
+
+    std::string        parentkey;
+    Parameter::Pointer parentParam;
+
+    if (splitKey.size() > 1)
+    {
+      parentkey   = pKey.GetRoot();
+      parentParam = GetParameterByKey(parentkey);
+    }
+    else
+    {
+      parentParam = this;
+    }
+
+    ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
     if (parentAsGroup)
     {
       using ActualParameterType = ParameterTypeTraits_t<type>;

@@ -23,6 +23,7 @@
 
 #include "otbWrapperStringParameter.h"
 #include "otbMacro.h"
+#include "otbNewMacro.h"
 
 #include <string>
 
