@@ -70,7 +70,7 @@ public:
    * The parent key of paramKey can be the path to a parameter group
    * or the path to a choice value
    */
-  void AddParameter(ParameterType type, std::string_view paramKey, std::string paramName);
+  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
   /**
    * Templated overload of `AddParameter`.
