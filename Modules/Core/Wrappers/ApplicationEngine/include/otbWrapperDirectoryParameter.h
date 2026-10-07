@@ -110,6 +110,15 @@ private:
   StringParameter::Pointer m_StringParam;
 }; // End class Parameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_Directory`. */
+template <>
+struct ParameterTypeTraits<ParameterType_Directory>
+{
+  using Type = DirectoryParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_Directory>::Type::Type == ParameterType_Directory);
+
 } // End namespace Wrapper
 } // End namespace otb
 

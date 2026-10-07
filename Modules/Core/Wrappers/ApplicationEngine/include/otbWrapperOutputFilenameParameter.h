@@ -107,6 +107,15 @@ private:
   StringParameter::Pointer m_StringParam;
 }; // End class Parameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_OutputFilename`. */
+template <>
+struct ParameterTypeTraits<ParameterType_OutputFilename>
+{
+  using Type = OutputFilenameParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_OutputFilename>::Type::Type == ParameterType_OutputFilename);
+
 } // End namespace Wrapper
 } // End namespace otb
 

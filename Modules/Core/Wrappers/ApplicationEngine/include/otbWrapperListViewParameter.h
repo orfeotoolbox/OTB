@@ -215,6 +215,15 @@ private:
 
 }; // End class Parameter
 
+/** `ParameterTypeTraits` specialisation for `ParameterType_ListView`. */
+template <>
+struct ParameterTypeTraits<ParameterType_ListView>
+{
+  using Type = ListViewParameter;
+};
+
+static_assert(ParameterTypeTraits<ParameterType_ListView>::Type::Type == ParameterType_ListView);
+
 } // End namespace Wrapper
 } // End namespace otb
 

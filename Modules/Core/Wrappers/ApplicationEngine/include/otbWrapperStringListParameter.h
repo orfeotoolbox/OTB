@@ -28,8 +28,6 @@
 
 namespace otb
 {
-
-
 namespace Wrapper
 {
 
@@ -101,11 +99,18 @@ private:
   StringListParameter(const StringListParameter&) = delete;
 
   void operator=(const StringListParameter&) = delete;
-
 }; // End class Parameter
 
-} // End namespace Wrapper
+/** `ParameterTypeTraits` specialisation for `ParameterType_StringList`. */
+template <>
+struct ParameterTypeTraits<ParameterType_StringList>
+{
+  using Type = StringListParameter;
+};
 
+static_assert(ParameterTypeTraits<ParameterType_StringList>::Type::Type == ParameterType_StringList);
+
+} // End namespace Wrapper
 } // End namespace otb
 
 #endif

@@ -28,8 +28,6 @@
 
 namespace otb
 {
-
-
 namespace Wrapper
 {
 
@@ -115,8 +113,16 @@ private:
 
 }; // End class InputImage Parameter
 
-} // End namespace Wrapper
+/** `ParameterTypeTraits` specialisation for `ParameterType_InputImageList`. */
+template <>
+struct ParameterTypeTraits<ParameterType_InputImageList>
+{
+  using Type = InputImageListParameter;
+};
 
+static_assert(ParameterTypeTraits<ParameterType_InputImageList>::Type::Type == ParameterType_InputImageList);
+
+} // End namespace Wrapper
 } // End namespace otb
 
 #endif
