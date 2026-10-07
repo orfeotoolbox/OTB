@@ -21,8 +21,9 @@
 #ifndef otbWrapperParameterGroup_h
 #define otbWrapperParameterGroup_h
 
-#include "itkObject.h"
 #include "otbWrapperParameter.h"
+#include "otbWrapperParameterKey.h"
+#include "itkObject.h"
 #include <vector>
 #include <string>
 
