@@ -30,27 +30,11 @@ namespace otb
 namespace Wrapper
 {
 
-InputImageParameter::InputImageParameter(
-    Parameter::Info info,
-    bool mustReuseLoadedRegion,
-    unsigned long streamHeight
-)
-: Parameter(std::move(info))
-, m_StreamHeight(streamHeight ? streamHeight : ConfigurationManager::GetMaxImageRowsReadAtOnce())
-, m_mustReuseLoadedRegion(mustReuseLoadedRegion)
+InputImageParameter::InputImageParameter()
 {
-  if (GetName().empty())
-    SetName("Input Image");
-  if (GetKey().empty())
-    SetKey("in");
+  this->SetName("Input Image");
+  this->SetKey("in");
 }
-
-InputImageParameter::InputImageParameter(
-    Info info,
-    unsigned long streamHeight
-)
-: InputImageParameter(std::move(info), false, streamHeight)
-{}
 
 bool InputImageParameter::SetFromFileName(std::string filename)
 {
@@ -115,6 +99,11 @@ void InputImageParameter::ClearValue()
   m_FileName         .clear();
   m_PreviousFileName .clear();
   m_UseFilename      = true;
+}
+
+ParameterType InputImageParameter::GetType() const
+{
+  return ParameterType_InputImage;
 }
 
 std::string InputImageParameter::ToString() const
