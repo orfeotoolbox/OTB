@@ -52,7 +52,7 @@ InputImageParameter::Pointer InputImageListParameter::FromImage(ImageBaseType* i
 InputImageParameter::Pointer& InputImageListParameter::FromImage(InputImageParameter::Pointer& parameter, ImageBaseType* image)
 {
   return FromData(parameter, image,
-                  [](auto p, auto i) -> void {
+                  [](auto &p, auto i) -> void {
                     assert(p);
 
                     p->SetImage(i);
@@ -110,7 +110,8 @@ void InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
   assert(imList != nullptr);
   assert(!m_ImageList.IsNull());
 
-  SetObjectList(*m_ImageList, *imList, [this](auto p, auto image) -> auto { this->FromImage(p, image); },
+  SetObjectList(*m_ImageList, *imList,
+                [this](auto &p, auto image) -> auto { this->FromImage(p, image); },
                 //
                 [](auto p) -> auto {
                   assert(p);

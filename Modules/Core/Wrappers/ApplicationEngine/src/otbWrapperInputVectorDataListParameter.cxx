@@ -98,7 +98,7 @@ void InputVectorDataListParameter::SetVectorDataList(VectorDataListType* vdList)
 
   SetObjectList(*m_VectorDataList, *vdList,
                 //
-                [this](auto p, auto vd) -> auto { this->FromVectorData(p, vd); },
+                [this](auto &p, auto vd) -> auto { this->FromVectorData(p, vd); },
                 //
                 [](auto p) -> auto {
                   assert(p);
