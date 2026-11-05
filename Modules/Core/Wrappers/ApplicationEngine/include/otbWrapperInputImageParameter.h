@@ -140,8 +140,29 @@ public:
   void FromString(const std::string& value) override;
 
 protected:
-  /** Constructor */
-  InputImageParameter();
+  /**
+   * Default (& init) constructor.
+   * Initialize a new instance with its parameter information, and permits to enable reuse of image
+   * parts already used.
+   *
+   * \param[in] info                   Parameter information (name, key, description)
+   * \param[in] mustReuseLoadedRegion  Enable reuse of image part previously load for previous
+   *                                   output strip/stream.
+   * \param[in] streamHeight           Permits to indirectly control RAM usage during image loading.
+   *                                   Setting this parameter overrides whatever
+   *                                   `ConfigurationManager::GetMaxImageRowsReadAtOnce()` returns.
+   */
+  InputImageParameter(
+      Info info = Info{},
+      bool mustReuseLoadedRegion = false,
+      unsigned long streamHeight = 0 // expect an ambiguity if you pass an int instead of un unsigned long
+  );
+
+  /// \overload
+  InputImageParameter(
+      Info info,
+      unsigned long streamHeight // expect an ambiguity if you pass an int instead of un unsigned long
+  );
 
   /** Destructor */
   ~InputImageParameter() override = default;
