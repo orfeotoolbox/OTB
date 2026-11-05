@@ -136,7 +136,7 @@ auto ImageFileReader<TOutputImage, ConvertPixelTraits>
 #endif
 
   otbMsgDevMacro(
-      "ALLOCATE temp buffer: " << (nb_bytes / 1024l / 1024l) << "MB for " << NeatRegionLogger(ioRegion));
+      "(RE)ALLOCATE temp buffer: " << (nb_bytes / 1024l / 1024l) << "MB for " << NeatRegionLogger(ioRegion));
   otb::Logger::Instance()->Flush();  // make sure to flush logs in case of bug
   loadBuffer.resize(nb_bytes);
 
