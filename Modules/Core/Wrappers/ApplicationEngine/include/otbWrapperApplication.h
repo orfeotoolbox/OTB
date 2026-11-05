@@ -138,55 +138,57 @@ public:
   /** Request the application to stop its processing */
   void Stop();
 
-  /* Get the internal application parameters
+  /**Get the internal application parameters.
    *
-   * WARNING: this method may disappear from the API */
+   * \warning this method may disappear from the API */
   ParameterGroup* GetParameterList();
 
-  /* Get the internal application parameter specified
-   * if the follow flag is on, the function returns the target of proxy parameters
-   * WARNING: this method may disappear from the API */
+  /** Get the internal application parameter specified.
+   * if the follow flag is on, the function returns the target of proxy parameters.
+   * \warning this method may disappear from the API
+   */
   Parameter* GetParameterByKey(std::string const& parameter, bool follow = true);
 
-  /* Get the internal application parameter specified
+  /** Get the internal application parameter specified.
    *
-   * WARNING: this method may disappear from the API */
+   * \warning this method may disappear from the API
+   */
   const Parameter* GetParameterByKey(std::string const& parameter, bool follow = true) const;
 
-  /* Returns the description of a parameter */
+  /** Returns the description of a parameter */
   std::string GetParameterName(std::string const& paramKey);
 
-  /* Returns the description of a parameter */
+  /** Returns the description of a parameter */
   std::string GetParameterDescription(std::string const& paramKey);
 
-  /* Set the description of a parameter */
+  /** Set the description of a parameter */
   void SetParameterDescription(std::string const& paramKey, std::string dec);
 
-  /* Enable the use of an optional parameter. Returns the previous state */
+  /** Enable the use of an optional parameter. Returns the previous state */
   void EnableParameter(std::string const& paramKey);
 
-  /* Disable the use of an optional parameter. Returns the previous state  */
+  /** Disable the use of an optional parameter. Returns the previous state  */
   void DisableParameter(std::string const& paramKey);
 
-  /* Return the enable state of an optional parameter  */
+  /** Return the enable state of an optional parameter  */
   bool IsParameterEnabled(std::string const& paramKey, bool recurseParents = false) const;
 
-  /* Return true if the specified parameter is mandatory */
+  /** Return true if the specified parameter is mandatory */
   bool IsMandatory(std::string const& paramKey) const;
 
-  /* Return true if the specified parameter was set automatically in
+  /** Return true if the specified parameter was set automatically in
    * the application
    */
   bool HasAutomaticValue(std::string const& paramKey) const;
 
-  /* Returns true if the parameter has an associated value provided externally
+  /** Returns true if the parameter has an associated value provided externally
    *  (not automatically computed by the application) */
   bool HasUserValue(std::string const& paramKey) const;
 
-  /* If a user value was provided, clear it and update the other parameters */
+  /** If a user value was provided, clear it and update the other parameters */
   void ClearValue(std::string const& paramKey);
 
-  /* Returns true if the parameter has an associated value.
+  /** Returns true if the parameter has an associated value.
    * This value can be an automatically computed value or default value,
    * or a value set externally by user */
   bool HasValue(std::string const& paramKey) const;
@@ -198,7 +200,7 @@ public:
    */
   void SetParameterUserValue(std::string const& paramKey, bool value);
 
-  /* Return the user level of access to a parameter */
+  /** Return the user level of access to a parameter */
   UserLevel GetParameterUserLevel(std::string const& paramKey) const;
 
   /** Get the role of the parameter */
@@ -926,7 +928,7 @@ protected:
   /** Destructor */
   ~Application() override = default;
 
-  /* Register a ProcessObject as a new progress source */
+  /** Register a ProcessObject as a new progress source */
   void AddProcess(itk::ProcessObject* object, std::string description);
 
   /** Add a new choice value to an existing choice parameter */
@@ -946,12 +948,13 @@ protected:
    * \todo Have `AddParameter` returns a reference to the newly built `Parameter` instance in order
    * to chain other changes directly (we have the information => don't loose it).
    */
-  template <ParameterType type>
-  void AddParameter(
+  template <ParameterType type, typename... Args>
+  auto AddParameter(
       std::string const& paramKey,
       std::string const& paramName,
-      std::string const& paramDescription = ""
-  );
+      std::string const& paramDescription = "",
+      Args &&...         args
+  ) -> ParameterTypeTraits_t<type>*;
 
   /** Add a parameterRAM method with no parameter*/
   void AddRAMParameter(std::string const& paramKey = "ram");

@@ -83,8 +83,12 @@ public:
    *
    * \return the new parameter created -- with no type degradation
    */
-  template <ParameterType type>
-  auto AddParameter(std::string paramKey, std::string paramName)
+  template <ParameterType type, typename... Args>
+  auto AddParameter(
+      std::string paramKey,
+      std::string paramName,
+      std::string paramDescription,
+      Args&&... args)
   -> ParameterTypeTraits_t<type>*
   {
     ParameterKey pKey(paramKey);
@@ -113,6 +117,7 @@ public:
       Parameter::Pointer newParam = ActualParameterType::New();
       newParam->SetKey(std::move(paramKey));
       newParam->SetName(std::move(paramName));
+      newParam->SetDescription(std::move(paramDescription));
 
       if (parentAsGroup != this)
       {
