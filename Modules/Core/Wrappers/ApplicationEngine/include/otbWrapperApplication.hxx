@@ -23,6 +23,7 @@
 
 
 #include "otbWrapperApplication.h"
+#include "otbWrapperParameterTraits.h"
 
 
 namespace otb

@@ -114,7 +114,10 @@ public:
     if (parentAsGroup)
     {
       using ActualParameterType = ParameterTypeTraits_t<type>;
-      Parameter::Pointer newParam = ActualParameterType::New();
+      using ActualPointer = ParameterTypeTraits_p<type>;
+      static_assert(! std::is_same_v<void, ActualParameterType>);
+      ActualPointer actualNewParam = ParameterTypeTraits<type>::New();
+      auto newParam = ParameterTypeTraits<type>::Upcast(actualNewParam);
       newParam->SetKey(std::move(paramKey));
       newParam->SetName(std::move(paramName));
       newParam->SetDescription(std::move(paramDescription));
@@ -125,7 +128,7 @@ public:
         parentAsGroup->AddChild(newParam);
       }
       parentAsGroup->AddParameter(newParam);
-      return newParam;
+      return actualNewParam;
     }
     else
     {
@@ -181,15 +184,6 @@ private:
   ParameterGroup(const ParameterGroup&) = delete;
   void operator=(const ParameterGroup&) = delete;
 };
-
-/** `ParameterTypeTraits` specialisation for `ParameterType_Group`. */
-template <>
-struct ParameterTypeTraits<ParameterType_Group>
-{
-  using Type = ParameterGroup;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_Group>::Type::Type == ParameterType_Group);
 
 }
 }

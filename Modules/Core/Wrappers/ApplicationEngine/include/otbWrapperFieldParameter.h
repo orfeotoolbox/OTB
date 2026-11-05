@@ -99,15 +99,6 @@ private:
 
 }; // End class FieldParameter
 
-/** `ParameterTypeTraits` specialisation for `ParameterType_Field`. */
-template <>
-struct ParameterTypeTraits<ParameterType_Field>
-{
-  using Type = FieldParameter;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_Field>::Type::Type == ParameterType_Field);
-
 } // End namespace Wrapper
 } // End namespace otb
 

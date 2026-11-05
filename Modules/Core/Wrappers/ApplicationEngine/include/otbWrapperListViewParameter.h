@@ -213,16 +213,7 @@ private:
   ListViewParameter(const ListViewParameter&) = delete;
   void operator=(const ListViewParameter&) = delete;
 
-}; // End class Parameter
-
-/** `ParameterTypeTraits` specialisation for `ParameterType_ListView`. */
-template <>
-struct ParameterTypeTraits<ParameterType_ListView>
-{
-  using Type = ListViewParameter;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_ListView>::Type::Type == ParameterType_ListView);
+}; // End class ListViewParameter
 
 } // End namespace Wrapper
 } // End namespace otb

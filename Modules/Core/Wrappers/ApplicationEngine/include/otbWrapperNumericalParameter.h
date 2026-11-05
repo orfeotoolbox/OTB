@@ -181,6 +181,7 @@ private:
 
 }; // End class Numerical Parameter
 
+
 class OTBApplicationEngine_EXPORT FloatParameter : public NumericalParameter<float>
 {
 public:
@@ -207,15 +208,6 @@ public:
 protected:
   using NumericalParameter::NumericalParameter;
 };
-
-/** `ParameterTypeTraits` specialisation for `ParameterType_Float`. */
-template <>
-struct ParameterTypeTraits<ParameterType_Float>
-{
-  using Type = FloatParameter;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_Float>::Type::Type == ParameterType_Float);
 
 
 class OTBApplicationEngine_EXPORT DoubleParameter : public NumericalParameter<double>
@@ -245,15 +237,6 @@ protected:
   using NumericalParameter::NumericalParameter;
 };
 
-/** `ParameterTypeTraits` specialisation for `ParameterType_Double`. */
-template <>
-struct ParameterTypeTraits<ParameterType_Double>
-{
-  using Type = DoubleParameter;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_Double>::Type::Type == ParameterType_Double);
-
 
 class OTBApplicationEngine_EXPORT IntParameter : public NumericalParameter<int>
 {
@@ -276,6 +259,7 @@ public:
 protected:
   using NumericalParameter::NumericalParameter;
 };
+
 
 class OTBApplicationEngine_EXPORT RAMParameter : public NumericalParameter<unsigned int>
 {
@@ -311,6 +295,7 @@ public:
   }
 };
 
+
 class OTBApplicationEngine_EXPORT RadiusParameter : public IntParameter
 {
 public:
@@ -341,15 +326,6 @@ protected:
     this->SetDescription("Radius in pixels");
   }
 };
-
-/** `ParameterTypeTraits` specialisation for `ParameterType_Radius`. */
-template <>
-struct ParameterTypeTraits<ParameterType_Radius>
-{
-  using Type = RadiusParameter;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_Radius>::Type::Type == ParameterType_Radius);
 
 } // End namespace Wrapper
 } // End namespace otb

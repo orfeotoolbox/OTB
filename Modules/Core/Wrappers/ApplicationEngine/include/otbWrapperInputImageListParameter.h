@@ -111,16 +111,7 @@ private:
   FloatVectorImageListType::Pointer m_ImageList;
 
 
-}; // End class InputImage Parameter
-
-/** `ParameterTypeTraits` specialisation for `ParameterType_InputImageList`. */
-template <>
-struct ParameterTypeTraits<ParameterType_InputImageList>
-{
-  using Type = InputImageListParameter;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_InputImageList>::Type::Type == ParameterType_InputImageList);
+}; // End class InputImageListParameter
 
 } // End namespace Wrapper
 } // End namespace otb

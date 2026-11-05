@@ -21,7 +21,6 @@
 #ifndef otbWrapperInputFilenameListParameter_h
 #define otbWrapperInputFilenameListParameter_h
 
-
 #include "otbWrapperParameterList.h"
 #include "otbWrapperStringParameter.h"
 
@@ -92,15 +91,6 @@ private:
   void operator=(const Parameter&) = delete;
 
 }; // End class InputFilenameList Parameter
-
-/** `ParameterTypeTraits` specialisation for `ParameterType_InputFilenameList`. */
-template <>
-struct ParameterTypeTraits<ParameterType_InputFilenameList>
-{
-  using Type = InputFilenameListParameter;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_InputFilenameList>::Type::Type == ParameterType_InputFilenameList);
 
 } // End namespace Wrapper
 } // End namespace otb
