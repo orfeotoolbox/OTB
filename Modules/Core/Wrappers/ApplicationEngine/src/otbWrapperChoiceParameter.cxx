@@ -94,7 +94,7 @@ ParameterGroup::Pointer ChoiceParameter::GetChoiceParameterGroupByIndex(int i) c
   return m_ChoiceList[i].m_AssociatedParameter;
 }
 
-ParameterGroup::Pointer ChoiceParameter::GetChoiceParameterGroupByKey(std::string const& choiceKey) const
+ParameterGroup::Pointer ChoiceParameter::GetChoiceParameterGroupByKey(std::string_view choiceKey) const
 {
   for (auto it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
   {

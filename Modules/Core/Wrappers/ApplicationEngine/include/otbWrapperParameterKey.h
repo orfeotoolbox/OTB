@@ -21,11 +21,10 @@
 #ifndef otbWrapperParameterKey_h
 #define otbWrapperParameterKey_h
 
+#include <algorithm>
 #include <string>
+#include <string_view>
 #include <vector>
-#include <ostream>
-#include <itksys/RegularExpression.hxx>
-#include "itkMacro.h"
 #include "OTBApplicationEngineExport.h"
 
 namespace otb
@@ -49,25 +48,24 @@ public:
   ParameterKey() = default;
   ParameterKey(std::string val);
 
-
   /** Class Methods used to interface with the registered factories */
   /*
-last() : return "tata"
+     last() : return "tata"
    ** parent() : return "toto.titi"
-   ** root() : return "toto"
+   ** root() : return "toto" -- Actually GetRoot() returns the parent() part
    ** split() : return vector<string> ("toto", "titi", "tata")
    ** append(std::string)
    ** append(const Key&)
    */
 
   /** Returns the string after the last point separator */
-  std::string GetLastElement() const;
+  std::string_view GetLastElement() const;
 
   /** Returns the string before the first point separator */
-  std::string GetFirstElement() const;
+  [[deprecated]] std::string_view GetFirstElement() const;
 
   /** Returns the string before the last point separator */
-  std::string GetRoot() const;
+  std::string_view GetRoot() const;
 
   /** Returns the vector of string that contains each element separated by a point. */
   std::vector<std::string> Split() const;
@@ -85,20 +83,61 @@ last() : return "tata"
   }
 
   /** Set Key value */
-  void SetKey(std::string val)
-  {
-    // Check chain : lowercase, alphanumerical or "."
-    itksys::RegularExpression reg;
-    reg.compile("([^0-9a-z\\.])");
+  void SetKey(std::string val);
 
-    if (!reg.find(val))
+  // ----[ Split On First Dot
+  [[nodiscard]]
+  static constexpr
+  std::pair<std::string_view, std::string_view>
+  SplitKeyOnFirstDot(std::string_view key)
+  {
+    auto const dot = key.find_first_of('.');
+    if (dot == std::string_view::npos)
     {
-      m_Key = std::move(val);
+      return {{key}, {}};
     }
     else
     {
-      itkGenericExceptionMacro("Invalid key '" << val << "'. Must be in lowercase, containing alphanumerical characters or \".\"");
+      return {
+        {key.data(), dot},
+        {key.begin()+dot+1, key.end()}
+      };
     }
+  }
+
+  [[nodiscard]] constexpr auto SplitKeyOnFirstDot() const
+  {
+    return SplitKeyOnFirstDot(m_Key);
+  }
+
+  // ----[ Split On Last Dot
+  [[nodiscard]]
+  static constexpr
+  std::pair<std::string_view, std::string_view>
+  SplitKeyOnLastDot(std::string_view key)
+  {
+    auto const dot = key.find_last_of('.');
+    if (dot == std::string_view::npos)
+    {
+      return {{}, {key}};
+    }
+    else
+    {
+      return {
+        {key.data(), dot},
+        {key.begin()+dot+1, key.end()}
+      };
+    }
+  }
+
+  [[nodiscard]] constexpr auto SplitKeyOnLastDot() const
+  {
+    return SplitKeyOnLastDot(m_Key);
+  }
+
+  [[nodiscard]] constexpr auto HasSeveralParts() const
+  {
+    return m_Key.find('.') != std::string::npos;
   }
 
 private:

@@ -19,6 +19,8 @@
  */
 
 #include "otbWrapperParameterKey.h"
+#include "itkMacro.h"
+#include <itksys/RegularExpression.hxx>
 
 #include "otb_boost_string_header.h"
 
@@ -32,22 +34,22 @@ ParameterKey::ParameterKey(std::string val)
   this->SetKey(std::move(val));
 }
 
-
-std::string ParameterKey::GetLastElement() const
+std::string_view ParameterKey::GetLastElement() const
 {
-  return m_Key.substr(m_Key.find_last_of(".") + 1, m_Key.size());
+  auto const dot = m_Key.find_last_of('.');
+  return {m_Key.begin()+dot+1, m_Key.end()};
 }
 
-std::string ParameterKey::GetFirstElement() const
+std::string_view ParameterKey::GetFirstElement() const
 {
-  return m_Key.substr(0, m_Key.find_first_of("."));
+  return {m_Key.data(), m_Key.find_first_of('.')};
 }
 
-std::string ParameterKey::GetRoot() const
+std::string_view ParameterKey::GetRoot() const
 {
-  return m_Key.substr(0, m_Key.find_last_of("."));
+  auto const dot = m_Key.find_last_of('.');
+  return {m_Key.data(), dot};
 }
-
 
 std::vector<std::string> ParameterKey::Split() const
 {
@@ -56,6 +58,26 @@ std::vector<std::string> ParameterKey::Split() const
 
   return res;
 }
+
+static_assert(Wrapper::ParameterKey::SplitKeyOnFirstDot("toto").first == "toto");
+static_assert(Wrapper::ParameterKey::SplitKeyOnFirstDot("toto").second == "");
+
+static_assert(Wrapper::ParameterKey::SplitKeyOnFirstDot("toto.titi").first == "toto");
+static_assert(Wrapper::ParameterKey::SplitKeyOnFirstDot("toto.titi").second == "titi");
+
+static_assert(Wrapper::ParameterKey::SplitKeyOnFirstDot("toto.titi.tata").first == "toto");
+static_assert(Wrapper::ParameterKey::SplitKeyOnFirstDot("toto.titi.tata").second == "titi.tata");
+
+
+static_assert(Wrapper::ParameterKey::SplitKeyOnLastDot("toto").first == "");
+static_assert(Wrapper::ParameterKey::SplitKeyOnLastDot("toto").second == "toto");
+
+static_assert(Wrapper::ParameterKey::SplitKeyOnLastDot("toto.titi").first == "toto");
+static_assert(Wrapper::ParameterKey::SplitKeyOnLastDot("toto.titi").second == "titi");
+
+static_assert(Wrapper::ParameterKey::SplitKeyOnLastDot("toto.titi.tata").first == "toto.titi");
+static_assert(Wrapper::ParameterKey::SplitKeyOnLastDot("toto.titi.tata").second == "tata");
+
 
 void ParameterKey::Append(const std::string& val)
 {
@@ -67,6 +89,22 @@ void ParameterKey::Append(const std::string& val)
 void ParameterKey::Append(const ParameterKey& pKey)
 {
   this->Append(pKey.GetKey());
+}
+
+void ParameterKey::SetKey(std::string val)
+{
+  // Check chain : lowercase, alphanumerical or "."
+  itksys::RegularExpression reg;
+  reg.compile("([^0-9a-z\\.])");
+
+  if (!reg.find(val))
+  {
+    m_Key = std::move(val);
+  }
+  else
+  {
+    itkGenericExceptionMacro("Invalid key '" << val << "'. Must be in lowercase, containing alphanumerical characters or \".\"");
+  }
 }
 
 } // end namespace Wrapper
