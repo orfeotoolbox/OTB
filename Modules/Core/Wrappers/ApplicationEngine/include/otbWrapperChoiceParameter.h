@@ -75,7 +75,7 @@ public:
   ParameterGroup::Pointer GetChoiceParameterGroupByIndex(int i) const;
 
   /** Get the ParameterGroup associated to a choice value */
-  ParameterGroup::Pointer GetChoiceParameterGroupByKey(std::string const& choiceKey) const;
+  ParameterGroup::Pointer GetChoiceParameterGroupByKey(std::string_view choiceKey) const;
 
   /** Get all parameters that are child of this choice parameter */
   std::vector<std::string> GetParametersKeys() const;

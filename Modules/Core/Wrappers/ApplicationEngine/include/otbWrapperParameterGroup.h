@@ -22,10 +22,12 @@
 #define otbWrapperParameterGroup_h
 
 #include "otbWrapperParameter.h"
-#include "otbWrapperParameterKey.h"
-#include "itkObject.h"
+#include "otbWrapperParameterTraits.h"
+#include "otbNewMacro.h"
+#include <tuple>
 #include <vector>
 #include <string>
+#include <string_view>
 
 namespace otb
 {
@@ -39,6 +41,8 @@ namespace Wrapper
  */
 class OTBApplicationEngine_EXPORT ParameterGroup : public Parameter
 {
+  std::tuple<ParameterGroup*, std::string_view, std::string_view> DecodeKey(std::string_view paramKey);
+
 public:
   using Self         = ParameterGroup;
   using Superclass   = Parameter;
@@ -55,22 +59,22 @@ public:
 
   /** Method to substitute a parameter in a group.
    *  The function returns true on success, false on failure */
-  bool ReplaceParameter(std::string const& key, Parameter::Pointer p);
+  bool ReplaceParameter(std::string_view key, Parameter::Pointer p);
 
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
 
   /** Remove choices made in ListViewParameter widget*/
-  void ClearChoices(std::string paramKey);
+  void ClearChoices(std::string_view paramKey);
 
   /** Get the choices made in a ListView Parameter widget*/
-  std::vector<int> GetSelectedItems(std::string const& paramKey) const;
+  std::vector<int> GetSelectedItems(std::string_view paramKey) const;
 
   /** Add a new parameter to the parameter group.
    * The parent key of paramKey can be the path to a parameter group
    * or the path to a choice value
    */
-  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
+  void AddParameter(ParameterType type, std::string_view paramKey, std::string paramName);
 
   /**
    * Templated overload of `AddParameter`.
@@ -95,26 +99,7 @@ public:
       Args&&... args)
   -> ParameterTypeTraits_t<type>*
   {
-    ParameterKey pKey(paramKey);
-    std::vector<std::string> splitKey = pKey.Split();
-
-    // Get the last subkey
-    std::string lastkey = pKey.GetLastElement();
-
-    std::string        parentkey;
-    Parameter::Pointer parentParam;
-
-    if (splitKey.size() > 1)
-    {
-      parentkey   = pKey.GetRoot();
-      parentParam = GetParameterByKey(parentkey);
-    }
-    else
-    {
-      parentParam = this;
-    }
-
-    ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
+    auto [parentAsGroup, parentkey, lastkey] = this->DecodeKey(paramKey);
     if (parentAsGroup)
     {
       Info info {
@@ -146,7 +131,7 @@ public:
 
   Parameter::Pointer GetParameterByIndex(unsigned int i, bool follow = true) const;
 
-  Parameter::Pointer GetParameterByKey(std::string const& name, bool follow = true) const;
+  Parameter::Pointer GetParameterByKey(std::string_view name, bool follow = true) const;
 
   void Clear()
   {
