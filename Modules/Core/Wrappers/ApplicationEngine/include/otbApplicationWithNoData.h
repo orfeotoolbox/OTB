@@ -22,6 +22,7 @@
 #define otbApplicationWithNoData_h
 
 #include "OTBApplicationEngineExport.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperApplication.h"
 #include <sstream>
 
