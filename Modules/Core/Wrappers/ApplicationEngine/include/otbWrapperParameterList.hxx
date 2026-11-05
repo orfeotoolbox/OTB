@@ -93,7 +93,7 @@ void ParameterList<T>::AddFromFileName(const std::string& filename)
 {
   assert(!filename.empty());
 
-  typename T::Pointer p(T::New());
+  typename T::Pointer p(T::New(this->m_Info));
 
   p->FromString(filename);
 
@@ -110,7 +110,7 @@ void ParameterList<T>::AddFromFileName(const std::string& filename)
 template <typename T>
 void ParameterList<T>::Insert(const std::string& filename, std::size_t index)
 {
-  typename T::Pointer p(T::New());
+  typename T::Pointer p(T::New(this->m_Info));
 
   p->FromString(filename);
 
@@ -153,8 +153,8 @@ std::size_t ParameterList<T>::SetStrings(const StringVector& strings)
 
   if (!strings.empty())
   {
-    std::transform(strings.begin(), strings.end(), std::back_inserter(m_Parameters), [](auto s) -> auto {
-      typename T::Pointer parameter(T::New());
+    std::transform(strings.begin(), strings.end(), std::back_inserter(m_Parameters), [&](auto s) -> auto {
+      typename T::Pointer parameter(T::New(this->m_Info));
       parameter->FromString(s);
       return parameter;
     });

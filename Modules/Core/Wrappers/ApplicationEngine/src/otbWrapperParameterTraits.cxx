@@ -45,10 +45,10 @@ namespace otb::Wrapper {
                                                                                    \
   static_assert(ParameterTypeTraits<EnumValue>::Type::Type == EnumValue);          \
                                                                                    \
-  auto ParameterTypeTraits<EnumValue>::New()                   \
+  auto ParameterTypeTraits<EnumValue>::New(Parameter::Info info)                   \
   -> Pointer                                                                       \
   {                                                                                \
-    auto res = Type::New();                                                    \
+    auto res = Type::New(info);                                                    \
     res->Register();                                                               \
     return res;                                                                    \
   }                                                                                \
@@ -88,12 +88,13 @@ OTB_DEFINE_PARAMETER_TRAITS(ParameterType_String,              StringParameter);
 // ----[ InputImage
 static_assert(ParameterTypeTraits<ParameterType_InputImage>::Type::Type == ParameterType_InputImage);
 auto ParameterTypeTraits<ParameterType_InputImage>::New(
+    Parameter::Info info,
     bool mustReuseLoadedRegion,
     unsigned long streamHeight
 )
 -> Pointer
 {
-  auto res = Type::New(mustReuseLoadedRegion, streamHeight);
+  auto res = Type::New(info, mustReuseLoadedRegion, streamHeight);
   res->Register();
   return res;
 }
@@ -106,11 +107,12 @@ itk::SmartPointer<Parameter> ParameterTypeTraits<ParameterType_InputImage>::Upca
 }
 
 auto ParameterTypeTraits<ParameterType_InputImage>::New(
+    Parameter::Info info,
     unsigned long streamHeight
 )
 -> Pointer
 {
-  auto res = Type::New(streamHeight);
+  auto res = Type::New(info, streamHeight);
   res->Register();
   return res;
 }

@@ -57,11 +57,16 @@ InputVectorDataParameter::Pointer& InputVectorDataListParameter::FromVectorData(
 }
 
 /*****************************************************************************/
-InputVectorDataListParameter::InputVectorDataListParameter()
-: m_VectorDataList(VectorDataListType::New())
+InputVectorDataListParameter::InputVectorDataListParameter(
+    Parameter::Info info
+)
+: ParameterList(std::move(info))
+, m_VectorDataList(VectorDataListType::New())
 {
-  SetName("Input VectorData List");
-  SetKey("vdList");
+  if (GetName().empty())
+    SetName("Input VectorData List");
+  if (GetKey().empty())
+    SetKey("vdList");
 }
 
 /*****************************************************************************/

@@ -23,6 +23,7 @@
 #endif
 
 #include "otbWrapperParameterKey.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbWrapperParameterKey(int itkNotUsed(argc), char* itkNotUsed(argv)[])

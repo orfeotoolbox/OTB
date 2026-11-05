@@ -23,6 +23,7 @@
 
 #include "otbWrapperParameter.h"
 #include "otbAlgoClamp.h"
+#include "otbNewMacro.h"
 #include "itkNumericTraits.h"
 #include <boost/optional.hpp>
 
@@ -190,7 +191,7 @@ public:
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  itkNewMacro(Self);
+  otbNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
   static constexpr auto Type = ParameterType_Float;
@@ -218,7 +219,7 @@ public:
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  itkNewMacro(Self);
+  otbNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
   static constexpr auto Type = ParameterType_Double;
@@ -246,7 +247,7 @@ public:
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  itkNewMacro(Self);
+  otbNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
   static constexpr auto Type = ParameterType_Int;
@@ -284,12 +285,13 @@ public:
   }
 
   /** Constructor */
-  RAMParameter() : NumericalParameter<unsigned int>()
+  RAMParameter() : NumericalParameter<unsigned int>(
+      {
+      .key="ram",
+      .name="RAM",
+      .description="Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)."
+      })
   {
-    this->SetName("RAM");
-    this->SetDescription("Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default).");
-    this->SetKey("ram");
-
     // 0 RAM is not allowed, make the minimum to 1 by default
     this->SetMinimumValue(1);
   }
@@ -303,7 +305,7 @@ public:
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  itkNewMacro(Self);
+  otbNewMacro(Self);
   itkTypeMacro(RadiusParameter, Parameter);
 
   static constexpr auto Type = ParameterType_Radius;
@@ -319,11 +321,15 @@ public:
   }
 
 protected:
-  RadiusParameter()
+  RadiusParameter(Info info = Info{})
+  : IntParameter(std::move(info))
   {
-    this->SetName("Radius");
-    this->SetKey("r");
-    this->SetDescription("Radius in pixels");
+    if (GetName().empty())
+      SetName("Radius");
+    if (GetKey().empty())
+      SetKey("r");
+    if (GetDescription().empty())
+      SetDescription("Radius in pixels");
   }
 };
 

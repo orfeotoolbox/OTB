@@ -455,7 +455,7 @@ const Parameter* Application::GetParameterByKey(std::string const& name, bool fo
 void Application::Init()
 {
   m_DocExample    = DocExampleStructure::New();
-  m_ParameterList = ParameterGroup::New();
+  m_ParameterList = ParameterGroup::New(Parameter::Info{});
   m_IsInPrivateDo = true;
   this->DoInit();
   m_IsInPrivateDo = false;
@@ -1866,7 +1866,7 @@ bool Application::ConnectImage(std::string in, Application* app, std::string out
     {
       return false;
     }
-    inListParam->InsertElement(InputImageParameter::New(), inListParam->Size());
+    inListParam->InsertElement(InputImageParameter::New(Parameter::Info{}), inListParam->Size());
     inParam = (inListParam->GetNthElement(inListParam->Size() - 1)).GetPointer();
   }
   param                          = app->GetParameterByKey(out);

@@ -23,7 +23,6 @@
 
 #include "otbWrapperStringParameter.h"
 #include "otbMacro.h"
-#include "otbNewMacro.h"
 
 #include <string>
 
@@ -96,9 +95,10 @@ public:
 
 protected:
   /** Constructor */
-  DirectoryParameter()
+  DirectoryParameter(Info info = Info{})
+  : Parameter(std::move(info))
   {
-    m_StringParam = StringParameter::New();
+    m_StringParam = StringParameter::New(m_Info);
   }
 
   /** Destructor */

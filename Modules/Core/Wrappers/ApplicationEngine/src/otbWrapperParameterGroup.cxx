@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,11 +33,12 @@
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
-#include "otbWrapperParameterKey.h"
-#include "otbWrapperProxyParameter.h"
 #include "otbWrapperBoolParameter.h"
 #include "otbWrapperFieldParameter.h"
 #include "otbWrapperBandParameter.h"
+
+#include "otbWrapperParameterKey.h"
+#include "otbWrapperProxyParameter.h"
 
 #include "otb_boost_string_header.h"
 
@@ -49,6 +50,7 @@ namespace Wrapper
 std::vector<std::string> ParameterGroup::GetParametersKeys(bool recursive) const
 {
   std::vector<std::string> parameters;
+  parameters.reserve(m_ParameterList.size());
 
   for (Parameter* param : m_ParameterList)
   {
@@ -210,126 +212,131 @@ void ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std:
   ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
   if (parentAsGroup)
   {
+    Info info{
+        .key         = std::string(lastkey),
+        .name        = std::move(paramName),
+        .description = "" // for now...
+    };
     Parameter::Pointer newParam;
     switch (type)
     {
-    case ParameterType_Int:
-    {
-      newParam = IntParameter::New();
-    }
-    break;
-    case ParameterType_Float:
-    {
-      newParam = FloatParameter::New();
-    }
-    break;
-    case ParameterType_Double:
-    {
-      newParam = DoubleParameter::New();
-    }
-    break;
-    case ParameterType_String:
-    {
-      newParam = StringParameter::New();
-    }
-    break;
-    case ParameterType_InputFilename:
-    {
-      newParam = InputFilenameParameter::New();
-    }
-    break;
-    case ParameterType_OutputFilename:
-    {
-      newParam = OutputFilenameParameter::New();
-    }
-    break;
-    case ParameterType_Directory:
-    {
-      newParam = DirectoryParameter::New();
-    }
-    break;
-    case ParameterType_InputImage:
-    {
-      newParam = InputImageParameter::New();
-    }
-    break;
-    case ParameterType_InputVectorData:
-    {
-      newParam = InputVectorDataParameter::New();
-    }
-    break;
-    case ParameterType_OutputImage:
-    {
-      newParam = OutputImageParameter::New();
-    }
-    break;
-    case ParameterType_OutputVectorData:
-    {
-      newParam = OutputVectorDataParameter::New();
-    }
-    break;
-    case ParameterType_Radius:
-    {
-      newParam = RadiusParameter::New();
-    }
-    break;
-    case ParameterType_Choice:
-    {
-      newParam = ChoiceParameter::New();
-    }
-    break;
-    case ParameterType_Group:
-    {
-      newParam = ParameterGroup::New();
-    }
-    break;
-    case ParameterType_StringList:
-    {
-      newParam = StringListParameter::New();
-    }
-    break;
-    case ParameterType_InputFilenameList:
-    {
-      newParam = InputFilenameListParameter::New();
-    }
-    break;
-    case ParameterType_InputImageList:
-    {
-      newParam = InputImageListParameter::New();
-    }
-    break;
-    case ParameterType_InputVectorDataList:
-    {
-      newParam = InputVectorDataListParameter::New();
-    }
-    break;
-    case ParameterType_ListView:
-    {
-      newParam = ListViewParameter::New();
-    }
-    break;
-    case ParameterType_RAM:
-    {
-      newParam = RAMParameter::New();
-    }
-    break;
-    case ParameterType_Bool:
-    {
-      newParam = BoolParameter::New();
-    }
-    break;
-    case ParameterType_Field:
-    {
-      newParam = FieldParameter::New();
-    }
-    break;
-    case ParameterType_Band:
-    {
-      newParam = BandParameter::New();
-    }
-    break;
-    default:
-      break;
+      case ParameterType_Int:
+        {
+          newParam = IntParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_Float:
+        {
+          newParam = FloatParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_Double:
+        {
+          newParam = DoubleParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_String:
+        {
+          newParam = StringParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_InputFilename:
+        {
+          newParam = InputFilenameParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_OutputFilename:
+        {
+          newParam = OutputFilenameParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_Directory:
+        {
+          newParam = DirectoryParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_InputImage:
+        {
+          newParam = InputImageParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_InputVectorData:
+        {
+          newParam = InputVectorDataParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_OutputImage:
+        {
+          newParam = OutputImageParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_OutputVectorData:
+        {
+          newParam = OutputVectorDataParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_Radius:
+        {
+          newParam = RadiusParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_Choice:
+        {
+          newParam = ChoiceParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_Group:
+        {
+          newParam = ParameterGroup::New(std::move(info));
+        }
+        break;
+      case ParameterType_StringList:
+        {
+          newParam = StringListParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_InputFilenameList:
+        {
+          newParam = InputFilenameListParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_InputImageList:
+        {
+          newParam = InputImageListParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_InputVectorDataList:
+        {
+          newParam = InputVectorDataListParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_ListView:
+        {
+          newParam = ListViewParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_RAM:
+        {
+          newParam = RAMParameter::New();
+        }
+        break;
+      case ParameterType_Bool:
+        {
+          newParam = BoolParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_Field:
+        {
+          newParam = FieldParameter::New(std::move(info));
+        }
+        break;
+      case ParameterType_Band:
+        {
+          newParam = BandParameter::New(std::move(info));
+        }
+        break;
+      default:
+        break;
     }
 
     if (newParam.IsNull())
@@ -337,8 +344,6 @@ void ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std:
       itkExceptionMacro(<< "Parameter type not supported for " << paramKey);
     }
 
-    newParam->SetKey(lastkey);
-    newParam->SetName(paramName);
 
     // If splitKey is greater than 1, that means that the parameter
     // is not a root, and have a parent(s):

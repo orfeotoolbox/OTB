@@ -68,8 +68,8 @@ void CompositeApplication::ClearApplications()
 
 bool CompositeApplication::Connect(std::string const& fromKey, std::string const& toKey)
 {
-  std::string  key1(fromKey);
-  std::string  key2(toKey);
+  std::string key1(fromKey);
+  std::string key2(toKey);
   Application* app1 = DecodeKey(key1);
   Application* app2 = DecodeKey(key2);
 
@@ -78,13 +78,19 @@ bool CompositeApplication::Connect(std::string const& fromKey, std::string const
   {
     otbAppLogWARNING("Parameter is already connected ! Override current connection");
   }
-  ProxyParameter::Pointer         proxyParam = ProxyParameter::New();
+  ProxyParameter::Pointer         proxyParam = ProxyParameter::New(
+      Parameter::Info{
+      .key = key1,
+      .name = rawParam1->GetName(),
+      .description = rawParam1->GetDescription()
+      }
+  );
   ProxyParameter::ProxyTargetType target;
   target.first  = app2->GetParameterList();
   target.second = key2;
   proxyParam->SetTarget(target);
-  proxyParam->SetName(rawParam1->GetName());
-  proxyParam->SetDescription(rawParam1->GetDescription());
+  // proxyParam->SetName(rawParam1->GetName());
+  // proxyParam->SetDescription(rawParam1->GetDescription());
   return app1->GetParameterList()->ReplaceParameter(key1, proxyParam.GetPointer());
 }
 
@@ -104,14 +110,20 @@ bool CompositeApplication::ShareParameter(
   std::string  proxyKey(pKey.GetLastElement());
 
   // Create and setup proxy parameter
-  ProxyParameter::Pointer         proxyParam = ProxyParameter::New();
+  ProxyParameter::Pointer         proxyParam = ProxyParameter::New(
+      Parameter::Info{
+      .key         = std::move(proxyKey),
+      .name        = name.empty() ? rawTarget->GetName()        : std::move(name),
+      .description = desc.empty() ? rawTarget->GetDescription() : std::move(desc)
+      }
+  );
   ProxyParameter::ProxyTargetType target;
   target.first  = app->GetParameterList();
   target.second = internalKeyCheck;
   proxyParam->SetTarget(target);
-  proxyParam->SetName(name.empty() ? rawTarget->GetName() : std::move(name));
-  proxyParam->SetDescription(desc.empty() ? rawTarget->GetDescription() : std::move(desc));
-  proxyParam->SetKey(std::move(proxyKey));
+  // proxyParam->SetName(name.empty() ? rawTarget->GetName() : name);
+  // proxyParam->SetDescription(desc.empty() ? rawTarget->GetDescription() : desc);
+  // proxyParam->SetKey(proxyKey);
 
   // Get group parameter where the proxy should be added
   Parameter::Pointer baseParam(proxyParam.GetPointer());

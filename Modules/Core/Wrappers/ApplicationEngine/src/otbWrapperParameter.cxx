@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-
 #include "otbWrapperParameter.h"
 
 
@@ -27,52 +26,51 @@ namespace otb
 namespace Wrapper
 {
 
-Parameter::Parameter()
-: m_Name()
-, m_Description()
-, m_Key()
+Parameter::Parameter(Parameter::Info info)
+: m_Info(std::move(info))
 , m_Mandatory(true)
 , m_Active(false)
 , m_UserValue(false)
 , m_UserLevel(UserLevel_Basic)
 , m_Role(Role_Input)
 , m_Root(this)
+// , m_Root(info.root ? info.root : this)
 {
 }
 
 /** Set/get the parameter name */
 void Parameter::SetName(std::string name)
 {
-  m_Name = std::move(name);
+  m_Info.name = std::move(name);
   this->Modified();
 }
 
 std::string const& Parameter::GetName() const
 {
-  return this->m_Name;
+  return this->m_Info.name;
 }
 
 /** Set/get the parameter description */
 void Parameter::SetDescription(std::string description)
 {
-  m_Description = std::move(description);
+  m_Info.description = std::move(description);
   this->Modified();
 }
 
 const std::string& Parameter::GetDescription() const
 {
-  return m_Description;
+  return m_Info.description;
 }
 
 /** Set/get the parameter key */
 void Parameter::SetKey(std::string key)
 {
-  m_Key = std::move(key);
+  m_Info.key = std::move(key);
   this->Modified();
 }
 std::string const& Parameter::GetKey() const
 {
-  return this->m_Key;
+  return this->m_Info.key;
 }
 
 /** Set the parameter Mandatory flag */

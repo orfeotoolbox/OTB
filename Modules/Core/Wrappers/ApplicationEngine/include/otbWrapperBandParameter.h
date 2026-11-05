@@ -23,6 +23,7 @@
 
 #include <string>
 #include "otbWrapperListViewParameter.h"
+#include "otbNewMacro.h"
 
 namespace otb
 {
@@ -45,7 +46,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(BandParameter, ListViewParameter);
@@ -71,7 +72,7 @@ public:
 
 protected:
   /** Constructor */
-  BandParameter() = default;
+  using ListViewParameter::ListViewParameter;
 
   /** Destructor */
   ~BandParameter() override = default;

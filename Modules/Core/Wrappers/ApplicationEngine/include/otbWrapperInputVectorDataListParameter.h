@@ -24,6 +24,7 @@
 
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperParameterList.h"
+#include "otbNewMacro.h"
 
 
 namespace otb
@@ -46,7 +47,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(InputVectorDataListParameter, ParameterList);
@@ -87,7 +88,7 @@ public:
 
 protected:
   /** Constructor */
-  InputVectorDataListParameter();
+  InputVectorDataListParameter(Info info = Info{});
 
   /** Destructor */
   ~InputVectorDataListParameter() override = default;

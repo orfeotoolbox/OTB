@@ -37,10 +37,13 @@ const std::string FILENAME_FILTER(
 
 
 /*****************************************************************************/
-InputFilenameListParameter::InputFilenameListParameter()
+InputFilenameListParameter::InputFilenameListParameter(Parameter::Info info)
+: ParameterList(std::move(info))
 {
-  SetName("Input Filename List");
-  SetKey("inList");
+  if (GetName().empty()) 
+    SetName("Input Filename List");
+  if (GetKey().empty()) 
+    SetKey("inList");
 }
 
 

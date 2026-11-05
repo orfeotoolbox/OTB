@@ -54,13 +54,19 @@ template <>
 void OutputImageParameter::SwitchInput(UInt8RGBImageType*);
 
 
-OutputImageParameter::OutputImageParameter()
-  : m_PixelType(ImagePixelType_float)
-  , m_DefaultPixelType(ImagePixelType_float)
-  , m_RAMValue(0)
+OutputImageParameter::OutputImageParameter(
+    Parameter::Info info
+)
+: Parameter(std::move(info))
+, m_PixelType(ImagePixelType_float)
+, m_DefaultPixelType(ImagePixelType_float)
+, m_RAMValue(0)
 {
-  SetName("Output Image");
-  SetKey("out");
+  if (GetName().empty())
+    SetName("Output Image");
+
+  if (GetKey().empty())
+    SetKey("out");
 }
 
 std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)

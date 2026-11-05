@@ -46,7 +46,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(InputImageListParameter, ParameterList);
@@ -90,7 +90,7 @@ public:
 
 protected:
   /** Constructor */
-  InputImageListParameter();
+  InputImageListParameter(Info info = Info{});
 
   /** Destructor */
   ~InputImageListParameter() override = default;

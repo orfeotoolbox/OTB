@@ -21,8 +21,8 @@
 #ifndef otbWrapperProxyParameter_h
 #define otbWrapperProxyParameter_h
 
-#include "itkObject.h"
 #include "otbWrapperParameter.h"
+#include "otbNewMacro.h"
 #include <utility>
 
 namespace otb
@@ -48,7 +48,7 @@ public:
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   itkTypeMacro(ProxyParameter, Parameter);
 
