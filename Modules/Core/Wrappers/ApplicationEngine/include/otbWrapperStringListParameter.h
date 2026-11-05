@@ -24,6 +24,7 @@
 
 #include "otbWrapperParameterList.h"
 #include "otbWrapperStringParameter.h"
+#include "otbNewMacro.h"
 
 
 namespace otb
@@ -50,7 +51,7 @@ public:
   using StringListType = StringListInterface::StringVector;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(StringListParameter, ParameterList);
@@ -88,7 +89,7 @@ public:
   // Protected methods.
 protected:
   /** Constructor */
-  StringListParameter();
+  StringListParameter(Info info = Info{});
 
   /** Destructor */
   ~StringListParameter() override = default;

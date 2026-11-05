@@ -28,12 +28,16 @@ namespace Wrapper
 void ChoiceParameter::AddChoice(std::string choicekey, std::string choiceName)
 {
   Choice choice;
-  choice.m_Key                 = choicekey;
-  choice.m_Name                = choiceName;
-  choice.m_AssociatedParameter = ParameterGroup::New();
-  choice.m_AssociatedParameter->SetName(choiceName);
+  choice.m_Key                 = std::move(choicekey);
+  choice.m_Name                = std::move(choiceName);
+  choice.m_AssociatedParameter = ParameterGroup::New(
+      Info{
+      .key         = choice.m_Key,
+      .name        = choice.m_Name,
+      .description = ""
+      }
+  );
   choice.m_AssociatedParameter->SetRoot(this);
-  choice.m_AssociatedParameter->SetKey(choicekey);
   choice.m_AssociatedParameter->SetMandatory(false);
   m_ChoiceList.push_back(choice);
 

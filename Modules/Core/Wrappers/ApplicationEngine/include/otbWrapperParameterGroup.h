@@ -45,7 +45,7 @@ public:
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   itkTypeMacro(ParameterList, Parameter);
 
@@ -78,8 +78,12 @@ public:
    * is done through `ParameterTypeTraits<type>`.
 
    * @tparam type  Exact type of parameter to add (enum value of type `ParameterType`)
-   * @param[in] paramKey   Parameter key -- can be a path in a parameter group
-   * @param[in] paramName  Parameter name
+   * @tparam Args  Variadic list of parameters to pass to the constructor of the actual
+   *               `ParameterTypeTraits<type>::Type`.
+   * @param[in] paramKey          Parameter key -- can be a path in a parameter group
+   * @param[in] paramName         Parameter name
+   * @param[in] paramDescription  Parameter description
+   * @param[in] args              Extra parameters to the parameter built
    *
    * \return the new parameter created -- with no type degradation
    */
@@ -113,14 +117,17 @@ public:
     ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
     if (parentAsGroup)
     {
+      Info info {
+        .key         = std::string(lastkey),
+        .name        = std::move(paramName),
+        .description = std::move(paramDescription)
+        // .root        = parentAsGroup != this ? parentAsGroup : nullptr
+      };
       using ActualParameterType = ParameterTypeTraits_t<type>;
       using ActualPointer = ParameterTypeTraits_p<type>;
       static_assert(! std::is_same_v<void, ActualParameterType>);
-      ActualPointer actualNewParam = ParameterTypeTraits<type>::New();
+      ActualPointer actualNewParam = ParameterTypeTraits<type>::New(std::move(info), std::forward<Args>(args)...);
       auto newParam = ParameterTypeTraits<type>::Upcast(actualNewParam);
-      newParam->SetKey(std::move(paramKey));
-      newParam->SetName(std::move(paramName));
-      newParam->SetDescription(std::move(paramDescription));
 
       if (parentAsGroup != this)
       {

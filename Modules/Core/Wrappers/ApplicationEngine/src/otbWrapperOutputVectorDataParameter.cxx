@@ -69,10 +69,13 @@ void OutputVectorDataParameter::InitializeWriters()
   m_Writer = otb::VectorDataFileWriter<VectorDataType>::New();
 }
 
-OutputVectorDataParameter::OutputVectorDataParameter()
+OutputVectorDataParameter::OutputVectorDataParameter(Parameter::Info info)
+: Parameter(std::move(info))
 {
-  this->SetName("Output Vector Data");
-  this->SetKey("outvd");
+  if (GetName().empty())
+    SetName("Output Vector Data");
+  if (GetKey().empty())
+    SetKey("outvd");
 }
 }
 }

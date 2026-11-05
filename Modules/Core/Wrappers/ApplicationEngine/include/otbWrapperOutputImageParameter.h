@@ -21,11 +21,10 @@
 #ifndef otbWrapperOutputImageParameter_h
 #define otbWrapperOutputImageParameter_h
 
-//#include "otbVectorImage.h"
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
-#include "otbImageFileWriter.h"
 #include "otbMultiImageFileWriter.h"
+#include "otbNewMacro.h"
 #include <string>
 
 namespace otb
@@ -48,7 +47,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(OutputImageParameter, Parameter);
@@ -128,7 +127,7 @@ public:
 
 protected:
   /** Constructor */
-  OutputImageParameter();
+  OutputImageParameter(Info info = Info{});
   /** Destructor */
   ~OutputImageParameter() override = default;
 

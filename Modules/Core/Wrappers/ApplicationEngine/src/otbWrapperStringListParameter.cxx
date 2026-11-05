@@ -29,10 +29,13 @@ namespace Wrapper
 
 
 /*****************************************************************************/
-StringListParameter::StringListParameter()
+StringListParameter::StringListParameter(Info info)
+: ParameterList(std::move(info))
 {
-  SetName("String List");
-  SetKey("strList");
+  if (GetName().empty())
+    SetName("String List");
+  if (GetKey().empty())
+    SetKey("strList");
 }
 
 /*****************************************************************************/

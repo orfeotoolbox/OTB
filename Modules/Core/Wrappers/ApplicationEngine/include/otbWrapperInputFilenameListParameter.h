@@ -23,6 +23,7 @@
 
 #include "otbWrapperParameterList.h"
 #include "otbWrapperStringParameter.h"
+#include "otbNewMacro.h"
 
 
 namespace otb
@@ -51,7 +52,7 @@ public:
   // Public methods.
 public:
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(InputFilenameListParameter, Superclass);
@@ -75,11 +76,9 @@ public:
     return Type;
   }
 
-  //
-  // Protected methods.
 protected:
   /** Constructor */
-  InputFilenameListParameter();
+  InputFilenameListParameter(Info info = Info{});
 
   /** Destructor */
   ~InputFilenameListParameter() override = default;

@@ -23,6 +23,7 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbWrapperParameter.h"
+#include "otbNewMacro.h"
 #include <string>
 
 namespace otb
@@ -45,7 +46,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(InputVectorDataParameter, Parameter);
@@ -86,18 +87,18 @@ public:
 
 protected:
   /** Constructor */
-  InputVectorDataParameter();
+  InputVectorDataParameter(Info info = Info{});
 
   /** Destructor */
   ~InputVectorDataParameter() override = default;
 
   using VectorDataFileReaderType = otb::VectorDataFileReader<VectorDataType>;
 
-  VectorDataType::Pointer                           m_VectorData;
-  VectorDataFileReaderType::Pointer                 m_Reader;
+  VectorDataType::Pointer           m_VectorData;
+  VectorDataFileReaderType::Pointer m_Reader;
 
-  std::string m_FileName;
-  std::string m_PreviousFileName;
+  std::string                       m_FileName;
+  std::string                       m_PreviousFileName;
 
 private:
   InputVectorDataParameter(const Parameter&) = delete;

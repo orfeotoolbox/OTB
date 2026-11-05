@@ -25,6 +25,7 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
+#include "otbNewMacro.h"
 #include <string>
 
 namespace otb
@@ -47,7 +48,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(OutputVectorDataParameter, Parameter);
@@ -94,7 +95,7 @@ public:
 
 protected:
   /** Constructor */
-  OutputVectorDataParameter();
+  OutputVectorDataParameter(Info info = Info{});
 
   /** Destructor */
   ~OutputVectorDataParameter() override = default;

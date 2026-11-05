@@ -23,6 +23,7 @@
 
 #include <string>
 #include "otbWrapperListViewParameter.h"
+#include "otbNewMacro.h"
 
 namespace otb
 {
@@ -45,7 +46,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(FieldParameter, ListViewParameter);
@@ -90,7 +91,7 @@ protected:
   /** Destructor */
   ~FieldParameter() override = default;
 
-  std::string m_VectorData;
+  std::string    m_VectorData;
   TypeFilterType m_TypeFilter;
 
 private:

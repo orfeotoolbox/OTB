@@ -22,7 +22,9 @@
 #define otbWrapperChoiceParameter_h
 
 #include "otbWrapperParameterGroup.h"
+#include "otbNewMacro.h"
 #include <string>
+#include <string_view>
 
 namespace otb
 {
@@ -47,7 +49,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(ChoiceParameter, Parameter);

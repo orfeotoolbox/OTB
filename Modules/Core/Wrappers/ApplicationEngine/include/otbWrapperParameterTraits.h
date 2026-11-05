@@ -64,7 +64,7 @@ using ParameterTypeTraits_p = typename ParameterTypeTraits<type>::Pointer;
     using Type         = ParameterType;                          \
     using Pointer      = Type*;                                  \
     using SmartPointer = itk::SmartPointer<Type>;                \
-    static Pointer New();                         \
+    static Pointer New(Parameter::Info);                         \
     static itk::SmartPointer<Parameter> Upcast(Pointer & p);     \
   };
 
@@ -104,10 +104,12 @@ struct ParameterTypeTraits<ParameterType_InputImage>
   using Pointer      = Type*;
   using SmartPointer = itk::SmartPointer<Type>;
   static Pointer New(
+      Parameter::Info,
       bool mustReuseLoadedRegion = false,
       unsigned long streamHeight = 0
   );
   static Pointer New(
+      Parameter::Info,
       unsigned long streamHeight
   );
   static itk::SmartPointer<Parameter> Upcast(Pointer & p);

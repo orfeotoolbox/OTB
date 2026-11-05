@@ -26,10 +26,13 @@ namespace otb
 namespace Wrapper
 {
 
-InputVectorDataParameter::InputVectorDataParameter()
+InputVectorDataParameter::InputVectorDataParameter(Parameter::Info info)
+: Parameter(std::move(info))
 {
-  this->SetName("Input VectorData");
-  this->SetKey("in");
+  if (GetName().empty())
+    this->SetName("Input VectorData");
+  if (GetKey().empty())
+    this->SetKey("in");
   this->ClearValue();
 }
 

@@ -43,7 +43,7 @@ InputImageParameter::Pointer InputImageListParameter::FromImage(ImageBaseType* i
 {
   assert(image != nullptr);
 
-  InputImageParameter::Pointer p(InputImageParameter::New());
+  InputImageParameter::Pointer p(InputImageParameter::New(this->m_Info));
 
   return FromImage(p, image);
 }
@@ -62,10 +62,16 @@ InputImageParameter::Pointer& InputImageListParameter::FromImage(InputImageParam
 
 
 /*****************************************************************************/
-InputImageListParameter::InputImageListParameter() : m_ImageList(FloatVectorImageListType::New())
+InputImageListParameter::InputImageListParameter(
+    Parameter::Info info
+)
+: ParameterList(std::move(info))
+, m_ImageList(FloatVectorImageListType::New())
 {
-  SetName("Input Image List");
-  SetKey("inList");
+  if (GetName().empty())
+    SetName("Input Image List");
+  if (GetKey().empty())
+    SetKey("inList");
 }
 
 

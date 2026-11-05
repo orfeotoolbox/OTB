@@ -44,7 +44,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  otbNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(InputFilenameParameter, Parameter);
@@ -91,10 +91,11 @@ public:
 
 protected:
   /** Constructor */
-  InputFilenameParameter()
+  InputFilenameParameter(Info info = Info{})
+  : Parameter(std::move(info))
   {
     // Initialize the String Parameter
-    m_StringParam = StringParameter::New();
+    m_StringParam = StringParameter::New(m_Info);
   }
 
   /** Destructor */

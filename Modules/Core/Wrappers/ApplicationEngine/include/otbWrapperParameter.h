@@ -157,18 +157,22 @@ public:
   virtual void FromString(const std::string&);
   virtual void FromStringList(const std::vector<std::string>&);
 
+  /** Information structure.
+   * Meant to simplify Parameter construction  w/ designated initializers.
+   */
+  struct Info {
+    std::string key;
+    std::string name;
+    std::string description;
+  };
+
+
 protected:
   /** Constructor */
-  Parameter();
+  Parameter(Info info = Info{});
 
-  /** Name of the parameter */
-  std::string m_Name;
-
-  /** Description of the parameter */
-  std::string m_Description;
-
-  /** Key of the parameter */
-  std::string m_Key;
+  /** Name, Key and Description of the parameter */
+  Info m_Info;
 
   /** True if the parameter is mandatory */
   bool m_Mandatory;
