@@ -32,16 +32,21 @@ namespace otb
 namespace Wrapper
 {
 
-template <ParameterType type>
-void Application::AddParameter(
+template <ParameterType type, typename... Args>
+auto Application::AddParameter(
     std::string const& paramKey,
     std::string const& paramName,
-    std::string const& paramDescription
-)
+    std::string const& paramDescription,
+    Args &&...         args
+) -> ParameterTypeTraits_t<type>*
 {
-  this->AddParameter(type, paramKey, paramName);
-  if (!paramDescription.empty())
-    SetParameterDescription(paramKey, paramDescription);
+  auto res = this->GetParameterList()->AddParameter<type>(
+      std::move(paramKey),
+      std::move(paramName),
+      std::move(paramDescription),
+      std::forward<Args>(args)...
+  );
+  return res;
 }
 
 
@@ -59,7 +64,6 @@ TImageType* Application::GetParameterImage(std::string const& parameter)
   else
   {
     itkExceptionMacro(<< parameter << " parameter can't be casted to ImageType");
-    return nullptr;
   }
 }
 
