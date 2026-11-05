@@ -60,6 +60,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperParameter.cxx
   otbWrapperCastImage.cxx
   otbWrapperTypes.cxx
+  otbWrapperParameterTraits.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})

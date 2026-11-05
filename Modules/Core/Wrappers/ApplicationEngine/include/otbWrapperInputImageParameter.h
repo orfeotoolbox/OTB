@@ -184,15 +184,6 @@ private:
 
 }; // End class InputImage Parameter
 
-/** `ParameterTypeTraits` specialisation for `ParameterType_InputImage`. */
-template <>
-struct ParameterTypeTraits<ParameterType_InputImage>
-{
-  using Type = InputImageParameter;
-};
-
-static_assert(ParameterTypeTraits<ParameterType_InputImage>::Type::Type == ParameterType_InputImage);
-
 } // End namespace Wrapper
 } // End namespace otb
 
