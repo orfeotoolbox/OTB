@@ -18,3 +18,13 @@ indent_size = 2
 # Various options
 trim_trailing_whitespace = true
 max_line_length = 160
+indent_size = 2
+
+# VIM lh-misc differentiated line lengths for comments and code
+p!style.textwidth.default = 160
+p!style.textwidth.comment = 100
+p!style.textwidth.doxygen = 100
+# p!style.textwidth.docstring = 100
+
+[COMMIT_EDITMSG]
+max_line_length = 79
