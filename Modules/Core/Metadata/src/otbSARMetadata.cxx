@@ -578,7 +578,7 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
 
   calibrationStartTime = ::value_or_throw<MetaData::TimePoint>(kwl, prefix + "CalibrationStartTime", "(SARCalib::FromKeywordlist)");
   calibrationStopTime  = ::value_or_throw<MetaData::TimePoint>(kwl, prefix + "CalibrationStopTime",  "(SARCalib::FromKeywordlist)");
-  
+
   std::istringstream iss(Get(kwl, prefix + "CalibrationStartTime"));
   if (!(iss >> calibrationStartTime))
   {
@@ -605,12 +605,12 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
                    radiometricCalibrationRangeSpreadLossPolynomialDegree);
 
   // itk::PointSet<double, 2>
-  auto stringToPointSet = [](const std::string & input, PointSetType::Pointer output)
+  auto stringToPointSet = [](const std::string & input, PointSetType::Pointer output, otb::string_view field)
   {
     output->Initialize();
 
     unsigned int id = 0;
-    const std::regex PointSet_regex("\\[([0-9]+), ([0-9]+)\\] ([0-9]+)");
+    const std::regex PointSet_regex("\\[([0-9]+), ([0-9]+)] (.+)");
     std::smatch PointSet_match;
     PointSetType::PointType point;
     typename PointSetType::PixelType pointValue;
@@ -624,23 +624,28 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
       {
         point[0] = std::stoi(PointSet_match[1]);
         point[1] = std::stoi(PointSet_match[2]);
-        pointValue = boost::lexical_cast<typename PointSetType::PixelType>(PointSet_match[3]);
+        pointValue = ::otb::to<typename PointSetType::PixelType>(
+            otb::string_view(PointSet_match[3]), "isn't a valid value for a "+field+" "+std::to_string(id)+"-th point value");
         output->SetPoint(id, point);
         output->SetPointData(id, pointValue);
         ++id;
       }
+      else {
+        otbGenericExceptionMacro(itk::ExceptionObject,
+            << "Cannot decode " << id << "-th point for " << field << "MetaData from '"<<input<<"'");
+      }
     }
   };
   stringToPointSet(Get(kwl, prefix + "RadiometricCalibrationNoise"),
-                   radiometricCalibrationNoise);
+                   radiometricCalibrationNoise, "RadiometricCalibrationNoise");
   stringToPointSet(Get(kwl, prefix + "RadiometricCalibrationAntennaPatternNewGain"),
-                   radiometricCalibrationAntennaPatternNewGain);
+                   radiometricCalibrationAntennaPatternNewGain, "RadiometricCalibrationAntennaPatternNewGain");
   stringToPointSet(Get(kwl, prefix + "RadiometricCalibrationAntennaPatternOldGain"),
-                   radiometricCalibrationAntennaPatternOldGain);
+                   radiometricCalibrationAntennaPatternOldGain, "RadiometricCalibrationAntennaPatternOldGain");
   stringToPointSet(Get(kwl, prefix + "RadiometricCalibrationIncidenceAngle"),
-                   radiometricCalibrationIncidenceAngle);
+                   radiometricCalibrationIncidenceAngle, "RadiometricCalibrationIncidenceAngle");
   stringToPointSet(Get(kwl, prefix + "RadiometricCalibrationRangeSpreadLoss"),
-                   radiometricCalibrationRangeSpreadLoss);
+                   radiometricCalibrationRangeSpreadLoss, "RadiometricCalibrationRangeSpreadLoss");
 
   // std::unordered_map<short, LookupDataType::Pointer>
   for (const auto & kv : kwl)
