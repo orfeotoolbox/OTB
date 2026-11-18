@@ -226,11 +226,11 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   numberOfLinesPerBurst   = ::value_or_throw<unsigned long>(kwl, prefix + "NumberOfLinesPerBurst", "(FromKeywordlist)");
   numberOfSamplesPerBurst = ::value_or_throw<unsigned long>(kwl, prefix + "NumberOfSamplesPerBurst", "(FromKeywordlist)");
 
-  centerSceneCoord.FromKeywordlist(kwl, prefix + "CenterSceneCoord");
-  ulSceneCoord.FromKeywordlist(kwl, prefix + "ulSceneCoord");
-  urSceneCoord.FromKeywordlist(kwl, prefix + "urSceneCoord");
-  lrSceneCoord.FromKeywordlist(kwl, prefix + "lrSceneCoord");
-  llSceneCoord.FromKeywordlist(kwl, prefix + "llSceneCoord");
+  centerSceneCoord = InfoSceneCoord::FromKeywordlist(kwl, prefix + "CenterSceneCoord");
+  ulSceneCoord     = InfoSceneCoord::FromKeywordlist(kwl, prefix + "ulSceneCoord");
+  urSceneCoord     = InfoSceneCoord::FromKeywordlist(kwl, prefix + "urSceneCoord");
+  lrSceneCoord     = InfoSceneCoord::FromKeywordlist(kwl, prefix + "lrSceneCoord");
+  llSceneCoord     = InfoSceneCoord::FromKeywordlist(kwl, prefix + "llSceneCoord");
 
   KeywordlistToVector(azimuthFmRates,                 kwl, prefix + "AzimuthFmRates");
   KeywordlistToVector(dopplerCentroids,               kwl, prefix + "DopplerCentroid");
@@ -469,40 +469,49 @@ CoordinateConversionRecord CoordinateConversionRecord::FromKeywordlist(const Met
 
 void InfoSceneCoord::ToKeywordlist(MetaData::Keywordlist &kwl, const std::string &prefix) const
 {
-  std::ostringstream oss;
-  oss << azimuthTime;
-  kwl.emplace(prefix + "AzimuthTime",     oss.str());
-  kwl.emplace(prefix + "referenceRow",    to_string_with_precision(referenceRow));
-  kwl.emplace(prefix + "referenceColumn", to_string_with_precision(referenceColumn));
-  kwl.emplace(prefix + "latitude",        to_string_with_precision(latitude));
-  kwl.emplace(prefix + "longitude",       to_string_with_precision(longitude));
-  kwl.emplace(prefix + "rangeTime",       to_string_with_precision(rangeTime));
-  kwl.emplace(prefix + "incidenceAngle",  to_string_with_precision(incidenceAngle));
+  if (azimuthTime)
+  {
+    std::ostringstream oss;
+    oss << *azimuthTime;
+    kwl.emplace(prefix + "AzimuthTime",     oss.str());
+  }
+
+  auto serialize = [&](auto const name, auto const& data) {
+    if (data)
+    {
+      kwl.emplace(prefix + name, to_string_with_precision(*data));
+    }
+  };
+  serialize(prefix + "referenceRow",    referenceRow);
+  serialize(prefix + "referenceColumn", referenceColumn);
+  serialize(prefix + "latitude",        latitude);
+  serialize(prefix + "longitude",       longitude);
+  serialize(prefix + "rangeTime",       rangeTime);
+  serialize(prefix + "incidenceAngle",  incidenceAngle);
 }
 
 InfoSceneCoord InfoSceneCoord::FromKeywordlist(const MetaData::Keywordlist &kwl, const std::string &prefix)
 {
-  InfoSceneCoord output;
+  InfoSceneCoord output{};
 
-#if 1
   output.azimuthTime = ::value_or_throw<MetaData::TimePoint>(kwl, prefix + "AzimuthTime", "(InfoSceneCoord::FromKeywordlist)");
-#else
-  std::istringstream iss(Get(kwl, prefix + "AzimuthTime"));
-  if (!(iss >> output.azimuthTime))
+
+  try
   {
-    otbGenericExceptionMacro(itk::ExceptionObject,
-        << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
+    output.referenceRow    = ::value_or_throw<unsigned long>(kwl, prefix + "referenceRow", "(InfoSceneCoord::FromKeywordlist)");
+    output.referenceColumn = ::value_or_throw<unsigned long>(kwl, prefix + "referenceColumn", "(InfoSceneCoord::FromKeywordlist)");
+    output.latitude        = ::value_or_throw<double>(kwl, prefix + "latitude", "(InfoSceneCoord::FromKeywordlist)");
+    output.longitude       = ::value_or_throw<double>(kwl, prefix + "longitude", "(InfoSceneCoord::FromKeywordlist)");
+    output.rangeTime       = ::value_or_throw<double>(kwl, prefix + "rangeTime", "(InfoSceneCoord::FromKeywordlist)");
+    output.incidenceAngle  = ::value_or_throw<double>(kwl, prefix + "incidenceAngle", "(InfoSceneCoord::FromKeywordlist)");
+
+    return output;
   }
-#endif
-
-  output.referenceRow    = ::value_or_throw<unsigned long>(kwl, prefix + "referenceRow", "(InfoSceneCoord::FromKeywordlist)");
-  output.referenceColumn = ::value_or_throw<unsigned long>(kwl, prefix + "referenceColumn", "(InfoSceneCoord::FromKeywordlist)");
-  output.latitude        = ::value_or_throw<double>(kwl, prefix + "latitude", "(InfoSceneCoord::FromKeywordlist)");
-  output.longitude       = ::value_or_throw<double>(kwl, prefix + "longitude", "(InfoSceneCoord::FromKeywordlist)");
-  output.rangeTime       = ::value_or_throw<double>(kwl, prefix + "rangeTime", "(InfoSceneCoord::FromKeywordlist)");
-  output.incidenceAngle  = ::value_or_throw<double>(kwl, prefix + "incidenceAngle", "(InfoSceneCoord::FromKeywordlist)");
-
-  return output;
+  catch (std::exception const& e)
+  {
+    otbLogMacro(Warning, << "Cannot extract " << prefix <<" metadata: " << e.what());
+  }
+  return {};
 }
 
 void SARCalib::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const

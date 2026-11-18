@@ -172,7 +172,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   {
     otbGenericExceptionMacro(MissingMetadataException, "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
   }
-  
+
   Fetch(MDStr::ProductType, imd, "Product_Type");
   if (not_in({"SCS_B", "SCS_U"}, imd[MDStr::ProductType]))
   {
@@ -220,7 +220,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   auto formatTimeDouble = [](double d) { return (d < 10 ? "0" + std::to_string(d)
                                                        : std::to_string(d) );};
 
-  std::string first_line_time = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds); 
+  std::string first_line_time = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
 
   total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_Last_Time"]);
   hour = static_cast<int> (total_seconds/3600.0);
@@ -252,7 +252,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   sarParam.burstRecords = CreateBurstRecord(first_line_time, last_line_time, sizex-1, sizey-1);
 
   auto rangeTimeInterval = std::stod(metadataBands[0]["S01_SBI_Column_Time_Interval"]);
-  
+
   if (!rangeTimeInterval)
   {
     otbGenericExceptionMacro(MissingMetadataException, "Range time interval is null.");
@@ -262,7 +262,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   sarParam.azimuthTimeInterval = MetaData::Duration::Seconds(
       std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"]));
   sarParam.nearRangeTime = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
-  
+
   auto lookSide = m_MetadataSupplierInterface->GetAs<std::string>("Look_Side");
 
   if (lookSide != "RIGHT" && lookSide != "LEFT")
@@ -276,26 +276,34 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   std::vector<std::string> vGeoCoor;
   otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"], vGeoCoor,
       "S01_SBI_Top_Left_Geodetic_Coordinates", " ");
-  sarParam.ulSceneCoord.latitude = std::stod(vGeoCoor[0]);
-  sarParam.ulSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  sarParam.ulSceneCoord = {
+    .latitude = std::stod(vGeoCoor[0]),
+    .longitude = std::stod(vGeoCoor[1])
+  };
   vGeoCoor.clear();
   otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Top_Right_Geodetic_Coordinates"], vGeoCoor,
       "S01_SBI_Top_Right_Geodetic_Coordinates", " ");
-  sarParam.urSceneCoord.latitude = std::stod(vGeoCoor[0]);
-  sarParam.urSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  sarParam.urSceneCoord = {
+    .latitude = std::stod(vGeoCoor[0]),
+    .longitude = std::stod(vGeoCoor[1])
+  };
   vGeoCoor.clear();
   otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Bottom_Left_Geodetic_Coordinates"], vGeoCoor,
       "S01_SBI_Bottom_Left_Geodetic_Coordinates", " ");
-  sarParam.llSceneCoord.latitude = std::stod(vGeoCoor[0]);
-  sarParam.llSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  sarParam.llSceneCoord = {
+    .latitude = std::stod(vGeoCoor[0]),
+    .longitude = std::stod(vGeoCoor[1])
+  };
   vGeoCoor.clear();
   otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Bottom_Right_Geodetic_Coordinates"], vGeoCoor,
       "S01_SBI_Bottom_Right_Geodetic_Coordinates", " ");
-  sarParam.lrSceneCoord.latitude = std::stod(vGeoCoor[0]);
-  sarParam.lrSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  sarParam.lrSceneCoord = {
+    .latitude = std::stod(vGeoCoor[0]),
+    .longitude = std::stod(vGeoCoor[1])
+  };
 
   // TODO: compute a GCP at the center of scene using the inverse sar model like it is done in ossim plugins
-  // This require to move IMIs to another higher level module that depends on OTBTransform (which depends 
+  // This require to move IMIs to another higher level module that depends on OTBTransform (which depends
   // on OTBMetadata) so that SarSensorModel can be used. (this cannot be done while IMIs still depend on Ossim)
 
   // Add the top left corner as GCP for now
@@ -309,7 +317,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   gcp.m_GCPRow = 0;
   gcp.m_GCPCol = 0;
   gcp.m_Id = "1";
-  
+
   Projection::GCPParam gcpParam;
   gcpParam.GCPProjection = SpatialReference::FromWGS84().ToWkt();
   gcpParam.GCPs.push_back(gcp);
@@ -339,7 +347,7 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
     otbGenericExceptionMacro(MissingMetadataException, << "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
 
   }
-  
+
   Fetch(MDStr::ProductType, imd, "support_data.product_type");
   if(not_in({"SCS_B", "SCS_U"}, imd[MDStr::ProductType]))
   {

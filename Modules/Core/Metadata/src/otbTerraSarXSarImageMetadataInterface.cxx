@@ -486,11 +486,14 @@ InfoSceneCoord TerraSarXSarImageMetadataInterface::GetSceneCoord(const MetadataS
   output.rangeTime = supplier.GetAs<double>(path + ".rangeTime");
   output.incidenceAngle = supplier.GetAs<double>(path + ".incidenceAngle");
   std::istringstream iss(supplier.GetAs<std::string>(path + ".azimuthTimeUTC"));
-  if (!(iss >> output.azimuthTime))
+
+  MetaData::TimePoint azimuthTime;
+  if (!(iss >> azimuthTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
            << "Unable to decode " << supplier.GetAs<std::string>(path + ".azimuthTimeUTC"));
   }
+  output.azimuthTime = azimuthTime;
   return output;
 }
 

@@ -25,10 +25,10 @@
 #include "otbMetaDataKey.h"
 #include "otbSarCalibrationLookupData.h"
 
+#include <optional>
 #include <string>
-#include <vector>
-#include <sstream>
 #include <unordered_map>
+#include <vector>
 
 #include "itkPoint.h"
 
@@ -145,7 +145,7 @@ struct OTBMetadata_EXPORT GCPTime
 
 /** \struct CoordinateConversionRecord
  *
- * \brief This structure contains coefficients to convert between coordinates types, e.g. 
+ * \brief This structure contains coefficients to convert between coordinates types, e.g.
  * from ground range to slant range
  */
 struct CoordinateConversionRecord
@@ -167,30 +167,31 @@ struct CoordinateConversionRecord
 struct InfoSceneCoord
 {
   /** Reference row (refRow) */
-  unsigned long referenceRow;
+  std::optional<unsigned long> referenceRow{};
 
   /** Reference column (refColumn) */
-  unsigned long referenceColumn;
+  std::optional<unsigned long> referenceColumn{};
 
   /** Latitude (lat) */
-  double latitude;
+  std::optional<double> latitude{};
 
   /** Longitude (lon) */
-  double longitude;
+  std::optional<double> longitude{};
 
   /** Azimuth time (azimuthTimeUTC) */
-  MetaData::TimePoint azimuthTime;
+  std::optional<MetaData::TimePoint> azimuthTime{};
 
   /** Range time (rangeTime) */
-  double rangeTime;
+  std::optional<double> rangeTime{};
 
   /** Incidence angle (incidenceAngle) */
-  double incidenceAngle;
+  std::optional<double> incidenceAngle{};
 
   /** Keywordlist export */
   void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
 
   /** Keywordlist import */
+  [[nodiscard]]
   static InfoSceneCoord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
@@ -201,7 +202,7 @@ struct InfoSceneCoord
  * \ingroup OTBMetadata
  */
 struct OTBMetadata_EXPORT SARParam
-{ 
+{
   /** Azimuth Frequency Modulation (FM) rate list.
    * contains an entry for each azimuth FM rate update made along azimuth.
    */
@@ -273,7 +274,7 @@ struct OTBMetadata_EXPORT SARCalib
 {
   using PointSetType   = itk::PointSet<double, 2>;
   using ArrayType      = std::array<int, 2>;
-  
+
   bool calibrationLookupFlag = false;
   double rescalingFactor;
   MetaData::TimePoint calibrationStartTime;
