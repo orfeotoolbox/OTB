@@ -132,29 +132,52 @@ class Handler:
       raise CDashException("Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     elif trace:
       print( "Argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-    buildid_api = "/api/v1/getbuildid.php?"
-    buildid_params = urllib.parse.urlencode({'project': project, 'site': site, 'stamp': stamp , 'name': name})
-    full_url = self.url + buildid_api + buildid_params
-    if trace:
-      print("full_url: "+full_url)
-    max_retry = 11
+
+    graphql_query = """
+    query ($project: String!, $stamp: String!) {
+      project(name: $project) {
+        builds(filters: { eq: { stamp: $stamp} }, onlyParents: false) {
+          edges { node { id name stamp site { name } } }
+        }
+      }
+    }
+    """
+
+    max_retry = 6
     nb_try = max_retry
-    build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     while nb_try:
-      response = requests.get(full_url).text
-      if trace:
-        print ( "response: " + response )
-      buildid = build_id_regex.search( response )
+      r = requests.post(f"{self.url}/graphql",
+                        headers={"Content-Type": "application/json"},
+                        json={
+                          "query": graphql_query,
+                          "variables": {
+                            "project": project,
+                            "stamp": stamp},
+                        },
+                        timeout=30)
+      buildid = None
+
+      if r.status_code == 200:
+        json_request = r.json()
+        if trace:
+          print( "request response " + str(json_request))
+        builds_filtered = json_request["data"]["project"]["builds"]["edges"]
+        for build in builds_filtered:
+          if build["node"]["site"]["name"] == site and \
+             build["node"]["name"] == name:
+            buildid = build["node"]["id"]
+            break
+      else:
+        print("Request object returns: " + r)
       nb_try -= 1
       if buildid or (nb_try == 0):
         break
       print("No build id, retry "+str(max_retry-nb_try)+"/"+str(max_retry)+" ...")
-      time.sleep(30)
     if buildid:
-      self.buildid = buildid.group(1)
+      self.buildid = buildid
       if trace:
         print ( "build id is ", self.buildid)
-      return buildid.group(1)
+      return buildid
     else:
       raise CDashException("Error in recovering buildid")
 
@@ -169,8 +192,7 @@ class Handler:
       print( "Missing argument to build url")
       return
     build_url = self.url
-    build_url +="/buildSummary.php?"
-    build_url += "buildid=" + buildid
+    build_url +="/builds/" + buildid
     return build_url
 
   def GetBuildStatus(self, buildid = "" ):

@@ -81,7 +81,7 @@ for cmake in ${CMAKE_FILES}; do
 done
 
 ARCHIVE_NAME="SuperBuild-archives-$VERSION"
-echo "Creating archive ${OUTPUT_DIR}/$ARCHIVE_NAME.tar.bz2"
+echo "Creating archive ${OUTPUT_DIR}/$ARCHIVE_NAME.tar.gz"
 
 mkdir -p "${OUTPUT_DIR}"
 cd "${OUTPUT_DIR}" || echo "cannot cd to ${OUTPUT_DIR}"
