@@ -17,9 +17,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+set(CTEST_PROJECT_NAME OTB)
 
-set(CTEST_PROJECT_NAME "OTB")
-set(CTEST_DROP_METHOD "https")
-set(CTEST_DROP_SITE "cdash.orfeo-toolbox.org")
-set(CTEST_DROP_LOCATION "/submit.php?project=OTB")
+if(CMAKE_VERSION VERSION_GREATER 3.14)
+  set(CTEST_SUBMIT_URL https://cdash.orfeo-toolbox.org/submit.php?project=OTB)
+else()
+  set(CTEST_DROP_METHOD "https")
+  set(CTEST_DROP_SITE "cdash.orfeo-toolbox.org")
+  set(CTEST_DROP_LOCATION "/submit.php?project=OTB")
+endif()
+
 set(CTEST_DROP_SITE_CDASH TRUE)
