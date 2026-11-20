@@ -163,7 +163,7 @@ fast-build:
     - merge_requests
     - branches
   stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-itk5:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:24.04
   variables:
     GIT_CHECKOUT: 'true'
     GIT_SUBMODULE_FORCE_HTTPS: 'true'
@@ -180,8 +180,8 @@ fast-build:
       git lfs pull --include Input/QB_PAN_ROI_1000_100.tif
       cd ..
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
-    - ctest -VV -S CI/FFTW_tests.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-24.04-fast
+    - ctest -VV -S CI/FFTW_tests.cmake -DIMAGE_NAME:string=ubuntu-24.04-fast
     - ccache -s
 
 legal-check:
@@ -203,17 +203,17 @@ legal-check:
 #------------------------- prepare & build jobs --------------------------------
 
 ## Ubuntu superbuild
-ubuntu-22-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
+# ubuntu-22-prepare:
+#   extends: .common-prepare
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
 ubuntu-24-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-full
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
   artifacts:
     untracked: false
     when: on_success
@@ -222,30 +222,30 @@ ubuntu-24-prepare:
     paths:
       - xdk/lib/python3/*
 
-ubuntu-22-build:
+ubuntu-24-build:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
 
-ubuntu-22-complete-build:
+ubuntu-24-complete-build:
   extends: .common-complete-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON -Dci_skip_install:BOOL=ON
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON -Dci_skip_install:BOOL=ON
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF -Dci_skip_install:BOOL=ON
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF -Dci_skip_install:BOOL=ON
     - mv build_packages/OTB-*.tar.gz . || true
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
 
 # Ubuntu 24 build needed for gdal bindings with python 3.12. We package the compiled bindings for python 3.12, this package will be downloaded and extracted automatically when
