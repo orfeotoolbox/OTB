@@ -375,14 +375,14 @@ ubuntu-qa-code-coverage:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:24.04
   script:
     - ctest -V -S CI/main_qa.cmake
-            -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
+            -DIMAGE_NAME:string=ubuntu-24.04-llvm-qa
             -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
 
 ubuntu-qa-static-analysis:
@@ -395,7 +395,7 @@ ubuntu-qa-static-analysis:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:24.04
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
@@ -407,7 +407,7 @@ ubuntu-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
   artifacts:
     when: always
@@ -419,7 +419,7 @@ ubuntu-sonar-report:
   extends: .common
   variables:
     GIT_DEPTH: ""
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:24.04
   stage: report
   only:
     refs:
@@ -457,13 +457,13 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-22-build
+    - job: ubuntu-24-build
       artifacts: true
     - job: windows-10-build
       artifacts: true
     - job: redhat-build
       artifacts: true
-    - job: ubuntu-22-complete-build
+    - job: ubuntu-24-complete-build
       artifacts: true
     - job: windows-10-complete-build
       artifacts: true
@@ -475,7 +475,7 @@ deploy:
 update-archive:
   tags:
     - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   stage: deploy
   extends: .general
   only:
@@ -490,7 +490,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: false
 
 
@@ -519,7 +519,7 @@ release-docker:
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   needs:
-      - job: ubuntu-22-complete-build
+      - job: ubuntu-24-complete-build
         artifacts: true
   script:
       # to authenticate in docker hub, kaniko needs a config file located at
