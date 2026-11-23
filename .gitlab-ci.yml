@@ -221,6 +221,9 @@ ubuntu-24-prepare:
     expire_in: 24hrs
     paths:
       - xdk/lib/python3/*
+      - sb_branch.txt # Needed to checkout correct branch in build step
+      - build/*/*/*/*.log # Superbuild log
+      - build/*/*/*/*.cmake
 
 ubuntu-24-build:
   extends: .common-build
