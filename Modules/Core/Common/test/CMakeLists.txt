@@ -197,6 +197,7 @@ otb_add_test(NAME coTvStandardWriterWatcher COMMAND otbCommonTestDriver
 # Real Boost.Test based unit tests
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
 
+  # Repack
   add_executable(otbTuRepack
     otbTestRepack.cxx
   )
@@ -208,6 +209,20 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
   add_test(NAME coTuRepack
            COMMAND otbTuRepack #coTuRepack
            WORKING_DIRECTORY ${TEMP})
+  
+  # StringUtilities
+  add_executable(otbTuStringUtilities
+    otbTestStringUtilities.cxx
+  )
+  target_link_libraries(
+    otbTuStringUtilities
+    ${OTBCommon_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+
+  add_test(NAME coTuStringUtilities
+           COMMAND otbTuStringUtilities #coTuStringUtilities
+           WORKING_DIRECTORY ${TEMP})
+
 else()
   message(AUTHOR_WARNING "Cannot find Boost.Test")
 endif()

@@ -25,6 +25,7 @@
 #include <iterator>
 #include <cassert>
 #include <cstring>
+#include <limits>
 #include <ostream>
 #include <sstream>
 #include <typeinfo>
@@ -32,6 +33,7 @@
 #include <cctype>
 #include <cmath>
 #include <string>
+#include <concepts>
 #include "otbMacro.h"
 #include "otbExpected.h"
 
@@ -526,28 +528,25 @@ OTBCommon_EXPORT string_view rstrip(string_view const& v, string_view const& c);
 /*-------------------------------[ String to number conversion ]-------------*/
 /**\name string to number conversion */
 //@{
+
+namespace details
+{
+
 /**
- * \brief Generic string to whatever conversion -- failure means exception.
- * Tries to decode a value from a string.
- * \tparam  T Type of the value decoded from the input string
- * \param[in] v  input string to convert
- * \param[in] context  context message for the exception thrown
+ * \brief Internal generic string to whatever conversion.
+ * Tries to convert the input string into the requested type.
+ * The conversion is done with C++ streams.
+ * \tparam Int Integral type
+ * \param[in] v  input string
  *
- * \return The value decoded
- * \throw std::runtime_error if a value of type `T` cannot be decoded from the
- * string.
- * \note For efficiency reasons, the function has been specialized for integral
- * floating point, and string types.
- * \note That alternative to `ossimString::toXxxx()` function has been defined
- * to support generic programming in `get()` and `add()` helper functions for
- * keyword list.
- * \see `to_with_default()` for the version that never fails, but returns a
- * default value otherwise (being `T()` by default).
- *
+ * \return [Expected] The string as an integer.
+ * \return [Error] An explanation about the issue
  */
 template <typename T>
+[[nodiscard]]
 inline
-T to(string_view const& v, string_view const& context)
+otb::expected<T, std::string>
+to(string_view const& v)
 {
   T res;
   std::stringstream ss;
@@ -555,59 +554,40 @@ T to(string_view const& v, string_view const& context)
   {
     return res;
   }
-  throw std::runtime_error("Cannot decode \"" + v + "\" as \"" + typeid(T).name() + "\" while " + context);
+  return otb::unexpected{"Cannot decode \"" + v + "\" as \"" + typeid(T).name()};
 }
 
-/**
- * \brief Generic string to whatever conversion -- failure is hidden.
- * Tries to decode a value from a string.
- * \tparam  T Type of the value decoded from the input string
- * \param[in] v  input string to convert
- * \param[in] def  default value returned in the conversion isn't possible
- *
- * \return The value decoded
- * \return `def` if no value of type `T` can be decoded from `v`.
- * \throw None
- * \note For efficiency reasons, the function has been specialized for integral
- * floating point, and string types.
- * \note That alternative to `ossimString::toXxxx()` function has been defined
- * to support generic programming in `get()` and `add()` helper functions for
- * keyword list.
- * \see `to()` for the version that fails by throwing exceptions.
- */
-template <typename T>
-inline
-T to_with_default(string_view const& v, T const& def = T())
+
+template <std::integral Int>
+constexpr char const* precision()
 {
-  T res = def;
-  std::stringstream ss;
-  if (ss << v && (ss >> res >> std::ws).eof())
-  {
-    return res;
+  switch (sizeof(Int)) {
+    case 1: return "8 bits";
+    case 2: return "16 bits";
+    case 4: return "32 bits";
+    case 8: return "64 bits";
+    case 16: return "128 bits";
   }
-  return def;
+  return "invalid int";
 }
 
-namespace details
-{
 /**
- * \brief Internal generic string to integer conversion (w/ exception).
- * Tries to convert the input string into a integer type. If the
- * string doesn't represent an integer value, an exception is thrown.
- * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
- * co to restrict the code to integral types)
+ * \brief Internal generic string to integer conversion.
+ * Tries to convert the input string into a integer type.
+ * \tparam Int Integral type
  * \param[in] v  input string
- * \param[in] context  context message for the exception thrown
  *
- * \return The string as an integer.
- * \throw std::runtime_error is the number cannot be converted.
- * \todo Use a failure_policy in order to factorize code flavour (returns
- * default value or throw an exception)
+ * \return [Expected] The string as an integer.
+ * \return [Error] An explanation about the issue
  */
-template <typename Int>
+template <std::integral Int>
+[[nodiscard]]
 inline
-Int to_integer(string_view const& v, string_view const& context)
+otb::expected<Int, std::string>
+to_integer(string_view const& v)
 {
+  constexpr Int min = std::numeric_limits<Int>::min();
+  constexpr Int max = std::numeric_limits<Int>::max();
   // string_view::data() isn't compatible with strtol => we emulate it
 
   // TODO: handle HEX, OCT, BIN, locales?
@@ -629,81 +609,53 @@ Int to_integer(string_view const& v, string_view const& context)
       // only support arabic digits
       if (!std::isdigit(*it))
       {
-        throw std::runtime_error("Cannot decode " + v + " as integer while " + context);
+        return otb::unexpected{"Cannot decode " + v + " as integer"};
       }
-      res  = 10 * res + *it - '0';
+      auto digit = *it - '0';
+      if (! is_negative) {
+        if (res > max / 10) {
+          return otb::unexpected{"Cannot decode " + v + " as "+precision<Int>()+" integer"};
+        } else if (10 * res > max-digit) {
+          return otb::unexpected{"Cannot decode " + v + " as "+precision<Int>()+" integer"};
+        }
+      } else {
+        digit = - digit;
+        if (res < min / 10) {
+          return otb::unexpected{"Cannot decode " + v + " as "+precision<Int>()+" integer"};
+        } else if (10 * res < min-digit) {
+          return otb::unexpected{"Cannot decode " + v + " as "+precision<Int>()+" integer"};
     }
   }
-  return is_negative ? -res : res;
+
+      res  = 10 * res + digit;
+    }
+  }
+  return res;
 }
 
 /**
- * \brief Internal generic string to integer conversion (w/o exception).
- * Tries to convert the input string into a integer type. If the
- * string doesn't represent an integer value, the default value will be
- * returned.
- * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
- * co to restrict the code to integral types)
+ * \brief Internal generic string to unsigned integer conversion.
+ * Tries to convert the input string into an unsigned integer type.
+ * \tparam UInt Unsigned integral type
  * \param[in] v  input string
- * \param[in] def  default value returned in the conversion isn't possible
  *
- * \return The string as an integer.
- * \return `def` if the string cannot be converted to an integer value.
- * \throw None
+ * \return [Expected] The string as an integer.
+ * \return [Error] An explanation about the issue
  */
-template <typename Int> inline Int to_integer(string_view const& v, Int const def)
-{
-  // string_view::data() isn't compatible with strtol => we emulate it
-
-  // TODO: handle HEX, OCT, BIN, locales?
-  string_view::const_iterator it  = v.begin();
-  string_view::const_iterator end = v.end();
-
-  bool is_negative = false;
-  Int res = 0;
-  if (it != end)
-  {
-    switch (*it)
-    {
-      case '-': is_negative = true; OTB_FALLTHROUGH;
-      case '+': ++it;
-    }
-    for ( ; it != end ; ++it)
-    {
-      // only support arabic digits
-      if (!std::isdigit(*it))
-      {
-        return def;
-      }
-      res  = 10 * res + *it - '0';
-    }
-  }
-  return is_negative ? -res : res;
-}
-
-/**
- * \brief Internal generic string to unsigned integer conversion (w/ exception).
- * Tries to convert the input string into a integer type. If the
- * string doesn't represent an integer value, an exception is thrown.
- * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
- * co to restrict the code to integral types)
- * \param[in] v  input string
- * \param[in] context  context message for the exception thrown
- *
- * \return The string as an integer.
- * \throw std::runtime_error is the number cannot be converted.
- */
-template <typename Int>
+template <std::unsigned_integral UInt>
+[[nodiscard]]
 inline
-Int to_uinteger(string_view const& v, string_view const& context)
+otb::expected<UInt, std::string>
+to_uinteger(string_view const& v)
 {
+  constexpr UInt max = std::numeric_limits<UInt>::max();
   // string_view::data() isn't compatible with strtol => we emulate it
 
   // TODO: handle HEX, OCT, BIN, locales?
   string_view::const_iterator it  = v.begin();
   string_view::const_iterator end = v.end();
 
-  Int res = 0;
+  UInt res = 0;
   if (it != end)
   {
     for ( ; it != end ; ++it)
@@ -711,7 +663,13 @@ Int to_uinteger(string_view const& v, string_view const& context)
       // only support arabic digits
       if (!std::isdigit(*it))
       {
-        throw std::runtime_error("Cannot decode " + v + " as integer while " + context);
+        return otb::unexpected{"Cannot decode " + v + " as unsigned integer"};
+      }
+      auto digit = *it - '0';
+      if (res > max / 10) {
+        return otb::unexpected{"Cannot decode " + v + " as "+precision<UInt>()+" integer"};
+      } else if (10 * res > max-digit) {
+        return otb::unexpected{"Cannot decode " + v + " as "+precision<UInt>()+" integer"};
       }
       res  = 10 * res + *it - '0';
     }
@@ -720,62 +678,24 @@ Int to_uinteger(string_view const& v, string_view const& context)
 }
 
 /**
- * \brief Internal generic string to unsigned integer conversion (w/o exception).
- * Tries to convert the input string into a integer type. If the
- * string doesn't represent an integer value, the default value will be
- * returned.
- * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
- * co to restrict the code to integral types)
- * \param[in] v  input string
- * \param[in] def  default value returned in the conversion isn't possible
- *
- * \return The string as an integer.
- * \return `def` if the string cannot be converted to an integer value.
- * \throw None
- */
-template <typename Int> inline Int to_uinteger(string_view const& v, Int const def)
-{
-  // string_view::data() isn't compatible with strtol => we emulate it
-
-  // TODO: handle HEX, OCT, BIN, locales?
-  string_view::const_iterator it  = v.begin();
-  string_view::const_iterator end = v.end();
-
-  Int res = 0;
-  if (it != end)
-  {
-    for (; it != end; ++it)
-    {
-      // only support arabic digits
-      if (!std::isdigit(*it))
-      {
-        return def;
-      }
-      res  = 10 * res + *it - '0';
-    }
-  }
-  return res;
-}
-
-/**
- * \brief Internal generic string to float conversion (w/ exception).
- * Tries to convert the input string into a floating point type. If the
- * string doesn't represent a floating point value, an exception is thrown.
+ * \brief Internal generic string to float conversion.
+ * Tries to convert the input string into a floating point type.
  * \tparam FloatType floating point type (`float`, `double`, `long double`)
  * \param[in] v  input string
- * \param[in] context  context message for the exception thrown
  *
- * \return The string as a float. The special `"nan"` string is converted to
- * `ossim::nan()`.
- * \throw std::runtime_error is the number cannot be converted.
+ * \return [Expected] The string as a float. The special `"nan"` string is converted to `std::nan()`
+ * \return [Error] An explanation about the issue
+ *
  */
-template <typename FloatType>
+template <std::floating_point FloatType>
+[[nodiscard]]
 inline
-FloatType to_float(string_view const& v, string_view const& context)
+otb::expected<FloatType, std::string>
+to_float(string_view const& v)
 {
   if (contains(v, "nan"))
   {
-    return std::nan("");
+    return static_cast<FloatType>(std::nan(""));
   }
   FloatType res = FloatType(); // 0-construction
   if (!v.empty())
@@ -783,68 +703,28 @@ FloatType to_float(string_view const& v, string_view const& context)
     std::stringstream ss;
     if (!(ss << v && (ss >> res >> std::ws).eof()))
     {
-      throw std::runtime_error("Cannot decode " + v + " as float value while " + context);
+      return otb::unexpected{"Cannot decode " + v + " as float value"};
     }
   }
   return res;
 }
 
-/**
- * \brief Internal generic string to float conversion (w/o exception).
- * Tries to convert the input string into a floating point type. If the
- * string doesn't represent a floating point value, the default value will
- * be returned.
- * \tparam FloatType floating point type (`float`, `double`, `long double`)
- * \param[in] v  input string
- * \param[in] def  default value returned in the conversion isn't possible
- *
- * \return The string as a float. The special `"nan"` string is converted
- * to `ossim::nan()`.
- * \return `def` if the string cannot be converted to a floating point
- * value.
- * \throw None
- */
-template <typename FloatType>
+// TODO: what was this specialisation??
+template <typename T>
+[[nodiscard]]
 inline
-FloatType to_float(string_view const& v, FloatType const def)
-{
-  if (contains(v, "nan"))
-  {
-    return std::nan("");
-  }
-  FloatType res = FloatType(); // 0-construction
-  if (!v.empty())
-  {
-    std::stringstream ss;
-    if (!(ss << v && (ss >> res >> std::ws).eof()))
-    {
-      return def;
-    }
-  }
-  return res;
-}
+otb::expected<std::string, std::string>
+to(T const& v) { return v; }
 
-inline unsigned int decode_uint(string_view& v)
-{
-  unsigned int res = 0;
-  for (; !v.empty(); v.remove_prefix(1))
-  {
-    // only support arabic digits
-    if (!std::isdigit(v.front()))
-      break;
-    res  = 10 * res + v.front() - '0';
-  }
-  return res;
-}
-} // otb::details namespace
+template <typename T>
+[[nodiscard]]
+inline
+otb::expected<std::string, std::string>
+to(T && v) { return otb::expected<std::string, std::string>(std::move(v)); }
 
 #define OTB_GENERATE_CONV(internal_to, type)                                         \
-template <> inline type to<type>(string_view const& v, string_view const& context)   \
-{ return details::internal_to<type>(v, context); }                                   \
-template <> inline type to_with_default<type>(string_view const& v, type const& def) \
-{ return details::internal_to<type>(v, def); }
-// Note: specialization doesn't support default arguments, but default argument
-// T() will still work.
+template <> [[nodiscard]] inline otb::expected<type, std::string> to<type>(string_view const& v) \
+{ return details::internal_to<type>(v); }
 
 OTB_GENERATE_CONV(to_integer,  char);
 OTB_GENERATE_CONV(to_uinteger, unsigned char);
@@ -855,23 +735,90 @@ OTB_GENERATE_CONV(to_integer,  int);
 OTB_GENERATE_CONV(to_uinteger, unsigned int);
 OTB_GENERATE_CONV(to_integer,  long);
 OTB_GENERATE_CONV(to_uinteger, unsigned long);
-#if defined(HAS_LONG_LONG) // TODO: add this configure option
 OTB_GENERATE_CONV(to_integer,  long long);
 OTB_GENERATE_CONV(to_uinteger, unsigned long long);
-#endif
 OTB_GENERATE_CONV(to_float,    float);
 OTB_GENERATE_CONV(to_float,    double);
 OTB_GENERATE_CONV(to_float,    long double);
 #undef OTB_GENERATE_CONV
 
+} // otb::details namespace
+
+/**
+ * \brief Generic string to whatever conversion -- failure means exception.
+ * Tries to decode a value from a string.
+ * \tparam  T Type of the value decoded from the input string
+ * \param[in] v  input string to convert
+ * \param[in] context  context message for the exception thrown
+ *
+ * \return The value decoded
+ * \throw std::runtime_error if a value of type `T` cannot be decoded from the
+ * string.
+ * \note For efficiency reasons, the function has been specialized for integral
+ * floating point, and string types.
+ * \note That alternative to `ossimString::toXxxx()` function has been defined
+ * to support generic programming in `get()` and `add()` helper functions for
+ * keyword list.
+ * \see `to_with_default()` for the version that never fails, but returns a
+ * default value otherwise (being `T()` by default).
+ *
+ */
+template <typename T>
+[[nodiscard]]
+inline
+T to(string_view const& v, string_view const& context)
+{
+  auto conversion = details::to<T>(v);
+  if (conversion) {
+    return *conversion;
+  }
+  else {
+    throw std::runtime_error(conversion.error() + " while " + context);
+  }
+}
+
+/**
+ * \brief Generic string to whatever conversion -- failure is hidden.
+ * Tries to decode a value from a string.
+ * \tparam  T Type of the value decoded from the input string
+ * \param[in] v  input string to convert
+ * \param[in] def  default value returned in the conversion isn't possible
+ *
+ * \return The value decoded
+ * \return `def` if no value of type `T` can be decoded from `v`.
+ * \throw None
+ * \note For efficiency reasons, the function has been specialized for integral
+ * floating point, and string types.
+ * \note That alternative to `ossimString::toXxxx()` function has been defined
+ * to support generic programming in `get()` and `add()` helper functions for
+ * keyword list.
+ * \see `to()` for the version that fails by throwing exceptions.
+ */
+template <typename T>
+[[nodiscard]]
+inline
+T to_with_default(string_view const& v, T const& def = T())
+{
+  auto conversion = details::to<T>(v);
+  if (conversion) {
+    return *conversion;
+  }
+  else {
+    return def;
+  }
+}
+
 template <>
+[[nodiscard]]
 inline std::string to<std::string>(string_view const& v, string_view const& /*context*/)
 { return std::string(v.begin(), v.end()); }
 
 template <typename T>
+[[nodiscard]]
 inline T const& to(T const& v, string_view const& /*context*/) { return v; }
 
 template <typename T>
+[[nodiscard]]
 inline T const& to_with_default(T const& v, T const& /* default*/) { return v; }
 
 
