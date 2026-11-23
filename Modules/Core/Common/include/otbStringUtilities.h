@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,10 +33,12 @@
 #include <cmath>
 #include <string>
 #include "otbMacro.h"
+#include "otbExpected.h"
 
 namespace otb
 {
 
+/*-------------------------------[ string_view backport ]--------------------*/
 /**\name String view + functions */
 //@{
 /** String view class.
@@ -52,9 +54,9 @@ namespace otb
  *
  * @invariant there is no guarantee `data()[size()] == '\0'`. It may happen
  * though depending on the constructor used.
- * @todo deprecate once OTB drop C++14 compatibility
+ * @todo deprecate since std::expected can be used now
  */
-struct string_view
+struct [[nodiscard]] string_view
 {
   using value_type      = char const;
   using reference       = char const&;
@@ -162,46 +164,51 @@ public:
    * @note There is no equivalent function in C++17 `std::string_view`.
    * C++23 has a `std::string_view::contains()` function however.
    */
+  [[nodiscard]]
   bool belongs_to(char const* first, char const* last) const
   {
     return first <= &*begin() && &*end() <= last;
   }
   template <std::size_t N>
+  [[nodiscard]]
   bool belongs_to(char const (&array)[N]) const
   {
     // N-1 because of terminal 0
     return belongs_to(&array[0], &array[N - 1]);
   }
+  [[nodiscard]]
   bool belongs_to(char const* ptr) const
   {
     return belongs_to(&ptr[0], &ptr[std::strlen(ptr)]);
   }
   template <typename String>
+  [[nodiscard]]
   bool belongs_to(String const& s) const
   {
     return belongs_to(s.data(), s.data() + s.size());
   }
 
-  size_type               size   () const { return m_size; }
-  bool                    empty  () const { return m_size == 0; }
+  [[nodiscard]] size_type               size   () const { return m_size; }
+  [[nodiscard]] bool                    empty  () const { return m_size == 0; }
 
   // iterator                begin  ()       { return iterator(m_first); }
   // iterator                end    ()       { return iterator(m_first+m_size); }
-  const_iterator          begin  () const { return m_first; }
-  const_iterator          end    () const { return m_first+m_size; }
-  const_iterator          cbegin () const { return m_first; }
-  const_iterator          cend   () const { return m_first+m_size; }
+  [[nodiscard]] const_iterator          begin  () const { return m_first; }
+  [[nodiscard]] const_iterator          end    () const { return m_first+m_size; }
+  [[nodiscard]] const_iterator          cbegin () const { return m_first; }
+  [[nodiscard]] const_iterator          cend   () const { return m_first+m_size; }
 
   // reverse_iterator        rbegin ()       { return reverse_iterator(m_first+m_size); }
   // reverse_iterator        rend   ()       { return reverse_iterator(m_first); }
-  const_reverse_iterator  rbegin () const { return const_reverse_iterator(m_first+m_size); }
-  const_reverse_iterator  rend   () const { return const_reverse_iterator(m_first); }
-  const_reverse_iterator  crbegin() const { return const_reverse_iterator(m_first+m_size); }
-  const_reverse_iterator  crend  () const { return const_reverse_iterator(m_first); }
+  [[nodiscard]] const_reverse_iterator  rbegin () const { return const_reverse_iterator(m_first+m_size); }
+  [[nodiscard]] const_reverse_iterator  rend   () const { return const_reverse_iterator(m_first); }
+  [[nodiscard]] const_reverse_iterator  crbegin() const { return const_reverse_iterator(m_first+m_size); }
+  [[nodiscard]] const_reverse_iterator  crend  () const { return const_reverse_iterator(m_first); }
 
   /** Indexed access.
    * @pre `p < size(),` checked with an assertion.
    */
+  [[nodiscard]]
   const_reference operator[](size_type p)
   {
     assert(p < size());
@@ -211,15 +218,18 @@ public:
   /** Returns first character of the view.
    * @pre `!empty()`, checked with an assertion.
    */
+  [[nodiscard]]
   const_reference front() const { assert(!empty()); return *begin(); }
   /** Returns last character of the view.
    * @pre `!empty()`, checked with an assertion.
    */
+  [[nodiscard]]
   const_reference back () const { assert(!empty()); return *(end()-1); }
 
   /** Returns a pointer to the first character of the view.
    * @warning there is no guarantee `data()[size()] == '\0'`
    */
+  [[nodiscard]]
   const_pointer   data () const { return &*m_first; }
 
   /** Removes the n first characters.
@@ -234,6 +244,7 @@ public:
    * @post `end()` iterator is n characters left.
    */
   void remove_suffix(std::size_t n) { assert(n <= m_size); m_size -= n; }
+
 private:
   struct build_empty{};
   string_view(build_empty) : m_size(0), m_first(NULL) {}
@@ -242,12 +253,14 @@ private:
   const_iterator m_first;
 };
 
+[[nodiscard]]
 inline
 bool operator==(string_view const& lhs, string_view const& rhs)
 {
   return lhs.size() == rhs.size()
     && std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
+[[nodiscard]]
 inline
 bool operator!=(string_view const& lhs, string_view const& rhs)
 {
@@ -261,6 +274,7 @@ std::ostream & operator<<(std::ostream & os, const string_view & v)
   return os;
 }
 
+[[nodiscard]]
 inline
 std::string operator+(string_view const& lhs, string_view const& rhs)
 {
@@ -270,6 +284,7 @@ std::string operator+(string_view const& lhs, string_view const& rhs)
 }
 
 /** Tells whether two views are exactly identical. */
+[[nodiscard]]
 inline
 bool is_same_view(string_view const& lhs, string_view const& rhs)
 {
@@ -277,6 +292,7 @@ bool is_same_view(string_view const& lhs, string_view const& rhs)
 }
 
 /** Tells whether the haystack string starts with the needle string. */
+[[nodiscard]]
 inline
 bool starts_with(string_view const& haystack, string_view const& needle)
 {
@@ -285,6 +301,7 @@ bool starts_with(string_view const& haystack, string_view const& needle)
 }
 
 /** Tells whether the haystack string starts with the needle string. */
+[[nodiscard]]
 inline
 bool ends_with(string_view const& haystack, string_view const& needle)
 {
@@ -293,6 +310,7 @@ bool ends_with(string_view const& haystack, string_view const& needle)
 }
 
 /** Searches needle string within the haystack string. */
+[[nodiscard]]
 inline
 string_view find(string_view const& haystack, string_view const& needle)
 {
@@ -328,6 +346,7 @@ string_view find(string_view const& haystack, string_view const& needle)
 }
 
 /** Tells whether the haystack string contains the needle string. */
+[[nodiscard]]
 inline
 bool contains(string_view const& haystack, string_view const& needle)
 {
@@ -335,6 +354,7 @@ bool contains(string_view const& haystack, string_view const& needle)
 }
 //@}
 
+/*-------------------------------[ Splitting functions ]---------------------*/
 /**\name Splitting functions */
 //@{
 
@@ -482,8 +502,28 @@ part_range<splitter_on_delim> split_on(String const& str, char delim)
 {
   return part_range<splitter_on_delim>(str, splitter_on_delim(delim));
 }
+
+/** Strip left side of a string
+ * @brief returns a string_view with the leading characters removed
+ * @param[in] v string to be stripped
+ * @param[in] c string with characters to strip.
+ * @return the stripped string_view
+ */
+[[nodiscard]]
+OTBCommon_EXPORT string_view lstrip(string_view const& v, string_view const& c);
+
+/** Strip right side of a string
+ * @brief returns a string_view with the ending characters removed
+ * @param[in] v string to be stripped
+ * @param[in] c string with characters to strip.
+ * @return the stripped string_view
+ */
+[[nodiscard]]
+OTBCommon_EXPORT string_view rstrip(string_view const& v, string_view const& c);
+
 //@}
 
+/*-------------------------------[ String to number conversion ]-------------*/
 /**\name string to number conversion */
 //@{
 /**
@@ -843,13 +883,6 @@ inline T const& to_with_default(T const& v, T const& /* default*/) { return v; }
  */
 OTBCommon_EXPORT string_view lstrip(string_view const& v, string_view const& c);
 
-/** Strip right side of a string
- * @brief returns a string_view with the ending characters removed
- * @param[in] v string to be stripped
- * @param[in] c string with characters to strip.
- * @return the stripped string_view
- */
-OTBCommon_EXPORT string_view rstrip(string_view const& v, string_view const& c);
 
 } // otb namespace
 
