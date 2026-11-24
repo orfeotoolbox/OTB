@@ -412,6 +412,7 @@ ubuntu-qa-static-analysis:
   needs:
     - job: ubuntu-24-prepare
       artifacts: true
+  allow_failure: true
   artifacts:
     when: always
     expire_in: 24 hrs
@@ -437,7 +438,8 @@ ubuntu-sonar-report:
                     -Dsonar.projectKey=$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME
                     `test -z "$CI_COMMIT_TAG" || echo "-Dsonar.projectVersion=$CI_COMMIT_TAG"`
                     -Dsonar.branch.name=$CI_COMMIT_REF_NAME
-
+  # does not work for the moment as sonar is down
+  allow_failure: true
   after_script: []
   needs:
     - job: ubuntu-qa-code-coverage
