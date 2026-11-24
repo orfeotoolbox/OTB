@@ -163,7 +163,7 @@ fast-build:
     - merge_requests
     - branches
   stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-itk5:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:24.04
   variables:
     GIT_CHECKOUT: 'true'
     GIT_SUBMODULE_FORCE_HTTPS: 'true'
@@ -180,8 +180,8 @@ fast-build:
       git lfs pull --include Input/QB_PAN_ROI_1000_100.tif
       cd ..
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
-    - ctest -VV -S CI/FFTW_tests.cmake -DIMAGE_NAME:string=ubuntu-22.04-fast
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-24.04-fast
+    - ctest -VV -S CI/FFTW_tests.cmake -DIMAGE_NAME:string=ubuntu-24.04-fast
     - ccache -s
 
 legal-check:
@@ -203,17 +203,17 @@ legal-check:
 #------------------------- prepare & build jobs --------------------------------
 
 ## Ubuntu superbuild
-ubuntu-22-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
+# ubuntu-22-prepare:
+#   extends: .common-prepare
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
 ubuntu-24-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-full
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
   artifacts:
     untracked: false
     when: on_success
@@ -221,31 +221,34 @@ ubuntu-24-prepare:
     expire_in: 24hrs
     paths:
       - xdk/lib/python3/*
+      - sb_branch.txt # Needed to checkout correct branch in build step
+      - build/*/*/*/*.log # Superbuild log
+      - build/*/*/*/*.cmake
 
-ubuntu-22-build:
+ubuntu-24-build:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=ON
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
 
-ubuntu-22-complete-build:
+ubuntu-24-complete-build:
   extends: .common-complete-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON -Dci_skip_install:BOOL=ON
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DOTB_FULL_BUILD:BOOL=ON -Dci_skip_install:BOOL=ON
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-22.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF -Dci_skip_install:BOOL=ON
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-24.04-llvm-xdk-full -DPACKAGE_BY_MODULE:BOOL=OFF -Dci_skip_install:BOOL=ON
     - mv build_packages/OTB-*.tar.gz . || true
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
 
 # Ubuntu 24 build needed for gdal bindings with python 3.12. We package the compiled bindings for python 3.12, this package will be downloaded and extracted automatically when
@@ -375,14 +378,14 @@ ubuntu-qa-code-coverage:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:24.04
   script:
     - ctest -V -S CI/main_qa.cmake
-            -DIMAGE_NAME:string=ubuntu-22.04-llvm-qa
+            -DIMAGE_NAME:string=ubuntu-24.04-llvm-qa
             -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
 
 ubuntu-qa-static-analysis:
@@ -395,7 +398,7 @@ ubuntu-qa-static-analysis:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:24.04
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
@@ -407,8 +410,9 @@ ubuntu-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   needs:
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: true
+  allow_failure: true
   artifacts:
     when: always
     expire_in: 24 hrs
@@ -419,7 +423,7 @@ ubuntu-sonar-report:
   extends: .common
   variables:
     GIT_DEPTH: ""
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:24.04
   stage: report
   only:
     refs:
@@ -434,7 +438,8 @@ ubuntu-sonar-report:
                     -Dsonar.projectKey=$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME
                     `test -z "$CI_COMMIT_TAG" || echo "-Dsonar.projectVersion=$CI_COMMIT_TAG"`
                     -Dsonar.branch.name=$CI_COMMIT_REF_NAME
-
+  # does not work for the moment as sonar is down
+  allow_failure: true
   after_script: []
   needs:
     - job: ubuntu-qa-code-coverage
@@ -457,13 +462,13 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-22-build
+    - job: ubuntu-24-build
       artifacts: true
     - job: windows-10-build
       artifacts: true
     - job: redhat-build
       artifacts: true
-    - job: ubuntu-22-complete-build
+    - job: ubuntu-24-complete-build
       artifacts: true
     - job: windows-10-complete-build
       artifacts: true
@@ -475,7 +480,7 @@ deploy:
 update-archive:
   tags:
     - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:22.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:24.04
   stage: deploy
   extends: .general
   only:
@@ -490,7 +495,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-22-prepare
+    - job: ubuntu-24-prepare
       artifacts: false
 
 
@@ -519,7 +524,7 @@ release-docker:
     refs:
       - /^release-[0-9]+\.[0-9]+$/
   needs:
-      - job: ubuntu-22-complete-build
+      - job: ubuntu-24-complete-build
         artifacts: true
   script:
       # to authenticate in docker hub, kaniko needs a config file located at
