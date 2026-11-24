@@ -68,14 +68,14 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_RADARSAT2 COMMAND otbMetadata
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   )
 
-otb_add_test(NAME ioTuMetaDataKeyTest COMMAND otbMetadataTestDriver 
+otb_add_test(NAME ioTuMetaDataKeyTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuMetaDataKeyTest.txt
   ${TEMP}/ioTuMetaDataKeyTest.txt
   otbImageMetadataTest
   otbMetadataKeyTest
   ${TEMP}/ioTuMetaDataKeyTest.txt
   )
-  
+
 otb_add_test(NAME ioTuImageMetadataSliceTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataSliceTest.txt
   ${TEMP}/ioTuImageMetadataSliceTest.txt
@@ -83,7 +83,7 @@ otb_add_test(NAME ioTuImageMetadataSliceTest COMMAND otbMetadataTestDriver
   otbImageMetadataSliceTest
   ${TEMP}/ioTuImageMetadataSliceTest.txt
   )
-  
+
 otb_add_test(NAME ioTuImageMetadataCompactTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataCompactTest.txt
   ${TEMP}/ioTuImageMetadataCompactTest.txt
@@ -99,7 +99,7 @@ otb_add_test(NAME ioTuImageMetadataGetSizeTest COMMAND otbMetadataTestDriver
   otbImageMetadataGetSizeTest
   ${TEMP}/ioTuImageMetadataGetSizeTest.txt
   )
-  
+
 otb_add_test(NAME ioTuImageMetadataAppendTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataAppendTest.txt
   ${TEMP}/ioTuImageMetadataAppendTest.txt
@@ -123,7 +123,7 @@ otb_add_test(NAME ioTuImageMetadataToFromKeywordlistTest COMMAND otbMetadataTest
   otbImageMetadataToFromKeywordlistTest
   ${TEMP}/ioTuImageMetadataToFromKeywordlistTest.txt
   )
-  
+
 otb_add_test(NAME ioTuotbGeomMetadataSupplierTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuotbGeomMetadataSupplierTest.txt
   ${TEMP}/ioTuotbGeomMetadataSupplierTest.txt
@@ -131,7 +131,7 @@ otb_add_test(NAME ioTuotbGeomMetadataSupplierTest COMMAND otbMetadataTestDriver
   ${INPUTDATA}/QB/qb-1.geom
   ${TEMP}/ioTuotbGeomMetadataSupplierTest.txt
   )
-  
+
 otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuotbXMLMetadataSupplierTest.txt
   ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
@@ -148,23 +148,23 @@ otb_add_test(NAME saTvS1ThermalNoiseLutTest COMMAND otbMetadataTestDriver
 
 
 # Image metadata interface tests.
-# The image metadata are read from a product and dumped into a txt file, which is then compared 
+# The image metadata are read from a product and dumped into a txt file, which is then compared
 # to a baseline ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_${sensor}.txt.
 # To create a test, add the name of the sensor in "sensor list" and define the ${sensor}_filename variable.
 # Additionally, it is possible to compare the metadata of the product with the metadata of a geom file
 # with the --compare-metadata utility by setting ${sensor}_geom_file
 
-set(sensor_list pleiades pleiades_2 
-pleiades_neo_basic_MS 
-pleiades_neo_reflec_MS 
-pleiades_neo_basic_P 
-pleiades_neo_reflec_P 
+set(sensor_list pleiades pleiades_2
+pleiades_neo_basic_MS
+pleiades_neo_reflec_MS
+pleiades_neo_basic_P
+pleiades_neo_reflec_P
 pleiades_neo_basic_PS_3bands
 pleiades_neo_reflec_PS_4bands
-pleiades_neo_ortho_P 
-pleiades_neo_ortho_MS 
+pleiades_neo_ortho_P
+pleiades_neo_ortho_MS
 pleiades_neo_ortho_PS
-pleiades_neo_ortho_PS_geotiff 
+pleiades_neo_ortho_PS_geotiff
 spot6 spot6_2 spot5 spot5_2 formosat ikonos worldview2 quickbird Radarsat2 TerraSar CosmoSkyMed Sentinel1)
 
 set(pleiades_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2})
@@ -207,11 +207,11 @@ set(Sentinel1_geom_file ${INPUTDATA}/sentinel1/sentinel1-1.geom)
 foreach(sensor ${sensor_list})
 
 if (${sensor}_geom_file)
-otb_add_test(NAME ioTvImageMetadataInterfaceTest_${sensor} COMMAND otbMetadataTestDriver 
-  --compare-ascii 0 
+otb_add_test(NAME ioTvImageMetadataInterfaceTest_${sensor} COMMAND otbMetadataTestDriver
+  --compare-ascii 0
   ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   ${TEMP}/ioTvImageMetadataInterfaceTest_${sensor}.txt
-  --compare-metadata ${EPSILON_9} 
+  --compare-metadata ${EPSILON_9}
   ${${sensor}_filename}
   ${${sensor}_filename}?&geom=${${sensor}_geom_file}
   otbImageMetadataInterfaceTest
@@ -219,8 +219,8 @@ otb_add_test(NAME ioTvImageMetadataInterfaceTest_${sensor} COMMAND otbMetadataTe
   ${TEMP}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   )
 else()
-otb_add_test(NAME ioTvImageMetadataInterfaceTest_${sensor} COMMAND otbMetadataTestDriver 
-  --compare-ascii 0 
+otb_add_test(NAME ioTvImageMetadataInterfaceTest_${sensor} COMMAND otbMetadataTestDriver
+  --compare-ascii 0
   ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   ${TEMP}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   otbImageMetadataInterfaceTest
@@ -234,14 +234,29 @@ endforeach()
 
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
 
+  # Date
   add_executable(otbDateTest otbDateTest.cxx )
   target_link_libraries(
     otbDateTest
     ${OTBMetadata-Test_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
 
-  otb_add_test(NAME ioTvDateTest
-           COMMAND otbDateTest --
-           )
+  otb_add_test(
+    NAME ioTvDateTest
+    COMMAND otbDateTest --
+  )
+
+  # SARMetadataUtilities
+  add_executable(otbTuSARMetadataUtilities
+    otbSARMetadataUtilitiesTest.cxx
+  )
+  target_link_libraries(
+    otbTuSARMetadataUtilities
+    ${OTBCommon_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+
+  add_test(NAME coTuSARMetadataUtilities
+           COMMAND otbTuSARMetadataUtilities #coTuSARMetadataUtilities
+           WORKING_DIRECTORY ${TEMP})
 
 endif()
