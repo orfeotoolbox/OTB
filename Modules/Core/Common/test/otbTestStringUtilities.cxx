@@ -24,6 +24,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/test/unit_test_log.hpp>
+#include "otbBoostTestHelpers.h"
 #include <istream>
 #include <ostream>
 
@@ -225,3 +227,112 @@ BOOST_AUTO_TEST_CASE(test_floatting_point_numbers_with_to_with_default)
 }
 
 /*-------------------------------[ Test OnDecodingError ]--------------------*/
+
+#define SUCCESS_FOR_EACH_INTEGRAL_WITH_POLICY(test, function, policy, sign, value) \
+  test(function<sign char, policy>     (#value, "decoding " #sign " char for tests") == value);    \
+  test(function<sign short, policy>    (#value, "decoding " #sign " short for tests") == value);   \
+  test(function<sign int, policy>      (#value, "decoding " #sign " int for tests") == value);     \
+  test(function<sign long, policy>     (#value, "decoding " #sign " long for tests") == value);    \
+  test(function<sign long long, policy>(#value, "decoding " #sign " long long for tests") == value);
+
+#include <optional>
+
+namespace std {
+template <typename T>
+std::ostream & operator<<(std::ostream & os, std::optional<T> const& v)
+{
+  if (v) {
+    os << *v;
+  } else {
+    os << "{none}";
+  }
+  return os;
+}
+
+} // std namespace
+
+#define TEST_POLICY_SUCCESS(type, policy, value, context)                                        \
+  do {                                                                                           \
+    tt::output_test_stream output;                                                               \
+    {                                                                                            \
+      tt::cout_redirect guard(output.rdbuf());                                                   \
+      auto const res = otb::to<type, otb::OnDecodingError::policy>(#value, "testing w/ policy"); \
+      BOOST_TEST(res == value);                                                                  \
+    }                                                                                            \
+    BOOST_TEST(! tt::contains(output.str(), "(WARNING): Cannot decode '" #value "'"));           \
+  } while (0)
+
+#define TEST_POLICY_WARN(type, policy, expected, value, context)                                 \
+  do {                                                                                           \
+    tt::output_test_stream output;                                                               \
+    {                                                                                            \
+      tt::cout_redirect guard(output.rdbuf());                                                   \
+      auto const res = otb::to<type, otb::OnDecodingError::policy>(#value, "testing w/ policy"); \
+      BOOST_TEST(res == expected);                                                               \
+    }                                                                                            \
+    BOOST_TEST(tt::contains(output.str(), "(WARNING): Cannot decode '" #value "'"));             \
+  } while (0)
+
+BOOST_AUTO_TEST_CASE(test_to_policy_warn_and_return)
+{
+  using DefOpt = otb::OnDecodingError::WarnAndReturn::Default<std::optional>::Impl<int>;
+  static_assert(std::is_same_v<DefOpt::result_t, std::optional<int>>);
+  static_assert(DefOpt::fallback() == std::optional<int>{});
+
+  using Def42 = otb::OnDecodingError::WarnAndReturn::TheValue<42>::Impl<int>;
+  static_assert(std::is_same_v<Def42::result_t, int>);
+  static_assert(Def42::fallback() == 42);
+
+  // (void)otb::to<int, otb::OnDecodingError::WarnAndReturn::Default<std::optional>>("107", "test w/ policy");
+  // (void)otb::to<int, otb::OnDecodingError::WarnAndReturn::TheValue<42>>("107", "test w/ policy");
+
+  TEST_POLICY_SUCCESS(int, WarnAndReturn::Default<std::optional>, -27, "testing w/ warn policy");
+  TEST_POLICY_SUCCESS(int, WarnAndReturn::TheValue<42>, -27, "testing w/ warn policy");
+
+  TEST_POLICY_WARN(unsigned int, WarnAndReturn::Default<std::optional>, std::optional<int>{}, -27, "testing w/ warn policy");
+  TEST_POLICY_WARN(unsigned int, WarnAndReturn::TheValue<42>, 42, -27, "testing w/ warn policy");
+}
+
+BOOST_AUTO_TEST_CASE(test_to_policy_throw)
+{
+  using Thr = otb::OnDecodingError::Throw<int>;
+  static_assert(std::is_same_v<Thr::result_t, int>);
+
+  // (void)otb::to<int, otb::OnDecodingError::Throw>("107", "test w/ policy");
+
+  auto check_exception_against = [](otb::string_view pattern) {
+    return [=](std::exception const& e) {
+      BOOST_TEST_MESSAGE("exception caught: " << e.what());
+      return otb::contains(e.what(), pattern);
+    };
+  };
+
+  TEST_POLICY_SUCCESS(int, Throw, -27, "testing w/ warn policy");
+  BOOST_CHECK_EXCEPTION(
+      ((void)otb::to<unsigned, otb::OnDecodingError::Throw>("-107", "ctx")),
+      std::runtime_error,
+      check_exception_against("Cannot decode '-107' as unsigned integer while ctx")
+  );
+  BOOST_CHECK_EXCEPTION(
+      ((void)otb::to<char, otb::OnDecodingError::Throw>("256", "ctx")),
+      std::runtime_error,
+      check_exception_against("Cannot decode '256' as 8 bits integer while ctx")
+  );
+
+  BOOST_CHECK_EXCEPTION(
+      ((void)otb::to<long, otb::OnDecodingError::Throw>("10 7", "ctx")),
+      std::runtime_error,
+      check_exception_against("Cannot decode '10 7' as integer while ctx")
+  );
+  BOOST_CHECK_EXCEPTION(
+      ((void)otb::to<long, otb::OnDecodingError::Throw>("a107", "ctx")),
+      std::runtime_error,
+      check_exception_against("Cannot decode 'a107' as integer while ctx")
+  );
+  BOOST_CHECK_EXCEPTION(
+      ((void)otb::to<long, otb::OnDecodingError::Throw>("107b", "ctx")),
+      std::runtime_error,
+      check_exception_against("Cannot decode '107b' as integer while ctx")
+  );
+
+}
