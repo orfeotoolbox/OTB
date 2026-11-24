@@ -554,7 +554,7 @@ to(string_view const& v)
   {
     return res;
   }
-  return otb::unexpected{"Cannot decode \"" + v + "\" as \"" + typeid(T).name()};
+  return otb::unexpected{"Cannot decode '" + v + "' as '" + typeid(T).name() + "'"};
 }
 
 
@@ -609,23 +609,23 @@ to_integer(string_view const& v)
       // only support arabic digits
       if (!std::isdigit(*it))
       {
-        return otb::unexpected{"Cannot decode " + v + " as integer"};
+        return otb::unexpected{"Cannot decode '" + v + "' as integer"};
       }
       auto digit = *it - '0';
       if (! is_negative) {
         if (res > max / 10) {
-          return otb::unexpected{"Cannot decode " + v + " as "+precision<Int>()+" integer"};
+          return otb::unexpected{"Cannot decode '" + v + "' as "+precision<Int>()+" integer"};
         } else if (10 * res > max-digit) {
-          return otb::unexpected{"Cannot decode " + v + " as "+precision<Int>()+" integer"};
+          return otb::unexpected{"Cannot decode '" + v + "' as "+precision<Int>()+" integer"};
         }
       } else {
         digit = - digit;
         if (res < min / 10) {
-          return otb::unexpected{"Cannot decode " + v + " as "+precision<Int>()+" integer"};
+          return otb::unexpected{"Cannot decode '" + v + "' as "+precision<Int>()+" integer"};
         } else if (10 * res < min-digit) {
-          return otb::unexpected{"Cannot decode " + v + " as "+precision<Int>()+" integer"};
-    }
-  }
+          return otb::unexpected{"Cannot decode '" + v + "' as "+precision<Int>()+" integer"};
+        }
+      }
 
       res  = 10 * res + digit;
     }
@@ -663,13 +663,13 @@ to_uinteger(string_view const& v)
       // only support arabic digits
       if (!std::isdigit(*it))
       {
-        return otb::unexpected{"Cannot decode " + v + " as unsigned integer"};
+        return otb::unexpected{"Cannot decode '" + v + "' as unsigned integer"};
       }
       auto digit = *it - '0';
       if (res > max / 10) {
-        return otb::unexpected{"Cannot decode " + v + " as "+precision<UInt>()+" integer"};
+        return otb::unexpected{"Cannot decode '" + v + "' as "+precision<UInt>()+" integer"};
       } else if (10 * res > max-digit) {
-        return otb::unexpected{"Cannot decode " + v + " as "+precision<UInt>()+" integer"};
+        return otb::unexpected{"Cannot decode '" + v + "' as "+precision<UInt>()+" integer"};
       }
       res  = 10 * res + *it - '0';
     }
@@ -703,7 +703,7 @@ to_float(string_view const& v)
     std::stringstream ss;
     if (!(ss << v && (ss >> res >> std::ws).eof()))
     {
-      return otb::unexpected{"Cannot decode " + v + " as float value"};
+      return otb::unexpected{"Cannot decode '" + v + "' as float value"};
     }
   }
   return res;
@@ -722,7 +722,7 @@ inline
 otb::expected<std::string, std::string>
 to(T && v) { return otb::expected<std::string, std::string>(std::move(v)); }
 
-#define OTB_GENERATE_CONV(internal_to, type)                                         \
+#define OTB_GENERATE_CONV(internal_to, type)                                                     \
 template <> [[nodiscard]] inline otb::expected<type, std::string> to<type>(string_view const& v) \
 { return details::internal_to<type>(v); }
 
@@ -761,7 +761,6 @@ OTB_GENERATE_CONV(to_float,    long double);
  * keyword list.
  * \see `to_with_default()` for the version that never fails, but returns a
  * default value otherwise (being `T()` by default).
- *
  */
 template <typename T>
 [[nodiscard]]
@@ -821,15 +820,180 @@ template <typename T>
 [[nodiscard]]
 inline T const& to_with_default(T const& v, T const& /* default*/) { return v; }
 
+/*-------------------------------[ More generic decoder ]--------------------*/
+/** Concept that Identifies type with `result_t` typedef. */
+template <template <typename> class P, typename T>
+concept HasResultT = requires { typename P<T>::result_t; };
 
-/** Strip left side of a string
- * @brief returns a string_view with the leading characters removed
- * @param[in] v string to be stripped
- * @param[in] c string with characters to strip.
- * @return the stripped string_view
+namespace details {
+
+/** Helper key to distinguish overloads in `OnDecodingError` policies.
  */
-OTBCommon_EXPORT string_view lstrip(string_view const& v, string_view const& c);
+struct UseDefault{};
 
+/** The policy is a template type.
+ * \see e.g. `OnDecodingError::Throw<>`
+ */
+template <typename T, template <typename> class P>
+using impl_t = P<T>;
+
+/** The policy exposes a templated subtype named `Impl<>`.
+ * \see e.g. `OnDecodingError::WarnAndReturn::TheValue<>`
+ */
+template <typename T, typename P>
+using nested_impl_t = typename P::template Impl<T>;
+
+} // details namespace
+
+namespace OnDecodingError
+{
+
+/** Concept for `OnDecodingError` policies.
+ * `Impl` shall define:
+ * - `result_t` subtype
+ * - and `decode_to(string_view, string_view) -> result_t`  function
+ */
+template <typename Impl>
+concept Policy = requires(otb::string_view str_repr, otb::string_view context)
+{
+  typename Impl::result_t;
+  { Impl::decode_to(str_repr, context) } -> std::same_as<typename Impl::result_t>;
+};
+
+/** Defines policies that emit a warning a return a default value. */
+namespace WarnAndReturn
+{
+/**
+ * Internal implementation for all `WarnAndReturn` policies.
+ * @tparam Value            Default value to return. Deduced from `ActualResultType` when `Value ==
+ *                          UseDefault{}`
+ * @tparam ActualResultType Actual type of `decode_to` result.
+ * @tparam T                Type we are trying to convert to
+ *
+ * Having `ActualResultType` different from `T` permits to try to convert to an `int` but actually
+ * return a `std::optional<int>`.
+ */
+template <auto Value, typename ActualResultType, typename T>
+struct Impl_
+{
+  using result_t = ActualResultType;
+
+  /** Tries to decode the input string.
+   * If conversion fails, an OTB Warning is emitted and the `fallback()` value is returned.
+   */
+  static result_t decode_to(otb::string_view str_repr, otb::string_view context)
+  {
+    auto r = details::to<T>(str_repr);
+    if (r) {
+      return *r;
+    }
+
+    otbLogMacro(Warning, << r.error() << " while " << context);
+    return fallback();
+  }
+
+  /** Actual value returned is conversion fails. */
+  static constexpr result_t fallback() {
+    if constexpr (std::is_same_v<decltype(Value), details::UseDefault>) {
+      return ActualResultType{};
+    } else {
+      return Value;
+    }
+  }
+};
+
+/**
+ * `OnDecodingError` policy generator that returns a fallback value built from `ResultType<T>{}`.
+ * The actual policy is `Default::Impl<T>`.
+ */
+template <template <typename> class ResultType>
+struct Default
+{
+  template <typename T> using Impl = Impl_<details::UseDefault{}, ResultType<T>, T>;
+};
+
+/**
+ * `OnDecodingError` policy generator that returns `Value` as fallback value.
+ * The actual policy is `TheValue::Impl<T>`.
+ */
+template <auto Value>
+struct TheValue
+{
+  template <typename T>
+  requires std::convertible_to<decltype(Value), T>
+  using Impl = Impl_<Value, T, T>;
+};
+}
+
+/**
+ * `OnDecodingError` policy that throws a `std::runtime_error` is conversion fails.
+ */
+template <typename T>
+struct Throw
+{
+  using result_t = T;
+  static result_t decode_to(otb::string_view str_repr, otb::string_view context)
+  {
+    auto r = details::to<T>(str_repr);
+    if (r) {
+      return *r;
+    }
+    throw std::runtime_error(r.error() + " while " + context);
+  }
+};
+
+}
+
+/** `OnDecodingError` policy based overload of `to`.
+ * Tries to decode a value from a string.
+ * \tparam T Type of the value decoded from the input string
+ * \tparam DecodingPolicy Actual policy expected to be templated on `T`.
+ *
+ * \param[in] str_repr  input string to convert
+ * \param[in] context  context message for the exception thrown
+ *
+ * \return The value decoded or... (see the actual policy)
+ * \throw Whatever the `DecodingPolicy` dictates.
+ *
+ * This overload supports forms like
+ * ```
+ * auto v = to<int, OnDecodingError::Throw>(42, "doing stuff");
+ * ```
+ */
+template <typename T, template <typename> class DecodingPolicy>
+requires otb::OnDecodingError::Policy<otb::details::impl_t<T, DecodingPolicy>>
+[[nodiscard]]
+inline auto to(std::string const& str_repr, otb::string_view context)
+  -> typename otb::details::impl_t<T, DecodingPolicy>::result_t
+{
+  return otb::details::impl_t<T, DecodingPolicy>::decode_to(str_repr, context);
+}
+
+/** `OnDecodingError` policy based overload of `to`.
+ * Tries to decode a value from a string.
+ * \tparam T Type of the value decoded from the input string
+ * \tparam DecodingPolicy Policy generator returning the actual policy expected to be templated on
+ *                        `T`.
+ *
+ * \param[in] str_repr  input string to convert
+ * \param[in] context   context message for the exception thrown
+ *
+ * \return The value decoded or... (see the actual policy)
+ * \throw Whatever the `DecodingPolicy` dictates.
+ *
+ * This overload supports forms like
+ * ```
+ * auto v = to<int, WarnAndReturn::TheValue<42>(105, "doing stuff");
+ * auto w = to<int, WarnAndReturn::Default<std::optional>(105, "doing stuff");
+ * ```
+ */
+template <typename T, typename DecodingPolicy>
+  requires otb::OnDecodingError::Policy<otb::details::nested_impl_t<T, DecodingPolicy>>
+inline auto to(std::string const& str_repr, otb::string_view context)
+  -> typename otb::details::nested_impl_t<T, DecodingPolicy>::result_t
+{
+  return otb::details::nested_impl_t<T, DecodingPolicy>::decode_to(str_repr, context);
+}
 
 } // otb namespace
 

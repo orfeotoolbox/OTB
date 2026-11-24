@@ -24,7 +24,6 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/test/unit_test_log.hpp>
 #include "otbBoostTestHelpers.h"
 #include <istream>
 #include <ostream>
@@ -300,39 +299,32 @@ BOOST_AUTO_TEST_CASE(test_to_policy_throw)
 
   // (void)otb::to<int, otb::OnDecodingError::Throw>("107", "test w/ policy");
 
-  auto check_exception_against = [](otb::string_view pattern) {
-    return [=](std::exception const& e) {
-      BOOST_TEST_MESSAGE("exception caught: " << e.what());
-      return otb::contains(e.what(), pattern);
-    };
-  };
-
   TEST_POLICY_SUCCESS(int, Throw, -27, "testing w/ warn policy");
   BOOST_CHECK_EXCEPTION(
       ((void)otb::to<unsigned, otb::OnDecodingError::Throw>("-107", "ctx")),
       std::runtime_error,
-      check_exception_against("Cannot decode '-107' as unsigned integer while ctx")
+      tt::check_exception_against("Cannot decode '-107' as unsigned integer while ctx")
   );
   BOOST_CHECK_EXCEPTION(
       ((void)otb::to<char, otb::OnDecodingError::Throw>("256", "ctx")),
       std::runtime_error,
-      check_exception_against("Cannot decode '256' as 8 bits integer while ctx")
+      tt::check_exception_against("Cannot decode '256' as 8 bits integer while ctx")
   );
 
   BOOST_CHECK_EXCEPTION(
       ((void)otb::to<long, otb::OnDecodingError::Throw>("10 7", "ctx")),
       std::runtime_error,
-      check_exception_against("Cannot decode '10 7' as integer while ctx")
+      tt::check_exception_against("Cannot decode '10 7' as integer while ctx")
   );
   BOOST_CHECK_EXCEPTION(
       ((void)otb::to<long, otb::OnDecodingError::Throw>("a107", "ctx")),
       std::runtime_error,
-      check_exception_against("Cannot decode 'a107' as integer while ctx")
+      tt::check_exception_against("Cannot decode 'a107' as integer while ctx")
   );
   BOOST_CHECK_EXCEPTION(
       ((void)otb::to<long, otb::OnDecodingError::Throw>("107b", "ctx")),
       std::runtime_error,
-      check_exception_against("Cannot decode '107b' as integer while ctx")
+      tt::check_exception_against("Cannot decode '107b' as integer while ctx")
   );
 
 }
