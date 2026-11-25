@@ -53,13 +53,13 @@ list(APPEND otb_internal_groups_repos
 )
 
 list(APPEND otb_internal_groups_git_tag
-    "main" # FeaturesExtraction
-    "main" # Learning
-    "main" # SAR
-    "main" # Segmentation
-    "main" # Hyperspectral
-    "main" # StereoProcessing
-    "main" # Miscellaneous
+    "10.0.0" # FeaturesExtraction
+    "10.0.0" # Learning
+    "10.0.0" # SAR
+    "10.0.0" # Segmentation
+    "10.0.0" # Hyperspectral
+    "10.0.0" # StereoProcessing
+    "10.0.0" # Miscellaneous
     )
 
 list(APPEND otb_internal_groups_get_submodules
