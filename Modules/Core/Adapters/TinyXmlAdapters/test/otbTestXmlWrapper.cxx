@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2025 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -165,7 +165,7 @@ BOOST_AUTO_TEST_CASE(BadGetDoubleNode2)
   auto xmldoc = create_document();
 
   char const* ref_error =
-    "Cannot decode TAI=2023-12-31T23:00:19.000000 as float value while "
+    "Cannot decode 'TAI=2023-12-31T23:00:19.000000' as float value while "
     "extracting <Earth_Explorer_File/Data_Block/List_of_OSVs/OSV/TAI> from '<stream>'";
   BOOST_REQUIRE_EXCEPTION(
       (void)xmldoc.find("Earth_Explorer_File", "Data_Block", "List_of_OSVs", "OSV", "TAI").as<double>(),
