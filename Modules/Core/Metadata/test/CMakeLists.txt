@@ -255,6 +255,12 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
     ${OTBCommon_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
 
+  target_include_directories(
+    otbTuSARMetadataUtilities
+    # Dirty hack: A test module would make more sense!
+    PRIVATE ${OTBCommon_SOURCE_DIR}/test
+  )
+
   add_test(NAME coTuSARMetadataUtilities
            COMMAND otbTuSARMetadataUtilities #coTuSARMetadataUtilities
            WORKING_DIRECTORY ${TEMP})

@@ -23,6 +23,7 @@
 
 #include "otbStringUtilities.h"
 #include "otbMacro.h"
+#include "otbConcepts.h"
 #include <type_traits>
 #include <unordered_map>
 #include <optional>
@@ -63,7 +64,7 @@ struct WarnAndReturnNone
   {
     otbLogMacro(
         Warning,
-        << "Unable to find '" << key << "' in the input keywordlist " << context);
+        << "Unable to find '" << key << "' while " << context);
     return {};
   }
 };
@@ -84,14 +85,15 @@ struct Throw
 /*-------------------------------[ value_or function ]-----------------------*/
 template <
   typename T,
-  template <typename> class MissingKeyPolicy,
-  template <typename> class DecodingPolicy
+  template <typename> class    MissingKeyPolicy,
+  template <typename> class    DecodingPolicy,
+  ReadOnlyAssociativeContainer Map
 >
 requires OnMissing::Policy<MissingKeyPolicy, T>
 && otb::OnDecodingError::Policy<otb::details::impl_t<T, DecodingPolicy>>
 [[nodiscard]]
 inline auto value_or(
-    dict_t const& kwl,
+    Map const& kwl,
     std::string const& key,
     otb::string_view context)
   -> std::common_type_t<typename MissingKeyPolicy<T>::result_t, typename otb::details::impl_t<T, DecodingPolicy>::result_t>
@@ -100,7 +102,7 @@ inline auto value_or(
   if (wh != kwl.end())
   {
     auto const& value = wh->second;
-    return otb::details::impl_t<T, DecodingPolicy>::decode_to(value, context);
+    return otb::details::impl_t<T, DecodingPolicy>::decode_to(value, "extracting metadata key '"+key+"' " + context);
   }
   else
   {
@@ -110,14 +112,15 @@ inline auto value_or(
 
 template <
   typename T,
-  template <typename> class MissingKeyPolicy,
-  typename                  DecodingPolicy
+  template <typename> class    MissingKeyPolicy,
+  typename                     DecodingPolicy,
+  ReadOnlyAssociativeContainer Map
 >
 requires OnMissing::Policy<MissingKeyPolicy, T>
 && otb::OnDecodingError::Policy<otb::details::nested_impl_t<T, DecodingPolicy>>
 [[nodiscard]]
 inline auto value_or(
-    dict_t const& kwl,
+    Map const& kwl,
     std::string const& key,
     otb::string_view context)
   -> std::common_type_t<typename MissingKeyPolicy<T>::result_t, typename otb::details::nested_impl_t<T, DecodingPolicy>::result_t>
@@ -126,7 +129,7 @@ inline auto value_or(
   if (wh != kwl.end())
   {
     auto const& value = wh->second;
-    return otb::details::nested_impl_t<T, DecodingPolicy>::decode_to(value, context);
+    return otb::details::nested_impl_t<T, DecodingPolicy>::decode_to(value, "extracting metadata key '"+key+"' " + context);
   }
   else
   {
