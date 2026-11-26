@@ -311,12 +311,14 @@ bool ends_with(string_view const& haystack, string_view const& needle)
     && std::equal(needle.rbegin(), needle.rend(), haystack.rbegin());
 }
 
-/** Searches needle string within the haystack string. */
+/**
+ * Searches needle string within the haystack string.
+ * \pre `!needle.empty()`
+ */
 [[nodiscard]]
 inline
 string_view find(string_view const& haystack, string_view const& needle)
 {
-  assert(!haystack.empty());
   assert(!needle.empty());
   string_view::size_type const size = needle.size();
   if (haystack.size() < size)
