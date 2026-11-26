@@ -38,7 +38,7 @@ namespace otb
  * Please refer to each function documentation for available
  * configuration values and related environment variables.
  */
-namespace OTBCommon_EXPORT ConfigurationManager
+namespace ConfigurationManager
 {
   using RAMValueType = std::uint64_t ;
 
@@ -49,6 +49,7 @@ namespace OTBCommon_EXPORT ConfigurationManager
    * returns it contents as a string
    * Else, returns an empty string
    */
+  [[nodiscard]] OTBCommon_EXPORT
   std::string GetDEMDirectory();
 
   /**
@@ -58,6 +59,7 @@ namespace OTBCommon_EXPORT ConfigurationManager
    * returns it contents as a string
    * Else, returns an empty string
    */
+  [[nodiscard]] OTBCommon_EXPORT
   std::string GetGeoidFile();
 
   /**
@@ -69,6 +71,7 @@ namespace OTBCommon_EXPORT ConfigurationManager
    * Else, returns default value, which is 128 Mb
    *
    */
+  [[nodiscard]] OTBCommon_EXPORT
   RAMValueType GetMaxRAMHint();
 
   /**
@@ -89,6 +92,7 @@ namespace OTBCommon_EXPORT ConfigurationManager
    * \throw std::invalid_argument if the variable cannot be decode as an int.
    * \throw std::out_of_range if the decoded int doesn't fit in an `unsigned int`.
    */
+  [[nodiscard]] OTBCommon_EXPORT
   unsigned long GetMaxImageRowsReadAtOnce();
 
   /**
@@ -109,6 +113,7 @@ namespace OTBCommon_EXPORT ConfigurationManager
    * decoded), level is INFO.
    *
    */
+  [[nodiscard]] OTBCommon_EXPORT
   itk::LoggerBaseEnums::PriorityLevel GetLoggerLevel();
 
   /**
@@ -117,6 +122,7 @@ namespace OTBCommon_EXPORT ConfigurationManager
    * of threads is returned.
    * If OpenMP is disabled, this function does nothing
    */
+  OTBCommon_EXPORT
   int InitOpenMPThreads();
 
 };
