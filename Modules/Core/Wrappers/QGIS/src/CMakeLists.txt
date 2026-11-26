@@ -28,14 +28,12 @@ add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
   COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
 )
 
-# get the path of ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications relative
-# from ${OTB_BINARY_DIR} and store it in _app_location
-file(RELATIVE_PATH _app_location ${OTB_BINARY_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
-
 set(_app_names ${OTB_APPLICATIONS_NAME_LIST})
 list(REMOVE_ITEM _app_names "TestApplication")
 list(REMOVE_ITEM _app_names "ApplicationExample")
 list(REMOVE_DUPLICATES _app_names)
+list(GET _app_names 0 _first_app_name)
+set(_app_location "$<PATH:RELATIVE_PATH,$<TARGET_FILE_DIR:otbapp_${_first_app_name}>,${OTB_BINARY_DIR}>")
 set(generate_descriptor_cmd "$<TARGET_FILE:otbQgisDescriptor>")
 #debian does not use RPATH and build is failing
 #see gitlab #1593
