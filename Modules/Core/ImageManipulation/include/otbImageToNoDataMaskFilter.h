@@ -93,7 +93,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(SpectralAngleDistanceImageFilter, itk::ImageToImageFilter);
+  itkTypeMacro(ImageToNoDataMaskFilter, itk::UnaryFunctorImageFilter);
 
   /**
    * Set inside value of output mask. This value will be used to

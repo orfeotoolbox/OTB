@@ -154,7 +154,7 @@ private:
     FloatVectorImageType* panchroV = GetParameterImage("inp");
     if (panchroV->GetNumberOfComponentsPerPixel() != 1)
     {
-      itkExceptionMacro(<< "The panchromatic image must be a single channel image")
+      itkExceptionMacro(<< "The panchromatic image must be a single channel image");
     }
 
     // Transform the PAN image to otb::Image

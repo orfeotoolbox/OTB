@@ -467,7 +467,7 @@ Parameter::Pointer ParameterGroup::GetParameterByKey(std::string name, bool foll
   }
   if (parentParam.IsNull())
   {
-    itkExceptionMacro(<< "Could not find parameter " << name)
+    itkExceptionMacro(<< "Could not find parameter " << name);
   }
 
   // follow proxy parameters (resolve intermediate group parameter because

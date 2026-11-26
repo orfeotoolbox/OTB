@@ -60,7 +60,8 @@ public:
   void ResetOutputs();
 
   static Pointer New();
-  itkCreateAnotherMacro(Logger) itkCloneMacro(Logger)
+  itkCreateAnotherMacro(Logger);
+  itkCloneMacro(Logger);
 
       /** Output logs about the RAM, caching and multi-threading settings */
       void LogSetupInformation();

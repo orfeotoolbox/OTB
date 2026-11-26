@@ -136,7 +136,7 @@ public:
    */
   void SetParameters(const ParametersType&) override
   {
-    itkExceptionMacro(<< "Subclasses should override this method (SetParameters)")
+    itkExceptionMacro(<< "Subclasses should override this method (SetParameters)");
   }
 
   void ComputeJacobianWithRespectToParameters(const InputPointType&, JacobianType&) const override
@@ -165,7 +165,7 @@ public:
   /** Set the fixed parameters and update internal transformation. */
   void SetFixedParameters(const ParametersType&) override
   {
-    itkExceptionMacro(<< "Subclasses should override this method (SetFixedParameters)")
+    itkExceptionMacro(<< "Subclasses should override this method (SetFixedParameters)");
   }
 
   /** Get the Fixed Parameters. */

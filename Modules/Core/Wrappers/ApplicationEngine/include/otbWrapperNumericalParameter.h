@@ -193,7 +193,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
-  itkTypeMacro(NumericalParameter, Parameter);
+  itkTypeMacro(FloatParameter, Parameter);
 
   ParameterType GetType() const override
   {
@@ -215,7 +215,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
-  itkTypeMacro(NumericalParameter, Parameter);
+  itkTypeMacro(DoubleParameter, Parameter);
 
   ParameterType GetType() const override
   {
@@ -237,7 +237,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
-  itkTypeMacro(NumericalParameter, Parameter);
+  itkTypeMacro(IntParameter, Parameter);
 
   ParameterType GetType() const override
   {

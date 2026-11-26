@@ -61,7 +61,7 @@ void FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::BeforeThreaded
   if (inputPtr.IsNull())
   {
     itkExceptionMacro(<< "At least one input is missing."
-                      << " Input is missing :" << inputPtr.GetPointer();)
+                      << " Input is missing :" << inputPtr.GetPointer(););
   }
   m_PixelFunction->SetInputImage(inputPtr);
 }
