@@ -59,7 +59,7 @@ public:
    * \tparam TITKIterator  ITK iterators
    * \param[in] iterator   List of iterators to track in the tuple.
    *
-   * \warning Beware that parameters are forwarded, a rvalue whell not be stored in a
+   * \warning Beware that parameters are forwarded, a rvalue will not be stored in a
    * `TupleIterator<Iterator&>`. Do compile with `-Wdangling-pointer` on.
    */
   template <typename... TITKIterator>

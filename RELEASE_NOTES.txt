@@ -1,4 +1,4 @@
-OTB-v 10.0.0 - Changes since version 9.1.0 (September 17th, 2026)
+OTB-v 10.0.0 - Changes since version 9.1.0 (November 27th, 2026)
 -----------------------------------------------------------------
 Features added:
   * !1103: Nisar integration by Julien Osman
