@@ -19,6 +19,7 @@
  */
 
 #include "otbSARMetadata.h"
+#include "otbSARMetadataUtilities.h"
 #include "otbSarCalibrationLookupData.h"
 #include "otbNISARCalibrationLookupData.h"
 #include "otbSentinel1CalibrationLookupData.h"
@@ -492,18 +493,30 @@ void InfoSceneCoord::ToKeywordlist(MetaData::Keywordlist &kwl, const std::string
 
 InfoSceneCoord InfoSceneCoord::FromKeywordlist(const MetaData::Keywordlist &kwl, const std::string &prefix)
 {
-  InfoSceneCoord output{};
-
-  output.azimuthTime = ::value_or_throw<MetaData::TimePoint>(kwl, prefix + "AzimuthTime", "(InfoSceneCoord::FromKeywordlist)");
-
   try
   {
-    output.referenceRow    = ::value_or_throw<unsigned long>(kwl, prefix + "referenceRow", "(InfoSceneCoord::FromKeywordlist)");
-    output.referenceColumn = ::value_or_throw<unsigned long>(kwl, prefix + "referenceColumn", "(InfoSceneCoord::FromKeywordlist)");
-    output.latitude        = ::value_or_throw<double>(kwl, prefix + "latitude", "(InfoSceneCoord::FromKeywordlist)");
-    output.longitude       = ::value_or_throw<double>(kwl, prefix + "longitude", "(InfoSceneCoord::FromKeywordlist)");
-    output.rangeTime       = ::value_or_throw<double>(kwl, prefix + "rangeTime", "(InfoSceneCoord::FromKeywordlist)");
-    output.incidenceAngle  = ::value_or_throw<double>(kwl, prefix + "incidenceAngle", "(InfoSceneCoord::FromKeywordlist)");
+    // Thanks to the Throw policy, we make sure any invalid field invalidates the the complete
+    // InfoSceneCoord, yet, we tolerate missing fields.
+    // Question: is it the right approach?
+    InfoSceneCoord output{};
+    output.azimuthTime = value_or<MetaData::TimePoint, OnMissing::WarnAndReturnNone, OnDecodingError::Throw>(
+      kwl, prefix + "AzimuthTime", "(InfoSceneCoord::FromKeywordlist)");
+
+    auto get_ul_value = [](dict_t const& kwl, std::string const& key, otb::string_view context)
+    {
+      return value_or<unsigned long, OnMissing::WarnAndReturnNone, OnDecodingError::Throw>(kwl, key, context);
+    };
+    auto get_f64l_value = [](dict_t const& kwl, std::string const& key, otb::string_view context)
+    {
+      return value_or<double, OnMissing::WarnAndReturnNone, OnDecodingError::Throw>(kwl, key, context);
+    };
+
+    output.referenceRow    = get_ul_value  (kwl, prefix + "referenceRow",    "(InfoSceneCoord::FromKeywordlist)");
+    output.referenceColumn = get_ul_value  (kwl, prefix + "referenceColumn", "(InfoSceneCoord::FromKeywordlist)");
+    output.latitude        = get_f64l_value(kwl, prefix + "latitude",        "(InfoSceneCoord::FromKeywordlist)");
+    output.longitude       = get_f64l_value(kwl, prefix + "longitude",       "(InfoSceneCoord::FromKeywordlist)");
+    output.rangeTime       = get_f64l_value(kwl, prefix + "rangeTime",       "(InfoSceneCoord::FromKeywordlist)");
+    output.incidenceAngle  = get_f64l_value(kwl, prefix + "incidenceAngle",  "(InfoSceneCoord::FromKeywordlist)");
 
     return output;
   }
