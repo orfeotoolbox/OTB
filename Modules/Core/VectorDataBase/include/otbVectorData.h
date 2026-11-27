@@ -23,9 +23,20 @@
 
 #include "itkDataObject.h"
 #include "otbDataNode.h"
+
+#if defined(__GNUC__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wuninitialized"
+#  if !defined(__clang__)
+#    pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#  endif
+#endif
 #include <boost/graph/graph_as_tree.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/copy.hpp>
+#if defined(__GNUC__)
+#  pragma GCC diagnostic pop
+#endif
 
 namespace otb
 {
@@ -88,7 +99,7 @@ public:
   using TreeEdgeType = typename boost::graph_traits< DataTreeType >::edge_descriptor;
   using ChildrenListType = std::vector<DataNodePointerType>;
   using VertexIterator = typename boost::graph_traits<DataTreeType>::vertex_iterator;
-  
+
    void SetProjectionRef(const std::string& projectionRef);
    std::string GetProjectionRef() const;
 
@@ -100,7 +111,7 @@ public:
    void SetOrigin(const float origin[2]);
 
   itkGetConstReferenceMacro(Origin, OriginType);
- 
+
   /** Set the spacing of the vector data to put it in the corresponding
    * image coordinates
    * \sa GetSignedSpacing() */
@@ -158,7 +169,7 @@ public:
     std::vector<DataNodePointerType> childrenslist;
     VertexIterator it,it_end;
     boost::tie(it, it_end) = boost::vertices(m_DataTree);
-    
+
     for (;it!=it_end;it++)
     {
       if(m_DataTree[*it] == parentNode)
@@ -225,7 +236,7 @@ protected:
   {
     this->m_root->Reset(rootNode);
   }
-  
+
 private:
   VectorData(const Self&) = delete;
 

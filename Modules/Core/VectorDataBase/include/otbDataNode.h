@@ -285,7 +285,7 @@ public:
    * \brief Perform a reset of all fields of a datanode using an input node
    * \warning Be aware that m_data contains itk smart pointers to polygon =>
    *  if you modify this polygon it will be modified in the input data node
-   * \param inputNode 
+   * \param inputNode
    */
   void Reset(const DataNode& inputNode)
   {
@@ -312,10 +312,10 @@ private:
   struct DataType
   {
     bool                   valid = false;
-    PointType              point;
-    LinePointerType        line;
-    PolygonPointerType     exteriorRing;
-    PolygonListPointerType interiorRings;
+    PointType              point{};
+    LinePointerType        line = nullptr;
+    PolygonPointerType     exteriorRing = nullptr;
+    PolygonListPointerType interiorRings = nullptr;
   };
 
   /** The node type */
