@@ -72,7 +72,7 @@ int otbImageFileReader_StreamedReadingPolicy_Test(int itkNotUsed(argc), char* ar
   auto const nb_expected_loads = (size_y+buffer_height-1) / buffer_height;
   std::cout << "Input dims: " << input_size << "\n";
 
-  std::regex const re_line{R"(.*otbImageFileReader.hxx, line \d+, ALLOCATE temp buffer: (\d+)MB.*, size=\d+x(\d+) @\(\d+, (\d+)\))"};
+  std::regex const re_line{R"(.*otbImageFileReader.hxx, line \d+, \(RE\)ALLOCATE temp buffer: (\d+)MB.*, size=\d+x(\d+) @\(\d+, (\d+)\))"};
   std::istringstream iss(logs);
 
   unsigned long expected_y_idx = 0;
@@ -161,7 +161,7 @@ int otbImageFileReader_BufferedReadingPolicy_Test(int itkNotUsed(argc), char* ar
   std::cout << "Input dims: " << input_size << "\n";
 
   std::regex const re_line{
-    R"(.*otbImageFileReader.hxx, line \d+, ALLOCATE temp buffer: \d+MB.*y ∈ \[(\d+)\.\.(\d+)\[, size=\d+x(\d+))"};
+    R"(.*otbImageFileReader.hxx, line \d+, \(RE\)ALLOCATE temp buffer: \d+MB.*y ∈ \[(\d+)\.\.(\d+)\[, size=\d+x(\d+))"};
   std::istringstream iss(logs);
 
   unsigned long expected_buffer_height = size_y / nb_strips;
@@ -182,7 +182,7 @@ int otbImageFileReader_BufferedReadingPolicy_Test(int itkNotUsed(argc), char* ar
       auto expected_y_idx_end = std::min(
           stream_iter * expected_buffer_height + radius,
           size_y);
-      
+
       std::cout << " Actual --> Δ" << actual_height << " y ∈ [" << actual_idx_start << " .. " << actual_idx_end << "[\n";
       std::cout << " Expected   Δ" << expected_buffer_height << " y ∈ [" << expected_y_idx << " .. " << expected_y_idx_end << "[\n";
 
