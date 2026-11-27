@@ -40,13 +40,14 @@
 #include "otbMacro.h"
 
 #include "itkVectorImage.h"
-#include "itkMetaDataObject.h"
+#include <itkMetaDataObject.h>
 #include <itksys/SystemTools.hxx>
 #include <boost/type_traits/is_complex.hpp>
 
 #include <ostream>
 #include <string>
 #include <cassert>
+#include <algorithm>
 
 namespace otb
 {
