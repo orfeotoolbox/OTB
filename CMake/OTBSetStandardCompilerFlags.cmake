@@ -190,6 +190,15 @@ macro(check_compiler_platform_flags)
          if(MSVC_VERSION GREATER 1310)
            set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} /bigobj")
          endif()
+
+         # Suppress warning C4996: 'std::complex<short>::complex': warning
+         # STL4037: The effect of instantiating the template std::complex for any
+         # type other than float, double, or long double is unspecified.  You can
+         # define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress
+         # this warning.
+         add_definitions(
+           -D_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+         )
        endif()
   endif()
 
