@@ -24,9 +24,23 @@
 #include "OTBCommonExport.h"
 #include "otbMetaProgrammingLibrary.h"
 
+#if defined(__GNUC__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wshadow"
+#elif defined(_MSC_VER)
+#  pragma warning( push )
+#  pragma warning( disable : 4459 )
+#endif
+// Ignore shadowing of is_empty in hana/map.hpp
 #include <boost/hana.hpp>
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/tuple.hpp>
+#if defined(__GNUC__)
+#  pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#  pragma warning( pop )
+#endif
+
 #include <tuple>
 #include <type_traits>
 
