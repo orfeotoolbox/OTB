@@ -21,8 +21,8 @@
 #ifndef otbPointSetFunction_h
 #define otbPointSetFunction_h
 
-#include "itkSpatialFunction.h"
-#include "itkProcessObject.h"
+#include <itkSpatialFunction.h>
+#include <itkProcessObject.h>
 
 namespace otb
 {

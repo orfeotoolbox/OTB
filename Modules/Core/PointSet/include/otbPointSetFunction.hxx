@@ -23,8 +23,8 @@
 
 #include "otbPointSetFunction.h"
 
-#include "itkNumericTraits.h"
-#include "itkConstNeighborhoodIterator.h"
+#include <itkNumericTraits.h>
+#include <itkConstNeighborhoodIterator.h>
 
 namespace otb
 {

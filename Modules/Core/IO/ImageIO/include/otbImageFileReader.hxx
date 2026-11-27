@@ -39,7 +39,7 @@
 
 #include "otbMacro.h"
 
-#include "itkVectorImage.h"
+#include <itkVectorImage.h>
 #include <itkMetaDataObject.h>
 #include <itksys/SystemTools.hxx>
 #include <boost/type_traits/is_complex.hpp>
@@ -344,7 +344,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
       auto nb_remaining_lines = ioRegion.GetSize()[y_index];
       while (nb_remaining_lines > 0)
       {
-        auto nb_lines_to_load = std::min(nb_remaining_lines, m_StreamHeight);
+        auto const nb_lines_to_load = std::min<unsigned long>(nb_remaining_lines, m_StreamHeight);
         ioRegion.GetModifiableSize()[y_index] = nb_lines_to_load;
 
 #if 0

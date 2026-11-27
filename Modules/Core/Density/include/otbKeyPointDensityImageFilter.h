@@ -21,9 +21,9 @@
 #ifndef otbKeyPointDensityImageFilter_h
 #define otbKeyPointDensityImageFilter_h
 
-#include "itkImageToImageFilter.h"
 #include "otbPointSetToDensityImageFilter.h"
-#include "itkNumericTraits.h"
+#include <itkImageToImageFilter.h>
+#include <itkNumericTraits.h>
 
 namespace otb
 {

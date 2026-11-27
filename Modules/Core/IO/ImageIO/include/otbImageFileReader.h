@@ -24,10 +24,10 @@
 #if defined(__GNUC__) || defined(__clang__)
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-parameter"
-#  include "itkImageSource.h"
+#  include <itkImageSource.h>
 #  pragma GCC diagnostic pop
 #else
-#  include "itkImageSource.h"
+#  include <itkImageSource.h>
 #endif
 
 #include "OTBImageIOExport.h"
@@ -37,8 +37,8 @@
 #include "otbImageIOBase.h"
 #include "otbNewMacro.h"
 
-#include "itkMacro.h"
-#include "itkImageRegion.h"
+#include <itkMacro.h>
+#include <itkImageRegion.h>
 
 #include <string>
 

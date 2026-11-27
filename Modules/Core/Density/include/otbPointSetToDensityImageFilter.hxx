@@ -22,7 +22,7 @@
 #define otbPointSetToDensityImageFilter_hxx
 
 #include "otbPointSetToDensityImageFilter.h"
-#include "itkImageRegionIterator.h"
+#include <itkImageRegionIterator.h>
 
 namespace otb
 {

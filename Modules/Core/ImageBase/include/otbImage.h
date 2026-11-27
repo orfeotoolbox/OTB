@@ -24,10 +24,10 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-#include "itkImage.h"
+#include <itkImage.h>
 #pragma GCC diagnostic pop
 #else
-#include "itkImage.h"
+#include <itkImage.h>
 #endif
 
 #include "otbImageCommons.h"

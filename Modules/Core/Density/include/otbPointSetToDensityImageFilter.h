@@ -21,11 +21,11 @@
 #ifndef otbPointSetToDensityImageFilter_h
 #define otbPointSetToDensityImageFilter_h
 
-#include "itkProcessObject.h"
-#include "itkPointSet.h"
-#include "itkPointSetToImageFilter.h"
 #include "otbPointSetDensityFunction.h"
-#include "itkPoint.h"
+#include <itkProcessObject.h>
+#include <itkPointSet.h>
+#include <itkPointSetToImageFilter.h>
+#include <itkPoint.h>
 
 namespace otb
 {
