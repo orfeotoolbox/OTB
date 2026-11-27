@@ -196,7 +196,7 @@ int Read(const std::string& filename, Application::Pointer this_)
       std::string pixelType(GetChildNodeTextOf(n_Parameter, "pixtype"));
 
       if (pixelType.empty())
-        std::runtime_error("Invalid pixel type (empty string).");
+        throw std::runtime_error("Invalid pixel type (empty string).");
 
       outImageParam->SetPixelType(GetPixelTypeFromString(pixelType));
     }
