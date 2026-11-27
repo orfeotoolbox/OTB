@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2026 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,11 +21,9 @@
 #ifndef otbDataNode_h
 #define otbDataNode_h
 
-#include "itkPoint.h"
 #include "otbPolygon.h"
 #include "otbObjectList.h"
-#include "otbVectorDataKeywordlist.h"
-
+#include <itkPoint.h>
 
 #include "ogrsf_frmts.h"
 #include <string>
@@ -36,7 +34,7 @@ namespace otb
  * This enumeration describes the type of nodes used to represent a tree of vector data in the Orfeo ToolBox.
  */
 
-typedef enum {
+enum NodeType {
   ROOT                 = 0,
   DOCUMENT             = 1,
   FOLDER               = 2,
@@ -47,7 +45,7 @@ typedef enum {
   FEATURE_MULTILINE    = 7,
   FEATURE_MULTIPOLYGON = 8,
   FEATURE_COLLECTION   = 9
-} NodeType;
+};
 
 /** \class DataNode
  *  \brief This class represents a node of data in a vector data hierarchy.
@@ -300,9 +298,7 @@ protected:
   /** Constructor */
   DataNode();
   /** Destructor */
-  ~DataNode() override
-  {
-  }
+  ~DataNode() override = default;
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -311,27 +307,27 @@ protected:
 private:
   DataNode(const Self&) = delete;
   void operator=(const Self&) = delete;
-//TODO Refactor modern cpp
+
   /** typedef of the data associated with the node */
-  typedef struct
+  struct DataType
   {
-    bool                   valid;
+    bool                   valid = false;
     PointType              point;
     LinePointerType        line;
     PolygonPointerType     exteriorRing;
     PolygonListPointerType interiorRings;
-  } DataType;
+  };
 
   /** The node type */
-  NodeType m_NodeType;
+  NodeType m_NodeType = ROOT;
 
   /** The node id */
   std::string m_NodeId;
 
   /** The data associated with the node */
-  DataType m_Data;
+  DataType m_Data {};
 
-  /** The fields map */
+  // /** The fields map */
   //   FieldMapType         m_FieldMap;
 };
 } // end namespace
