@@ -256,7 +256,7 @@ class TagDispatchMemberContainerSetterPtr<T, ptr_to_function, ActualParamType, t
 public:
   static void call(OGRFeature& f, int index, ActualParamType const& container)
   {
-    const int nb = boost::size(container);
+    const int nb = static_cast<int>(std::size(container));  // static_cast to neutralize MSVC warning
     (f.*ptr_to_function)(index, nb, const_cast<T*>(&container[0]));
   }
 };
