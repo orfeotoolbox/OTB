@@ -1214,9 +1214,9 @@ template <> struct parameter_type<int>
   {
     return app.GetParameterInt(key);
   }
-  static void set_default(Application& app, std::string const& key, int value)
+  static void set_default(Application& app, std::string const& key, int val)
   {
-    app.SetDefaultParameterInt(key, value);
+    app.SetDefaultParameterInt(key, val);
   }
 };
 
@@ -1228,9 +1228,9 @@ template <> struct parameter_type<float>
   {
     return app.GetParameterFloat(key);
   }
-  static void set_default(Application& app, std::string const& key, float value)
+  static void set_default(Application& app, std::string const& key, float val)
   {
-    app.SetDefaultParameterFloat(key, value);
+    app.SetDefaultParameterFloat(key, val);
   }
 };
 
@@ -1242,9 +1242,9 @@ template <> struct parameter_type<double>
   {
     return app.GetParameterDouble(key);
   }
-  static void set_default(Application& app, std::string const& key, double value)
+  static void set_default(Application& app, std::string const& key, double val)
   {
-    app.SetDefaultParameterDouble(key, value);
+    app.SetDefaultParameterDouble(key, val);
   }
 };
 
@@ -1257,9 +1257,9 @@ template <> struct parameter_type<std::string>
     return app.GetParameterString(key);
   }
 #if 0
-  static void set_default(Application & app, std::string const& key, std::string value)
+  static void set_default(Application & app, std::string const& key, std::string val)
   {
-    app.SetDefaultParameterString(key, value);
+    app.SetDefaultParameterString(key, val);
   }
 #endif
 };
@@ -1276,9 +1276,9 @@ template <> struct parameter_type<bool>
   {
     return app.IsParameterTrue(key, def);
   };
-  static void set_default(Application& app, std::string const& key, bool value)
+  static void set_default(Application& app, std::string const& key, bool val)
   {
-    app.SetDefaultParameterInt(key, value?1:0);
+    app.SetDefaultParameterInt(key, val?1:0);
   }
 };
 
